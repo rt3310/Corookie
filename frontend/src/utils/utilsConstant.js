@@ -5,6 +5,9 @@ export const URL = {
     HOME: {
         MAIN: '/',
     },
+    CHAT: {
+        TEXT: '/chat/text',
+    },
 }
 
-export const MAX_WIDTH = '1920px'
+export const MAX_WIDTH = '1440px'
