@@ -1,21 +1,22 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const CommentBox = () => {
-    return <S.Wrap></S.Wrap>
+const EditBox = () => {
+    return <S.Wrap>123</S.Wrap>
 }
 
 const S = {
     Wrap: styled.div`
-        display: flex;
-        width: 600px;
-        height: 70%;
+        bottom: 0;
+        width: inherit;
+        height: 64px;
         border-radius: 8px;
         background-color: ${({ theme }) => theme.color.white};
         box-shadow: ${({ theme }) => theme.shadow.card};
-        margin: 0 16px 16px;
+        margin: 16px;
         padding: 0 26px;
     `,
+    Header: styled.div``,
 }
 
-export default CommentBox
+export default EditBox

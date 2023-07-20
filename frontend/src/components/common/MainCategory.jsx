@@ -5,8 +5,8 @@ const MainCategory = () => {
     return (
         <S.Wrap>
             <S.Container>
-                <S.Button>일정 캘린더</S.Button>
-                <S.Button>이슈 관리</S.Button>
+                <S.Button>일정</S.Button>
+                <S.Button>이슈</S.Button>
             </S.Container>
         </S.Wrap>
     )
@@ -14,7 +14,7 @@ const MainCategory = () => {
 
 const S = {
     Wrap: styled.div`
-        width: 240px;
+        width: 216px;
         height: 80px;
         background-color: ${({ theme }) => theme.color.white};
         border-radius: 8px;
@@ -27,15 +27,16 @@ const S = {
     `,
     Button: styled.div`
         display: flex;
-        justify-content: center;
         align-items: center;
         width: 100%;
         height: 40px;
         transition-duration: 0.2s;
+        padding: 16px;
+        font-size: ${({ theme }) => theme.fontsize.sub1};
         cursor: pointer;
 
         &:hover {
-            background-color: ${({ theme }) => theme.color.color3};
+            background-color: ${({ theme }) => theme.color.main};
             color: ${({ theme }) => theme.color.white};
         }
 

@@ -37,7 +37,7 @@ const S = {
     Main: styled.div`
         width: 1920px;
         height: 100%;
-        overflow-y: auto;
+        overflow-y: hidden;
         min-height: 100vh;
 
         @media (max-width: ${utils.MAX_WIDTH}) {
@@ -48,8 +48,6 @@ const S = {
     Container: styled.div`
         display: flex;
         width: 100%;
-        height: calc(100vh - 48px);
-        padding: 48px 0 0 0;
     `,
     UserAccess: styled.div`
         display: block;

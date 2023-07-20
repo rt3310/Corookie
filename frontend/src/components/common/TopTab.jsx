@@ -11,21 +11,19 @@ const TopTab = () => {
 
 const S = {
     Wrap: styled.div`
-        position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         max-width: 100vw;
-        height: 48px;
-        background-color: ${({ theme }) => theme.color.color1};
+        height: 56px;
     `,
     Title: styled.div`
-        display: flex;
-        align-items: center;
         height: 100%;
-        font-size: ${({ theme }) => theme.fontsize.title1};
-        color: ${({ theme }) => theme.color.white};
-        margin: 0 0 0 20px;
+        width: 167px;
+        font-size: ${({ theme }) => theme.fontsize.logo};
+        font-weight: 700;
+        color: ${({ theme }) => theme.color.main};
+        padding: 24px 8px 8px 32px;
     `,
 }
 

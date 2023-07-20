@@ -14,7 +14,7 @@ const ProjectIntro = () => {
 
 const S = {
     Wrap: styled.div`
-        width: 240px;
+        width: 216px;
         height: 150px;
         background-color: ${({ theme }) => theme.color.white};
         border-radius: 8px;

@@ -3,6 +3,8 @@ import styled from 'styled-components'
 
 import * as components from 'components'
 
+import { IoExitOutline } from 'react-icons/io5'
+
 const TextChat = () => {
     const [openComment, setOpenComment] = useState(false)
 
@@ -11,13 +13,26 @@ const TextChat = () => {
             <S.Header>
                 <S.Title>1. 공지</S.Title>
                 <S.DeleteButton>
-                    <img src={require('images/delete.png').default} alt="삭제버튼" />
+                    <IoExitOutline />
                 </S.DeleteButton>
             </S.Header>
             <S.Container>
                 <S.ThreadBox>
                     <components.Thread openComment={openComment} setOpenComment={setOpenComment} />
+                    <components.Thread />
+                    <components.Thread />
+                    <components.Thread />
+                    <components.Thread />
+                    <components.Thread />
+                    <components.Thread />
+                    <components.Thread />
+                    <components.Thread />
+                    <components.Thread />
+                    <components.Thread />
+                    <components.Thread />
+                    <components.Thread />
                 </S.ThreadBox>
+                <components.EditBox />
                 {openComment ? <components.CommentBox /> : null}
             </S.Container>
         </S.Wrap>
@@ -47,13 +62,13 @@ const S = {
         cursor: pointer;
         transition-duration: 0.2s;
 
-        & img {
+        & svg {
             width: 24px;
             height: 24px;
         }
 
         &:hover {
-            filter: ${({ theme }) => theme.color.warningFilter};
+            color: ${({ theme }) => theme.color.warning};
             transform: translateY(-1px);
         }
     `,
@@ -62,7 +77,26 @@ const S = {
         height: 100%;
     `,
     ThreadBox: styled.div`
+        position: relative;
         width: 100%;
+        max-height: calc(100vh - 160px);
+        overflow-y: auto;
+        padding: 0 0 16px;
+
+        &::-webkit-scrollbar {
+            height: 0px;
+            width: 4px;
+        }
+        &::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        &::-webkit-scrollbar-thumb {
+            background: ${({ theme }) => theme.color.gray};
+            border-radius: 45px;
+        }
+        &::-webkit-scrollbar-thumb:hover {
+            background: ${({ theme }) => theme.color.gray};
+        }
     `,
 }
 

@@ -75,11 +75,28 @@ const ChannelNav = () => {
 
 const S = {
     Wrap: styled.div`
-        width: 240px;
+        width: 216px;
+        max-height: calc(100vh - 344px);
         background-color: ${({ theme }) => theme.color.white};
         border-radius: 8px;
         box-shadow: ${({ theme }) => theme.shadow.card};
         margin: 16px 0;
+        overflow-y: auto;
+
+        &::-webkit-scrollbar {
+            height: 0px;
+            width: 4px;
+        }
+        &::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        &::-webkit-scrollbar-thumb {
+            background: ${({ theme }) => theme.color.gray};
+            border-radius: 45px;
+        }
+        &::-webkit-scrollbar-thumb:hover {
+            background: ${({ theme }) => theme.color.gray};
+        }
     `,
     Container: styled.div`
         width: 100%;
@@ -95,7 +112,7 @@ const S = {
         cursor: pointer;
 
         &:hover {
-            background-color: ${({ theme }) => theme.color.color3};
+            background-color: ${({ theme }) => theme.color.main};
             color: ${({ theme }) => theme.color.white};
         }
 
@@ -134,7 +151,7 @@ const S = {
         transition-duration: 0.2s;
 
         &:hover {
-            background-color: ${({ theme }) => theme.color.color3};
+            background-color: ${({ theme }) => theme.color.main};
             color: ${({ theme }) => theme.color.white};
         }
 
@@ -151,16 +168,24 @@ const S = {
         }
     `,
     AddChannelButton: styled.div`
-        padding: 12px 16px;
-        cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: flex-start;
+        font-size: ${({ theme }) => theme.fontsize.sub1};
+        padding: 12px 16px;
         transition-duration: 0.2s;
+        cursor: pointer;
 
         &:hover {
             transform: translateY(-2px);
-            color: ${({ theme }) => theme.color.color3};
+            color: ${({ theme }) => theme.color.main};
+        }
+
+        & svg {
+            width: 20px;
+            height: 20px;
+            margin: 0 0 0 -4px;
+            color: ${({ theme }) => theme.color.main};
         }
     `,
     DmList: styled.ul`
@@ -170,10 +195,11 @@ const S = {
         display: flex;
         align-items: center;
         padding: 6px 16px;
+        font-size: ${({ theme }) => theme.fontsize.sub1};
         cursor: pointer;
 
         &:hover {
-            background-color: ${({ theme }) => theme.color.color3};
+            background-color: ${({ theme }) => theme.color.main};
             color: ${({ theme }) => theme.color.white};
         }
 
@@ -186,9 +212,12 @@ const S = {
         }
     `,
     DmProfileImage: styled.li`
+        display: flex;
+        align-items: center;
         margin: 0 10px 0 0;
+
         & img {
-            width: 30px;
+            width: 20px;
         }
     `,
     VideoChannelList: styled.ul``,

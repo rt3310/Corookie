@@ -14,14 +14,10 @@ const common = {
 }
 
 const color = {
-    color1: '#001848',
-    color2: '#02457A',
-    color3: '#018ABE',
-    color4: '#97CADB',
-    color5: '#D6E8EE',
-    pending: '#EA9A27',
-    warning: '#E93636',
-    success: '#008472',
+    main: '#286EF0',
+    pending: '#FFC908',
+    warning: '#FF1304',
+    success: '#0DDB9D',
     white: '#FFF',
     black: '#000',
     darkgray: '#333',
@@ -29,11 +25,12 @@ const color = {
     lightgray: '#EEE',
     gray: '#A0A0A0',
 
-    warningFilter: 'invert(40%) sepia(73%) saturate(7218%) hue-rotate(348deg) brightness(100%) contrast(83%)',
+    warningFilter: 'invert(16%) sepia(51%) saturate(7032%) hue-rotate(357deg) brightness(105%) contrast(108%)',
 }
 
 const fontsize = {
     content: '14px',
+    logo: '27px',
     title1: '24px',
     title2: '18px',
     title3: '16px',
