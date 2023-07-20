@@ -1,20 +1,73 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { IoIosArrowDown } from 'react-icons/io'
+import { BsPlus } from 'react-icons/bs'
 
 const ChannelNav = () => {
+    const [openText, setOpenText] = useState(true)
+    const [openDm, setOpenDm] = useState(true)
+    const [openVideo, setOpenVideo] = useState(true)
+
     return (
         <S.Wrap>
             <S.Container>
-                <S.TextChannelList>
-                    <S.ChannelHead>
-                        텍스트 채널 <IoIosArrowDown />
+                <S.TextChannelList className={openText ? 'opened' : ''}>
+                    <S.ChannelHead onClick={() => setOpenText(!openText)}>
+                        텍스트 채널 &nbsp; <IoIosArrowDown />
                     </S.ChannelHead>
                     <S.Channel>1. 공지</S.Channel>
                     <S.Channel>2. 자유</S.Channel>
                     <S.Channel>3. Backend</S.Channel>
                     <S.Channel>4. Frontend</S.Channel>
+                    <S.AddChannelButton>
+                        <BsPlus /> 채널 추가
+                    </S.AddChannelButton>
                 </S.TextChannelList>
+                <S.DmList className={openDm ? 'opened' : ''}>
+                    <S.ChannelHead onClick={() => setOpenDm(!openDm)}>
+                        Direct Message &nbsp; <IoIosArrowDown />
+                    </S.ChannelHead>
+                    <S.DmMember>
+                        <S.DmProfileImage>
+                            <img src={require('images/profile.png').default} alt="프로필" />
+                        </S.DmProfileImage>
+                        황상미
+                    </S.DmMember>
+                    <S.DmMember>
+                        <S.DmProfileImage>
+                            <img src={require('images/profile.png').default} alt="프로필" />
+                        </S.DmProfileImage>
+                        황상미
+                    </S.DmMember>
+                    <S.DmMember>
+                        <S.DmProfileImage>
+                            <img src={require('images/profile.png').default} alt="프로필" />
+                        </S.DmProfileImage>
+                        황상미
+                    </S.DmMember>
+                    <S.DmMember>
+                        <S.DmProfileImage>
+                            <img src={require('images/profile.png').default} alt="프로필" />
+                        </S.DmProfileImage>
+                        황상미
+                    </S.DmMember>
+                    <S.DmMember>
+                        <S.DmProfileImage>
+                            <img src={require('images/profile.png').default} alt="프로필" />
+                        </S.DmProfileImage>
+                        황상미
+                    </S.DmMember>
+                </S.DmList>
+                <S.VideoChannelList className={openVideo ? 'opened' : ''}>
+                    <S.ChannelHead onClick={() => setOpenVideo(!openVideo)}>
+                        화상 채널 &nbsp; <IoIosArrowDown />
+                    </S.ChannelHead>
+                    <S.Channel>1. 회의</S.Channel>
+                    <S.Channel>2. 자유</S.Channel>
+                    <S.AddChannelButton>
+                        <BsPlus /> 채널 추가
+                    </S.AddChannelButton>
+                </S.VideoChannelList>
             </S.Container>
         </S.Wrap>
     )
@@ -54,18 +107,31 @@ const S = {
             border-radius: 0 0 8px 8px;
         }
     `,
-    TextChannelList: styled.ul``,
+    TextChannelList: styled.ul`
+        border-bottom: 1px solid ${({ theme }) => theme.color.lightgray};
+    `,
     ChannelHead: styled.li`
-        font-size: 16px;
+        font-size: ${({ theme }) => theme.fontsize.title3};
         display: flex;
         align-items: center;
         padding: 16px 16px 10px;
         cursor: pointer;
+
+        :not(.opened) & svg {
+            transition-duration: 0.2s;
+            transform: rotateZ(180deg);
+        }
+
+        .opened & svg {
+            transition-duration: 0.2s;
+            transform: rotateZ(360deg);
+        }
     `,
     Channel: styled.li`
-        font-size: 14px;
+        font-size: ${({ theme }) => theme.fontsize.sub1};
         padding: 12px 16px;
         cursor: pointer;
+        transition-duration: 0.2s;
 
         &:hover {
             background-color: ${({ theme }) => theme.color.color3};
@@ -75,7 +141,57 @@ const S = {
         &:last-child {
             border-radius: 0 0 8px 8px;
         }
+
+        :not(.opened) & {
+            display: none;
+        }
+
+        .opened & {
+            display: block;
+        }
     `,
+    AddChannelButton: styled.div`
+        padding: 12px 16px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        transition-duration: 0.2s;
+
+        &:hover {
+            transform: translateY(-2px);
+            color: ${({ theme }) => theme.color.color3};
+        }
+    `,
+    DmList: styled.ul`
+        border-bottom: 1px solid ${({ theme }) => theme.color.lightgray};
+    `,
+    DmMember: styled.li`
+        display: flex;
+        align-items: center;
+        padding: 6px 16px;
+        cursor: pointer;
+
+        &:hover {
+            background-color: ${({ theme }) => theme.color.color3};
+            color: ${({ theme }) => theme.color.white};
+        }
+
+        :not(.opened) & {
+            display: none;
+        }
+
+        .opened & {
+            display: flex;
+        }
+    `,
+    DmProfileImage: styled.li`
+        margin: 0 10px 0 0;
+        & img {
+            width: 30px;
+        }
+    `,
+    VideoChannelList: styled.ul``,
 }
 
 export default ChannelNav
