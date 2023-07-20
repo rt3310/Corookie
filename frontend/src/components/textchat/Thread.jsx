@@ -38,6 +38,11 @@ const Thread = ({ openComment, setOpenComment }) => {
                         <S.MemberName>황상미</S.MemberName>
                         <S.CreatedTime>오전 11:12</S.CreatedTime>
                         <S.CommentButton onClick={() => setOpenComment(!openComment)} open={openComment}>
+                            <div>
+                                <img src={require('images/profile.png').default} alt="프로필" />
+                                <img src={require('images/profile.png').default} alt="프로필" />
+                                <img src={require('images/profile.png').default} alt="프로필" />
+                            </div>
                             3개의 댓글 <IoIosArrowForward />
                         </S.CommentButton>
                     </S.MemberInfoBox>
@@ -127,11 +132,29 @@ const S = {
 
         &:hover {
             color: ${({ theme }) => theme.color.warning};
+
+            & > div img {
+                margin: 0 4px 0 0;
+            }
         }
 
         & svg {
             width: 20px;
             height: 20px;
+        }
+
+        & > div {
+            margin: 0 10px 0 0;
+        }
+
+        & img {
+            width: 24px;
+            height: 24px;
+            transition-duration: 0.2s;
+        }
+
+        & img:not(:last-child) {
+            margin: 0 -10px 0 0;
         }
     `,
     Text: styled.div`
