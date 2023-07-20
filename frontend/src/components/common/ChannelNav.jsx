@@ -1,9 +1,13 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import { IoIosArrowDown } from 'react-icons/io'
 import { BsPlus } from 'react-icons/bs'
 
+import * as utils from 'utils'
+
 const ChannelNav = () => {
+    const navigate = useNavigate()
     const [openText, setOpenText] = useState(true)
     const [openDm, setOpenDm] = useState(true)
     const [openVideo, setOpenVideo] = useState(true)
@@ -15,7 +19,7 @@ const ChannelNav = () => {
                     <S.ChannelHead onClick={() => setOpenText(!openText)}>
                         텍스트 채널 &nbsp; <IoIosArrowDown />
                     </S.ChannelHead>
-                    <S.Channel>1. 공지</S.Channel>
+                    <S.Channel onClick={() => navigate(utils.URL.CHAT.TEXT)}>1. 공지</S.Channel>
                     <S.Channel>2. 자유</S.Channel>
                     <S.Channel>3. Backend</S.Channel>
                     <S.Channel>4. Frontend</S.Channel>

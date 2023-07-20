@@ -25,6 +25,7 @@ const color = {
     lightgray: '#EEE',
     gray: '#A0A0A0',
 
+    mainFilter: 'invert(34%) sepia(44%) saturate(5088%) hue-rotate(211deg) brightness(99%) contrast(90%)',
     warningFilter: 'invert(16%) sepia(51%) saturate(7032%) hue-rotate(357deg) brightness(105%) contrast(108%)',
 }
 

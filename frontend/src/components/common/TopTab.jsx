@@ -1,10 +1,15 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
+import * as utils from 'utils'
+
 const TopTab = () => {
+    const navigate = useNavigate()
+
     return (
         <S.Wrap>
-            <S.Title>CoRookie</S.Title>
+            <S.Title onClick={() => navigate(utils.URL.HOME.MAIN)}>CoRookie</S.Title>
         </S.Wrap>
     )
 }
@@ -24,6 +29,7 @@ const S = {
         font-weight: 700;
         color: ${({ theme }) => theme.color.main};
         padding: 24px 8px 8px 32px;
+        cursor: pointer;
     `,
 }
 

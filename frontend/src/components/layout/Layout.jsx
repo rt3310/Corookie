@@ -37,7 +37,7 @@ const S = {
     Main: styled.div`
         width: 1920px;
         height: 100%;
-        overflow-y: hidden;
+        /* overflow-y: hidden; */
         min-height: 100vh;
 
         @media (max-width: ${utils.MAX_WIDTH}) {

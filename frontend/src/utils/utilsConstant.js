@@ -10,4 +10,4 @@ export const URL = {
     },
 }
 
-export const MAX_WIDTH = '1440px'
+export const MAX_WIDTH = '1920px'

@@ -12,28 +12,30 @@ const TextChat = () => {
         <S.Wrap>
             <S.Header>
                 <S.Title>1. 공지</S.Title>
-                <S.DeleteButton>
+                <S.ExitButton>
                     <IoExitOutline />
-                </S.DeleteButton>
+                </S.ExitButton>
             </S.Header>
             <S.Container>
-                <S.ThreadBox>
-                    <components.Thread openComment={openComment} setOpenComment={setOpenComment} />
-                    <components.Thread />
-                    <components.Thread />
-                    <components.Thread />
-                    <components.Thread />
-                    <components.Thread />
-                    <components.Thread />
-                    <components.Thread />
-                    <components.Thread />
-                    <components.Thread />
-                    <components.Thread />
-                    <components.Thread />
-                    <components.Thread />
-                </S.ThreadBox>
-                <components.EditBox />
-                {openComment ? <components.CommentBox /> : null}
+                <S.ChatBox>
+                    <S.ThreadBox>
+                        <components.Thread openComment={openComment} setOpenComment={setOpenComment} />
+                        <components.Thread />
+                        <components.Thread />
+                        <components.Thread />
+                        <components.Thread />
+                        <components.Thread />
+                        <components.Thread />
+                        <components.Thread />
+                        <components.Thread />
+                        <components.Thread />
+                        <components.Thread />
+                        <components.Thread />
+                        <components.Thread />
+                    </S.ThreadBox>
+                    <components.EditBox />
+                </S.ChatBox>
+                {openComment && <components.CommentBox />}
             </S.Container>
         </S.Wrap>
     )
@@ -41,6 +43,8 @@ const TextChat = () => {
 
 const S = {
     Wrap: styled.div`
+        display: flex;
+        flex-direction: column;
         width: 100%;
         height: 100%;
     `,
@@ -49,7 +53,8 @@ const S = {
         align-items: center;
         height: 64px;
         border-radius: 8px;
-        background-color: ${({ theme }) => theme.color.white};
+        background-color: ${({ theme }) => theme.color.main};
+        color: ${({ theme }) => theme.color.white};
         box-shadow: ${({ theme }) => theme.shadow.card};
         margin: 16px;
         padding: 0 26px;
@@ -57,7 +62,7 @@ const S = {
     Title: styled.div`
         font-size: ${({ theme }) => theme.fontsize.title2};
     `,
-    DeleteButton: styled.div`
+    ExitButton: styled.div`
         margin: 0 0 0 auto;
         cursor: pointer;
         transition-duration: 0.2s;
@@ -69,17 +74,23 @@ const S = {
 
         &:hover {
             color: ${({ theme }) => theme.color.warning};
-            transform: translateY(-1px);
+            transform: translateX(1px);
         }
     `,
     Container: styled.div`
         display: flex;
         height: 100%;
     `,
-    ThreadBox: styled.div`
-        position: relative;
+    ChatBox: styled.div`
+        display: flex;
+        flex-direction: column;
         width: 100%;
-        max-height: calc(100vh - 160px);
+        height: 100%;
+        transition: width 0.2s;
+    `,
+    ThreadBox: styled.div`
+        width: 100%;
+        max-height: calc(100vh - 300px);
         overflow-y: auto;
         padding: 0 0 16px;
 
