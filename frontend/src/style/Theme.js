@@ -4,38 +4,58 @@ const common = {
     display: flex;
     justify-contents: center;
     align-items: center;
-  `,
+    `,
     flexCenterColumn: `
-    display: flex;
-    flex-direction: column;
-    justify-contents: center;
-    align-items: center;
-  `,
+        display: flex;
+        flex-direction: column;
+        justify-contents: center;
+        align-items: center;
+    `,
 }
 
 const color = {
-    main: '#FFD462',
-    sub: '#FFEBB6',
-    typo1: '#141414',
-    typo2: '#3D3D3D',
-    typo3: '#A5A5A5',
-    typo4: '#DFDFDF',
-    typo5: '#FFFFFF',
-    background1: '#FFFAEB',
-    background2: '#F7F7F7',
-    warning: '#E93636',
+    main: '#286EF0',
+    pending: '#FFC908',
+    warning: '#FF1304',
+    success: '#0DDB9D',
+    white: '#FFF',
+    black: '#000',
+    darkgray: '#333',
+    background: '#F3F3F3',
+    lightgray: '#EEE',
+    gray: '#A0A0A0',
+
+    mainFilter: 'invert(34%) sepia(44%) saturate(5088%) hue-rotate(211deg) brightness(99%) contrast(90%)',
+    warningFilter: 'invert(16%) sepia(51%) saturate(7032%) hue-rotate(357deg) brightness(105%) contrast(108%)',
+}
+
+const fontsize = {
+    content: '14px',
+    logo: '27px',
+    title1: '24px',
+    title2: '18px',
+    title3: '16px',
+    sub1: '14px',
+}
+
+const lineheight = {
+    content: '24px',
+    title1: '24px',
+    title2: '18px',
+    title3: '16px',
+    sub1: '14px',
 }
 
 const shadow = {
-    grid: `0px 4px 40px rgba(0, 0, 0, 0.1);`,
-    card: `8px 4px 60px rgba(0, 0, 0, 0.08);`,
-    button: `8px 4px 40px rgba(0, 0, 0, 0.3);`,
+    card: `0px 3px 3px 0px rgba(0, 0, 0, 0.03);`,
 }
 
 const Theme = {
     common,
     color,
     shadow,
+    fontsize,
+    lineheight,
 }
 
 export default Theme

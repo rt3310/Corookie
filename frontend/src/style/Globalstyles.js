@@ -58,7 +58,7 @@ const GlobalStyles = createGlobalStyle`
     font-size: 100%;
     font: inherit;
     vertical-align: baseline;
-    font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+    font-family: 'Noto Sans KR', 'Pretendard', sans-serif;
     }
     /* HTML5 display-role reset for older browsers */
     article, aside, details, figcaption, figure, 
@@ -87,7 +87,10 @@ const GlobalStyles = createGlobalStyle`
         background-color: #fff;
     }
     //#endregion
-    
+    #root {
+        width: 100%;
+        height: 100%;
+    }
 `
 
 export default GlobalStyles
