@@ -1,7 +1,7 @@
-package com.fourttttty.corookie.member.infrastructure;
+package com.fourttttty.corookie.project.infrastructure;
 
-import com.fourttttty.corookie.member.domain.Member;
+import com.fourttttty.corookie.project.domain.Project;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface MemberJpaRepository extends JpaRepository<Member, Long> {
+public interface ProjectJpaRepository extends JpaRepository<Project, Long> {
 }
