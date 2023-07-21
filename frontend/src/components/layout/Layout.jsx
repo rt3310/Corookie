@@ -48,12 +48,14 @@ const S = {
     Container: styled.div`
         display: flex;
         width: 100%;
+        max-height: calc(100vh - 56px);
     `,
     UserAccess: styled.div`
         display: block;
         width: 272px;
         height: 100%;
         padding: 0 16px;
+        max-height: calc(100vh - 56px);
 
         @media (max-width: 800px) {
             display: none;

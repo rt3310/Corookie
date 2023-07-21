@@ -126,12 +126,12 @@ const S = {
         align-items: center;
         margin: 0 0 0 auto;
         font-size: 13px;
-        color: ${({ theme }) => theme.color.main};
+        color: ${({ theme }) => theme.color.gray};
         transition-duration: 0.2s;
         cursor: pointer;
 
         &:hover {
-            color: ${({ theme }) => theme.color.warning};
+            color: ${({ theme }) => theme.color.main};
 
             & > div img {
                 margin: 0 4px 0 0;
@@ -170,10 +170,14 @@ const S = {
         width: 100%;
         height: 40px;
         font-size: ${({ theme }) => theme.fontsize.content};
-        color: ${({ theme }) => theme.color.main};
+        color: ${({ theme }) => theme.color.gray};
 
         & > div {
             cursor: pointer;
+        }
+
+        & > div:hover {
+            color: ${({ theme }) => theme.color.main};
         }
     `,
     HideButton: styled.div`

@@ -36,7 +36,7 @@ const S = {
         border-radius: 8px;
         background-color: ${({ theme }) => theme.color.white};
         box-shadow: ${({ theme }) => theme.shadow.card};
-        margin: auto 16px 16px;
+        margin: 16px;
         padding: 23px 26px;
     `,
     Edit: styled.textarea`
@@ -56,10 +56,6 @@ const S = {
         margin: 0 16px 4px 0;
         transition-duration: 0.2s;
         cursor: pointer;
-
-        &:hover {
-            color: ${({ theme }) => theme.color.warning};
-        }
 
         & svg {
             width: 20px;

@@ -53,8 +53,7 @@ const S = {
         align-items: center;
         height: 64px;
         border-radius: 8px;
-        background-color: ${({ theme }) => theme.color.main};
-        color: ${({ theme }) => theme.color.white};
+        background-color: ${({ theme }) => theme.color.white};
         box-shadow: ${({ theme }) => theme.shadow.card};
         margin: 16px;
         padding: 0 26px;
@@ -80,6 +79,7 @@ const S = {
     Container: styled.div`
         display: flex;
         height: 100%;
+        max-height: calc(100vh - 152px);
     `,
     ChatBox: styled.div`
         display: flex;
@@ -90,9 +90,11 @@ const S = {
     `,
     ThreadBox: styled.div`
         width: 100%;
-        max-height: calc(100vh - 300px);
+        flex-grow: 1;
+        /* max-height: calc(100vh - 300px); */
         overflow-y: auto;
         padding: 0 0 16px;
+        margin: 0 0 auto 0;
 
         &::-webkit-scrollbar {
             height: 0px;
