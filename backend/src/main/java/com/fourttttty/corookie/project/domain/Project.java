@@ -5,6 +5,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "project")
 @Getter
@@ -12,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class Project {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "project_id")
     public Long id;
 
@@ -25,16 +27,16 @@ public class Project {
 
 
     @Column(name = "created_at")
-    private String createdAt;
+    private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
-    private String updatedAt;
+    private LocalDateTime updatedAt;
 
     @Column(name = "enabled")
     private boolean enabled;
 
     @Column(name = "inv_link")
-    private boolean invLink;
+    private String invLink;
 
     @Column(name = "inv_status")
     private boolean invStatus;

@@ -2,7 +2,7 @@ package com.fourttttty.corookie.project.presentation;
 
 import com.fourttttty.corookie.project.application.service.ProjectService;
 import com.fourttttty.corookie.project.domain.Project;
-import com.fourttttty.corookie.project.response.ProjectResponse;
+import com.fourttttty.corookie.project.dto.response.ProjectResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,18 +17,20 @@ public class ProjectController {
 
     @GetMapping
     public ResponseEntity<List<ProjectResponse>> projects(){
+//        return ResponseEntity.ok(projectService.findAll().stream().map(ProjectResponse::of).toList());
         return null;
     }
 
     @GetMapping("/{projectId}")
     public ResponseEntity<ProjectResponse> projectDetail(@PathVariable Long projectId) {
-        return ResponseEntity.ok(new ProjectResponse(projectService.findById(projectId).getName()));
+        //return ResponseEntity.ok(new ProjectResponse(projectService.findById(projectId).getName()));
+        return null;
     }
 
     @PostMapping
     public ResponseEntity<ProjectResponse> postProjectDetail(@PathVariable Long projectId) {
-
-        return ResponseEntity.ok(new ProjectResponse(projectService.findById(projectId).getName()));
+            return null;
+//        return ResponseEntity.ok(new ProjectResponse(projectService.findById(projectId).getName()));
     }
 
     @PutMapping("/{projectId}")
@@ -42,7 +44,8 @@ public class ProjectController {
 
     @DeleteMapping
     public ResponseEntity<ProjectResponse> deleteProjectDetail(@PathVariable Long projectId) {
-        return ResponseEntity.ok(new ProjectResponse(projectService.findById(projectId).getName()));
+        return null;
+        //return ResponseEntity.ok(new ProjectResponse(projectService.findById(projectId).getName()));
     }
 
 
