@@ -18,19 +18,18 @@ public class ProjectService {
     private final ProjectRepository projectRepository;
 
     public List<ProjectResponse> findAll(){
-       // return projectRepository.findAll();
-        return null;
+        return projectRepository.findAll().stream()
+                .map(ProjectResponse::of)
+                .toList();
     }
 
     public ProjectResponse findById(Long id) {
-        Project project = projectRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-        return new ProjectResponse(project.getName(), project.getDescription(), project.getCreatedAt(), project.getUpdatedAt(), project.isEnabled(), project.getInvLink(), project.isInvStatus());
+        return ProjectResponse.of(projectRepository.findById(id).orElseThrow(EntityNotFoundException::new));
     }
 
     @Transactional
     public ProjectResponse create(Project project) {
-        Project createdProject = projectRepository.save(project);
-        return new ProjectResponse(createdProject.getName(), createdProject.getDescription(), createdProject.getCreatedAt(), createdProject.getUpdatedAt(), createdProject.isEnabled(), createdProject.getInvLink(), createdProject.isInvStatus());
+        return ProjectResponse.of(projectRepository.save(project));
     }
 
     @Transactional

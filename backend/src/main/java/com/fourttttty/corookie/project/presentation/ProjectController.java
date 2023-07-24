@@ -18,7 +18,7 @@ public class ProjectController {
     private final ProjectService projectService;
 
     @GetMapping
-    public ResponseEntity<List<ProjectResponse>> projectList(){
+    public ResponseEntity<List<ProjectResponse>> projectList() {
         return ResponseEntity.ok(projectService.findAll().stream().toList());
     }
 
@@ -28,12 +28,12 @@ public class ProjectController {
     }
 
     @PostMapping
-    public ResponseEntity<ProjectResponse> projectCreate(@RequestBody Project project) {
+    public ResponseEntity<ProjectResponse> projectCreate(@RequestBody @Validated Project project) {
         return ResponseEntity.ok(projectService.create(project));
     }
 
     @DeleteMapping("/{projectId}")
-    public ResponseEntity<ProjectResponse> projectDelete(@PathVariable Long projectId) {
+    public ResponseEntity<Object> projectDelete(@PathVariable Long projectId) {
         return ResponseEntity.noContent().build();
     }
 }
