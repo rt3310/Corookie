@@ -18,27 +18,25 @@ public class Project {
     @Column(name = "project_id")
     public Long id;
 
-    @Column(name = "project_name")
+    @Column(nullable = false)
     private String name;
 
-
-    @Column(name = "description")
+    @Column(nullable = false)
     private String description;
 
-
-    @Column(name = "created_at")
+    @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at")
+    @Column
     private LocalDateTime updatedAt;
 
-    @Column(name = "enabled")
+    @Column(columnDefinition = "tinyint(1) default 1")
     private boolean enabled;
 
-    @Column(name = "inv_link")
+    @Column
     private String invLink;
 
-    @Column(name = "inv_status")
+    @Column(nullable = false)
     private boolean invStatus;
 
     /*

@@ -25,19 +25,11 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     }
 
     @Override
-    @Transactional
-    public void save(Project project){
-        projectJpaRepository.save(project);
+    public Project save(Project project){
+        return projectJpaRepository.save(project);
     }
 
     @Override
-    @Transactional
-    public void update(Project project){
-        projectJpaRepository.save(project);
-    }
-
-    @Override
-    @Transactional
     public void deleteById(Long id) {
         projectJpaRepository.deleteById(id);
     }
