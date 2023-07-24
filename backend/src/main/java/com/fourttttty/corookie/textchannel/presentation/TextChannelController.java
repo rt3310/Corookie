@@ -4,10 +4,7 @@ import com.fourttttty.corookie.textchannel.application.service.TextChannelServic
 import com.fourttttty.corookie.textchannel.domain.TextChannel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,8 +15,21 @@ public class TextChannelController {
 
     private final TextChannelService textChannelService;
 
+    // text channel 전체 조회
     @GetMapping("/")
     public ResponseEntity<List<TextChannel>> textChannelList(@PathVariable Long projectId) {
         return ResponseEntity.ok(textChannelService.findAll());
     }
+
+    // text channel 단일 조회
+    @GetMapping("/{textChannelId}")
+    public ResponseEntity<TextChannel> textChannelDetail(@PathVariable Long projectId, @PathVariable Long textChannelId) {
+        return ResponseEntity.ok(textChannelService.findById(textChannelId));
+    }
+
+    @PostMapping("/")
+    public ResponseEntity<TextChannel> textChannelCreation(@PathVariable Long projectId, @RequestParam(required = true) String name) {
+        return ResponseEntity.ok(textChannelService.createTextChannel(name));
+    }
+
 }

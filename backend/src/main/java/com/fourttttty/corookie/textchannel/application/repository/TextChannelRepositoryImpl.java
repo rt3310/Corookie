@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -16,6 +17,11 @@ public class TextChannelRepositoryImpl implements TextChannelRepository {
     @Override
     public List<TextChannel> findAll() {
         return textChannelJpaRepository.findAll();
+    }
+
+    @Override
+    public Optional<TextChannel> findById(Long id) {
+        return textChannelJpaRepository.findById(id);
     }
 
     @Override
