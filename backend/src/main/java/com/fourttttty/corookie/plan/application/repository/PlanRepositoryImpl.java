@@ -1,32 +1,26 @@
 package com.fourttttty.corookie.plan.application.repository;
 
-
 import com.fourttttty.corookie.plan.domain.Plan;
+import com.fourttttty.corookie.plan.infrastructure.PlanJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class PlanRepositoryImpl implements PlanRepository{
+public class PlanRepositoryImpl implements PlanRepository {
 
-    private final PlanRepository planRepository;
+    private final PlanJpaRepository planJpaRepository;
 
     @Override
     public Optional<Plan> findById(Long id) {
-        return planRepository.findById(id);
-    }
-
-    @Override
-    public List<Plan> findByProjectId(Long projectId) {
-        return planRepository.findByProjectId(projectId);
+        return planJpaRepository.findById(id);
     }
 
     @Override
     public Plan save(Plan plan) {
-        return planRepository.save(plan);
+        return planJpaRepository.save(plan);
     }
 
 

@@ -1,13 +1,13 @@
 package com.fourttttty.corookie.plan.domain;
 
-
 import jakarta.persistence.*;
+
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 @Entity
 @Table(name="plan")
@@ -17,11 +17,8 @@ public class Plan {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
-    private Long planId;
-
-    @Column(nullable = false)
-    private Long projectId;
+    @Column(name = "plan_id", nullable = false)
+    private Long id;
 
     @Column(nullable = false)
     private String planName;
@@ -57,10 +54,11 @@ public class Plan {
 //    @JoinColumn(name="plan_id")
 //    private List<category> categories = new ArrayList<>();
 
+    @Builder
     public Plan(String planName,
                 String description,
                 LocalDateTime planStart,
-                LocalDateTime planEnd){
+                LocalDateTime planEnd) {
         this.planName = planName;
         this.description = description;
         this.planStart = planStart;
@@ -70,7 +68,7 @@ public class Plan {
     public void update(String planName,
                        String description,
                        LocalDateTime planStart,
-                       LocalDateTime planEnd){
+                       LocalDateTime planEnd) {
         this.planName = planName;
         this.description = description;
         this.planStart = planStart;
