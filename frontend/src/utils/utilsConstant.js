@@ -8,6 +8,7 @@ export const URL = {
     CHAT: {
         TEXT: '/chat/text',
     },
+    
 }
 
 export const MAX_WIDTH = '1920px'
