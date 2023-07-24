@@ -1,0 +1,122 @@
+[33mcommit f33cbb81151731cfabbc974b3749804424125dfa[m[33m ([m[1;36mHEAD -> [m[1;32mfeature/plan[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/develop[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmaster[m[33m, [m[1;32mdevelop[m[33m)[m
+Merge: 38621c0 f880708
+Author: 서원호 <btac3310@gmail.com>
+Date:   Fri Jul 21 13:12:02 2023 +0900
+
+    Merge branch 'develop' into 'master'
+    
+    Merge develop to master
+    
+    See merge request s09-webmobile1-sub2/S09P12A402!5
+
+[33mcommit f880708219684a1af0c4f59610efa57f474c310f[m
+Merge: a94ae05 43efc9e
+Author: 서원호 <btac3310@gmail.com>
+Date:   Fri Jul 21 13:09:41 2023 +0900
+
+    Merge branch 'feature/textchat' into 'develop'
+    
+    채팅 화면 구현
+    
+    See merge request s09-webmobile1-sub2/S09P12A402!4
+
+[33mcommit 38621c00cca4d38c5bd1954504725ac2a912ad28[m
+Merge: 47cd2e4 2461124
+Author: 서원호 <btac3310@gmail.com>
+Date:   Fri Jul 21 13:04:59 2023 +0900
+
+    Merge branch 'feature/backend-skeleton' into 'master'
+    
+    Member 조회 기능 추가
+    
+    See merge request s09-webmobile1-sub2/S09P12A402!3
+
+[33mcommit 2461124d21c6e73d9689985f2c3f31241b81878b[m
+Author: rt3310 <btac3310@gmail.com>
+Date:   Fri Jul 21 13:01:06 2023 +0900
+
+    feature: Member 조회 기능 추가
+
+[33mcommit 43efc9ef4ab38d4565fe9530b6bbff661f338a76[m
+Author: rt3310 <btac3310@gmail.com>
+Date:   Fri Jul 21 10:04:47 2023 +0900
+
+    feature: 버튼 색 변경
+
+[33mcommit 00765c64b92d72741e1f2f6583ae2912cd6e14c0[m
+Author: rt3310 <btac3310@gmail.com>
+Date:   Fri Jul 21 01:54:58 2023 +0900
+
+    feature: 댓글 버튼 이미지 애니메이션 추가
+
+[33mcommit df81fdc34f441e43fa3d588a1e2f61f0c74db423[m
+Author: rt3310 <btac3310@gmail.com>
+Date:   Fri Jul 21 01:42:11 2023 +0900
+
+    feature: 스레드 레이아웃 조정 및 더보기 기능 구현
+
+[33mcommit 7943d7a72933a86ce81d68ced3532fe574f78c63[m
+Author: rt3310 <btac3310@gmail.com>
+Date:   Thu Jul 20 17:53:51 2023 +0900
+
+    feature: 스레드 목록 보기 기능 구현
+
+[33mcommit 701ffc441203452b5106010c2c2bbe6f77601cc8[m
+Author: rt3310 <btac3310@gmail.com>
+Date:   Thu Jul 20 09:53:40 2023 +0900
+
+    feature: 채널 카테고리 기능 구현
+
+[33mcommit 81d10a580fa1eb61a5d61c0efe477bb7303bdd87[m
+Author: rt3310 <btac3310@gmail.com>
+Date:   Thu Jul 20 08:45:42 2023 +0900
+
+    feature: text channel 리스트 추가
+
+[33mcommit 51730ae305b90540bb1a26cca8aac30390b43db8[m
+Author: rt3310 <btac3310@gmail.com>
+Date:   Wed Jul 19 17:44:55 2023 +0900
+
+    feature: 텍스트 채팅 기본 레이아웃 구성
+
+[33mcommit 47cd2e45e58a768e95c767dbedf7f3cdfd2db508[m
+Merge: c4d9d9a a94ae05
+Author: 서원호 <btac3310@gmail.com>
+Date:   Wed Jul 19 11:13:43 2023 +0900
+
+    Merge branch 'develop' into 'master'
+    
+    docs: banner 변경
+    
+    See merge request s09-webmobile1-sub2/S09P12A402!2
+
+[33mcommit b0711b9ead92d910b4ec58347bfaae12e3adb0e9[m
+Merge: c4d9d9a a94ae05
+Author: rt3310 <btac3310@gmail.com>
+Date:   Wed Jul 19 11:12:44 2023 +0900
+
+    Merge branch 'develop' of https://lab.ssafy.com/s09-webmobile1-sub2/S09P12A402 into develop
+
+[33mcommit a94ae05db8dabb58f27b1c1dff64b5c103e30356[m
+Author: Jongseo Park <sociojs85@gmail.com>
+Date:   Wed Jul 19 11:11:28 2023 +0900
+
+    docs: banner 변경
+
+[33mcommit c4d9d9aa36604ae0db7ecd1f17a621c07c224deb[m
+Author: rt3310 <btac3310@gmail.com>
+Date:   Wed Jul 19 10:48:09 2023 +0900
+
+    style: babel indent 4로 변경
+
+[33mcommit 3c3aebdff394d553c5bfe37eaef5efbfea432f05[m
+Author: rt3310 <btac3310@gmail.com>
+Date:   Tue Jul 18 17:21:34 2023 +0900
+
+    init: initialize backend project
+
+[33mcommit 5cb223ec3416e265c2dfdcd3079c0e0cd64ec994[m
+Author: rt3310 <btac3310@gmail.com>
+Date:   Tue Jul 18 17:20:55 2023 +0900
+
+    init: initialize project

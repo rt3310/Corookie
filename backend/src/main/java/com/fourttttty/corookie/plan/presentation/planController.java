@@ -30,4 +30,16 @@ public class planController {
     public ResponseEntity<Plan> planCreate(@RequestBody PlanRequest planRequest){
         return ResponseEntity.ok(planService.createPlan(planRequest));
     }
+
+    @PutMapping("/{planId}")
+    public ResponseEntity<Object> planModify(@PathVariable Long planId, @RequestBody PlanRequest planRequest){
+        planService.modifyPlan(planId, planRequest);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{planId}")
+    public ResponseEntity<Object> planDelete(@PathVariable Long planId){
+        planService.deletePlan(planId);
+        return ResponseEntity.ok().build();
+    }
 }

@@ -41,7 +41,7 @@ public class Plan {
     @Column
     private LocalDateTime updatedAt;
 
-    @Column
+    @Column(columnDefinition = "tinyint(1) default 1")
     private boolean enabled;
 
 //    @ManyToMany
@@ -65,5 +65,19 @@ public class Plan {
         this.description = description;
         this.planStart = planStart;
         this.planEnd = planEnd;
+    }
+
+    public void update(String planName,
+                       String description,
+                       LocalDateTime planStart,
+                       LocalDateTime planEnd){
+        this.planName = planName;
+        this.description = description;
+        this.planStart = planStart;
+        this.planEnd = planEnd;
+    }
+
+    public void delete(){
+        this.enabled = false;
     }
 }

@@ -1,0 +1,122 @@
+*   [33mcommit f33cbb81151731cfabbc974b3749804424125dfa[m[33m ([m[1;36mHEAD -> [m[1;32mfeature/#3-일정CRUD기능구현[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/develop[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmaster[m[33m, [m[1;32mdevelop[m[33m)[m
+[31m|[m[32m\[m  Merge: 38621c0 f880708
+[31m|[m [32m|[m Author: 서원호 <btac3310@gmail.com>
+[31m|[m [32m|[m Date:   Fri Jul 21 13:12:02 2023 +0900
+[31m|[m [32m|[m 
+[31m|[m [32m|[m     Merge branch 'develop' into 'master'
+[31m|[m [32m|[m     
+[31m|[m [32m|[m     Merge develop to master
+[31m|[m [32m|[m     
+[31m|[m [32m|[m     See merge request s09-webmobile1-sub2/S09P12A402!5
+[31m|[m [32m|[m   
+[31m|[m *   [33mcommit f880708219684a1af0c4f59610efa57f474c310f[m
+[31m|[m [33m|[m[34m\[m  Merge: a94ae05 43efc9e
+[31m|[m [33m|[m [34m|[m Author: 서원호 <btac3310@gmail.com>
+[31m|[m [33m|[m [34m|[m Date:   Fri Jul 21 13:09:41 2023 +0900
+[31m|[m [33m|[m [34m|[m 
+[31m|[m [33m|[m [34m|[m     Merge branch 'feature/textchat' into 'develop'
+[31m|[m [33m|[m [34m|[m     
+[31m|[m [33m|[m [34m|[m     채팅 화면 구현
+[31m|[m [33m|[m [34m|[m     
+[31m|[m [33m|[m [34m|[m     See merge request s09-webmobile1-sub2/S09P12A402!4
+[31m|[m [33m|[m [34m|[m 
+[31m|[m [33m|[m * [33mcommit 43efc9ef4ab38d4565fe9530b6bbff661f338a76[m
+[31m|[m [33m|[m [34m|[m Author: rt3310 <btac3310@gmail.com>
+[31m|[m [33m|[m [34m|[m Date:   Fri Jul 21 10:04:47 2023 +0900
+[31m|[m [33m|[m [34m|[m 
+[31m|[m [33m|[m [34m|[m     feature: 버튼 색 변경
+[31m|[m [33m|[m [34m|[m 
+[31m|[m [33m|[m * [33mcommit 00765c64b92d72741e1f2f6583ae2912cd6e14c0[m
+[31m|[m [33m|[m [34m|[m Author: rt3310 <btac3310@gmail.com>
+[31m|[m [33m|[m [34m|[m Date:   Fri Jul 21 01:54:58 2023 +0900
+[31m|[m [33m|[m [34m|[m 
+[31m|[m [33m|[m [34m|[m     feature: 댓글 버튼 이미지 애니메이션 추가
+[31m|[m [33m|[m [34m|[m 
+[31m|[m [33m|[m * [33mcommit df81fdc34f441e43fa3d588a1e2f61f0c74db423[m
+[31m|[m [33m|[m [34m|[m Author: rt3310 <btac3310@gmail.com>
+[31m|[m [33m|[m [34m|[m Date:   Fri Jul 21 01:42:11 2023 +0900
+[31m|[m [33m|[m [34m|[m 
+[31m|[m [33m|[m [34m|[m     feature: 스레드 레이아웃 조정 및 더보기 기능 구현
+[31m|[m [33m|[m [34m|[m 
+[31m|[m [33m|[m * [33mcommit 7943d7a72933a86ce81d68ced3532fe574f78c63[m
+[31m|[m [33m|[m [34m|[m Author: rt3310 <btac3310@gmail.com>
+[31m|[m [33m|[m [34m|[m Date:   Thu Jul 20 17:53:51 2023 +0900
+[31m|[m [33m|[m [34m|[m 
+[31m|[m [33m|[m [34m|[m     feature: 스레드 목록 보기 기능 구현
+[31m|[m [33m|[m [34m|[m 
+[31m|[m [33m|[m * [33mcommit 701ffc441203452b5106010c2c2bbe6f77601cc8[m
+[31m|[m [33m|[m [34m|[m Author: rt3310 <btac3310@gmail.com>
+[31m|[m [33m|[m [34m|[m Date:   Thu Jul 20 09:53:40 2023 +0900
+[31m|[m [33m|[m [34m|[m 
+[31m|[m [33m|[m [34m|[m     feature: 채널 카테고리 기능 구현
+[31m|[m [33m|[m [34m|[m 
+[31m|[m [33m|[m * [33mcommit 81d10a580fa1eb61a5d61c0efe477bb7303bdd87[m
+[31m|[m [33m|[m [34m|[m Author: rt3310 <btac3310@gmail.com>
+[31m|[m [33m|[m [34m|[m Date:   Thu Jul 20 08:45:42 2023 +0900
+[31m|[m [33m|[m [34m|[m 
+[31m|[m [33m|[m [34m|[m     feature: text channel 리스트 추가
+[31m|[m [33m|[m [34m|[m 
+[31m|[m [33m|[m * [33mcommit 51730ae305b90540bb1a26cca8aac30390b43db8[m
+[31m|[m [33m|[m [34m|[m Author: rt3310 <btac3310@gmail.com>
+[31m|[m [33m|[m [34m|[m Date:   Wed Jul 19 17:44:55 2023 +0900
+[31m|[m [33m|[m [34m|[m 
+[31m|[m [33m|[m [34m|[m     feature: 텍스트 채팅 기본 레이아웃 구성
+[31m|[m [33m|[m [34m|[m   
+* [33m|[m [34m|[m   [33mcommit 38621c00cca4d38c5bd1954504725ac2a912ad28[m
+[35m|[m[36m\[m [33m\[m [34m\[m  Merge: 47cd2e4 2461124
+[35m|[m [36m|[m [33m|[m [34m|[m Author: 서원호 <btac3310@gmail.com>
+[35m|[m [36m|[m [33m|[m [34m|[m Date:   Fri Jul 21 13:04:59 2023 +0900
+[35m|[m [36m|[m [33m|[m [34m|[m 
+[35m|[m [36m|[m [33m|[m [34m|[m     Merge branch 'feature/backend-skeleton' into 'master'
+[35m|[m [36m|[m [33m|[m [34m|[m     
+[35m|[m [36m|[m [33m|[m [34m|[m     Member 조회 기능 추가
+[35m|[m [36m|[m [33m|[m [34m|[m     
+[35m|[m [36m|[m [33m|[m [34m|[m     See merge request s09-webmobile1-sub2/S09P12A402!3
+[35m|[m [36m|[m [33m|[m [34m|[m 
+[35m|[m * [33m|[m [34m|[m [33mcommit 2461124d21c6e73d9689985f2c3f31241b81878b[m
+[35m|[m [34m|[m [33m|[m[34m/[m  Author: rt3310 <btac3310@gmail.com>
+[35m|[m [34m|[m[34m/[m[33m|[m   Date:   Fri Jul 21 13:01:06 2023 +0900
+[35m|[m [34m|[m [33m|[m   
+[35m|[m [34m|[m [33m|[m       feature: Member 조회 기능 추가
+[35m|[m [34m|[m [33m|[m 
+[35m|[m * [33m|[m [33mcommit b0711b9ead92d910b4ec58347bfaae12e3adb0e9[m
+[35m|[m [1;31m|[m[33m\[m[33m|[m Merge: c4d9d9a a94ae05
+[35m|[m [1;31m|[m [33m|[m Author: rt3310 <btac3310@gmail.com>
+[35m|[m [1;31m|[m [33m|[m Date:   Wed Jul 19 11:12:44 2023 +0900
+[35m|[m [1;31m|[m [33m|[m 
+[35m|[m [1;31m|[m [33m|[m     Merge branch 'develop' of https://lab.ssafy.com/s09-webmobile1-sub2/S09P12A402 into develop
+[35m|[m [1;31m|[m [33m|[m   
+* [1;31m|[m [33m|[m   [33mcommit 47cd2e45e58a768e95c767dbedf7f3cdfd2db508[m
+[1;31m|[m[33m\[m [1;31m\[m [33m\[m  Merge: c4d9d9a a94ae05
+[1;31m|[m [33m|[m[1;31m/[m [33m/[m  Author: 서원호 <btac3310@gmail.com>
+[1;31m|[m[1;31m/[m[33m|[m [33m/[m   Date:   Wed Jul 19 11:13:43 2023 +0900
+[1;31m|[m [33m|[m[33m/[m    
+[1;31m|[m [33m|[m         Merge branch 'develop' into 'master'
+[1;31m|[m [33m|[m         
+[1;31m|[m [33m|[m         docs: banner 변경
+[1;31m|[m [33m|[m         
+[1;31m|[m [33m|[m         See merge request s09-webmobile1-sub2/S09P12A402!2
+[1;31m|[m [33m|[m 
+[1;31m|[m * [33mcommit a94ae05db8dabb58f27b1c1dff64b5c103e30356[m
+[1;31m|[m [1;34m|[m Author: Jongseo Park <sociojs85@gmail.com>
+[1;31m|[m [1;34m|[m Date:   Wed Jul 19 11:11:28 2023 +0900
+[1;31m|[m [1;34m|[m 
+[1;31m|[m [1;34m|[m     docs: banner 변경
+[1;31m|[m [1;34m|[m 
+* [1;34m|[m [33mcommit c4d9d9aa36604ae0db7ecd1f17a621c07c224deb[m
+[1;34m|[m[1;34m/[m  Author: rt3310 <btac3310@gmail.com>
+[1;34m|[m   Date:   Wed Jul 19 10:48:09 2023 +0900
+[1;34m|[m   
+[1;34m|[m       style: babel indent 4로 변경
+[1;34m|[m 
+* [33mcommit 3c3aebdff394d553c5bfe37eaef5efbfea432f05[m
+[1;34m|[m Author: rt3310 <btac3310@gmail.com>
+[1;34m|[m Date:   Tue Jul 18 17:21:34 2023 +0900
+[1;34m|[m 
+[1;34m|[m     init: initialize backend project
+[1;34m|[m 
+* [33mcommit 5cb223ec3416e265c2dfdcd3079c0e0cd64ec994[m
+  Author: rt3310 <btac3310@gmail.com>
+  Date:   Tue Jul 18 17:20:55 2023 +0900
+  
+      init: initialize project
