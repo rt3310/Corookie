@@ -4,8 +4,7 @@ import com.fourttttty.corookie.project.domain.Project;
 import lombok.Builder;
 import java.time.LocalDateTime;
 
-public record ProjectResponse(
-                              String name,
+public record ProjectResponse(String name,
                               String description,
                               LocalDateTime createdAt,
                               LocalDateTime updatedAt,
@@ -18,14 +17,14 @@ public record ProjectResponse(
     }
 
 
-    public static ProjectResponse of(Project project, Boolean enabled, Boolean invStatus) {
+    public static ProjectResponse of(Project project) {
           return ProjectResponse.builder()
                   .name(project.getName())
                   .createdAt(project.getCreatedAt())
                   .updatedAt(project.getUpdatedAt())
-                  .enabled(enabled)
+                  .enabled(project.isEnabled())
                   .invLink(project.getInvLink())
-                  .invStatus(invStatus)
+                  .invStatus(project.isInvStatus())
                   .build();
          }
 
