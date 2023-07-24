@@ -7,4 +7,6 @@ export { default as ChannelNav } from './common/ChannelNav'
 
 export { default as Thread } from './textchat/Thread'
 export { default as CommentBox } from './textchat/CommentBox'
+export { default as CommentEditBox } from './textchat/CommentEditBox'
 export { default as EditBox } from './textchat/EditBox'
+export { default as Comment } from './textchat/Comment'
