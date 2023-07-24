@@ -1,5 +1,6 @@
 package com.fourttttty.corookie.plan.domain;
 
+import com.fourttttty.corookie.global.audit.BaseTime;
 import jakarta.persistence.*;
 
 import lombok.AccessLevel;
@@ -8,12 +9,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name="plan")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Plan {
+@EntityListeners(AuditingEntityListener.class)
+public class Plan extends BaseTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,27 +35,8 @@ public class Plan {
     @Column(nullable = false)
     private LocalDateTime planEnd;
 
-    @Column
-    private LocalDateTime createdAt;
-
-    @Column
-    private LocalDateTime updatedAt;
-
     @Column(columnDefinition = "tinyint(1) default 1")
     private boolean enabled;
-
-//    @ManyToMany
-//    @JoinTable(
-//    name = "plan_member",
-//    joinColumns = @JoinColumn(name = "plan_id"),
-//    inverseJoinColumns = @JoinColumn(name = "member_id")
-//    )
-//    private List<Project> projects;
-
-
-//    @OneToMany
-//    @JoinColumn(name="plan_id")
-//    private List<category> categories = new ArrayList<>();
 
     @Builder
     public Plan(String planName,
