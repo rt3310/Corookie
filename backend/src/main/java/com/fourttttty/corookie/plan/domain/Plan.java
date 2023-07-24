@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 @Entity
 @Table(name="plan")
@@ -23,15 +24,15 @@ public class Plan {
     private Long projectId;
 
     @Column(nullable = false)
-    private String name;
+    private String planName;
 
     @Column(columnDefinition = "text")
     private String description;
 
-    @Column
+    @Column(nullable = false)
     private LocalDateTime planStart;
 
-    @Column
+    @Column(nullable = false)
     private LocalDateTime planEnd;
 
     @Column
@@ -51,12 +52,18 @@ public class Plan {
 //    )
 //    private List<Project> projects;
 
-//    @ManyToMany
-//    @JoinTable(
-//    name = "plan_category",
-//    joinColumns = @JoinColumn(name = "plan_id"),
-//    inverseJoinColumns = @JoinColumn(name = "cate_id")
-//    )
-//    private List<Category> categories;
 
+//    @OneToMany
+//    @JoinColumn(name="plan_id")
+//    private List<category> categories = new ArrayList<>();
+
+    public Plan(String planName,
+                String description,
+                LocalDateTime planStart,
+                LocalDateTime planEnd){
+        this.planName = planName;
+        this.description = description;
+        this.planStart = planStart;
+        this.planEnd = planEnd;
+    }
 }
