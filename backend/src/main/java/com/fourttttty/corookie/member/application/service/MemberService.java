@@ -2,7 +2,6 @@ package com.fourttttty.corookie.member.application.service;
 
 import com.fourttttty.corookie.member.application.repository.MemberRepository;
 import com.fourttttty.corookie.member.domain.Member;
-import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

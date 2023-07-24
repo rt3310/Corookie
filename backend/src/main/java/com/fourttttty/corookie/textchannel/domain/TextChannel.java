@@ -32,15 +32,7 @@ public class TextChannel extends BaseTime {
         return newTextChannel;
     }
 
-    public static TextChannel create(String name, boolean deletable) {
-
-        TextChannel newTextChannel = new TextChannel();
-        newTextChannel.channelName = name;
-        newTextChannel.enabled = true;
-        newTextChannel.deletable = deletable;
-
-        return newTextChannel;
+    public void modifyChannelName(String name) {
+        this.channelName = name;
     }
-
-
 }
