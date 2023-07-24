@@ -14,7 +14,7 @@ public class TextChannelConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
 
         // "/text-channel/endpoint"는 WebSocket 또는 SockJS Client가 웹소켓 핸드셰이크 커넥션을 생성할 경로이다.
-        registry.addEndpoint("/text-channel/endpoint")
+        registry.addEndpoint("/ws/thread")
                 .setAllowedOriginPatterns("*")
                 .withSockJS();
     }
