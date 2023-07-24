@@ -35,7 +35,7 @@ const TextChat = () => {
                     </S.ThreadBox>
                     <components.EditBox />
                 </S.ChatBox>
-                {openComment && <components.CommentBox />}
+                {openComment && <components.CommentBox openComment={openComment} setOpenComment={setOpenComment} />}
             </S.Container>
         </S.Wrap>
     )
