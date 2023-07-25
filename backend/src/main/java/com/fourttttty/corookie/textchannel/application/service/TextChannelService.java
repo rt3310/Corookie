@@ -4,6 +4,7 @@ import com.fourttttty.corookie.project.application.repository.ProjectRepository;
 import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.textchannel.application.repository.TextChannelRepository;
 import com.fourttttty.corookie.textchannel.domain.TextChannel;
+import com.fourttttty.corookie.textchannel.dto.TextChannelCreateRequest;
 import com.fourttttty.corookie.textchannel.dto.TextChannelResponse;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -38,11 +39,17 @@ public class TextChannelService {
     }
 
     @Transactional
-    public TextChannelResponse create(String name, Long projectId) {
-        return new TextChannelResponse(textChannelRepository
-                .save(TextChannel.create(name, projectRepository
+    public TextChannelResponse create(TextChannelCreateRequest request, Long projectId) {
+        return new TextChannelResponse(textChannelRepository.save(request.toEntity(projectRepository
                         .findById(projectId)
                         .orElseThrow(EntityNotFoundException::new))).getChannelName());
+    }
+
+    @Transactional
+    public void createDefaultChannel(String channelName, Long projectId) {
+        TextChannel.create(channelName, true,
+                projectRepository.findById(projectId).orElseThrow(EntityNotFoundException::new))
+                .changeNotDeletableChannel();
     }
 
     @Transactional

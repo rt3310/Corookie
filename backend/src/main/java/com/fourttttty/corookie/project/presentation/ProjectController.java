@@ -28,8 +28,9 @@ public class ProjectController {
     }
 
     @PostMapping
-    public ResponseEntity<ProjectResponse> projectCreate(@RequestBody @Validated ProjectCreateRequest projectCreateRequest) {
-        return ResponseEntity.ok(projectService.create(projectCreateRequest));
+    public ResponseEntity<ProjectResponse> projectCreate(@RequestBody @Validated ProjectCreateRequest projectCreateRequest,
+                                                         @RequestParam Long memberId) {
+        return ResponseEntity.ok(projectService.create(projectCreateRequest, memberId));
     }
 
     @PutMapping("/{projectId}")

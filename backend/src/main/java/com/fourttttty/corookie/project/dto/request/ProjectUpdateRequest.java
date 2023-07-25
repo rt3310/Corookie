@@ -5,6 +5,6 @@ import jakarta.validation.constraints.NotNull;
 
 public record ProjectUpdateRequest(@NotBlank String name,
                                    @NotNull String description,
-                                   @NotBlank String invLink,
-                                   @NotNull Boolean invStatus) {
+                                   @NotBlank String invitationLink,
+                                   @NotNull Boolean invitationStatus) {
 }
