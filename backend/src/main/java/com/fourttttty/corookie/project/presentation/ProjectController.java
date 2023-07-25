@@ -18,7 +18,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProjectController {
     private final ProjectService projectService;
-    private final TextChannelService textChannelService;
 
     @GetMapping
     public ResponseEntity<List<ProjectResponse>> projectList() {
@@ -37,22 +36,26 @@ public class ProjectController {
                 .description(request.description())
                 .invLink(request.invLink())
                 .build());
-        textChannelService.createTextChannel("공지");
-        textChannelService.createTextChannel("자유");
-        textChannelService.createTextChannel("Front-End");
-        textChannelService.createTextChannel("Back-End");
         //TO-DO : textChannelService로 새 채널 생성 시 프로젝트 정보까지 저장할 것.
         return ResponseEntity.ok(projectResponse);
     }
 
     @PutMapping("/{projectId}")
     public ResponseEntity<ProjectResponse> projectModifyName(@RequestBody ProjectUpdateRequest request){
-        ProjectResponse projectResponse = projectService.modifyName(request.name(), request.description(), request.id());
+        ProjectResponse projectResponse = projectService.modify(request);
         return ResponseEntity.ok(projectResponse);
     }
 
     @DeleteMapping("/{projectId}")
     public ResponseEntity<Object> projectDelete(@PathVariable Long projectId) {
         return ResponseEntity.noContent().build();
+    }
+
+    public void addMemberToProject(Long id){
+        projectService.findById(id);
+    }
+
+    public void removeMemberFromProject(){
+
     }
 }

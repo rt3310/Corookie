@@ -34,11 +34,5 @@ public class ProjectRepositoryImpl implements ProjectRepository {
         projectJpaRepository.deleteById(id);
     }
 
-    @Override
-    public Project modifyName(String name, String description, Long id) {
-        int rowsUpdated = projectJpaRepository.modifyProjectName(name, description, id);
-        if (rowsUpdated < 0) throw new EntityNotFoundException();
-        return projectJpaRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-    }
 }
 

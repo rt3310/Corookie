@@ -53,11 +53,9 @@ public class Project extends BaseTime {
     }
 
     public void update(String name,
-                       String description,
-                       String invLink) {
+                       String description) {
         this.name = name;
         this.description = description;
-        this.invLink = invLink;
     }
 
     public void delete(){

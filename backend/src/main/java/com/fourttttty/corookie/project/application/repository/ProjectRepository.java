@@ -12,5 +12,4 @@ public interface ProjectRepository {
     List<Project> findAll();
     Project save(Project project);
     void deleteById(Long id);
-    Project modifyName(String name, String description, Long id);
 }

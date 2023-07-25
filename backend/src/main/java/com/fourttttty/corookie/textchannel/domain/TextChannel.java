@@ -1,6 +1,7 @@
 package com.fourttttty.corookie.textchannel.domain;
 
 import com.fourttttty.corookie.global.audit.BaseTime;
+import com.fourttttty.corookie.project.domain.Project;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -23,11 +24,16 @@ public class TextChannel extends BaseTime {
     private boolean enabled;
     private boolean deletable;
 
-    public static TextChannel create(String name) {
+    @ManyToOne
+    @JoinColumn(name = "project_id")
+    private Project project;
+
+    public static TextChannel create(String name, Project project) {
 
         TextChannel newTextChannel = new TextChannel();
         newTextChannel.channelName = name;
         newTextChannel.enabled = true;
+        newTextChannel.project = project;
 
         return newTextChannel;
     }
