@@ -11,16 +11,16 @@ import java.util.List;
 @Builder
 public record IssueCreateRequest(String topic,
                                  String description,
-                                 String progress,
-                                 String priority,
+                                 IssueProgress issueProgress,
+                                 IssuePriority issuePriority,
                                  List<IssueCategoryCreateRequest> issueCategories) {
 
     public Issue toEntity(Member member) {
         return Issue.builder()
                 .topic(topic)
                 .description(description)
-                .progress(IssueProgress.from(progress))
-                .priority(IssuePriority.from(priority))
+                .progress(issueProgress)
+                .priority(issuePriority)
                 .enabled(true)
                 .manager(member)
                 .build();

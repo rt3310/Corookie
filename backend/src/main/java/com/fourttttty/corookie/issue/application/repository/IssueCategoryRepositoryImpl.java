@@ -1,5 +1,6 @@
 package com.fourttttty.corookie.issue.application.repository;
 
+import com.fourttttty.corookie.issue.domain.Category;
 import com.fourttttty.corookie.issue.domain.IssueCategory;
 import com.fourttttty.corookie.issue.infrastructure.IssueCategoryJpaRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ public class IssueCategoryRepositoryImpl implements IssueCategoryRepository {
     }
 
     @Override
-    public Optional<IssueCategory> findByCategory(String category) {
+    public Optional<IssueCategory> findByCategory(Category category) {
         return issueCategoryJpaRepository.findByCategory(category);
     }
 

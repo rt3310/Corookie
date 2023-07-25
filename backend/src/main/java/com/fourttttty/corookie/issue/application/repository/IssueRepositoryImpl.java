@@ -19,11 +19,16 @@ public class IssueRepositoryImpl implements IssueRepository {
         return issueJpaRepository.save(issue);
     }
 
-    public Optional<Issue> findById(Long id) {
-        return issueJpaRepository.findById(id);
+    public Optional<Issue> findById(Long issueId) {
+        return issueJpaRepository.findById(issueId);
     }
 
     public List<Issue> findByProjectId(Long projectId) {
         return issueJpaRepository.findAll();
+    }
+
+    @Override
+    public void deleteById(Long issueId) {
+        issueJpaRepository.deleteById(issueId);
     }
 }

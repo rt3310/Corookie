@@ -19,7 +19,7 @@ public class Issue extends BaseTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "issue_id")
+    @Column(name = "issue_id", nullable = false)
     private Long id;
 
     @Column(nullable = false)
@@ -33,17 +33,18 @@ public class Issue extends BaseTime {
     private IssueProgress progress;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private IssuePriority priority;
 
     @Column(nullable = false)
     private Boolean enabled;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "project_id")
+    @JoinColumn(name = "project_id", nullable = false)
     private Project project;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "manager_id")
+    @JoinColumn(name = "manager_id", nullable = false)
     private Member manager;
 
     @Builder

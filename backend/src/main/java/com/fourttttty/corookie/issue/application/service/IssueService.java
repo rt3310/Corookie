@@ -40,4 +40,8 @@ public class IssueService {
                         .of(issue, issueCategoryService.findByIssueId(issue.getId()), projectId, memberId))
                 .toList();
     }
+
+    public void deleteById(Long issueId) {
+        issueRepository.deleteById(issueId);
+    }
 }

@@ -2,7 +2,6 @@ package com.fourttttty.corookie.issue.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fourttttty.corookie.global.exception.InvalidIssuePriorityException;
-import com.fourttttty.corookie.global.exception.InvalidIssueProgressException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -10,8 +9,10 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum IssuePriority {
     MUST("must"),
-    IN_PROGRESS("inProgress"),
-    DONE("done");
+    SHOULD("should"),
+    MIDDLE("middle"),
+    MAY("may"),
+    MIGHT("might");
 
     private final String value;
 

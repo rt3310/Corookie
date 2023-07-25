@@ -16,14 +16,14 @@ public class IssueCategoryService {
 
     public IssueCategoryResponse createIfNone(IssueCategoryCreateRequest issueCategoryCreateRequest, Issue issue) {
         return issueCategoryRepository.findByCategory(issueCategoryCreateRequest.category())
-                .map(issueCategory -> new IssueCategoryResponse(issueCategory.getCategory()))
+                .map(issueCategory -> new IssueCategoryResponse(issueCategory.getCategory().getValue()))
                 .orElseGet(() -> new IssueCategoryResponse(issueCategoryRepository
-                        .save(issueCategoryCreateRequest.toEntity(issue)).getCategory()));
+                        .save(issueCategoryCreateRequest.toEntity(issue)).getCategory().getValue()));
     }
 
     public List<IssueCategoryResponse> findByIssueId(Long issueId) {
         return issueCategoryRepository.findByIssueId(issueId).stream()
-                .map(issueCategory -> new IssueCategoryResponse(issueCategory.getCategory()))
+                .map(issueCategory -> new IssueCategoryResponse(issueCategory.getCategory().getValue()))
                 .toList();
     }
 }
