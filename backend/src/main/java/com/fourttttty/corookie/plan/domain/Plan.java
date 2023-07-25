@@ -1,11 +1,13 @@
 package com.fourttttty.corookie.plan.domain;
 
+import com.fourttttty.corookie.global.audit.BaseTime;
 import jakarta.persistence.*;
 
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
@@ -13,7 +15,8 @@ import java.time.LocalDateTime;
 @Table(name="plan")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Plan {
+@EntityListeners(AuditingEntityListener.class)
+public class Plan extends BaseTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,13 +35,7 @@ public class Plan {
     @Column(nullable = false)
     private LocalDateTime planEnd;
 
-    @Column
-    private LocalDateTime createdAt;
-
-    @Column
-    private LocalDateTime updatedAt;
-
-    @Column(columnDefinition = "tinyint(1) default 1")
+    @Column(nullable = false)
     private boolean enabled;
 
 //    @ManyToMany
