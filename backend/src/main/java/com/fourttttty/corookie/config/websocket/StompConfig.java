@@ -1,4 +1,4 @@
-package com.fourttttty.corookie.textchannel.config;
+package com.fourttttty.corookie.config.websocket;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -8,7 +8,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 
 @Configuration
 @EnableWebSocketMessageBroker // Stomp를 사용하기 위한 어노테이션
-public class TextChannelConfig implements WebSocketMessageBrokerConfigurer {
+public class StompConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {

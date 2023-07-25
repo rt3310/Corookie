@@ -1,8 +1,10 @@
 package com.fourttttty.corookie.textchannel.presentation;
 
 import com.fourttttty.corookie.textchannel.application.service.TextChannelService;
+import com.fourttttty.corookie.textchannel.dto.TextChannelCreateRequest;
 import com.fourttttty.corookie.textchannel.dto.TextChannelResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 @RequestMapping("/api/v1/projects/{projectId}/text-channels")
 @CrossOrigin("*")
 public class TextChannelController {
@@ -32,7 +35,9 @@ public class TextChannelController {
     // text channel 등록
     @PostMapping("/")
     public ResponseEntity<TextChannelResponse> textChannelCreate(@PathVariable Long projectId,
-                                                                 @RequestBody(required = true) String name) {
+                                                                 @RequestBody TextChannelCreateRequest request) {
+        String name = request.name();
+        log.info("name: {}  ", name);
         return ResponseEntity.ok(textChannelService.createTextChannel(name));
     }
 
