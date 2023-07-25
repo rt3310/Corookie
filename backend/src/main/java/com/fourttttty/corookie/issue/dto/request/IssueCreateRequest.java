@@ -4,6 +4,7 @@ import com.fourttttty.corookie.issue.domain.Issue;
 import com.fourttttty.corookie.issue.domain.IssuePriority;
 import com.fourttttty.corookie.issue.domain.IssueProgress;
 import com.fourttttty.corookie.member.domain.Member;
+import com.fourttttty.corookie.project.domain.Project;
 import lombok.Builder;
 
 import java.util.List;
@@ -15,13 +16,14 @@ public record IssueCreateRequest(String topic,
                                  IssuePriority issuePriority,
                                  List<IssueCategoryCreateRequest> issueCategories) {
 
-    public Issue toEntity(Member member) {
+    public Issue toEntity(Project project, Member member) {
         return Issue.builder()
                 .topic(topic)
                 .description(description)
                 .progress(issueProgress)
                 .priority(issuePriority)
                 .enabled(true)
+                .project(project)
                 .manager(member)
                 .build();
     }
