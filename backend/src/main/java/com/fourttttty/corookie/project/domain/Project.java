@@ -38,17 +38,23 @@ public class Project extends BaseTime {
     @Column(nullable = false)
     private Boolean invitationStatus;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
+
     @Builder
     public Project(String name,
                    String description,
                    Boolean enabled,
                    String invitationLink,
-                   Boolean invitationStatus) {
+                   Boolean invitationStatus,
+                   Member member) {
         this.name = name;
         this.description = description;
         this.enabled = enabled;
         this.invitationLink = invitationLink;
         this.invitationStatus = invitationStatus;
+        this.member = member;
     }
 
     public void update(String name,
