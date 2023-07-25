@@ -1,6 +1,7 @@
 package com.fourttttty.corookie.issue.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.fourttttty.corookie.global.exception.InvalidIssueProgressException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,5 +25,10 @@ public enum IssueProgress {
             }
         }
         throw new InvalidIssueProgressException();
+    }
+
+    @JsonValue
+    public String getValue() {
+        return this.value;
     }
 }

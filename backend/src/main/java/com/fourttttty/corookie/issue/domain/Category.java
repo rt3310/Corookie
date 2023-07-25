@@ -1,12 +1,12 @@
 package com.fourttttty.corookie.issue.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.fourttttty.corookie.global.exception.InvalidIssueCategoryException;
 import com.fourttttty.corookie.global.exception.InvalidIssuePriorityException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@Getter
 @AllArgsConstructor
 public enum Category {
     ALL("all"),
@@ -26,5 +26,10 @@ public enum Category {
             }
         }
         throw new InvalidIssueCategoryException();
+    }
+
+    @JsonValue
+    public String getValue() {
+        return this.value;
     }
 }

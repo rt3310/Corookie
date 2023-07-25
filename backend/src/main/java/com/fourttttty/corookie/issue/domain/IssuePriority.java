@@ -1,6 +1,7 @@
 package com.fourttttty.corookie.issue.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.fourttttty.corookie.global.exception.InvalidIssuePriorityException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,5 +25,10 @@ public enum IssuePriority {
             }
         }
         throw new InvalidIssuePriorityException();
+    }
+
+    @JsonValue
+    public String getValue() {
+        return this.value;
     }
 }
