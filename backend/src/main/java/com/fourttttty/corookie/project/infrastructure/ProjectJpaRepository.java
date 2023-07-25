@@ -9,12 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 public interface ProjectJpaRepository extends JpaRepository<Project, Long> {
     @Modifying
     @Transactional
-    @Query("UPDATE Project p SET p.name = ?1 WHERE p.id = ?2")
-    int modifyProjectName(String name, Long id);
-
-    @Modifying
-    @Transactional
-    @Query("UPDATE Project p SET p.description = ?1 WHERE p.id = ?2")
-    int modifyProjectDescription(String description, Long id);
+    @Query("UPDATE Project p SET p.name = ?1, p.description = ?2 WHERE p.id = ?3")
+    int modifyProjectName(String name, String description, Long id);
 
 }

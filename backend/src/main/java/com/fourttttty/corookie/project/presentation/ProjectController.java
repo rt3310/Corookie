@@ -45,15 +45,9 @@ public class ProjectController {
         return ResponseEntity.ok(projectResponse);
     }
 
-    @PutMapping
-    public ResponseEntity<ProjectResponse> projectModifyName(String name, Long id){
-        ProjectResponse projectResponse = projectService.modifyName(name, id);
-        return ResponseEntity.ok(projectResponse);
-    }
-
-    @PutMapping
-    public ResponseEntity<ProjectResponse> projectModifyDescription(String description, Long id){
-        ProjectResponse projectResponse = projectService.modifyDescription(description, id);
+    @PutMapping("/{projectId}")
+    public ResponseEntity<ProjectResponse> projectModifyName(@RequestBody ProjectUpdateRequest request){
+        ProjectResponse projectResponse = projectService.modifyName(request.name(), request.description(), request.id());
         return ResponseEntity.ok(projectResponse);
     }
 

@@ -35,15 +35,8 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     }
 
     @Override
-    public Project modifyName(String name, Long id) {
-        int rowsUpdated = projectJpaRepository.modifyProjectName(name, id);
-        if (rowsUpdated < 0) throw new EntityNotFoundException();
-        return projectJpaRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-    }
-
-    @Override
-    public Project modifyDescription(String description, Long id) {
-        int rowsUpdated = projectJpaRepository.modifyProjectName(description, id);
+    public Project modifyName(String name, String description, Long id) {
+        int rowsUpdated = projectJpaRepository.modifyProjectName(name, description, id);
         if (rowsUpdated < 0) throw new EntityNotFoundException();
         return projectJpaRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }

@@ -34,13 +34,8 @@ public class ProjectService {
     }
 
     @Transactional
-    public ProjectResponse modifyName(String name, Long id){
-        return ProjectResponse.of(projectRepository.modifyName(name, id));
-    }
-
-    @Transactional
-    public ProjectResponse modifyDescription(String name, Long id){
-        return ProjectResponse.of(projectRepository.modifyDescription(name, id));
+    public ProjectResponse modifyName(String name, String description, Long id){
+        return ProjectResponse.of(projectRepository.modifyName(name, description, id));
     }
 
     @Transactional
