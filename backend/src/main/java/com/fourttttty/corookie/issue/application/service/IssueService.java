@@ -4,11 +4,10 @@ import com.fourttttty.corookie.global.exception.IssueNotFoundException;
 import com.fourttttty.corookie.issue.application.repository.IssueRepository;
 import com.fourttttty.corookie.issue.domain.Issue;
 import com.fourttttty.corookie.issue.dto.request.IssueCreateRequest;
+import com.fourttttty.corookie.issue.dto.response.IssueCategoryResponse;
 import com.fourttttty.corookie.issue.dto.response.IssueDetailResponse;
 import com.fourttttty.corookie.issue.dto.response.IssueListResponse;
 import com.fourttttty.corookie.member.application.service.MemberService;
-import com.fourttttty.corookie.member.domain.Member;
-import com.fourttttty.corookie.project.domain.Project;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +22,10 @@ public class IssueService {
 
     public IssueDetailResponse create(IssueCreateRequest issueCreateRequest, Long projectId, Long memberId) {
         Issue issue = issueRepository.save(issueCreateRequest.toEntity(memberService.findById(memberId)));
-        return IssueDetailResponse.of(issue, issueCategoryService.findByIssueId(issue.getId()), projectId, memberId);
+        List<IssueCategoryResponse> issueCategoryResponses = issueCreateRequest.issueCategories().stream()
+                .map(issueCategoryCreateRequest -> issueCategoryService.createIfNone(issueCategoryCreateRequest, issue))
+                .toList();
+        return IssueDetailResponse.of(issue, issueCategoryResponses, projectId, memberId);
     }
 
     public IssueDetailResponse findById(Long issueId, Long projectId, Long memberId) {
