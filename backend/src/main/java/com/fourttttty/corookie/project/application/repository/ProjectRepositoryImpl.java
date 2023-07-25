@@ -2,7 +2,7 @@ package com.fourttttty.corookie.project.application.repository;
 
 import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.project.infrastructure.ProjectJpaRepository;
-import jakarta.transaction.Transactional;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -32,6 +32,20 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     @Override
     public void deleteById(Long id) {
         projectJpaRepository.deleteById(id);
+    }
+
+    @Override
+    public Project modifyName(String name, Long id) {
+        int rowsUpdated = projectJpaRepository.modifyProjectName(name, id);
+        if (rowsUpdated < 0) throw new EntityNotFoundException();
+        return projectJpaRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+    }
+
+    @Override
+    public Project modifyDescription(String description, Long id) {
+        int rowsUpdated = projectJpaRepository.modifyProjectName(description, id);
+        if (rowsUpdated < 0) throw new EntityNotFoundException();
+        return projectJpaRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 }
 

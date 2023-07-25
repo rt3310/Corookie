@@ -1,5 +1,6 @@
 package com.fourttttty.corookie.member.domain;
 
+import com.fourttttty.corookie.project.domain.Project;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -17,4 +18,8 @@ public class Member {
     private Long id;
 
     private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "project_id")
+    private Project project;
 }

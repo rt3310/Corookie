@@ -4,6 +4,7 @@ import com.fourttttty.corookie.global.audit.BaseTime;
 import com.fourttttty.corookie.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -34,10 +35,32 @@ public class Project extends BaseTime {
     @Column
     private String invLink;
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "tinyint(1) default 0")
     private boolean invStatus;
 
     @OneToOne
     @JoinColumn(name = "owner_id")
     private Member owner;
+
+
+    @Builder
+    public Project(String name,
+                String description,
+                String invLink) {
+        this.name = name;
+        this.description = description;
+        this.invLink = invLink;
+    }
+
+    public void update(String name,
+                       String description,
+                       String invLink) {
+        this.name = name;
+        this.description = description;
+        this.invLink = invLink;
+    }
+
+    public void delete(){
+        this.enabled = false;
+    }
 }
