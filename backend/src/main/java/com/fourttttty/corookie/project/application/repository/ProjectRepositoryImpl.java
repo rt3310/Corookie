@@ -2,7 +2,6 @@ package com.fourttttty.corookie.project.application.repository;
 
 import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.project.infrastructure.ProjectJpaRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -25,14 +24,8 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     }
 
     @Override
-    public Project save(Project project){
+    public Project save(Project project) {
         return projectJpaRepository.save(project);
     }
-
-    @Override
-    public void deleteById(Long id) {
-        projectJpaRepository.deleteById(id);
-    }
-
 }
 

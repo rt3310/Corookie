@@ -8,8 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "text_channel")
@@ -20,15 +18,20 @@ public class TextChannel extends BaseTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "channel_id")
+    @Column(name = "channel_id", nullable = false)
     private Long id;
 
+    @Column(nullable = false)
     private String channelName;
+
+    @Column(nullable = false)
     private Boolean enabled;
+
+    @Column(nullable = false)
     private Boolean deletable;
 
     @ManyToOne
-    @JoinColumn(name = "project_id")
+    @JoinColumn(name = "project_id", nullable = false)
     private Project project;
 
     public static TextChannel create(String name, Project project) {

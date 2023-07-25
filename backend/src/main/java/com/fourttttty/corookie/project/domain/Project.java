@@ -12,15 +12,15 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "project")
 @Getter
+@Table(name = "project")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 public class Project extends BaseTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "project_id")
+    @Column(name = "project_id", nullable = false)
     public Long id;
 
     @Column(nullable = false)
@@ -29,36 +29,39 @@ public class Project extends BaseTime {
     @Column(nullable = false)
     private String description;
 
-    @Column(columnDefinition = "tinyint(1) default 1")
-    private boolean enabled;
+    @Column(nullable = false)
+    private Boolean enabled;
 
-    @Column
-    private String invLink;
+    @Column(nullable = false)
+    private String invitationLink;
 
-    @Column(columnDefinition = "tinyint(1) default 0")
-    private boolean invStatus;
-
-    @OneToOne
-    @JoinColumn(name = "owner_id")
-    private Member owner;
-
+    @Column(nullable = false)
+    private Boolean invitationStatus;
 
     @Builder
     public Project(String name,
-                String description,
-                String invLink) {
+                   String description,
+                   Boolean enabled,
+                   String invitationLink,
+                   Boolean invitationStatus) {
         this.name = name;
         this.description = description;
-        this.invLink = invLink;
+        this.enabled = enabled;
+        this.invitationLink = invitationLink;
+        this.invitationStatus = invitationStatus;
     }
 
     public void update(String name,
-                       String description) {
+                       String description,
+                       String invitationLink,
+                       Boolean invitationStatus) {
         this.name = name;
         this.description = description;
+        this.invitationLink = invitationLink;
+        this.invitationStatus = invitationStatus;
     }
 
-    public void delete(){
+    public void delete() {
         this.enabled = false;
     }
 }

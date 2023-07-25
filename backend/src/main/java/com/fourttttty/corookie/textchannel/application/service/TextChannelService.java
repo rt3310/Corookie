@@ -38,12 +38,11 @@ public class TextChannelService {
     }
 
     @Transactional
-    public TextChannelResponse createTextChannel(String name, Long id) {
-        Project project = projectRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-        TextChannel textChannel = textChannelRepository
-                .save(TextChannel.create(name, project));
-        return new TextChannelResponse(
-                textChannel.getChannelName());
+    public TextChannelResponse create(String name, Long projectId) {
+        return new TextChannelResponse(textChannelRepository
+                .save(TextChannel.create(name, projectRepository
+                        .findById(projectId)
+                        .orElseThrow(EntityNotFoundException::new))).getChannelName());
     }
 
     @Transactional

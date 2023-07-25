@@ -4,27 +4,23 @@ import com.fourttttty.corookie.project.domain.Project;
 import lombok.Builder;
 import java.time.LocalDateTime;
 
+@Builder
 public record ProjectResponse(String name,
                               String description,
                               LocalDateTime createdAt,
                               LocalDateTime updatedAt,
                               Boolean enabled,
-                              String invLink,
-                              Boolean invStatus) {
-
-    @Builder
-    public ProjectResponse {
-    }
-
+                              String invitationLink,
+                              Boolean invitationStatus) {
 
     public static ProjectResponse of(Project project) {
           return ProjectResponse.builder()
                   .name(project.getName())
                   .createdAt(project.getCreatedAt())
                   .updatedAt(project.getUpdatedAt())
-                  .enabled(project.isEnabled())
-                  .invLink(project.getInvLink())
-                  .invStatus(project.isInvStatus())
+                  .enabled(project.getEnabled())
+                  .invitationLink(project.getInvitationLink())
+                  .invitationStatus(project.getInvitationStatus())
                   .build();
          }
 
