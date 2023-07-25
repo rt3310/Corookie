@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "text_channel")
 @Getter
@@ -20,8 +23,8 @@ public class TextChannel extends BaseTime {
     private Long id;
 
     private String channelName;
-    private boolean enabled;
-    private boolean deletable;
+    private Boolean enabled;
+    private Boolean deletable;
 
     public static TextChannel create(String name) {
 
