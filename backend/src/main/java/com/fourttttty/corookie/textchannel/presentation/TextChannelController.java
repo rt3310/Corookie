@@ -20,7 +20,7 @@ public class TextChannelController {
     private final TextChannelService textChannelService;
 
     // text channel 전체 조회
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<TextChannelResponse>> textChannelList(@PathVariable Long projectId) {
         return ResponseEntity.ok(textChannelService.findAll());
     }
@@ -33,12 +33,10 @@ public class TextChannelController {
     }
 
     // text channel 등록
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<TextChannelResponse> textChannelCreate(@PathVariable Long projectId,
                                                                  @RequestBody TextChannelCreateRequest request) {
-        String name = request.name();
-        log.info("name: {}  ", name);
-        return ResponseEntity.ok(textChannelService.createTextChannel(name));
+        return ResponseEntity.ok(textChannelService.create(request.name(), projectId));
     }
 
     // text channel 제목 수정

@@ -1,7 +1,7 @@
 package com.fourttttty.corookie.project.presentation;
 
 import com.fourttttty.corookie.project.application.service.ProjectService;
-import com.fourttttty.corookie.project.domain.Project;
+import com.fourttttty.corookie.project.dto.request.ProjectCreateRequest;
 import com.fourttttty.corookie.project.dto.request.ProjectUpdateRequest;
 import com.fourttttty.corookie.project.dto.response.ProjectResponse;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ public class ProjectController {
 
     @GetMapping
     public ResponseEntity<List<ProjectResponse>> projectList() {
-        return ResponseEntity.ok(projectService.findAll().stream().toList());
+        return ResponseEntity.ok(projectService.findAll());
     }
 
     @GetMapping("/{projectId}")
@@ -28,12 +28,19 @@ public class ProjectController {
     }
 
     @PostMapping
-    public ResponseEntity<ProjectResponse> projectCreate(@RequestBody @Validated Project project) {
-        return ResponseEntity.ok(projectService.create(project));
+    public ResponseEntity<ProjectResponse> projectCreate(@RequestBody @Validated ProjectCreateRequest projectCreateRequest) {
+        return ResponseEntity.ok(projectService.create(projectCreateRequest));
+    }
+
+    @PutMapping("/{projectId}")
+    public ResponseEntity<ProjectResponse> projectModify(@PathVariable Long projectId,
+                                                         @RequestBody @Validated ProjectUpdateRequest projectUpdateRequest){
+        return ResponseEntity.ok(projectService.modify(projectUpdateRequest, projectId));
     }
 
     @DeleteMapping("/{projectId}")
     public ResponseEntity<Object> projectDelete(@PathVariable Long projectId) {
+        projectService.deleteById(projectId);
         return ResponseEntity.noContent().build();
     }
 }

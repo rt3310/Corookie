@@ -1,5 +1,7 @@
 package com.fourttttty.corookie.textchannel.application.service;
 
+import com.fourttttty.corookie.project.application.repository.ProjectRepository;
+import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.textchannel.application.repository.TextChannelRepository;
 import com.fourttttty.corookie.textchannel.domain.TextChannel;
 import com.fourttttty.corookie.textchannel.dto.TextChannelResponse;
@@ -16,6 +18,7 @@ import java.util.List;
 public class TextChannelService {
 
     private final TextChannelRepository textChannelRepository;
+    private final ProjectRepository projectRepository;
 
     public List<TextChannelResponse> findAll() {
         return textChannelRepository.findAll().stream()
@@ -35,10 +38,11 @@ public class TextChannelService {
     }
 
     @Transactional
-    public TextChannelResponse createTextChannel(String name) {
+    public TextChannelResponse create(String name, Long projectId) {
         return new TextChannelResponse(textChannelRepository
-                .save(TextChannel.create(name))
-                .getChannelName());
+                .save(TextChannel.create(name, projectRepository
+                        .findById(projectId)
+                        .orElseThrow(EntityNotFoundException::new))).getChannelName());
     }
 
     @Transactional
