@@ -63,4 +63,8 @@ public class Issue extends BaseTime {
         this.project = project;
         this.manager = manager;
     }
+
+    public void delete() {
+        this.enabled = false;
+    }
 }
