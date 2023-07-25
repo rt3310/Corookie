@@ -1,15 +1,14 @@
 package com.fourttttty.corookie.plan.presentation;
 
 import com.fourttttty.corookie.plan.application.service.PlanService;
-import com.fourttttty.corookie.plan.dto.request.PlanRequest;
+import com.fourttttty.corookie.plan.dto.request.PlanCreateRequest;
 
+import com.fourttttty.corookie.plan.dto.request.PlanUpdateRequest;
 import com.fourttttty.corookie.plan.dto.response.PlanResponse;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,13 +22,13 @@ public class planController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<PlanResponse> planCreate(@RequestBody PlanRequest planRequest) {
-        return ResponseEntity.ok(planService.createPlan(planRequest));
+    public ResponseEntity<PlanResponse> planCreate(@RequestBody PlanCreateRequest planCreateRequest) {
+        return ResponseEntity.ok(planService.createPlan(planCreateRequest));
     }
 
     @PutMapping("/{planId}")
-    public ResponseEntity<Object> planModify(@PathVariable Long planId, @RequestBody PlanRequest planRequest) {
-        planService.modifyPlan(planId, planRequest);
+    public ResponseEntity<Object> planModify(@PathVariable Long planId, @RequestBody PlanUpdateRequest planUpdateRequest) {
+        planService.modifyPlan(planId, planUpdateRequest);
         return ResponseEntity.ok().build();
     }
 

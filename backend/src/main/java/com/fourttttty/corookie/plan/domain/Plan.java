@@ -60,6 +60,6 @@ public class Plan extends BaseTime {
     }
 
     public void delete(){
-        this.enabled = false;
+        this.enabled = true;
     }
 }
