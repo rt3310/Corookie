@@ -24,10 +24,8 @@ public class IssueController {
     }
 
     @GetMapping("/{issueId}")
-    public ResponseEntity<IssueDetailResponse> issueDetail(@PathVariable Long projectId,
-                                                           @PathVariable Long issueId,
-                                                           @RequestParam Long memberId) {
-        return ResponseEntity.ok(issueService.findById(issueId, projectId, memberId));
+    public ResponseEntity<IssueDetailResponse> issueDetail(@PathVariable Long issueId) {
+        return ResponseEntity.ok(issueService.findById(issueId));
     }
 
     @PostMapping
@@ -37,5 +35,11 @@ public class IssueController {
                                                            IssueCreateRequest issueCreateRequest,
                                                            @RequestParam Long memberId) {
         return ResponseEntity.ok(issueService.create(issueCreateRequest, projectId, memberId));
+    }
+
+    @DeleteMapping("/{issueId}")
+    public ResponseEntity<Object> issueDelete(@PathVariable Long issueId) {
+        issueService.deleteById(issueId);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -14,14 +14,15 @@ public record ProjectResponse(String name,
                               Boolean invitationStatus) {
 
     public static ProjectResponse of(Project project) {
-          return ProjectResponse.builder()
-                  .name(project.getName())
-                  .createdAt(project.getCreatedAt())
-                  .updatedAt(project.getUpdatedAt())
-                  .enabled(project.getEnabled())
-                  .invitationLink(project.getInvitationLink())
-                  .invitationStatus(project.getInvitationStatus())
-                  .build();
+        return ProjectResponse.builder()
+                .name(project.getName())
+                .description(project.getDescription())
+                .createdAt(project.getCreatedAt())
+                .updatedAt(project.getUpdatedAt())
+                .enabled(project.getEnabled())
+                .invitationLink(project.getInvitationLink())
+                .invitationStatus(project.getInvitationStatus())
+                .build();
          }
 
 }

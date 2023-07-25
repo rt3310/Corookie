@@ -18,7 +18,7 @@ public class Member {
 
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "project_id")
-    private Project project;
+    public Member(String name) {
+        this.name = name;
+    }
 }

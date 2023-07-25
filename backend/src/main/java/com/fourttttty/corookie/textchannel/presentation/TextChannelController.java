@@ -36,7 +36,7 @@ public class TextChannelController {
     @PostMapping
     public ResponseEntity<TextChannelResponse> textChannelCreate(@PathVariable Long projectId,
                                                                  @RequestBody TextChannelCreateRequest request) {
-        return ResponseEntity.ok(textChannelService.create(request.name(), projectId));
+        return ResponseEntity.ok(textChannelService.create(request, projectId));
     }
 
     // text channel 제목 수정
