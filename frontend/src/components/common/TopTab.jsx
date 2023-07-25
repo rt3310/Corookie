@@ -22,9 +22,9 @@ const TopTab = () => {
     return (
         <S.Wrap style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <S.Title onClick={() => navigate(utils.URL.HOME.MAIN)}>CoRookie</S.Title>
-            <S.ProfileBox onClick={() => toggleProfile()}>
+            <S.Profile onClick={() => toggleProfile()}>
                 <img src={require('images/thread_profile.png').default} alt="스레드 이미지" />
-            </S.ProfileBox>
+            </S.Profile>
         </S.Wrap>
     )
 }
@@ -46,7 +46,7 @@ const S = {
         padding: 24px 8px 8px 32px;
         cursor: pointer;
     `,
-    ProfileBox: styled.div`
+    Profile: styled.div`
         width: 40px;
         margin: 16px 16px 0 0;
 

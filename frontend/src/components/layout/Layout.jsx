@@ -22,7 +22,7 @@ const Layout = () => {
                     <S.Content>
                         <Outlet />
                     </S.Content>
-                    {profileOpened && <components.Profile />}
+                    {profileOpened && <components.ProfileBox />}
                 </S.Container>
             </S.Main>
         </S.Wrap>

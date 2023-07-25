@@ -14,7 +14,8 @@ const CommentBox = () => {
 const S = {
     Wrap: styled.div`
         display: flex;
-        width: 600px;
+        width: 400px;
+        min-width: 400px;
         border-radius: 8px;
         background-color: ${({ theme }) => theme.color.white};
         box-shadow: ${({ theme }) => theme.shadow.card};
