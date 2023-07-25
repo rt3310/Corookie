@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 public class MemberService {
     private final MemberRepository memberRepository;
 
-    public Member findById(Long id) {
+    public Member findEntityById(Long id) {
         return memberRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 }
