@@ -19,6 +19,7 @@ public class MemberService {
         return memberRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
+    @Transactional
     public MemberResponse create(MemberCreateRequest memberCreateRequest) {
         return MemberResponse.of(memberRepository.save(memberCreateRequest.toEntity()));
     }
