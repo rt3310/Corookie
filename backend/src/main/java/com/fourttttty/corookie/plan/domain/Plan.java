@@ -35,7 +35,7 @@ public class Plan extends BaseTime {
     @Column(nullable = false)
     private LocalDateTime planEnd;
 
-    @Column(columnDefinition = "tinyint(1) default 1")
+    @Column()
     private boolean enabled;
 
     @Builder

@@ -4,7 +4,7 @@ import com.fourttttty.corookie.plan.application.repository.PlanRepository;
 import com.fourttttty.corookie.plan.domain.Plan;
 import com.fourttttty.corookie.plan.dto.request.PlanCreateRequest;
 import com.fourttttty.corookie.plan.dto.request.PlanUpdateRequest;
-import com.fourttttty.corookie.plan.dto.response.CategoryResponse;
+import com.fourttttty.corookie.plan.dto.response.PlanCategoryResponse;
 import com.fourttttty.corookie.plan.dto.response.PlanResponse;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -22,12 +22,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class PlanService {
 
     private final PlanRepository planRepository;
-    private final CategoryService categoryService;
+    private final PlanCategoryService planCategoryService;
 
     public PlanResponse findById(Long id) {
         Plan plan = planRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-        List<CategoryResponse> categories = categoryService.findCategoriesByPlan(plan);
-        return PlanResponse.of(plan, categories);
+        List<PlanCategoryResponse> planCategories = planCategoryService.findPlanCategoriesByPlan(plan);
+        return PlanResponse.of(plan, planCategories);
     }
 
     @Transactional
@@ -39,9 +39,9 @@ public class PlanService {
             .planEnd(planCreateRequest.planEnd())
             .build();
         planRepository.save(plan);
-        List<CategoryResponse> categoriesResponse = categoryService.createCategoriesByPlan(plan, planCreateRequest.categories());
+        List<PlanCategoryResponse> planCategoriesResponse = planCategoryService.createCategoriesByPlan(plan, planCreateRequest.categories());
 
-        return PlanResponse.of(plan, categoriesResponse);
+        return PlanResponse.of(plan, planCategoriesResponse);
     }
 
     @Transactional
@@ -51,8 +51,8 @@ public class PlanService {
             planUpdateRequest.planStart(), planUpdateRequest.planEnd());
 
         planUpdateRequest.categories().stream()
-            .filter(category -> categoryService.findByCategoryContentAndPlan(category.categoryContent(),plan))
-            .forEach(category -> categoryService.create(category.toEntity(plan)));
+            .filter(planCategory -> planCategoryService.findByContentAndPlan(planCategory.content(),plan))
+            .forEach(category -> planCategoryService.create(category.toEntity(plan)));
     }
 
     @Transactional

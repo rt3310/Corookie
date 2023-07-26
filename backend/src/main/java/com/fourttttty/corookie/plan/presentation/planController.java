@@ -8,6 +8,7 @@ import com.fourttttty.corookie.plan.dto.response.PlanResponse;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,14 +21,13 @@ public class planController {
     public ResponseEntity<PlanResponse> planDetail(@PathVariable(name = "planId") Long id) {
         return ResponseEntity.ok(planService.findById(id));
     }
-
-    @PostMapping("/")
-    public ResponseEntity<PlanResponse> planCreate(@RequestBody PlanCreateRequest planCreateRequest) {
+    @PostMapping("")
+    public ResponseEntity<PlanResponse> planCreate(@RequestBody @Validated PlanCreateRequest planCreateRequest) {
         return ResponseEntity.ok(planService.createPlan(planCreateRequest));
     }
 
     @PutMapping("/{planId}")
-    public ResponseEntity<Object> planModify(@PathVariable Long planId, @RequestBody PlanUpdateRequest planUpdateRequest) {
+    public ResponseEntity<Object> planModify(@PathVariable Long planId, @RequestBody @Validated PlanUpdateRequest planUpdateRequest) {
         planService.modifyPlan(planId, planUpdateRequest);
         return ResponseEntity.ok().build();
     }

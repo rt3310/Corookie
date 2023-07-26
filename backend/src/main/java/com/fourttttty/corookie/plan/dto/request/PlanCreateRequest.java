@@ -12,5 +12,5 @@ public record PlanCreateRequest(@NotNull String planName,
                                 @NotNull String description,
                                 @NotNull LocalDateTime planStart,
                                 @NotNull LocalDateTime planEnd,
-                                @NotNull List<CategoryCreateRequest> categories) {
+                                @NotNull List<PlanCategoryCreateRequest> categories) {
 }

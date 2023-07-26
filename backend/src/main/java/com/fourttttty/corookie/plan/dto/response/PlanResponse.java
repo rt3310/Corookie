@@ -12,10 +12,8 @@ public record PlanResponse(@NotNull Long planId,
                            @NotNull String description,
                            @NotNull LocalDateTime planStart,
                            @NotNull LocalDateTime planEnd,
-                           @NotNull List<CategoryResponse> categories
-) {
-
-    public static PlanResponse of(Plan plan, List<CategoryResponse> categories) {
+                           @NotNull List<PlanCategoryResponse> categories) {
+    public static PlanResponse of(Plan plan, List<PlanCategoryResponse> categories) {
         return PlanResponse.builder()
             .planId(plan.getId())
             .planName(plan.getPlanName())

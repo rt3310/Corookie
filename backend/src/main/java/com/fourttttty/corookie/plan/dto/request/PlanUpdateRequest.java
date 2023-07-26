@@ -10,6 +10,6 @@ public record PlanUpdateRequest(@NotNull String planName,
                                 @NotNull String description,
                                 @NotNull LocalDateTime planStart,
                                 @NotNull LocalDateTime planEnd,
-                                @NotNull List<CategoryUpdateRequest> categories) {
+                                @NotNull List<PlanCategoryUpdateRequest> categories) {
 
 }
