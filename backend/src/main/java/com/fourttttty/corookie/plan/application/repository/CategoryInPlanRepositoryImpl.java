@@ -18,6 +18,6 @@ public class CategoryInPlanRepositoryImpl implements CategoryInPlanRepository{
 
     @Override
     public List<CategoryInPlan> findAllbyPlan(Plan plan) {
-        return categoryInPlanJpaRepository.findByPlan(plan);
+        return categoryInPlanJpaRepository.findByIdPlan(plan);
     }
 }
