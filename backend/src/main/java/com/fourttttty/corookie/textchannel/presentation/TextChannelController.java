@@ -47,9 +47,9 @@ public class TextChannelController {
     }
 
     @DeleteMapping("/{textChannelId}")
-    public ResponseEntity<Void> textChannelDelete(@PathVariable Long projectId,
+    public ResponseEntity<Object> textChannelDelete(@PathVariable Long projectId,
                                                  @PathVariable Long textChannelId) {
         textChannelService.delete(textChannelId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 }
