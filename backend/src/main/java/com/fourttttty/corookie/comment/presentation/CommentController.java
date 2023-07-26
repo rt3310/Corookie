@@ -21,7 +21,7 @@ public class CommentController {
     private final CommentService commentService;
 
     // 특정 스레드 코멘트 전체 조회
-    @GetMapping("")
+    @GetMapping
     public ResponseEntity<List<CommentDetailResponse>> commentList(@PathVariable Long projectId,
                                                                    @PathVariable Long textChannelId,
                                                                    @PathVariable Long threadId) {
