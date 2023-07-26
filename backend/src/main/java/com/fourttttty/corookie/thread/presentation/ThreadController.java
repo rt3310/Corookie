@@ -44,9 +44,9 @@ public class ThreadController {
     }
 
     // 특정 텍스트 채널의 스레드 전체 보기
-    @GetMapping("")
+    @GetMapping
     public ResponseEntity<List<ThreadDetailResponse>> threadList(@PathVariable Long projectId,
-                                                              @PathVariable Long textChannelId) {
+                                                                 @PathVariable Long textChannelId) {
         return ResponseEntity.ok(threadService.findAll(textChannelId));
     }
 
