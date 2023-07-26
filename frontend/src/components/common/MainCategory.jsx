@@ -1,12 +1,17 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
+import * as utils from 'utils'
+
 const MainCategory = () => {
+    const navigate = useNavigate()
+
     return (
         <S.Wrap>
             <S.Container>
                 <S.Button>일정</S.Button>
-                <S.Button>이슈</S.Button>
+                <S.Button onClick={() => navigate(utils.URL.TASK.BOARD)}>이슈</S.Button>
             </S.Container>
         </S.Wrap>
     )
