@@ -3,10 +3,14 @@ import styled from 'styled-components'
 
 import { IoIosArrowForward, IoIosArrowDown, IoIosArrowUp } from 'react-icons/io'
 
-const Thread = ({ openComment, setOpenComment }) => {
+import * as hooks from 'hooks'
+
+const Thread = () => {
     const text = useRef(null)
     const [overText, setOverText] = useState(false)
     const [closedText, setClosedText] = useState(false)
+    const { closeProfile } = hooks.profileState()
+    const { commentOpened, openComment, closeComment } = hooks.commentState()
 
     useEffect(() => {
         if (text.current.scrollHeight > 140) {
@@ -27,6 +31,15 @@ const Thread = ({ openComment, setOpenComment }) => {
         setClosedText(true)
     }
 
+    const toggleComment = () => {
+        if (commentOpened) {
+            closeComment()
+        } else {
+            openComment()
+            closeProfile()
+        }
+    }
+
     return (
         <S.Wrap>
             <S.ChatBox>
@@ -37,7 +50,7 @@ const Thread = ({ openComment, setOpenComment }) => {
                     <S.MemberInfoBox>
                         <S.MemberName>황상미</S.MemberName>
                         <S.CreatedTime>오전 11:12</S.CreatedTime>
-                        <S.CommentButton onClick={() => setOpenComment(!openComment)} open={openComment}>
+                        <S.CommentButton onClick={() => toggleComment()} open={commentOpened}>
                             <div>
                                 <img src={require('images/profile.png').default} alt="프로필" />
                                 <img src={require('images/profile.png').default} alt="프로필" />
@@ -57,13 +70,13 @@ const Thread = ({ openComment, setOpenComment }) => {
                             </div>
                         </S.MoreButton>
                     )}
-                    {/* {overText && !closedText && (
+                    {overText && !closedText && (
                         <S.MoreButton>
                             <div onClick={() => hideText()}>
                                 감추기 <IoIosArrowUp />
                             </div>
                         </S.MoreButton>
-                    )} */}
+                    )}
                 </S.ContentBox>
             </S.ChatBox>
         </S.Wrap>
