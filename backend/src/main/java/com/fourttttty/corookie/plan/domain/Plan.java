@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name="plan")
@@ -36,20 +37,7 @@ public class Plan extends BaseTime {
     private LocalDateTime planEnd;
 
     @Column(nullable = false)
-    private boolean enabled;
-
-//    @ManyToMany
-//    @JoinTable(
-//    name = "plan_member",
-//    joinColumns = @JoinColumn(name = "plan_id"),
-//    inverseJoinColumns = @JoinColumn(name = "member_id")
-//    )
-//    private List<Project> projects;
-
-
-//    @OneToMany
-//    @JoinColumn(name="plan_id")
-//    private List<category> categories = new ArrayList<>();
+    private Boolean enabled;
 
     @Builder
     public Plan(String planName,
