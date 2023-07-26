@@ -53,15 +53,16 @@ public class TextChannelService {
     }
 
     @Transactional
-    public TextChannelResponse modifyTextChannel(Long id, String name) {
+    public TextChannelResponse modify(Long id, String name) {
         TextChannel textChannel = textChannelRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         textChannel.modifyChannelName(name);
         return new TextChannelResponse(textChannel.getChannelName());
     }
 
     @Transactional
-    public void deleteTextChannel(Long id) {
-        textChannelRepository.deleteById(id);
+    public void delete(Long id) {
+        TextChannel textChannel = textChannelRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        textChannel.deleteChannel();
     }
 
 }
