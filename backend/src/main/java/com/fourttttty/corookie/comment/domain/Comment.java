@@ -34,5 +34,22 @@ public class Comment extends BaseTime {
     @JoinColumn(name = "member_id")
     private Member writer;
 
+    public static Comment create(String content, Thread thread, Member writer, Boolean enabled) {
+        Comment comment = new Comment();
 
+        comment.content = content;
+        comment.thread = thread;
+        comment.writer = writer;
+        comment.enabled = enabled;
+
+        return comment;
+    }
+
+    public void modify(String content) {
+        this.content = content;
+    }
+
+    public void delete() {
+        this.enabled = false;
+    }
 }

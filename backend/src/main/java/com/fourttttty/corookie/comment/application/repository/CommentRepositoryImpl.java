@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -15,6 +16,18 @@ public class CommentRepositoryImpl implements CommentRepository {
 
     @Override
     public List<Comment> findAll(Long threadId) {
-        return commentJpaRepository.findAllById();
+        return commentJpaRepository.findByThreadId(threadId);
     }
+
+    @Override
+    public Optional<Comment> findById(Long commentId) {
+        return commentJpaRepository.findById(commentId);
+    }
+
+    @Override
+    public Comment save(Comment comment) {
+        return commentJpaRepository.save(comment);
+    }
+
+
 }
