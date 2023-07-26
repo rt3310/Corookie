@@ -14,13 +14,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/api/v1/projects/{projectId}/text-channels")
-@CrossOrigin("*")
 public class TextChannelController {
 
     private final TextChannelService textChannelService;
 
     // text channel 전체 조회
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<List<TextChannelResponse>> textChannelList(@PathVariable Long projectId) {
         return ResponseEntity.ok(textChannelService.findAll());
     }
@@ -33,12 +32,12 @@ public class TextChannelController {
     }
 
     // text channel 등록
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity<TextChannelResponse> textChannelCreate(@PathVariable Long projectId,
                                                                  @RequestBody TextChannelCreateRequest request) {
         String name = request.name();
         log.info("name: {}  ", name);
-        return ResponseEntity.ok(textChannelService.createTextChannel(name));
+        return ResponseEntity.ok(textChannelService.create(name));
     }
 
     // text channel 제목 수정
@@ -46,13 +45,13 @@ public class TextChannelController {
     public ResponseEntity<TextChannelResponse> textChannelModify(@PathVariable Long projectId,
                                                                  @PathVariable Long textChannelId,
                                                                  @RequestBody(required = true) String name) {
-        return ResponseEntity.ok(textChannelService.modifyTextChannel(textChannelId, name));
+        return ResponseEntity.ok(textChannelService.modify(textChannelId, name));
     }
 
     @DeleteMapping("/{textChannelId}")
-    public ResponseEntity<TextChannelResponse> textChannelDelete(@PathVariable Long projectId,
-                                                                 @PathVariable Long textChannelId) {
-        textChannelService.deleteTextChannel(textChannelId);
+    public ResponseEntity<Void> textChannelDelete(@PathVariable Long projectId,
+                                                 @PathVariable Long textChannelId) {
+        textChannelService.delete(textChannelId);
         return ResponseEntity.ok().build();
     }
 }

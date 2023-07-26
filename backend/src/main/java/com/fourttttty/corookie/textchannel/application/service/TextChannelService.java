@@ -35,21 +35,21 @@ public class TextChannelService {
     }
 
     @Transactional
-    public TextChannelResponse createTextChannel(String name) {
+    public TextChannelResponse create(String name) {
         return new TextChannelResponse(textChannelRepository
                 .save(TextChannel.create(name))
                 .getChannelName());
     }
 
     @Transactional
-    public TextChannelResponse modifyTextChannel(Long id, String name) {
+    public TextChannelResponse modify(Long id, String name) {
         TextChannel textChannel = textChannelRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         textChannel.modifyChannelName(name);
         return new TextChannelResponse(textChannel.getChannelName());
     }
 
     @Transactional
-    public void deleteTextChannel(Long id) {
+    public void delete(Long id) {
         TextChannel textChannel = textChannelRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         textChannel.deleteChannel();
     }

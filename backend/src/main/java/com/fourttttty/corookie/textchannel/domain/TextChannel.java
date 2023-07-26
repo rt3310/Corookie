@@ -40,6 +40,6 @@ public class TextChannel extends BaseTime {
     }
 
     public void deleteChannel() {
-        this.deletable = false;
+        this.enabled = false;
     }
 }
