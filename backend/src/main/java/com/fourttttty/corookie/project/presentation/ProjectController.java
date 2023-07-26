@@ -1,7 +1,7 @@
 package com.fourttttty.corookie.project.presentation;
 
 import com.fourttttty.corookie.project.application.service.ProjectService;
-import com.fourttttty.corookie.project.domain.Project;
+import com.fourttttty.corookie.project.dto.request.ProjectCreateRequest;
 import com.fourttttty.corookie.project.dto.request.ProjectUpdateRequest;
 import com.fourttttty.corookie.project.dto.response.ProjectResponse;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +18,8 @@ public class ProjectController {
     private final ProjectService projectService;
 
     @GetMapping
-    public ResponseEntity<List<ProjectResponse>> projectList(){
-        return ResponseEntity.ok(projectService.findAll().stream().toList());
+    public ResponseEntity<List<ProjectResponse>> projectList() {
+        return ResponseEntity.ok(projectService.findAll());
     }
 
     @GetMapping("/{projectId}")
@@ -28,12 +28,20 @@ public class ProjectController {
     }
 
     @PostMapping
-    public ResponseEntity<ProjectResponse> projectCreate(@RequestBody Project project) {
-        return ResponseEntity.ok(projectService.create(project));
+    public ResponseEntity<ProjectResponse> projectCreate(@RequestBody @Validated ProjectCreateRequest projectCreateRequest,
+                                                         @RequestParam Long memberId) {
+        return ResponseEntity.ok(projectService.create(projectCreateRequest, memberId));
+    }
+
+    @PutMapping("/{projectId}")
+    public ResponseEntity<ProjectResponse> projectModify(@PathVariable Long projectId,
+                                                         @RequestBody @Validated ProjectUpdateRequest projectUpdateRequest){
+        return ResponseEntity.ok(projectService.modify(projectUpdateRequest, projectId));
     }
 
     @DeleteMapping("/{projectId}")
-    public ResponseEntity<ProjectResponse> projectDelete(@PathVariable Long projectId) {
+    public ResponseEntity<Object> projectDelete(@PathVariable Long projectId) {
+        projectService.deleteById(projectId);
         return ResponseEntity.noContent().build();
     }
 }
