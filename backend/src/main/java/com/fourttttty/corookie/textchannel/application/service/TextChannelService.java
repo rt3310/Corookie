@@ -1,31 +1,67 @@
 package com.fourttttty.corookie.textchannel.application.service;
 
+import com.fourttttty.corookie.project.application.repository.ProjectRepository;
+import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.textchannel.application.repository.TextChannelRepository;
 import com.fourttttty.corookie.textchannel.domain.TextChannel;
-import jakarta.persistence.EntityExistsException;
+import com.fourttttty.corookie.textchannel.dto.TextChannelCreateRequest;
+import com.fourttttty.corookie.textchannel.dto.TextChannelResponse;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class TextChannelService {
 
     private final TextChannelRepository textChannelRepository;
+    private final ProjectRepository projectRepository;
 
-    public List<TextChannel> findAll() {
-        return textChannelRepository.findAll();
+    public List<TextChannelResponse> findAll() {
+        return textChannelRepository.findAll().stream()
+                .map(textChannel -> new TextChannelResponse(textChannel.getChannelName()))
+                .toList();
     }
 
-    public TextChannel findById(Long id) {
+    public TextChannelResponse findById(Long id) {
+        return new TextChannelResponse(textChannelRepository
+                .findById(id)
+                .orElseThrow(EntityNotFoundException::new)
+                .getChannelName());
+    }
+
+    public TextChannel findEntityById(Long id) {
         return textChannelRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
-    public TextChannel createTextChannel(String name) {
-        TextChannel newTextChannel = TextChannel.create(name);
-        return textChannelRepository.save(newTextChannel);
+    @Transactional
+    public TextChannelResponse create(TextChannelCreateRequest request, Long projectId) {
+        return new TextChannelResponse(textChannelRepository.save(request.toEntity(projectRepository
+                        .findById(projectId)
+                        .orElseThrow(EntityNotFoundException::new))).getChannelName());
+    }
+
+    @Transactional
+    public void createDefaultChannel(String channelName, Long projectId) {
+        TextChannel.create(channelName, true,
+                projectRepository.findById(projectId).orElseThrow(EntityNotFoundException::new))
+                .changeNotDeletableChannel();
+    }
+
+    @Transactional
+    public TextChannelResponse modifyTextChannel(Long id, String name) {
+        TextChannel textChannel = textChannelRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        textChannel.modifyChannelName(name);
+        return new TextChannelResponse(textChannel.getChannelName());
+    }
+
+    @Transactional
+    public void deleteTextChannel(Long id) {
+        textChannelRepository.deleteById(id);
     }
 
 }

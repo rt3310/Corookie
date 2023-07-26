@@ -28,4 +28,11 @@ public class TextChannelRepositoryImpl implements TextChannelRepository {
     public TextChannel save(TextChannel textChannel) {
         return textChannelJpaRepository.save(textChannel);
     }
+
+    @Override
+    public void deleteById(Long id) {
+        textChannelJpaRepository.deleteById(id);
+    }
+
+
 }

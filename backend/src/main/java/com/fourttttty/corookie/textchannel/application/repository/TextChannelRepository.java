@@ -11,4 +11,6 @@ public interface TextChannelRepository {
     Optional<TextChannel> findById(Long id);
 
     TextChannel save(TextChannel textChannel);
+
+    void deleteById(Long id);
 }
