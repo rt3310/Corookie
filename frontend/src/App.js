@@ -16,6 +16,7 @@ const App = () => {
                     <Route path={utils.URL.HOME.MAIN} element={<components.Layout />}>
                         <Route path={utils.URL.HOME.MAIN} element={<pages.Main />} />
                         <Route path={utils.URL.CHAT.TEXT} element={<pages.TextChat />} />
+                        <Route path={utils.URL.TASK.BOARD} element={<pages.TaskBoard />} />
                     </Route>
                 </Routes>
             </Router>

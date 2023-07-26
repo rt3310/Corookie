@@ -70,13 +70,13 @@ const Thread = () => {
                             </div>
                         </S.MoreButton>
                     )}
-                    {/* {overText && !closedText && (
+                    {overText && !closedText && (
                         <S.MoreButton>
                             <div onClick={() => hideText()}>
                                 감추기 <IoIosArrowUp />
                             </div>
                         </S.MoreButton>
-                    )} */}
+                    )}
                 </S.ContentBox>
             </S.ChatBox>
         </S.Wrap>
