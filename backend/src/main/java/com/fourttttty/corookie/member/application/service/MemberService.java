@@ -7,9 +7,11 @@ import com.fourttttty.corookie.member.dto.response.MemberResponse;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class MemberService {
     private final MemberRepository memberRepository;
 
@@ -17,6 +19,7 @@ public class MemberService {
         return memberRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
+    @Transactional
     public MemberResponse create(MemberCreateRequest memberCreateRequest) {
         return MemberResponse.of(memberRepository.save(memberCreateRequest.toEntity()));
     }

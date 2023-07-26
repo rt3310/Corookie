@@ -3,9 +3,12 @@ import { Outlet } from 'react-router-dom'
 import styled from 'styled-components'
 
 import * as utils from 'utils'
+import * as hooks from 'hooks'
 import * as components from 'components'
 
 const Layout = () => {
+    const { profileOpened } = hooks.profileState()
+
     return (
         <S.Wrap>
             <S.Main>
@@ -19,6 +22,7 @@ const Layout = () => {
                     <S.Content>
                         <Outlet />
                     </S.Content>
+                    {profileOpened && <components.ProfileBox />}
                 </S.Container>
             </S.Main>
         </S.Wrap>

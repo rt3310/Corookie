@@ -14,7 +14,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/api/v1/projects/{projectId}/text-channels")
-@CrossOrigin("*")
 public class TextChannelController {
 
     private final TextChannelService textChannelService;
@@ -43,14 +42,14 @@ public class TextChannelController {
     @PutMapping("/{textChannelId}")
     public ResponseEntity<TextChannelResponse> textChannelModify(@PathVariable Long projectId,
                                                                  @PathVariable Long textChannelId,
-                                                                 @RequestBody(required = true) String name) {
-        return ResponseEntity.ok(textChannelService.modifyTextChannel(textChannelId, name));
+                                                                 @RequestBody String name) {
+        return ResponseEntity.ok(textChannelService.modify(textChannelId, name));
     }
 
     @DeleteMapping("/{textChannelId}")
-    public ResponseEntity<TextChannelResponse> textChannelDelete(@PathVariable Long projectId,
-                                                                 @PathVariable Long textChannelId) {
-        textChannelService.deleteTextChannel(textChannelId);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Object> textChannelDelete(@PathVariable Long projectId,
+                                                 @PathVariable Long textChannelId) {
+        textChannelService.delete(textChannelId);
+        return ResponseEntity.noContent().build();
     }
 }
