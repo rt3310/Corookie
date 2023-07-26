@@ -18,10 +18,11 @@ public class planController {
     private final PlanService planService;
 
     @GetMapping("/{planId}")
-    public ResponseEntity<PlanResponse> planDetail(@PathVariable(name = "planId") Long id) {
-        return ResponseEntity.ok(planService.findById(id));
+    public ResponseEntity<PlanResponse> planDetail(@PathVariable Long planId) {
+        return ResponseEntity.ok(planService.findById(planId));
     }
-    @PostMapping("")
+
+    @PostMapping
     public ResponseEntity<PlanResponse> planCreate(@RequestBody @Validated PlanCreateRequest planCreateRequest) {
         return ResponseEntity.ok(planService.createPlan(planCreateRequest));
     }
@@ -35,6 +36,6 @@ public class planController {
     @DeleteMapping("/{planId}")
     public ResponseEntity<Object> planDelete(@PathVariable Long planId) {
         planService.deletePlan(planId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 }
