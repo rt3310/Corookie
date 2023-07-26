@@ -4,7 +4,6 @@ import com.fourttttty.corookie.comment.application.repository.CommentRepository;
 import com.fourttttty.corookie.comment.domain.Comment;
 import com.fourttttty.corookie.comment.dto.request.CommentCreateRequest;
 import com.fourttttty.corookie.comment.dto.request.CommentModifyRequest;
-import com.fourttttty.corookie.comment.dto.response.CommentCreateResponse;
 import com.fourttttty.corookie.comment.dto.response.CommentDetailResponse;
 import com.fourttttty.corookie.member.application.service.MemberService;
 import com.fourttttty.corookie.thread.application.service.ThreadService;
