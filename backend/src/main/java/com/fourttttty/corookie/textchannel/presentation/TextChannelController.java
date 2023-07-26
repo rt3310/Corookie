@@ -44,7 +44,7 @@ public class TextChannelController {
     @PutMapping("/{textChannelId}")
     public ResponseEntity<TextChannelResponse> textChannelModify(@PathVariable Long projectId,
                                                                  @PathVariable Long textChannelId,
-                                                                 @RequestBody(required = true) String name) {
+                                                                 @RequestBody String name) {
         return ResponseEntity.ok(textChannelService.modify(textChannelId, name));
     }
 
