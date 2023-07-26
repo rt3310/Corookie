@@ -38,4 +38,8 @@ public class TextChannel extends BaseTime {
     public void modifyChannelName(String name) {
         this.channelName = name;
     }
+
+    public void deleteChannel() {
+        this.deletable = false;
+    }
 }

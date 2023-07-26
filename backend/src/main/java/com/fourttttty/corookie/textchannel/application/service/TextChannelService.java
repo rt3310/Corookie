@@ -50,7 +50,8 @@ public class TextChannelService {
 
     @Transactional
     public void deleteTextChannel(Long id) {
-        textChannelRepository.deleteById(id);
+        TextChannel textChannel = textChannelRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        textChannel.deleteChannel();
     }
 
 }
