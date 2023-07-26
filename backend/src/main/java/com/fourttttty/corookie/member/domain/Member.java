@@ -1,5 +1,6 @@
 package com.fourttttty.corookie.member.domain;
 
+import com.fourttttty.corookie.project.domain.Project;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -11,10 +12,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
 
-    @Id
-    @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
-    public Long id;
+    private Long id;
 
     private String name;
+
+    public Member(String name) {
+        this.name = name;
+    }
 }
