@@ -7,8 +7,7 @@ import java.util.Optional;
 
 public interface PlanCategoryRepository {
     PlanCategory save(PlanCategory planCategory);
-    List<PlanCategory> findAllByPlan(Plan plan);
-    void deleteAllByPlan(Plan plan);
-    List<PlanCategory> savePlanCategories(List<PlanCategory> planCategories);
-    Optional<PlanCategory> findByContentAndPlan(String content, Plan plan);
+    Optional<PlanCategory> findById(Long id);
+    Optional<PlanCategory> findByContent(String content);
+
 }

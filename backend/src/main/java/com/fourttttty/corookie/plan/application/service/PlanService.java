@@ -26,7 +26,7 @@ public class PlanService {
 
     public PlanResponse findById(Long id) {
         Plan plan = planRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-        List<PlanCategoryResponse> planCategories = planCategoryService.findPlanCategoriesByPlan(plan);
+        List<PlanCategoryResponse> planCategories = planCategoryService.findAllByPlan(plan);
         return PlanResponse.of(plan, planCategories);
     }
 
@@ -39,7 +39,10 @@ public class PlanService {
             .planEnd(planCreateRequest.planEnd())
             .build();
         planRepository.save(plan);
-        List<PlanCategoryResponse> planCategoriesResponse = planCategoryService.createCategoriesByPlan(plan, planCreateRequest.categories());
+
+        List<PlanCategoryResponse> planCategoriesResponse = planCreateRequest.categories().stream()
+                .map(planCategoryCreateRequest -> planCategoryService.create(plan,planCategoryCreateRequest))
+                .toList();
 
         return PlanResponse.of(plan, planCategoriesResponse);
     }
@@ -50,9 +53,9 @@ public class PlanService {
         plan.update(planUpdateRequest.planName(), planUpdateRequest.description(),
             planUpdateRequest.planStart(), planUpdateRequest.planEnd());
 
-        planUpdateRequest.categories().stream()
-            .filter(planCategory -> planCategoryService.findByContentAndPlan(planCategory.content(),plan))
-            .forEach(category -> planCategoryService.create(category.toEntity(plan)));
+//        planUpdateRequest.categories().stream()
+//            .filter(planCategory -> planCategoryService.findByContentAndPlan(planCategory.content(),plan))
+//            .forEach(category -> planCategoryService.create(plan,);
     }
 
     @Transactional

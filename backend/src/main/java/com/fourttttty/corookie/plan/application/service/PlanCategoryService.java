@@ -1,6 +1,8 @@
 package com.fourttttty.corookie.plan.application.service;
 
+import com.fourttttty.corookie.plan.application.repository.CategoryInPlanRepository;
 import com.fourttttty.corookie.plan.application.repository.PlanCategoryRepository;
+import com.fourttttty.corookie.plan.domain.CategoryInPlan;
 import com.fourttttty.corookie.plan.domain.PlanCategory;
 import com.fourttttty.corookie.plan.domain.Plan;
 import com.fourttttty.corookie.plan.dto.request.PlanCategoryCreateRequest;
@@ -13,31 +15,23 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class PlanCategoryService {
-
     private final PlanCategoryRepository planCategoryRepository;
+    private final CategoryInPlanRepository categoryInPlanRepository;
 
     @Transactional
-    public PlanCategoryResponse create(PlanCategory planCategory) {
-        return new PlanCategoryResponse(planCategoryRepository.save(planCategory).getContent());
+    public PlanCategoryResponse create(Plan plan,PlanCategoryCreateRequest planCategoryCreateRequest) {
+        PlanCategory newPlanCategory = planCategoryRepository.findByContent(planCategoryCreateRequest.content())
+            .orElse(planCategoryRepository.save(planCategoryCreateRequest.toEntity()));
+
+        categoryInPlanRepository.save(new CategoryInPlan(plan,newPlanCategory));
+
+        return new PlanCategoryResponse(newPlanCategory.getContent());
     }
 
-    public Boolean findByContentAndPlan(String content, Plan plan) {
-        return planCategoryRepository.findByContentAndPlan(content, plan).isEmpty();
-    }
-
-    public List<PlanCategoryResponse> findPlanCategoriesByPlan(Plan plan) {
-        return planCategoryRepository.findAllByPlan(plan).stream()
-            .map(planCategory -> new PlanCategoryResponse(planCategory.getContent()))
-            .toList();
-    }
-
-    @Transactional
-    public List<PlanCategoryResponse> createCategoriesByPlan(Plan plan, List<PlanCategoryCreateRequest> planCategories) {
-        return planCategoryRepository.savePlanCategories(planCategories.stream()
-                .distinct()
-                .map(planCategory->planCategory.toEntity(plan))
-                .toList()).stream()
-            .map(planCategory -> new PlanCategoryResponse(planCategory.getContent()))
+    public List<PlanCategoryResponse> findAllByPlan(Plan plan){
+        List<CategoryInPlan> categoryInPlans = categoryInPlanRepository.findAllbyPlan(plan);
+        return categoryInPlans.stream()
+            .map(categoryInPlan -> new PlanCategoryResponse(categoryInPlan.getId().getPlanCategory().getContent()))
             .toList();
     }
 }

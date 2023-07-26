@@ -5,7 +5,7 @@ import com.fourttttty.corookie.plan.domain.Plan;
 import jakarta.validation.constraints.NotBlank;
 
 public record PlanCategoryCreateRequest(@NotBlank String content) {
-    public PlanCategory toEntity(Plan plan) {
-        return new PlanCategory(content, plan);
+    public PlanCategory toEntity() {
+        return new PlanCategory(content);
     }
 }
