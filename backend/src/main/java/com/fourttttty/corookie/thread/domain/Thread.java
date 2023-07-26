@@ -3,6 +3,7 @@ package com.fourttttty.corookie.thread.domain;
 import com.fourttttty.corookie.global.audit.BaseTime;
 import com.fourttttty.corookie.member.domain.Member;
 import com.fourttttty.corookie.textchannel.domain.TextChannel;
+import com.fourttttty.corookie.thread.dto.request.ThreadModifyRequest;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -22,8 +23,14 @@ public class Thread extends BaseTime {
     @Column(name = "thread_id")
     private Long id;
 
+    @Column(nullable = false)
     private String content;
+
+    @Column(nullable = false)
     private Boolean enabled;
+
+    @Column(nullable = false)
+    private Integer commentCount;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "channel_Id")
@@ -39,8 +46,17 @@ public class Thread extends BaseTime {
         thread.textChannel = textChannel;
         thread.writer = writer;
         thread.enabled = enabled;
+        thread.commentCount = 0;
 
         return thread;
+    }
+
+    public void delete() {
+        this.enabled = false;
+    }
+
+    public void modify(ThreadModifyRequest request) {
+        this.content = request.content();
     }
 
 }
