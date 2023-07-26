@@ -35,8 +35,8 @@ public class Plan extends BaseTime {
     @Column(nullable = false)
     private LocalDateTime planEnd;
 
-    @Column()
-    private boolean enabled;
+    @Column(nullable = false)
+    private Boolean enabled;
 
     @Builder
     public Plan(String planName,
