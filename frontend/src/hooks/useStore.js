@@ -23,7 +23,17 @@ export const priorityState = create(set => ({
     setValue: input => set(state => ({ value: input })),
 }))
 
+export const detailPriorityState = create(set => ({
+    value: '중요도',
+    setValue: input => set(state => ({ value: input })),
+}))
+
 export const managerState = create(set => ({
+    value: '책임자',
+    setValue: input => set(state => ({ value: input })),
+}))
+
+export const detailManagerState = create(set => ({
     value: '책임자',
     setValue: input => set(state => ({ value: input })),
 }))
@@ -33,7 +43,18 @@ export const categoryState = create(set => ({
     setValue: input => set(state => ({ value: input })),
 }))
 
+export const detailCategoryState = create(set => ({
+    value: '분류',
+    setValue: input => set(state => ({ value: input })),
+}))
+
 export const statusState = create(set => ({
     value: '상태',
     setValue: input => set(state => ({ value: input })),
+}))
+
+export const issueDetailState = create(set => ({
+    issueDetailOpened: '-1',
+    openIssueDetail: input => set(state => ({ issueDetailOpened: input })),
+    closeIssueDetail: () => set(state => ({ issueDetailOpened: '-1' })),
 }))

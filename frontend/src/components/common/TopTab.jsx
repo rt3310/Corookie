@@ -40,6 +40,7 @@ const S = {
     Title: styled.div`
         height: 100%;
         width: 167px;
+        font-family: 'Futura PT';
         font-size: ${({ theme }) => theme.fontsize.logo};
         font-weight: 700;
         color: ${({ theme }) => theme.color.main};

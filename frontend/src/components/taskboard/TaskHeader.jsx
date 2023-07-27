@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import * as components from 'components'
 
 import * as hooks from 'hooks'
-import { IoSearch } from 'react-icons/io5'
+import { IoSearch, IoAdd } from 'react-icons/io5'
 
 const TaskHeader = () => {
     const { showIssue, openIssue, openKanban } = hooks.taskState()
@@ -24,26 +24,36 @@ const TaskHeader = () => {
                     칸반 보드
                 </S.KanbanTitle>
             </S.Title>
-            <S.Filters>
-                <S.TopicFilter>
-                    <S.SearchTopic placeholder="토픽으로 검색" />
-                    <S.SearchButton>
-                        <IoSearch />
-                    </S.SearchButton>
-                </S.TopicFilter>
-                <S.ToggleFilter>
-                    <components.ToggleButton defaultVal="priority" list={priorityList} />
-                </S.ToggleFilter>
-                <S.ToggleFilter>
-                    <components.ToggleButton defaultVal="manager" list={managerList} />
-                </S.ToggleFilter>
-                <S.ToggleFilter>
-                    <components.ToggleButton defaultVal="category" list={categoryList} />
-                </S.ToggleFilter>
-                <S.ToggleFilter>
-                    <components.ToggleButton defaultVal="status" list={statusList} />
-                </S.ToggleFilter>
-            </S.Filters>
+            <S.Search>
+                <S.Filters>
+                    <S.TopicFilter>
+                        <S.SearchTopic placeholder="토픽으로 검색" />
+                        <S.SearchButton>
+                            <IoSearch />
+                        </S.SearchButton>
+                    </S.TopicFilter>
+                    <S.ToggleFilter>
+                        <components.ToggleButton defaultVal="priority" list={priorityList} />
+                    </S.ToggleFilter>
+                    <S.ToggleFilter>
+                        <components.ToggleButton defaultVal="manager" list={managerList} />
+                    </S.ToggleFilter>
+                    <S.ToggleFilter>
+                        <components.ToggleButton defaultVal="category" list={categoryList} />
+                    </S.ToggleFilter>
+                    {showIssue && (
+                        <S.ToggleFilter>
+                            <components.ToggleButton defaultVal="status" list={statusList} />
+                        </S.ToggleFilter>
+                    )}
+                </S.Filters>
+                {showIssue && (
+                    <S.CreateButton>
+                        <IoAdd />
+                        <S.CreateText>생성</S.CreateText>
+                    </S.CreateButton>
+                )}
+            </S.Search>
         </S.Header>
     )
 }
@@ -81,11 +91,21 @@ const S = {
         color: ${({ showIssue, theme }) => (!showIssue ? theme.color.black : theme.color.gray)};
         cursor: pointer;
     `,
+    Search: styled.div`
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        height: 43px;
+    `,
     Filters: styled.div`
         display: flex;
         height: 43px;
         padding: 0;
         align-items: flex-end;
+        justify-content: flex-start;
+        &:last-child {
+            margin-right: auto;
+        }
     `,
     TopicFilter: styled.div`
         display: flex;
@@ -123,6 +143,26 @@ const S = {
         justify-content: space-between;
         max-height: 31px;
         margin: 0 8px;
+    `,
+    CreateButton: styled.div`
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 31px;
+        margin: 0 8px;
+        padding: 8px;
+        background-color: ${({ theme }) => theme.color.main};
+        border-radius: 4px;
+        cursor: pointer;
+        & svg {
+            color: ${({ theme }) => theme.color.white};
+            height: 16px;
+            width: 16px;
+        }
+    `,
+    CreateText: styled.div`
+        font-size: ${({ theme }) => theme.fontsize.sub1};
+        color: ${({ theme }) => theme.color.white};
     `,
 }
 export default TaskHeader

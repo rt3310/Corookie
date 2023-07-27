@@ -30,6 +30,9 @@ const ToggleButton = ({ defaultVal, list }) => {
         manager: hooks.managerState(),
         category: hooks.categoryState(),
         status: hooks.statusState(),
+        detailPriority: hooks.detailPriorityState(),
+        detailManager: hooks.detailManagerState(),
+        detailCategory: hooks.detailCategoryState(),
     }
 
     const { value, setValue } = type[defaultVal]
@@ -39,9 +42,9 @@ const ToggleButton = ({ defaultVal, list }) => {
     }, [value])
 
     return (
-        <S.Selector className={isActive ? 'active' : null}>
-            <S.Label onClick={() => changeIsActive()}>
-                {value}
+        <S.Selector className={isActive ? 'active' : null} onClick={() => changeIsActive()}>
+            <S.Label>
+                <S.text>{value}</S.text>
                 {isActive ? <IoChevronUp /> : <IoChevronDown />}
             </S.Label>
             <S.Options ref={searchRef}>
@@ -68,11 +71,11 @@ const S = {
         border: solid 1px ${({ theme }) => theme.color.gray};
         border-radius: 4px;
         height: 31px;
-        width: 80px;
-        background-color: ${({ isActive, theme }) => (!isActive ? theme.color.white : theme.color.main)};
+        width: 100px;
         cursor: pointer;
         &.active ul {
             max-height: 500px;
+            border: solid 1px ${({ theme }) => theme.color.gray};
         }
     `,
     Label: styled.button`
@@ -80,7 +83,10 @@ const S = {
         justify-content: space-around;
         align-items: center;
         width: 100%;
-        cursor: pointer;
+    `,
+    text: styled.div`
+        justify-content: center;
+        width: auto;
     `,
     Options: styled.ul`
         position: absolute;
@@ -91,6 +97,7 @@ const S = {
         color: #000;
         list-style-type: none;
         padding: 0;
+
         border-radius: 2px;
         overflow: auto;
         max-height: 0;
@@ -104,6 +111,7 @@ const S = {
         white-space: nowrap;
         &:hover {
             background-color: ${({ theme }) => theme.color.main};
+            color: ${({ theme }) => theme.color.white};
         }
     `,
 }
