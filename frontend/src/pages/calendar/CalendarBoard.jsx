@@ -3,11 +3,10 @@ import styled from 'styled-components'
 
 import * as components from 'components'
 
-const TaskBoard = () => {
+const CalendarBoard = () => {
     return (
         <S.Wrap>
-            <components.TaskHeader />
-            <components.KanbanBoard />
+            <components.CalendarBoard />
         </S.Wrap>
     )
 }
@@ -20,4 +19,4 @@ const S = {
     `,
 }
 
-export default TaskBoard
+export default CalendarBoard
