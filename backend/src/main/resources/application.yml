@@ -2,7 +2,6 @@ spring:
   h2:
     console:
       enabled: true
-
   jpa:
     hibernate:
       ddl-auto: create
@@ -16,4 +15,3 @@ spring:
 logging:
   level:
     org.hibernate.SQL: debug
-

@@ -28,4 +28,5 @@ public class TextChannelRepositoryImpl implements TextChannelRepository {
     public TextChannel save(TextChannel textChannel) {
         return textChannelJpaRepository.save(textChannel);
     }
+
 }

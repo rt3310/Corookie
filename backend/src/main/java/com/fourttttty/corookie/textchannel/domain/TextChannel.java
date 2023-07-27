@@ -1,6 +1,7 @@
 package com.fourttttty.corookie.textchannel.domain;
 
 import com.fourttttty.corookie.global.audit.BaseTime;
+import com.fourttttty.corookie.project.domain.Project;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -16,31 +17,43 @@ public class TextChannel extends BaseTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "channel_id")
+    @Column(name = "channel_id", nullable = false)
     private Long id;
 
+    @Column(nullable = false)
     private String channelName;
-    private boolean enabled;
-    private boolean deletable;
 
-    public static TextChannel create(String name) {
+    @Column(nullable = false)
+    private Boolean enabled;
 
+    @Column(nullable = false)
+    private Boolean deletable;
+
+    @ManyToOne
+    @JoinColumn(name = "project_id", nullable = false)
+    private Project project;
+
+    public static TextChannel create(String channelName,
+                                     Boolean enabled,
+                                     Project project) {
         TextChannel newTextChannel = new TextChannel();
-        newTextChannel.channelName = name;
-        newTextChannel.enabled = true;
+        newTextChannel.channelName = channelName;
+        newTextChannel.enabled = enabled;
+        newTextChannel.deletable = true;
+        newTextChannel.project = project;
 
         return newTextChannel;
     }
 
-    public static TextChannel create(String name, boolean deletable) {
-
-        TextChannel newTextChannel = new TextChannel();
-        newTextChannel.channelName = name;
-        newTextChannel.enabled = true;
-        newTextChannel.deletable = deletable;
-
-        return newTextChannel;
+    public void changeNotDeletableChannel() {
+        this.deletable = false;
     }
 
+    public void modifyChannelName(String name) {
+        this.channelName = name;
+    }
 
+    public void deleteChannel() {
+        this.enabled = false;
+    }
 }

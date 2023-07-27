@@ -8,4 +8,9 @@ export { default as ProfileBox } from './common/ProfileBox'
 
 export { default as Thread } from './textchat/Thread'
 export { default as CommentBox } from './textchat/CommentBox'
+export { default as CommentEditBox } from './textchat/CommentEditBox'
 export { default as EditBox } from './textchat/EditBox'
+export { default as Comment } from './textchat/Comment'
+
+export { default as TaskHeader } from './taskboard/TaskHeader'
+export { default as ToggleButton } from './taskboard/ToggleButton'

@@ -1,4 +1,4 @@
-package com.fourttttty.corookie.textchannel.config;
+package com.fourttttty.corookie.config.websocket;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -8,13 +8,13 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 
 @Configuration
 @EnableWebSocketMessageBroker // Stomp를 사용하기 위한 어노테이션
-public class TextChannelConfig implements WebSocketMessageBrokerConfigurer {
+public class StompConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
 
         // "/text-channel/endpoint"는 WebSocket 또는 SockJS Client가 웹소켓 핸드셰이크 커넥션을 생성할 경로이다.
-        registry.addEndpoint("/text-channel/endpoint")
+        registry.addEndpoint("/ws/chat")
                 .setAllowedOriginPatterns("*")
                 .withSockJS();
     }
