@@ -1,6 +1,6 @@
 # Readme.md
 
-![Untitled](./Readme/Untitled.png)
+![Untitled](Readme%20md%20dc292a8368e146c8b80c0dc0fa6397d1/Untitled.png)
 
 **| 프로젝트 기간 |**  2023.07.10 -
 
@@ -20,50 +20,32 @@ Notion, Slack, JIRA 등 분산되어 있는 개발 툴들을 통합하여 제공
 협업 경험이 낯설고, 어떤 툴을 사용해야 할지 모르는 초보 개발자들이 
 개발에 필요한 협업 프로세스를 익힐 수 있도록 도와줍니다.
 
-
-## 🧑‍🤝‍🧑 팀원 소개
-
----
-
-**최효빈 | 팀장, BE |**  스크럼 미팅 주관 및 프로젝트 CRUD 기능 구현
-
-**서원호 | CTO |**  팀 내 테크 리드, 설계 및 구현 주도
-
-**권현수 | FE |**  React 기반 Front-End 화면 구현
-
-**신승수 | BE |**  일정 관리 기능 및 기계학습 모델 구현
-
-**박종서 | BE |**  SockJS 및 Stomp 활용 WebSocket 기반 텍스트 채팅 구현
-
-**황상미 | FE |**  React 기반 Front-End 화면 구현
-
 ### 핵심 기능
 
 ---
 
-<!--
 <aside>
 💡 기능 정의서에서 피피티로 내용 옮겨서 정리할 때 요약한 내용 여기다가 추가하기
 
-</aside>-->
+</aside>
 
 ### Information Architecture & Wireframe
 
 ---
 
-![Information Architecture_bg.png](./Readme/Information_Architecture_bg.png)
+![Information Architecture_bg.png](Readme%20md%20dc292a8368e146c8b80c0dc0fa6397d1/Information_Architecture_bg.png)
 
 ### Work Flow
 
 ---
 
-![Workflow_bg.png](./Readme/Workflow_bg.png)
+![Workflow_bg.png](Readme%20md%20dc292a8368e146c8b80c0dc0fa6397d1/Workflow_bg.png)
 
 ### System Architecture
 
 ---
 
-![System Architecture 2.png](./Readme/System_Architecture_2.png)
+![System Architecture 2.png](Readme%20md%20dc292a8368e146c8b80c0dc0fa6397d1/System_Architecture_2.png)
 
 ## 🧑🏻‍💻 컨벤션
 
@@ -97,7 +79,7 @@ Notion, Slack, JIRA 등 분산되어 있는 개발 툴들을 통합하여 제공
 
 master - develop - feature - hotfix
 
-![Git Branch Strategy.png](./Readme/Git_Branch_Strategy.png)
+![Git Branch Strategy.png](Readme%20md%20dc292a8368e146c8b80c0dc0fa6397d1/Git_Branch_Strategy.png)
 
 - **작업 시작 시** develop -> feature로 분기합니다.
 - **작업 및 테스트 완료 시** develop에 feature를 병합합니다.
@@ -125,3 +107,38 @@ master - develop - feature - hotfix
 [제목 없는 데이터베이스](Readme%20md%20dc292a8368e146c8b80c0dc0fa6397d1/%E1%84%8C%E1%85%A6%E1%84%86%E1%85%A9%E1%86%A8%20%E1%84%8B%E1%85%A5%E1%86%B9%E1%84%82%E1%85%B3%E1%86%AB%20%E1%84%83%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%90%E1%85%A5%E1%84%87%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%89%E1%85%B3%207b1559390a8249c583bc33cdf902837f.csv)
 
 [제목 없는 데이터베이스](Readme%20md%20dc292a8368e146c8b80c0dc0fa6397d1/%E1%84%8C%E1%85%A6%E1%84%86%E1%85%A9%E1%86%A8%20%E1%84%8B%E1%85%A5%E1%86%B9%E1%84%82%E1%85%B3%E1%86%AB%20%E1%84%83%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%90%E1%85%A5%E1%84%87%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%89%E1%85%B3%20059fedbd27ce49c69f3d7acd1bd41e9f.csv)
+
+## 🧑‍🤝‍🧑 팀원 소개
+
+---
+
+<table>
+      <tr align=center>
+        <td><a href='https://lab.ssafy.com/gyqls234'>최효빈</a></td>
+        <td><a href='https://lab.ssafy.com/btac3310'>서원호</a></td>
+        <td><a href='https://lab.ssafy.com/imapples'>권현수</a></td>
+        <td><a href='https://lab.ssafy.com/zaduc'>황상미</a></td>
+        <td><a href='https://lab.ssafy.com/tmd0707'>신승수</a></td>
+        <td><a href='https://lab.ssafy.com/sociojs85'>박종서</a></td>
+      </tr>
+        <tr align=center>
+        <td>Leader, BE</td>
+        <td>CTO</td>
+        <td>FE</td>
+        <td>FE</td>
+        <td>BE</td>
+        <td>BE</td>
+      </tr>
+    </table>
+
+최효빈 | 팀장, BE |  스크럼 미팅 주관 및 프로젝트 CRUD 기능 구현
+
+서원호 | CTO | 
+
+권현수 | FE | 
+
+신승수 | BE |
+
+박종서 | BE |  SockJS 및 Stomp 활용 WebSocket 기반 텍스트 채팅 구현
+
+황상미 | FE |  React 기반 페이지 구현
