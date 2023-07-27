@@ -11,6 +11,9 @@ export const URL = {
     TASK: {
         BOARD: '/task/board',
     },
+    PLAN: {
+        CALENDER: '/plan/calendar',
+    },
 }
 
 export const MAX_WIDTH = '1920px'
