@@ -1,0 +1,9 @@
+﻿구분,version,상태
+React,,선택
+Babel,,선택
+Webpack,,선택
+Zustand,,선택
+Prettier,,선택
+TypeScript,latest,선택
+node.js,18,선택
+pwa,,고려중
