@@ -26,36 +26,27 @@ public class PlanService {
 
     public PlanResponse findById(Long id) {
         Plan plan = planRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-        List<PlanCategoryResponse> planCategories = planCategoryService.findAllByPlan(plan);
-        return PlanResponse.of(plan, planCategories);
+        return PlanResponse.of(plan, planCategoryService.findAllByPlan(plan));
     }
 
     @Transactional
     public PlanResponse createPlan(PlanCreateRequest planCreateRequest) {
-        Plan plan = Plan.builder()
-            .planName(planCreateRequest.planName())
-            .description(planCreateRequest.description())
-            .planStart(planCreateRequest.planStart())
-            .planEnd(planCreateRequest.planEnd())
-            .build();
-        planRepository.save(plan);
+        Plan plan = planRepository.save(
+                Plan.of(planCreateRequest.planName(),
+                        planCreateRequest.description(),
+                        planCreateRequest.planStart(),
+                        planCreateRequest.planEnd()));
 
-        List<PlanCategoryResponse> planCategoriesResponse = planCreateRequest.categories().stream()
-                .map(planCategoryCreateRequest -> planCategoryService.create(plan,planCategoryCreateRequest))
-                .toList();
-
-        return PlanResponse.of(plan, planCategoriesResponse);
+        return PlanResponse.of(plan, planCreateRequest.categories().stream()
+                .map(planCategoryCreateRequest -> planCategoryService.create(plan ,planCategoryCreateRequest))
+                .toList());
     }
 
     @Transactional
     public void modifyPlan(Long planId, PlanUpdateRequest planUpdateRequest) {
-        Plan plan = planRepository.findById(planId).orElseThrow(EntityNotFoundException::new);
-        plan.update(planUpdateRequest.planName(), planUpdateRequest.description(),
-            planUpdateRequest.planStart(), planUpdateRequest.planEnd());
-
-//        planUpdateRequest.categories().stream()
-//            .filter(planCategory -> planCategoryService.findByContentAndPlan(planCategory.content(),plan))
-//            .forEach(category -> planCategoryService.create(plan,);
+        planRepository.findById(planId).orElseThrow(EntityNotFoundException::new)
+                .update(planUpdateRequest.planName(), planUpdateRequest.description(),
+                        planUpdateRequest.planStart(), planUpdateRequest.planEnd());
     }
 
     @Transactional

@@ -47,8 +47,7 @@ public class Issue extends BaseTime {
     @JoinColumn(name = "manager_id", nullable = false)
     private Member manager;
 
-    @Builder
-    public Issue(String topic,
+    private Issue(String topic,
                  String description,
                  IssueProgress progress,
                  IssuePriority priority,
@@ -62,6 +61,22 @@ public class Issue extends BaseTime {
         this.enabled = enabled;
         this.project = project;
         this.manager = manager;
+    }
+
+    public static Issue of(String topic,
+                           String description,
+                           IssueProgress progress,
+                           IssuePriority priority,
+                           Boolean enabled,
+                           Project project,
+                           Member manager) {
+        return new Issue(topic,
+                description,
+                progress,
+                priority,
+                enabled,
+                project,
+                manager);
     }
 
     public void delete() {

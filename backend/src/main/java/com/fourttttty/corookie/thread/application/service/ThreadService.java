@@ -2,7 +2,6 @@ package com.fourttttty.corookie.thread.application.service;
 
 import com.fourttttty.corookie.member.application.service.MemberService;
 import com.fourttttty.corookie.member.domain.Member;
-import com.fourttttty.corookie.member.dto.response.MemberResponse;
 import com.fourttttty.corookie.textchannel.application.service.TextChannelService;
 import com.fourttttty.corookie.textchannel.domain.TextChannel;
 import com.fourttttty.corookie.thread.application.repository.ThreadRepository;
@@ -30,7 +29,7 @@ public class ThreadService {
     public ThreadDetailResponse create(ThreadCreateRequest request, Long writerId) {
         TextChannel textChannel = textChannelService.findEntityById(request.textChannelId());
         Member writer = memberService.findEntityById(writerId);
-        Thread thread = Thread.create(request.content(), textChannel, writer, true);
+        Thread thread = Thread.of(request.content(), true, 0, textChannel, writer);
         threadRepository.save(thread);
         return ThreadDetailResponse.of(thread);
     }

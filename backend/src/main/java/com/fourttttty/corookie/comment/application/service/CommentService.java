@@ -32,11 +32,11 @@ public class CommentService {
 
     @Transactional
     public CommentDetailResponse create(CommentCreateRequest request, Long writerId) {
-        Comment comment = Comment.create(
+        Comment comment = Comment.of(
                 request.content(),
+                true,
                 threadService.findEntityById(request.threadId()),
-                memberService.findEntityById(writerId),
-                true);
+                memberService.findEntityById(writerId));
         return CommentDetailResponse.of(commentRepository.save(comment));
     }
 

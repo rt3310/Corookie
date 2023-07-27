@@ -30,14 +30,14 @@ public class CommentController {
 
     // 코멘트 추가
     @MessageMapping("/comment")
-    public ResponseEntity<CommentDetailResponse> threadCreate(CommentCreateRequest request) {
+    public ResponseEntity<CommentDetailResponse> commentCreate(CommentCreateRequest request) {
         sendingOperations.convertAndSend("/topic/comment/" + request.threadId(), request);
         return ResponseEntity.ok(commentService.create(request, request.writerId()));
     }
 
     // 코멘트 수정
     @PutMapping("/{commentId}")
-    public ResponseEntity<CommentDetailResponse> threadModify(@PathVariable Long projectId,
+    public ResponseEntity<CommentDetailResponse> commentModify(@PathVariable Long projectId,
                                                               @PathVariable Long textChannelId,
                                                               @PathVariable Long threadId,
                                                               @PathVariable Long commentId,
@@ -47,7 +47,7 @@ public class CommentController {
 
     // 코멘트 삭제
     @DeleteMapping("/{commentId}")
-    public ResponseEntity<Void> threadDelete(@PathVariable Long projectId,
+    public ResponseEntity<Void> commentDelete(@PathVariable Long projectId,
                                              @PathVariable Long textChannelId,
                                              @PathVariable Long threadId,
                                              @PathVariable Long commentId) {

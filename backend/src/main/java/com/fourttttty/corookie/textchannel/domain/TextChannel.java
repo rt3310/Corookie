@@ -33,16 +33,18 @@ public class TextChannel extends BaseTime {
     @JoinColumn(name = "project_id", nullable = false)
     private Project project;
 
-    public static TextChannel create(String channelName,
-                                     Boolean enabled,
-                                     Project project) {
-        TextChannel newTextChannel = new TextChannel();
-        newTextChannel.channelName = channelName;
-        newTextChannel.enabled = enabled;
-        newTextChannel.deletable = true;
-        newTextChannel.project = project;
+    private TextChannel(String channelName, Boolean enabled, Boolean deletable, Project project) {
+        this.channelName = channelName;
+        this.enabled = enabled;
+        this.deletable = deletable;
+        this.project = project;
+    }
 
-        return newTextChannel;
+    public static TextChannel of(String channelName,
+                                 Boolean enabled,
+                                 Boolean deletable,
+                                 Project project) {
+        return new TextChannel(channelName, enabled, deletable, project);
     }
 
     public void changeNotDeletableChannel() {

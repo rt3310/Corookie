@@ -39,8 +39,7 @@ public class Plan extends BaseTime {
     @Column(nullable = false)
     private Boolean enabled;
 
-    @Builder
-    public Plan(String planName,
+    private Plan(String planName,
                 String description,
                 LocalDateTime planStart,
                 LocalDateTime planEnd) {
@@ -48,6 +47,16 @@ public class Plan extends BaseTime {
         this.description = description;
         this.planStart = planStart;
         this.planEnd = planEnd;
+    }
+
+    public static Plan of(String planName,
+                          String description,
+                          LocalDateTime planStart,
+                          LocalDateTime planEnd) {
+        return new Plan(planName,
+                description,
+                planStart,
+                planEnd);
     }
 
     public void update(String planName,

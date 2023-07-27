@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
-public class CategoryInPlanRepositoryImpl implements CategoryInPlanRepository{
+public class CategoryInPlanRepositoryImpl implements CategoryInPlanRepository {
     private final CategoryInPlanJpaRepository categoryInPlanJpaRepository;
     @Override
     public void save(CategoryInPlan categoryInPlan) {
@@ -17,7 +17,7 @@ public class CategoryInPlanRepositoryImpl implements CategoryInPlanRepository{
     }
 
     @Override
-    public List<CategoryInPlan> findAllbyPlan(Plan plan) {
+    public List<CategoryInPlan> findAllByPlan(Plan plan) {
         return categoryInPlanJpaRepository.findByIdPlan(plan);
     }
 }
