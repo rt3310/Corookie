@@ -26,7 +26,7 @@ public class CommentService {
     public List<CommentDetailResponse> findAll(Long threadId) {
         return commentRepository.findAll(threadId)
                 .stream()
-                .map(CommentDetailResponse::of)
+                .map(CommentDetailResponse::from)
                 .toList();
     }
 
@@ -37,14 +37,14 @@ public class CommentService {
                 true,
                 threadService.findEntityById(request.threadId()),
                 memberService.findEntityById(writerId));
-        return CommentDetailResponse.of(commentRepository.save(comment));
+        return CommentDetailResponse.from(commentRepository.save(comment));
     }
 
     @Transactional
     public CommentDetailResponse modify(CommentModifyRequest request, Long commentId) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(EntityNotFoundException::new);
         comment.modify(request.content());
-        return CommentDetailResponse.of(comment);
+        return CommentDetailResponse.from(comment);
     }
 
     @Transactional

@@ -13,7 +13,7 @@ public record PlanResponse(@NotNull Long planId,
                            @NotNull LocalDateTime planStart,
                            @NotNull LocalDateTime planEnd,
                            @NotNull List<PlanCategoryResponse> categories) {
-    public static PlanResponse of(Plan plan, List<PlanCategoryResponse> categories) {
+    public static PlanResponse from(Plan plan, List<PlanCategoryResponse> categories) {
         return PlanResponse.builder()
             .planId(plan.getId())
             .planName(plan.getPlanName())

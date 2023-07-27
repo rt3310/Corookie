@@ -1,4 +1,4 @@
-package com.fourttttty.corookie.textchannel.dto;
+package com.fourttttty.corookie.textchannel.dto.request;
 
 import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.textchannel.domain.TextChannel;

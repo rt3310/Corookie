@@ -31,7 +31,7 @@ public class ThreadService {
         Member writer = memberService.findEntityById(writerId);
         Thread thread = Thread.of(request.content(), true, 0, textChannel, writer);
         threadRepository.save(thread);
-        return ThreadDetailResponse.of(thread);
+        return ThreadDetailResponse.from(thread);
     }
 
     public Thread findEntityById(Long threadId) {
@@ -40,13 +40,13 @@ public class ThreadService {
 
     public ThreadDetailResponse findById(Long threadId) {
         Thread thread = threadRepository.findById(threadId).orElseThrow(EntityNotFoundException::new);
-        return ThreadDetailResponse.of(thread);
+        return ThreadDetailResponse.from(thread);
     }
 
     public List<ThreadDetailResponse> findAll(Long TextChannelId) {
         return threadRepository.findAll(TextChannelId)
                 .stream()
-                .map(ThreadDetailResponse::of)
+                .map(ThreadDetailResponse::from)
                 .toList();
     }
 
@@ -60,6 +60,6 @@ public class ThreadService {
     public ThreadDetailResponse modify(ThreadModifyRequest request, Long threadId) {
         Thread thread = threadRepository.findById(threadId).orElseThrow(EntityNotFoundException::new);
         thread.modify(request);
-        return ThreadDetailResponse.of(thread);
+        return ThreadDetailResponse.from(thread);
     }
 }

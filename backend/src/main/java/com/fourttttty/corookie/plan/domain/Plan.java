@@ -1,6 +1,7 @@
 package com.fourttttty.corookie.plan.domain;
 
 import com.fourttttty.corookie.global.audit.BaseTime;
+import com.fourttttty.corookie.project.domain.Project;
 import jakarta.persistence.*;
 
 import lombok.AccessLevel;
@@ -39,34 +40,48 @@ public class Plan extends BaseTime {
     @Column(nullable = false)
     private Boolean enabled;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "project_id")
+    private Project project;
+
     private Plan(String planName,
-                String description,
-                LocalDateTime planStart,
-                LocalDateTime planEnd) {
+                 String description,
+                 LocalDateTime planStart,
+                 LocalDateTime planEnd,
+                 Boolean enabled,
+                 Project project) {
         this.planName = planName;
         this.description = description;
         this.planStart = planStart;
         this.planEnd = planEnd;
+        this.enabled = enabled;
+        this.project = project;
     }
 
     public static Plan of(String planName,
                           String description,
                           LocalDateTime planStart,
-                          LocalDateTime planEnd) {
+                          LocalDateTime planEnd,
+                          Boolean enabled,
+                          Project project) {
         return new Plan(planName,
                 description,
                 planStart,
-                planEnd);
+                planEnd,
+                enabled,
+                project);
     }
 
     public void update(String planName,
                        String description,
                        LocalDateTime planStart,
-                       LocalDateTime planEnd) {
+                       LocalDateTime planEnd,
+                       Project project) {
         this.planName = planName;
         this.description = description;
         this.planStart = planStart;
         this.planEnd = planEnd;
+        this.project = project;
     }
 
     public void delete(){

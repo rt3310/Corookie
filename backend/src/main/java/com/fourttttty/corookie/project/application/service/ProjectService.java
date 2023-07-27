@@ -8,7 +8,6 @@ import com.fourttttty.corookie.project.dto.request.ProjectUpdateRequest;
 import com.fourttttty.corookie.project.dto.response.ProjectResponse;
 import com.fourttttty.corookie.textchannel.application.service.TextChannelService;
 import com.fourttttty.corookie.textchannel.domain.DefaultChannel;
-import com.fourttttty.corookie.textchannel.dto.TextChannelCreateRequest;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,12 +25,12 @@ public class ProjectService {
 
     public List<ProjectResponse> findAll() {
         return projectRepository.findAll().stream()
-                .map(ProjectResponse::of)
+                .map(ProjectResponse::from)
                 .toList();
     }
 
     public ProjectResponse findById(Long projectId) {
-        return ProjectResponse.of(findEntityById(projectId));
+        return ProjectResponse.from(findEntityById(projectId));
     }
 
     public Project findEntityById(Long projectId) {
@@ -42,7 +41,7 @@ public class ProjectService {
     public ProjectResponse create(ProjectCreateRequest projectCreateRequest, Long memberId) {
         Project project = projectRepository.save(projectCreateRequest.toEntity(memberService.findEntityById(memberId)));
         createInitialTextChannel(project.getId());
-        return ProjectResponse.of(project);
+        return ProjectResponse.from(project);
     }
 
     private void createInitialTextChannel(Long projectId) {
@@ -55,7 +54,7 @@ public class ProjectService {
     public ProjectResponse modify(ProjectUpdateRequest request, Long projectId) {
         Project project = projectRepository.findById(projectId).orElseThrow(EntityNotFoundException::new);
         project.update(request.name(), request.description(), request.invitationLink(), request.invitationStatus());
-        return ProjectResponse.of(project);
+        return ProjectResponse.from(project);
     }
 
     @Transactional

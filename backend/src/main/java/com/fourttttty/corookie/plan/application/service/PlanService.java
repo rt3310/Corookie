@@ -4,12 +4,11 @@ import com.fourttttty.corookie.plan.application.repository.PlanRepository;
 import com.fourttttty.corookie.plan.domain.Plan;
 import com.fourttttty.corookie.plan.dto.request.PlanCreateRequest;
 import com.fourttttty.corookie.plan.dto.request.PlanUpdateRequest;
-import com.fourttttty.corookie.plan.dto.response.PlanCategoryResponse;
 import com.fourttttty.corookie.plan.dto.response.PlanResponse;
 
+import com.fourttttty.corookie.project.application.service.ProjectService;
 import jakarta.persistence.EntityNotFoundException;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -23,30 +22,36 @@ public class PlanService {
 
     private final PlanRepository planRepository;
     private final PlanCategoryService planCategoryService;
+    private final ProjectService projectService;
 
     public PlanResponse findById(Long id) {
         Plan plan = planRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-        return PlanResponse.of(plan, planCategoryService.findAllByPlan(plan));
+        return PlanResponse.from(plan, planCategoryService.findAllByPlan(plan));
     }
 
     @Transactional
-    public PlanResponse createPlan(PlanCreateRequest planCreateRequest) {
+    public PlanResponse createPlan(PlanCreateRequest planCreateRequest, Long projectId) {
         Plan plan = planRepository.save(
                 Plan.of(planCreateRequest.planName(),
                         planCreateRequest.description(),
                         planCreateRequest.planStart(),
-                        planCreateRequest.planEnd()));
+                        planCreateRequest.planEnd(),
+                        true,
+                        projectService.findEntityById(projectId)));
 
-        return PlanResponse.of(plan, planCreateRequest.categories().stream()
+        return PlanResponse.from(plan, planCreateRequest.categories().stream()
                 .map(planCategoryCreateRequest -> planCategoryService.create(plan ,planCategoryCreateRequest))
                 .toList());
     }
 
     @Transactional
-    public void modifyPlan(Long planId, PlanUpdateRequest planUpdateRequest) {
+    public void modifyPlan(PlanUpdateRequest planUpdateRequest, Long planId, Long projectId) {
         planRepository.findById(planId).orElseThrow(EntityNotFoundException::new)
-                .update(planUpdateRequest.planName(), planUpdateRequest.description(),
-                        planUpdateRequest.planStart(), planUpdateRequest.planEnd());
+                .update(planUpdateRequest.planName(),
+                        planUpdateRequest.description(),
+                        planUpdateRequest.planStart(),
+                        planUpdateRequest.planEnd(),
+                        projectService.findEntityById(projectId));
     }
 
     @Transactional
