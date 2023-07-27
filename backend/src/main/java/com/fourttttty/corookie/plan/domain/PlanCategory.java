@@ -22,7 +22,7 @@ public class PlanCategory extends BaseTime {
     @Column(nullable = false)
     private String content;
 
-    public PlanCategory(String content) {
+    private PlanCategory(String content) {
         this.content = content;
     }
 

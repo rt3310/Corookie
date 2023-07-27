@@ -24,4 +24,3 @@ public record PlanResponse(@NotNull Long planId,
             .build();
     }
 }
-

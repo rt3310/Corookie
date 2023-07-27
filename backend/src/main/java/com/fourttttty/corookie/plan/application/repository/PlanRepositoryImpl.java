@@ -22,6 +22,4 @@ public class PlanRepositoryImpl implements PlanRepository {
     public Plan save(Plan plan) {
         return planJpaRepository.save(plan);
     }
-
-
 }

@@ -6,6 +6,6 @@ import jakarta.validation.constraints.NotBlank;
 
 public record PlanCategoryUpdateRequest(@NotBlank String content) {
     public PlanCategory toEntity() {
-        return new PlanCategory(content);
+        return PlanCategory.of(content);
     }
 }
