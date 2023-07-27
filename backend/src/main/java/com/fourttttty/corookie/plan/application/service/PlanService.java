@@ -35,7 +35,7 @@ public class PlanService {
     }
 
     @Transactional
-    public PlanResponse createPlan(Long projectId, PlanCreateRequest planCreateRequest) {
+    public PlanResponse createPlan(PlanCreateRequest planCreateRequest, Long projectId) {
         Plan plan = Plan.of(planCreateRequest.planName(),
             planCreateRequest.description(),
             planCreateRequest.planStart(),
