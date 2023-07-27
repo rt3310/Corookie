@@ -32,12 +32,12 @@ public class IssueService {
         List<IssueCategoryResponse> issueCategoryResponses = issueCreateRequest.issueCategories().stream()
                 .map(request -> issueCategoryService.createIfNone(request, issue))
                 .toList();
-        return IssueDetailResponse.of(issue, issueCategoryResponses, memberId);
+        return IssueDetailResponse.from(issue, issueCategoryResponses, memberId);
     }
 
     public IssueDetailResponse findById(Long issueId) {
         Issue issue = findEntityById(issueId);
-        return IssueDetailResponse.of(issue, issueCategoryService.findByIssueId(issueId), issue.getManager().getId());
+        return IssueDetailResponse.from(issue, issueCategoryService.findByIssueId(issueId), issue.getManager().getId());
     }
 
     public Issue findEntityById(Long issueId) {
@@ -47,7 +47,7 @@ public class IssueService {
     public List<IssueListResponse> findByProjectId(Long projectId, Long memberId) {
         return issueRepository.findByProjectId(projectId).stream()
                 .map(issue -> IssueListResponse
-                        .of(issue, issueCategoryService.findByIssueId(issue.getId()), projectId, memberId))
+                        .from(issue, issueCategoryService.findByIssueId(issue.getId()), projectId, memberId))
                 .toList();
     }
 

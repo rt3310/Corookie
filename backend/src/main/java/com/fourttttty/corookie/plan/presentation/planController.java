@@ -23,13 +23,16 @@ public class planController {
     }
 
     @PostMapping
-    public ResponseEntity<PlanResponse> planCreate(@RequestBody @Validated PlanCreateRequest planCreateRequest) {
-        return ResponseEntity.ok(planService.createPlan(planCreateRequest));
+    public ResponseEntity<PlanResponse> planCreate(@PathVariable Long projectId,
+                                                   @RequestBody @Validated PlanCreateRequest planCreateRequest) {
+        return ResponseEntity.ok(planService.createPlan(planCreateRequest, projectId));
     }
 
     @PutMapping("/{planId}")
-    public ResponseEntity<Object> planModify(@PathVariable Long planId, @RequestBody @Validated PlanUpdateRequest planUpdateRequest) {
-        planService.modifyPlan(planId, planUpdateRequest);
+    public ResponseEntity<Object> planModify(@PathVariable Long projectId,
+                                             @PathVariable Long planId,
+                                             @RequestBody @Validated PlanUpdateRequest planUpdateRequest) {
+        planService.modifyPlan(planUpdateRequest, planId, projectId);
         return ResponseEntity.ok().build();
     }
 

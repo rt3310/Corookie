@@ -8,6 +8,6 @@ import jakarta.validation.constraints.NotBlank;
 public record IssueCategoryCreateRequest(@NotBlank Category category) {
 
     public IssueCategory toEntity(Issue issue) {
-        return new IssueCategory(category, issue);
+        return IssueCategory.of(category, issue);
     }
 }

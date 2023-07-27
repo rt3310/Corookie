@@ -1,11 +1,10 @@
 package com.fourttttty.corookie.textchannel.application.service;
 
 import com.fourttttty.corookie.project.application.repository.ProjectRepository;
-import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.textchannel.application.repository.TextChannelRepository;
 import com.fourttttty.corookie.textchannel.domain.TextChannel;
-import com.fourttttty.corookie.textchannel.dto.TextChannelCreateRequest;
-import com.fourttttty.corookie.textchannel.dto.TextChannelResponse;
+import com.fourttttty.corookie.textchannel.dto.request.TextChannelCreateRequest;
+import com.fourttttty.corookie.textchannel.dto.response.TextChannelResponse;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -47,7 +46,7 @@ public class TextChannelService {
 
     @Transactional
     public void createDefaultChannel(String channelName, Long projectId) {
-        TextChannel.create(channelName, true,
+        TextChannel.of(channelName, true, false,
                 projectRepository.findById(projectId).orElseThrow(EntityNotFoundException::new))
                 .changeNotDeletableChannel();
     }

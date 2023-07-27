@@ -19,14 +19,7 @@ public record IssueCreateRequest(@NotBlank String topic,
                                  List<IssueCategoryCreateRequest> issueCategories) {
 
     public Issue toEntity(Project project, Member member) {
-        return Issue.builder()
-                .topic(topic)
-                .description(description)
-                .progress(issueProgress)
-                .priority(issuePriority)
-                .enabled(true)
-                .project(project)
-                .manager(member)
-                .build();
+        return Issue.of(topic, description, issueProgress,
+                issuePriority, true, project, member);
     }
 }

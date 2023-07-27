@@ -26,8 +26,12 @@ public class IssueCategory {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Issue issue;
 
-    public IssueCategory(Category category, Issue issue) {
+    private IssueCategory(Category category, Issue issue) {
         this.category = category;
         this.issue = issue;
+    }
+
+    public static IssueCategory of(Category category, Issue issue) {
+        return new IssueCategory(category, issue);
     }
 }

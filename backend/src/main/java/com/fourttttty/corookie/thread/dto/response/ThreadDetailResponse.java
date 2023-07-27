@@ -10,7 +10,7 @@ public record ThreadDetailResponse(MemberResponse writer,
                                    String content,
                                    Integer commentCount) {
 
-    public static ThreadDetailResponse of(Thread thread) {
+    public static ThreadDetailResponse from(Thread thread) {
         return new ThreadDetailResponse(
                 new MemberResponse(thread.getWriter().getName()),
                 thread.getCreatedAt(),

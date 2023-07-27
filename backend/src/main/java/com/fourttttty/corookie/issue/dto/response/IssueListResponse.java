@@ -13,10 +13,10 @@ public record IssueListResponse(String topic,
                                 Long projectId,
                                 Long memberId) {
 
-    public static IssueListResponse of(Issue issue,
-                                       List<IssueCategoryResponse> issueCategories,
-                                       Long projectId,
-                                       Long memberId) {
+    public static IssueListResponse from(Issue issue,
+                                         List<IssueCategoryResponse> issueCategories,
+                                         Long projectId,
+                                         Long memberId) {
         return IssueListResponse.builder()
                 .topic(issue.getTopic())
                 .progress(issue.getProgress().getValue())

@@ -13,7 +13,7 @@ public record ProjectResponse(String name,
                               String invitationLink,
                               Boolean invitationStatus) {
 
-    public static ProjectResponse of(Project project) {
+    public static ProjectResponse from(Project project) {
         return ProjectResponse.builder()
                 .name(project.getName())
                 .description(project.getDescription())
