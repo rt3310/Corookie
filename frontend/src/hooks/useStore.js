@@ -37,3 +37,14 @@ export const statusState = create(set => ({
     value: '상태',
     setValue: input => set(state => ({ value: input })),
 }))
+
+export const dateState = create(set => ({
+    monthStart: -1,
+    monthEnd: -1,
+    startDate: -1,
+    endDate: -1,
+    setMonthStart: input => set(state => ({ monthStart: input })),
+    setMonthEnd: input => set(state => ({ monthEnd: input })),
+    setStartDate: input => set(state => ({ startDate: input })),
+    setEndDate: input => set(state => ({ endDate: input })),
+}))
