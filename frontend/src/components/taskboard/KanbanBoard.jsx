@@ -6,9 +6,8 @@ const KanbanBoard = () => {
         todo: [
             { id: 1, name: 'Task 1' },
             { id: 2, name: 'Task 2' },
-            { id: 3, name: 'Task 3' },
         ],
-        inProgress: [],
+        inProgress: [{ id: 3, name: 'Task 3' }],
         done: [],
     })
 
@@ -41,42 +40,48 @@ const KanbanBoard = () => {
                 [draggedOverList]: updatedSourceList,
                 [targetList]: updatedTargetList,
             })
-            setDraggedItem(null) // Clear dragged item after drop
-            setDraggedOverList(null) // Clear dragged over list after drop
+            setDraggedItem(null)
+            setDraggedOverList(null)
         }
     }
 
     return (
         <S.Wrap>
-            <S.Todo onDragOver={e => onDragOver(e, 'todo')} onDrop={onDrop}>
+            <S.Todo onDragOver={e => onDragOver(e, 'todo')} onDrop={onDrop} draggable={false}>
                 Todo
-                <ul>
-                    {lists.todo.map(item => (
-                        <li key={item.id} draggable onDragStart={e => onDragStart(e, item, 'todo')}>
-                            <p>{item.name}</p>
-                        </li>
-                    ))}
-                </ul>
+                <S.TaskBox>
+                    <ul>
+                        {lists.todo.map(item => (
+                            <li key={item.id} draggable onDragStart={e => onDragStart(e, item, 'todo')}>
+                                <p>{item.name}</p>
+                            </li>
+                        ))}
+                    </ul>
+                </S.TaskBox>
             </S.Todo>
-            <S.InProgress onDragOver={e => onDragOver(e, 'inProgress')} onDrop={onDrop}>
+            <S.InProgress onDragOver={e => onDragOver(e, 'inProgress')} onDrop={onDrop} draggable={false}>
                 InProgress
-                <ul>
-                    {lists.inProgress.map(item => (
-                        <li key={item.id} draggable onDragStart={e => onDragStart(e, item, 'inProgress')}>
-                            <p>{item.name}</p>
-                        </li>
-                    ))}
-                </ul>
+                <S.TaskBox>
+                    <ul>
+                        {lists.inProgress.map(item => (
+                            <li key={item.id} draggable onDragStart={e => onDragStart(e, item, 'inProgress')}>
+                                <p>{item.name}</p>
+                            </li>
+                        ))}
+                    </ul>
+                </S.TaskBox>
             </S.InProgress>
-            <S.Done onDragOver={e => onDragOver(e, 'done')} onDrop={onDrop}>
+            <S.Done onDragOver={e => onDragOver(e, 'done')} onDrop={onDrop} draggable={false}>
                 Done
-                <ul>
-                    {lists.done.map(item => (
-                        <li key={item.id} draggable onDragStart={e => onDragStart(e, item, 'done')}>
-                            <p>{item.name}</p>
-                        </li>
-                    ))}
-                </ul>
+                <S.TaskBox>
+                    <ul>
+                        {lists.done.map(item => (
+                            <li key={item.id} draggable onDragStart={e => onDragStart(e, item, 'done')}>
+                                <p>{item.name}</p>
+                            </li>
+                        ))}
+                    </ul>
+                </S.TaskBox>
             </S.Done>
         </S.Wrap>
     )
@@ -89,6 +94,12 @@ const S = {
         background-color: ${({ theme }) => theme.color.background};
         padding: 0 4px;
     `,
+    TaskBox: styled.div`
+        display: flex;
+        background-color: ${({ theme }) => theme.color.background};
+        padding: 0 0;
+        margin: 16px 0;
+    `,
     Todo: styled.div`
         border-radius: 8px;
         background-color: ${({ theme }) => theme.color.success};
@@ -98,6 +109,21 @@ const S = {
         height: 32px;
         color: ${({ theme }) => theme.color.white};
         cursor: pointer;
+        ul {
+            list-style: none;
+            padding: 0;
+            width: 100%;
+        }
+        li {
+            background-color: ${({ theme }) => theme.color.white};
+            margin: 16px 0 16px 0;
+            padding: 8px;
+            border-radius: 4px;
+            height: 120px;
+            color: ${({ theme }) => theme.color.black};
+
+            cursor: pointer;
+        }
     `,
     InProgress: styled.div`
         border-radius: 8px;
@@ -108,6 +134,21 @@ const S = {
         height: 32px;
         color: ${({ theme }) => theme.color.white};
         cursor: pointer;
+        ul {
+            list-style: none;
+            padding: 0;
+            width: 100%;
+        }
+        li {
+            background-color: ${({ theme }) => theme.color.white};
+            margin: 16px 0 16px 0;
+            padding: 8px;
+            border-radius: 4px;
+            height: 120px;
+            color: ${({ theme }) => theme.color.black};
+
+            cursor: pointer;
+        }
     `,
     Done: styled.div`
         border-radius: 8px;
@@ -118,6 +159,22 @@ const S = {
         height: 32px;
         color: ${({ theme }) => theme.color.white};
         cursor: pointer;
+        ul {
+            list-style: none;
+            padding: 0;
+            width: 100%;
+            height: 120px;
+        }
+        li {
+            background-color: ${({ theme }) => theme.color.white};
+            margin: 16px 0 16px 0;
+            padding: 8px;
+            border-radius: 4px;
+            height: 120px;
+            color: ${({ theme }) => theme.color.black};
+
+            cursor: pointer;
+        }
     `,
 }
 
