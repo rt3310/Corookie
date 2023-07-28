@@ -17,7 +17,11 @@ public class CategoryInPlan {
     @EmbeddedId
     private CategoryInPlanId id;
 
-    public CategoryInPlan(Plan plan, PlanCategory planCategory) {
+    private CategoryInPlan(Plan plan, PlanCategory planCategory) {
         this.id = new CategoryInPlanId(plan, planCategory);
+    }
+
+    public static CategoryInPlan of(Plan plan, PlanCategory planCategory) {
+        return new CategoryInPlan(plan, planCategory);
     }
 }

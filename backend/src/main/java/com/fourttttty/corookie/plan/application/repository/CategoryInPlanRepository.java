@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface CategoryInPlanRepository {
     void save(CategoryInPlan categoryInPlan);
-    List<CategoryInPlan> findAllbyPlan(Plan plan);
+    List<CategoryInPlan> findAllByPlan(Plan plan);
 }

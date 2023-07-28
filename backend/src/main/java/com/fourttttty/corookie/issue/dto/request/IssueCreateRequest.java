@@ -14,19 +14,12 @@ import java.util.List;
 @Builder
 public record IssueCreateRequest(@NotBlank String topic,
                                  @NotNull String description,
-                                 @NotNull IssueProgress issueProgress,
-                                 @NotNull IssuePriority issuePriority,
+                                 @NotNull IssueProgress progress,
+                                 @NotNull IssuePriority priority,
                                  List<IssueCategoryCreateRequest> issueCategories) {
 
     public Issue toEntity(Project project, Member member) {
-        return Issue.builder()
-                .topic(topic)
-                .description(description)
-                .progress(issueProgress)
-                .priority(issuePriority)
-                .enabled(true)
-                .project(project)
-                .manager(member)
-                .build();
+        return Issue.of(topic, description, progress,
+                priority, true, project, member);
     }
 }

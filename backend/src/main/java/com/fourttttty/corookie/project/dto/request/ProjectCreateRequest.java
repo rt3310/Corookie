@@ -11,13 +11,6 @@ public record ProjectCreateRequest(@NotBlank String name,
                                    @NotNull Boolean invitationStatus) {
 
     public Project toEntity(Member member) {
-        return Project.builder()
-                .name(name)
-                .description(description)
-                .enabled(true)
-                .invitationLink(invitationLink)
-                .invitationStatus(invitationStatus)
-                .member(member)
-                .build();
+        return Project.of(name, description, true, invitationLink, invitationStatus, member);
     }
 }

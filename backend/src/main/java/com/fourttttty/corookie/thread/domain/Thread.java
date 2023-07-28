@@ -6,10 +6,11 @@ import com.fourttttty.corookie.textchannel.domain.TextChannel;
 import com.fourttttty.corookie.thread.dto.request.ThreadModifyRequest;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -17,8 +18,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 public class Thread extends BaseTime {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "thread_id")
     private Long id;
 
@@ -39,15 +39,16 @@ public class Thread extends BaseTime {
     @JoinColumn(name = "member_id")
     private Member writer;
 
-    public static Thread create(String content, TextChannel textChannel, Member writer, Boolean enabled) {
-        Thread thread = new Thread();
-        thread.content = content;
-        thread.textChannel = textChannel;
-        thread.writer = writer;
-        thread.enabled = enabled;
-        thread.commentCount = 0;
+    private Thread(String content, Boolean enabled, Integer commentCount, TextChannel textChannel, Member writer) {
+        this.content = content;
+        this.enabled = enabled;
+        this.commentCount = commentCount;
+        this.textChannel = textChannel;
+        this.writer = writer;
+    }
 
-        return thread;
+    public static Thread of(String content, Boolean enabled, Integer commentCount, TextChannel textChannel, Member writer) {
+        return new Thread(content, enabled, commentCount, textChannel, writer);
     }
 
     public void delete() {

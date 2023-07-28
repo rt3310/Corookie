@@ -9,7 +9,7 @@ public record CommentDetailResponse(String content,
                                     MemberResponse writer,
                                     LocalDateTime createdAt) {
 
-    public static CommentDetailResponse of(Comment comment) {
+    public static CommentDetailResponse from(Comment comment) {
         return new CommentDetailResponse(
                 comment.getContent(),
                 new MemberResponse(comment.getWriter().getName()),

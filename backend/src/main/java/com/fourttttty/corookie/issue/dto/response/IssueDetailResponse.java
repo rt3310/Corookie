@@ -13,9 +13,9 @@ public record IssueDetailResponse(String topic,
                                   List<IssueCategoryResponse> issueCategories,
                                   Long memberId) {
 
-    public static IssueDetailResponse of(Issue issue,
-                                         List<IssueCategoryResponse> issueCategories,
-                                         Long memberId) {
+    public static IssueDetailResponse from(Issue issue,
+                                           List<IssueCategoryResponse> issueCategories,
+                                           Long memberId) {
         return IssueDetailResponse.builder()
                 .topic(issue.getTopic())
                 .description(issue.getDescription())

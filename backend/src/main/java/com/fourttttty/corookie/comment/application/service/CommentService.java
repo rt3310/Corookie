@@ -26,25 +26,25 @@ public class CommentService {
     public List<CommentDetailResponse> findAll(Long threadId) {
         return commentRepository.findAll(threadId)
                 .stream()
-                .map(CommentDetailResponse::of)
+                .map(CommentDetailResponse::from)
                 .toList();
     }
 
     @Transactional
     public CommentDetailResponse create(CommentCreateRequest request, Long writerId) {
-        Comment comment = Comment.create(
+        Comment comment = Comment.of(
                 request.content(),
+                true,
                 threadService.findEntityById(request.threadId()),
-                memberService.findEntityById(writerId),
-                true);
-        return CommentDetailResponse.of(commentRepository.save(comment));
+                memberService.findEntityById(writerId));
+        return CommentDetailResponse.from(commentRepository.save(comment));
     }
 
     @Transactional
     public CommentDetailResponse modify(CommentModifyRequest request, Long commentId) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(EntityNotFoundException::new);
         comment.modify(request.content());
-        return CommentDetailResponse.of(comment);
+        return CommentDetailResponse.from(comment);
     }
 
     @Transactional

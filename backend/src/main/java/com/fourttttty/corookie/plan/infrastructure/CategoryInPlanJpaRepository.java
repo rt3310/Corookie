@@ -7,5 +7,5 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CategoryInPlanJpaRepository extends JpaRepository<CategoryInPlan, CategoryInPlanId> {
-    List<CategoryInPlan> findByPlan(Plan plan);
+    List<CategoryInPlan> findByIdPlan(Plan plan);
 }

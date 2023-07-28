@@ -42,8 +42,7 @@ public class Project extends BaseTime {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @Builder
-    public Project(String name,
+    private Project(String name,
                    String description,
                    Boolean enabled,
                    String invitationLink,
@@ -55,6 +54,20 @@ public class Project extends BaseTime {
         this.invitationLink = invitationLink;
         this.invitationStatus = invitationStatus;
         this.member = member;
+    }
+
+    public static Project of(String name,
+                             String description,
+                             Boolean enabled,
+                             String invitationLink,
+                             Boolean invitationStatus,
+                             Member member) {
+        return new Project(name,
+                description,
+                enabled,
+                invitationLink,
+                invitationStatus,
+                member);
     }
 
     public void update(String name,
