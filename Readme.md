@@ -94,7 +94,7 @@ Notion, Slack, JIRA 등 분산되어 있는 개발 툴들을 통합하여 제공
 
 ---
 
-![System Architecture 2.png](./Readme/System_Architecture_2.png)
+![System Architecture 2.png](./Readme/System_Architecture_3.png)
 
 &nbsp;  
 
