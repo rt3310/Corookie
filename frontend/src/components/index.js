@@ -14,3 +14,5 @@ export { default as Comment } from './textchat/Comment'
 
 export { default as TaskHeader } from './taskboard/TaskHeader'
 export { default as ToggleButton } from './taskboard/ToggleButton'
+
+export { default as Calendar } from './plan/Calendar'
