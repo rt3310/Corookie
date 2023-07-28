@@ -36,17 +36,16 @@ public class PlanService {
 
     @Transactional
     public PlanResponse createPlan(PlanCreateRequest planCreateRequest, Long projectId) {
-        Plan plan = Plan.of(planCreateRequest.planName(),
+        Plan plan = planRepository.save(Plan.of(planCreateRequest.planName(),
             planCreateRequest.description(),
             planCreateRequest.planStart(),
             planCreateRequest.planEnd(),
             true,
-            projectRepository.findById(projectId).orElseThrow(EntityNotFoundException::new));
-        planRepository.save(plan);
+            projectRepository.findById(projectId).orElseThrow(EntityNotFoundException::new)));
 
         return PlanResponse.from(plan, planCreateRequest.categories().stream()
             .map(planCategoryCreateRequest ->
-                planCategoryService.create(plan,planCategoryCreateRequest.content()))
+                planCategoryService.create(plan, planCategoryCreateRequest.content()))
             .toList());
     }
 
@@ -60,7 +59,7 @@ public class PlanService {
                 projectRepository.findById(projectId).orElseThrow(EntityNotFoundException::new));
 
         return PlanResponse.from(plan,
-            categoryInPlanService.modifyCategoryInPlan(plan,planUpdateRequest.categories()));
+            categoryInPlanService.modifyCategoryInPlan(plan, planUpdateRequest.categories()));
     }
 
     @Transactional
