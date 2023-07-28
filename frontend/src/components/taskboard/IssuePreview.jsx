@@ -6,6 +6,7 @@ import { IoReorderTwoSharp } from 'react-icons/io5'
 
 const IssuePreview = ({ id, title, type, manager, priority }) => {
     const { openIssueDetail } = hooks.issueDetailState()
+    const { closeProfile } = hooks.profileState()
     const renderPriority = priority => {
         switch (priority) {
             case 'Normal':
@@ -14,6 +15,12 @@ const IssuePreview = ({ id, title, type, manager, priority }) => {
                 return null
         }
     }
+
+    const toggleIssueDetail = id => {
+        openIssueDetail(id)
+        closeProfile()
+    }
+
     const renderProfile = manager => {
         switch (manager) {
             case '황상미':
@@ -23,7 +30,7 @@ const IssuePreview = ({ id, title, type, manager, priority }) => {
         }
     }
     return (
-        <S.Wrap onClick={() => openIssueDetail(id)}>
+        <S.Wrap onClick={() => toggleIssueDetail(id)}>
             <S.Title>{title} </S.Title>
             <S.Description>
                 <S.Type>{type}</S.Type>
@@ -42,7 +49,7 @@ const S = {
         min-height: 48px;
         margin: 4px 0;
         padding: 8px 16px;
-        border: solid 1px ${({ theme }) => theme.color.gray};
+        border: solid 1px #dbdbdb;
         border-radius: 8px;
         &:first-child {
             margin-top: 0;

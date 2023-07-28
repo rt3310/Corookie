@@ -8,6 +8,7 @@ import * as hooks from 'hooks'
 const TopTab = () => {
     const { profileOpened, openProfile, closeProfile } = hooks.profileState()
     const { closeComment } = hooks.commentState()
+    const { closeIssueDetail } = hooks.issueDetailState()
     const navigate = useNavigate()
 
     const toggleProfile = () => {
@@ -16,6 +17,7 @@ const TopTab = () => {
         } else {
             openProfile()
             closeComment()
+            closeIssueDetail()
         }
     }
 

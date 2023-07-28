@@ -11,22 +11,45 @@ const IssueDetail = ({ id }) => {
     const managerList = ['황상미', '최효빈', '신승수', '박종서', '서원호', '권현수']
     const priorityList = ['Highest', 'High', 'Normal', 'Low', 'Lowest']
     const categoryList = ['frontend', 'backend', 'design', 'development', 'product', 'other']
+    const [title, setTitle] = useState('사용자는 프로젝트를 생성한다. ')
+    const [content, setContent] = useState(
+        '사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.',
+    )
+    const [editTitle, setEditTitle] = useState(false)
+    const [editContent, setEditContent] = useState(false)
+    const handleTitleChange = e => setTitle(e.target.value)
+    const titleKeyDown = e => {
+        if (e.key === 'Enter') {
+            setEditTitle(false)
+        }
+    }
+    const handleContentChange = e => setContent(e.target.value)
+    const contentKeyDown = e => {
+        if (e.key === 'Enter') {
+            setEditContent(false)
+        }
+    }
     return (
         <S.Wrap>
             <S.Container>
                 <S.Header>
-                    <S.Title>
-                        이슈 상세
-                        <IoTrashOutline />
-                    </S.Title>
+                    <S.IssueTitle>
+                        {editTitle ? (
+                            <S.TitleEdit
+                                type="text"
+                                value={title}
+                                onChange={handleTitleChange}
+                                onKeyDown={titleKeyDown}
+                            />
+                        ) : (
+                            <S.IssueTitleText>{title}</S.IssueTitleText>
+                        )}
+                        {!editTitle && <IoPencil onClick={() => setEditTitle(true)} />}
+                    </S.IssueTitle>
                     <S.Close onClick={() => closeIssueDetail()}>
                         <IoClose />
                     </S.Close>
                 </S.Header>
-                <S.IssueTitle>
-                    <S.IssueTitleText>사용자는 프로젝트를 생성한다.</S.IssueTitleText>
-                    <IoPencil />
-                </S.IssueTitle>
                 <S.Status>
                     <S.StatusBox onClick={() => setChosenState('todo')} status="todo" chosen={chosenState}>
                         ToDo
@@ -53,14 +76,14 @@ const IssueDetail = ({ id }) => {
                 <S.DescriptionBox>
                     <S.DescriptionBoxHeader>
                         <S.Text>설명</S.Text>
-                        <IoPencil />
+                        {!editContent ? <IoPencil onClick={() => setEditContent(true)} /> : null}
                     </S.DescriptionBoxHeader>
                     <S.Line></S.Line>
-                    <S.DescriptionBoxContent>
-                        사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.사용자는 프로젝트를 생성하고 생성하고
-                        생성생성생성한다.사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.사용자는 프로젝트를
-                        생성하고 생성하고 생성생성생성한다.
-                    </S.DescriptionBoxContent>
+                    {editContent ? (
+                        <S.ContentEdit value={content} onChange={handleContentChange} onKeyDown={contentKeyDown} />
+                    ) : (
+                        <S.DescriptionBoxContent>{content}</S.DescriptionBoxContent>
+                    )}
                 </S.DescriptionBox>
             </S.Container>
         </S.Wrap>
@@ -87,19 +110,6 @@ const S = {
         align-items: center;
         margin-bottom: 12px;
     `,
-    Title: styled.div`
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: ${({ theme }) => theme.fontsize.title2};
-        width: 109px;
-        color: ${({ theme }) => theme.color.black};
-        & svg {
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-        }
-    `,
     Close: styled.div`
         display: flex;
         align-items: center;
@@ -112,20 +122,49 @@ const S = {
     `,
     IssueTitle: styled.div`
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-start;
         align-items: center;
-        font-size: ${({ theme }) => theme.fontsize.content};
         padding: 12px 8px 16px;
+        width: 100%;
+
         & svg {
             width: 16px;
             height: 16px;
             cursor: pointer;
             color: ${({ theme }) => theme.color.black};
+            margin-left: 8px;
         }
     `,
+    TitleEdit: styled.input`
+        width: 100%;
+        flex: 1 1 0%;
+        border: none;
+        outline: none;
+        width: auto;
+    `,
     IssueTitleText: styled.div`
+        max-width: 280px;
+        white-space: nowrap;
         font-size: ${({ theme }) => theme.fontsize.content};
-        color: ${({ theme }) => theme.color.black};
+        overflow-x: auto;
+        overflow-y: hidden;
+        /* text-overflow: ellipsis; */
+        padding: 4px 0;
+
+        &::-webkit-scrollbar {
+            height: 3px;
+            width: 0px;
+        }
+        &::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        &::-webkit-scrollbar-thumb {
+            background: ${({ theme }) => theme.color.gray};
+            border-radius: 45px;
+        }
+        &::-webkit-scrollbar-thumb:hover {
+            background: ${({ theme }) => theme.color.gray};
+        }
     `,
     Status: styled.div`
         display: flex;
@@ -199,8 +238,8 @@ const S = {
         width: 100%;
         padding: 16px;
         & svg {
-            width: 20px;
-            height: 20px;
+            width: 16px;
+            height: 16px;
             cursor: pointer;
             color: ${({ theme }) => theme.color.black};
         }
@@ -210,6 +249,13 @@ const S = {
         height: 1px;
         background-color: ${({ theme }) => theme.color.gray};
     `,
+    ContentEdit: styled.textarea`
+        width: 100%;
+        flex: 1 1 0%;
+        border: none;
+        outline: none;
+        padding: 16px;
+    `,
     DescriptionBoxContent: styled.div`
         width: 100%;
         height: 100%;
@@ -218,6 +264,7 @@ const S = {
         color: ${({ theme }) => theme.color.black};
         flex-grow: 1;
         overflow-y: auto;
+        line-height: 20px;
         &::-webkit-scrollbar {
             height: 0px;
             width: 4px;
