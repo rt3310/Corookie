@@ -100,9 +100,12 @@ Notion, Slack, JIRA 등 분산되어 있는 개발 툴들을 통합하여 제공
 
 ## 🧑🏻‍💻 컨벤션
 
----
+### 코딩 스타일 컨벤션
+Google Java Convention
 
-### 메소드 컨벤션
+&nbsp;  
+
+### CRUD 컨벤션
 
 |  | Service | Repository | Controller |
 | --- | --- | --- | --- |
