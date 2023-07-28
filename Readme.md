@@ -70,42 +70,6 @@ Notion, Slack, JIRA 등 분산되어 있는 개발 툴들을 통합하여 제공
 
 &nbsp;  
 
-## 🧑‍🤝‍🧑 팀원 소개
-
----
-
-<table>
-      <tr align=center>
-        <td><a href='https://lab.ssafy.com/gyqls234'>최효빈</a></td>
-        <td><a href='https://lab.ssafy.com/btac3310'>서원호</a></td>
-        <td><a href='https://lab.ssafy.com/imapples'>권현수</a></td>
-        <td><a href='https://lab.ssafy.com/zaduc'>황상미</a></td>
-        <td><a href='https://lab.ssafy.com/tmd0707'>신승수</a></td>
-        <td><a href='https://lab.ssafy.com/sociojs85'>박종서</a></td>
-      </tr>
-        <tr align=center>
-        <td>Leader, BE</td>
-        <td>CTO</td>
-        <td>FE</td>
-        <td>FE</td>
-        <td>BE</td>
-        <td>BE</td>
-      </tr>
-    </table>
-
-**최효빈 | 팀장, BE |**  스크럼 미팅 주관 및 프로젝트 CRUD 기능 구현
-
-**서원호 | CTO |**  팀 내 테크 리드, 설계 및 구현 주도
-
-**권현수 | FE |**  React 기반 페이지 구현 
-
-**신승수 | BE |**  일정 기능 및 기계학습 모델 구현  
-
-**박종서 | BE |**  SockJS 및 Stomp 활용 WebSocket 기반 텍스트 채팅 구현
-
-**황상미 | FE |**  React 기반 페이지 구현
-
-&nbsp;  
 
 ### 핵심 기능
 
@@ -180,37 +144,66 @@ Google Java Convention
 
 ### **브랜치 전략**
 
-master - develop - feature - hotfix
+| 배포 | 개발 | 기능 | 긴급 수정 |
+|:-:|:-:|:-:|:-:|
+| master | develop | feature | hotfix |
 
 ![Git Branch Strategy.png](./Readme/Git_Branch_Strategy.png)
 
-- **작업 시작 시** develop -> feature로 분기합니다.
-- **작업 및 테스트 완료 시** develop에 feature를 병합합니다.
-- **상용 배포 시** develop -> master로 병합합니다.
+- **작업 시작 시**: develop -> feature로 분기합니다.
+- **작업 및 테스트 완료 시**: develop에 feature를 병합합니다.
+- **상용 배포 시**: develop -> master로 병합합니다.
 
 &nbsp;  
 
 ### **작성 규칙**
 
 - commit message
-    - `feature: 카페 등록 기능 구현`
-    - `test: 카페 등록 기능 단위 테스트 코드 작성`
+  - ex) `feature: 카페 등록 기능 구현`
+
 - branch
-    - develop
-        - `develop`
-    - feature
-        - `feature/{#issue-number}-[feature-name]`
-        - `feature/#1`
-        - `feature/#1-채팅생성`
-    - hotfix
-        - `hotfix`
+
+|branch|example|
+|:-:|:-:|
+|develop|`develop`|
+|feature|`feature/{#issue-number}-[feature-name]` <br> `feature/#1` <br> `feature/#1-채팅생성`|
+|hotfix|`hotfix`|
 
 &nbsp;  
 
-### 스택
+## 🧑‍🤝‍🧑 팀원 소개
 
 ---
 
-![FE_STACK.PNG](./Readme/FE_STACK.PNG)
+<table>
+      <tr align=center>
+        <td><a href='https://lab.ssafy.com/gyqls234'>최효빈</a></td>
+        <td><a href='https://lab.ssafy.com/btac3310'>서원호</a></td>
+        <td><a href='https://lab.ssafy.com/imapples'>권현수</a></td>
+        <td><a href='https://lab.ssafy.com/zaduc'>황상미</a></td>
+        <td><a href='https://lab.ssafy.com/tmd0707'>신승수</a></td>
+        <td><a href='https://lab.ssafy.com/sociojs85'>박종서</a></td>
+      </tr>
+        <tr align=center>
+        <td>Leader, BE</td>
+        <td>CTO</td>
+        <td>FE</td>
+        <td>FE</td>
+        <td>BE</td>
+        <td>BE</td>
+      </tr>
+    </table>
 
-![BE_STACK.PNG](./Readme/BE_STACK.PNG)
+**최효빈 | 팀장, BE |**  스크럼 미팅 주관 및 프로젝트 CRUD 기능 구현
+
+**서원호 | CTO |**  팀 내 테크 리드, 설계 및 구현 주도
+
+**권현수 | FE |**  React 기반 페이지 구현 
+
+**신승수 | BE |**  일정 기능 및 기계학습 모델 구현  
+
+**박종서 | BE |**  SockJS 및 Stomp 활용 WebSocket 기반 텍스트 채팅 구현
+
+**황상미 | FE |**  React 기반 페이지 구현
+
+&nbsp;  
