@@ -163,6 +163,6 @@ master - develop - feature - hotfix
 
 ---
 
-![FE_STACK.png](./Readme/FE_STACK.png)
+![FE_STACK.PNG](./Readme/FE_STACK.PNG)
 
-![BE_STACK.png](./Readme/BE_STACK.png)
+![BE_STACK.PNG](./Readme/BE_STACK.PNG)
