@@ -24,7 +24,7 @@ Notion, Slack, JIRA 등 분산되어 있는 개발 툴들을 통합하여 제공
 
 &nbsp;
 
-## Skills
+## 🛠 Skills
 ---
 ### Frontend
 <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white">
