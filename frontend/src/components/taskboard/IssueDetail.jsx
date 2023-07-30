@@ -136,7 +136,6 @@ const S = {
         }
     `,
     TitleEdit: styled.input`
-        width: 100%;
         flex: 1 1 0%;
         border: none;
         outline: none;

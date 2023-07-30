@@ -33,6 +33,9 @@ const ToggleButton = ({ defaultVal, list }) => {
         detailPriority: hooks.detailPriorityState(),
         detailManager: hooks.detailManagerState(),
         detailCategory: hooks.detailCategoryState(),
+        createPriority: hooks.createPriorityState(),
+        createManager: hooks.createManagerState(),
+        createCategory: hooks.createCategoryState(),
     }
 
     const { value, setValue } = type[defaultVal]

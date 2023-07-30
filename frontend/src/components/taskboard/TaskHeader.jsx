@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import * as components from 'components'
 
@@ -7,11 +7,16 @@ import { IoSearch, IoAdd } from 'react-icons/io5'
 
 const TaskHeader = () => {
     const { showIssue, openIssue, openKanban } = hooks.taskState()
+    const { issueCreateOpened, openIssueCreate } = hooks.issueCreateState()
 
     const priorityList = ['Highest', 'High', 'Normal', 'Low', 'Lowest']
     const managerList = ['황상미', '최효빈', '신승수', '박종서', '서원호', '권현수']
     const categoryList = ['frontend', 'backend', 'design', 'development', 'product', 'other']
     const statusList = ['To Do', 'In Progress', 'Done']
+
+    useEffect(() => {
+        console.log(issueCreateOpened)
+    }, [issueCreateOpened])
 
     return (
         <S.Header>
@@ -48,7 +53,7 @@ const TaskHeader = () => {
                     )}
                 </S.Filters>
                 {showIssue && (
-                    <S.CreateButton>
+                    <S.CreateButton onClick={() => openIssueCreate()}>
                         <IoAdd />
                         <S.CreateText>생성</S.CreateText>
                     </S.CreateButton>
