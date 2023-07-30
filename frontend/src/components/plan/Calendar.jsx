@@ -1,21 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import styled from 'styled-components'
 
 import { format } from 'date-fns'
 import { startOfMonth, endOfMonth, startOfWeek, endOfWeek } from 'date-fns'
 import { isSameMonth, isSameDay, addDays } from 'date-fns'
-import { useDrag, useDrop } from 'react-dnd'
 
 const Calendar = ({ currentMonth }) => {
-    const [{ isDragging }, dragRef, previewRef] = useDrag(() => ({
-        collect: monitor => ({
-            isDragging: monitor.isDragging(), // isDragging will be true if the user is dragging an item
-        }),
-        end: (item, monitor) => {
-            const dragIndex = monitor.getItem().index
-            const hoverIndex = item.index
-        },
-    }))
+    const draggingItemIndex = useRef(null)
+    const draggingOverItemIndex = useRef(null)
     const monthStart = startOfMonth(currentMonth)
     const monthEnd = endOfMonth(monthStart)
     const startDate = startOfWeek(monthStart)

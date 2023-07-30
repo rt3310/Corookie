@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import { format, addMonths, subMonths } from 'date-fns'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 
 import { BsPlus } from 'react-icons/bs'
 import { IoIosArrowForward, IoIosArrowBack } from 'react-icons/io'
@@ -10,6 +12,7 @@ import * as components from 'components'
 
 const Plan = () => {
     const [currentMonth, setCurrentMonth] = useState(new Date())
+    const [openRegister, setOpenRegister] = useState(false)
 
     const prevMonth = () => {
         setCurrentMonth(subMonths(currentMonth, 1))
@@ -31,7 +34,7 @@ const Plan = () => {
                             </div>
                             <IoIosArrowForward onClick={() => nextMonth()} />
                         </S.MonthBox>
-                        <S.CreateButton>
+                        <S.CreateButton onClick={() => setOpenRegister(true)}>
                             <BsPlus /> 생성
                         </S.CreateButton>
                     </S.CalendarAccess>
@@ -45,8 +48,11 @@ const Plan = () => {
                         <S.DayOfWeek>S</S.DayOfWeek>
                     </S.WeekHeader>
                 </S.CalendarHeader>
-                <components.Calendar currentMonth={currentMonth} />
+                <DndProvider backend={HTML5Backend}>
+                    <components.Calendar currentMonth={currentMonth} />
+                </DndProvider>
             </S.Container>
+            {openRegister && <components.PlanRegister setOpenRegister={setOpenRegister} />}
         </S.Wrap>
     )
 }
@@ -120,16 +126,15 @@ const S = {
         width: 56px;
         height: 30px;
         border-radius: 8px;
-        /* background-color: ${({ theme }) => theme.color.lightgray}; */
-        /* border: 1px solid ${({ theme }) => theme.color.main}; */
-        box-shadow: 0px 0px 1px 1px rgba(40, 110, 240, 0.3);
-        color: ${({ theme }) => theme.color.main};
+        border: 1px solid ${({ theme }) => theme.color.main};
+        background-color: ${({ theme }) => theme.color.main};
+        color: ${({ theme }) => theme.color.white};
         margin: 0 16px;
         transition-duration: 0.2s;
 
         &:hover {
-            background-color: ${({ theme }) => theme.color.main};
-            color: ${({ theme }) => theme.color.white};
+            background-color: ${({ theme }) => theme.color.white};
+            color: ${({ theme }) => theme.color.main};
             box-shadow: none;
         }
     `,
