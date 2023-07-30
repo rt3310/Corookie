@@ -43,7 +43,7 @@ public class ProjectServiceTest {
         projectService = new ProjectService(projectRepository, new TextChannelService(textChannelRepository, projectRepository), memberService);
     }
 
-    //To-Do : FakeRepository 이용할 때 Project Entity에 id값 생성해서, TextChannelService 정상 동작하게 하기
+    //To-Do : FakeRepository 이용할 때 Project Entity에 id값 생성해서, TextChannelService 정상 동작하게 하기.
     @Test
     @DisplayName("프로젝트 생성")
     void createProject() {
