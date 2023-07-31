@@ -1,23 +1,55 @@
-import React from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 
-import * as hooks from 'hooks'
 import * as components from 'components'
-import { IoSave } from 'react-icons/io5'
+import * as hooks from 'hooks'
 const IssueCreate = () => {
-    const { issueCreateOpened, closeIssueCreate } = hooks.issueCreateState()
+    const { closeIssueCreate } = hooks.issueCreateState()
+    const { value: priority, setValue: setPriority } = hooks.createPriorityState()
+    const { value: manager, setValue: setManager } = hooks.createManagerState()
+    const { value: category, setValue: setCategory } = hooks.createCategoryState()
+    const [title, setTitle] = useState('')
+    let createRef = useRef(null)
+
+    useEffect(() => {}, [])
+
+    useEffect(() => {
+        setPriority('중요도')
+        setManager('관리자')
+        setCategory('분류')
+        const handleOutside = e => {
+            if (createRef.current && !createRef.current.contains(e.target)) {
+                closeIssueCreate()
+            }
+        }
+        document.addEventListener('mousedown', handleOutside)
+        return () => {
+            document.removeEventListener('mousedown', handleOutside)
+        }
+    }, [createRef, closeIssueCreate])
+
+    const handleTitleChange = e => setTitle(e.target.value)
+
+    const saveIssue = () => {
+        if (title !== '' && priority !== '중요도' && manager !== '책임자' && category !== '분류') {
+            closeIssueCreate()
+        } else {
+            alert('정보를 입력해주세요. ')
+        }
+    }
+
     const managerList = ['황상미', '최효빈', '신승수', '박종서', '서원호', '권현수']
     const priorityList = ['Highest', 'High', 'Normal', 'Low', 'Lowest']
     const categoryList = ['frontend', 'backend', 'design', 'development', 'product', 'other']
     return (
-        <S.Container>
-            <S.Title placeholder="제목을 입력하세요" />
+        <S.Container ref={createRef}>
+            <S.Title value={title} onChange={handleTitleChange} placeholder="제목을 입력하세요" />
             <S.Properties>
                 <components.ToggleButton defaultVal="createManager" list={managerList} />
                 <components.ToggleButton defaultVal="createPriority" list={priorityList} />
                 <components.ToggleButton defaultVal="createCategory" list={categoryList} />
             </S.Properties>
-            <S.Save>저장</S.Save>
+            <S.Save onClick={() => saveIssue()}>저장</S.Save>
         </S.Container>
     )
 }
@@ -58,6 +90,7 @@ const S = {
         background-color: ${({ theme }) => theme.color.main};
         font-size: ${({ theme }) => theme.fontsize.sub1};
         color: ${({ theme }) => theme.color.white};
+        cursor: pointer;
     `,
 }
 

@@ -6,24 +6,11 @@ import * as hooks from 'hooks'
 
 const IssueBoard = () => {
     const { issueCreateOpened, closeIssueCreate } = hooks.issueCreateState()
-    let createRef = useRef(null)
-
-    useEffect(() => {
-        const handleOutside = e => {
-            if (createRef.current && !createRef.current.contains(e.target)) {
-                closeIssueCreate()
-            }
-        }
-        document.addEventListener('mousedown', handleOutside)
-        return () => {
-            document.removeEventListener('mousedown', handleOutside)
-        }
-    }, [createRef])
 
     return (
         <S.Container>
             <S.Wrap>
-                {issueCreateOpened && <components.IssueCreate ref={createRef} />}
+                {issueCreateOpened && <components.IssueCreate />}
                 <components.IssuePreview
                     id="1"
                     title="사용자는 프로젝트를 생성한다. "

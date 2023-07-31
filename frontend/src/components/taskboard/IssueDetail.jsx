@@ -29,6 +29,13 @@ const IssueDetail = ({ id }) => {
             setEditContent(false)
         }
     }
+
+    const onRemove = () => {
+        if (window.confirm('정말 삭제하시겠습니까?')) {
+            alert('삭제되었습니다. ')
+            closeIssueDetail()
+        }
+    }
     return (
         <S.Wrap>
             <S.Container>
@@ -85,6 +92,9 @@ const IssueDetail = ({ id }) => {
                         <S.DescriptionBoxContent>{content}</S.DescriptionBoxContent>
                     )}
                 </S.DescriptionBox>
+                <S.Delete>
+                    <IoTrashOutline onClick={() => onRemove()} />
+                </S.Delete>
             </S.Container>
         </S.Wrap>
     )
@@ -92,10 +102,11 @@ const IssueDetail = ({ id }) => {
 const S = {
     Wrap: styled.div`
         display: flex;
+        flex-direction: column;
         background-color: ${({ theme }) => theme.color.white};
-        width: 372px;
+        width: 320px;
         max-height: calc(100vh - 208px);
-        padding: 24px 0;
+        padding: 24px 0 16px;
         margin: 0 16px 0 0;
         border-radius: 8px;
     `,
@@ -108,7 +119,7 @@ const S = {
         justify-content: space-between;
         height: 18px;
         align-items: center;
-        margin-bottom: 12px;
+        margin-bottom: 20px;
     `,
     Close: styled.div`
         display: flex;
@@ -124,9 +135,8 @@ const S = {
         display: flex;
         justify-content: flex-start;
         align-items: center;
-        padding: 12px 8px 16px;
+        padding: 12px 8px;
         width: 100%;
-
         & svg {
             width: 16px;
             height: 16px;
@@ -140,11 +150,13 @@ const S = {
         border: none;
         outline: none;
         width: auto;
+        font-family: 'Noto Sans KR', 'Pretendard', sans-serif;
+        font-size: ${({ theme }) => theme.fontsize.title3};
     `,
     IssueTitleText: styled.div`
-        max-width: 280px;
+        max-width: 225px;
         white-space: nowrap;
-        font-size: ${({ theme }) => theme.fontsize.content};
+        font-size: ${({ theme }) => theme.fontsize.title3};
         overflow-x: auto;
         overflow-y: hidden;
         /* text-overflow: ellipsis; */
@@ -168,15 +180,15 @@ const S = {
     Status: styled.div`
         display: flex;
         justify-content: space-between;
-        margin-bottom: 16px;
+        margin-bottom: 8px;
         padding: 0 10px;
     `,
     StatusBox: styled.div`
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 100px;
-        height: 60px;
+        width: 84px;
+        height: 55px;
         cursor: pointer;
         color: ${({ theme }) => theme.color.white};
         font-size: ${({ theme }) => theme.fontsize.content};
@@ -189,11 +201,19 @@ const S = {
                 ? theme.color.pending
                 : theme.color.warning};
         border-radius: 8px;
+        &:hover {
+            background-color: ${({ status, theme }) =>
+                status === 'todo'
+                    ? theme.color.success
+                    : status === 'inprogress'
+                    ? theme.color.pending
+                    : theme.color.warning};
+        }
     `,
     Manager: styled.div`
         display: flex;
         align-items: center;
-        padding: 4px 16px;
+        padding: 8px 16px;
         font-size: ${({ theme }) => theme.fontsize.content};
         & p {
             margin-right: 40px;
@@ -206,7 +226,7 @@ const S = {
     Priority: styled.div`
         display: flex;
         align-items: center;
-        padding: 4px 16px;
+        padding: 8px 16px;
         font-size: ${({ theme }) => theme.fontsize.content};
         & p {
             margin-right: 40px;
@@ -215,7 +235,7 @@ const S = {
     Category: styled.div`
         display: flex;
         align-items: center;
-        padding: 4px 16px;
+        padding: 8px 16px;
         font-size: ${({ theme }) => theme.fontsize.content};
         & p {
             margin-right: 53px;
@@ -228,14 +248,14 @@ const S = {
         border-radius: 8px;
         margin: 12px 8px;
         height: 100%;
-        max-height: calc(100vh - 580px);
+        max-height: calc(100vh - 540px);
     `,
     DescriptionBoxHeader: styled.div`
         display: flex;
         justify-content: space-between;
         align-items: center;
         width: 100%;
-        padding: 16px;
+        padding: 16px 8px;
         & svg {
             width: 16px;
             height: 16px;
@@ -244,7 +264,7 @@ const S = {
         }
     `,
     Line: styled.div`
-        margin: 0 16px;
+        margin: 0 8px;
         height: 1px;
         background-color: ${({ theme }) => theme.color.gray};
     `,
@@ -253,13 +273,30 @@ const S = {
         flex: 1 1 0%;
         border: none;
         outline: none;
-        padding: 16px;
+        padding: 16px 8px;
+        font-family: 'Noto Sans KR', 'Pretendard', sans-serif;
+        font-size: ${({ theme }) => theme.fontsize.sub1};
+        line-height: 20px;
+        &::-webkit-scrollbar {
+            height: 0px;
+            width: 4px;
+        }
+        &::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        &::-webkit-scrollbar-thumb {
+            background: ${({ theme }) => theme.color.gray};
+            border-radius: 45px;
+        }
+        &::-webkit-scrollbar-thumb:hover {
+            background: ${({ theme }) => theme.color.gray};
+        }
     `,
     DescriptionBoxContent: styled.div`
         width: 100%;
         height: 100%;
-        padding: 16px;
-        font-size: ${({ theme }) => theme.fontsize.content};
+        padding: 16px 8px;
+        font-size: ${({ theme }) => theme.fontsize.sub1};
         color: ${({ theme }) => theme.color.black};
         flex-grow: 1;
         overflow-y: auto;
@@ -277,6 +314,21 @@ const S = {
         }
         &::-webkit-scrollbar-thumb:hover {
             background: ${({ theme }) => theme.color.gray};
+        }
+    `,
+    Delete: styled.div`
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        width: 100%;
+        & svg {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            color: ${({ theme }) => theme.color.gray};
+            &:hover {
+                color: ${({ theme }) => theme.color.main};
+            }
         }
     `,
 }
