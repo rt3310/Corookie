@@ -22,6 +22,7 @@ const color = {
     black: '#000',
     darkgray: '#333',
     background: '#F3F3F3',
+    middlegray: '#BDBDBD',
     lightgray: '#EEE',
     gray: '#A0A0A0',
 

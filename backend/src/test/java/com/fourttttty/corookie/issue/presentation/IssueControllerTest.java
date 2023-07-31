@@ -90,7 +90,7 @@ class IssueControllerTest extends RestDocsTest {
                 .andExpect(jsonPath("$.issueCategories[0].category").value(request.issueCategories().get(0).category().getValue()));
 
         perform.andDo(print())
-                .andDo(document("post-create",
+                .andDo(document("issue-create",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         queryParameters(
