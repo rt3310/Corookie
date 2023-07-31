@@ -46,22 +46,18 @@ class CommentControllerTest extends RestDocsTest {
     @MockBean
     private SimpMessageSendingOperations sendingOperations;
 
-    private Member member;
-    private Project project;
-    private TextChannel textChannel;
     private Thread thread;
-    private Comment comment;
 
     @BeforeEach
     void initTexture() {
-        member = new Member("name");
-        project = Project.of("project",
+        Member member = new Member("name");
+        Project project = Project.of("project",
                 "description",
                 true,
                 "http://test.com",
                 false,
                 member);
-        textChannel = TextChannel.of("channelName",
+        TextChannel textChannel = TextChannel.of("channelName",
                 true,
                 true,
                 project);
@@ -70,7 +66,7 @@ class CommentControllerTest extends RestDocsTest {
                 0,
                 textChannel,
                 member);
-        comment = Comment.of("content",
+        Comment comment = Comment.of("content",
                 true,
                 thread,
                 member);
@@ -130,7 +126,7 @@ class CommentControllerTest extends RestDocsTest {
         // when
         ResultActions perform = mockMvc.perform(put("/api/v1/projects/{projectId}/text-channels/{textChannelId}/threads/{threadId}/comments/{commentId}", 1L, 1L, 1L, 1L)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(request)));;
+                .content(toJson(request)));
 
         // then
         perform.andExpect(status().isOk())

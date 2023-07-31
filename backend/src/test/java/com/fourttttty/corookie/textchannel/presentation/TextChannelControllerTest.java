@@ -22,12 +22,12 @@ import static com.fourttttty.corookie.support.ApiDocumentUtils.getDocumentReques
 import static com.fourttttty.corookie.support.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
-import static org.springframework.restdocs.payload.JsonFieldType.*;
+import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -38,13 +38,12 @@ class TextChannelControllerTest extends RestDocsTest {
     @MockBean
     private TextChannelService textChannelService;
 
-    private Member member;
     private Project project;
     private TextChannel textChannel;
 
     @BeforeEach
     void initTexture() {
-        member = new Member("name");
+        Member member = new Member("name");
         project = Project.of("project",
                 "description",
                 true,
@@ -154,7 +153,7 @@ class TextChannelControllerTest extends RestDocsTest {
         // when
         ResultActions perform = mockMvc.perform(put("/api/v1/projects/{projectId}/text-channels/{textChannelId}", 1L, 1L)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(request)));;
+                .content(toJson(request)));
 
         // then
         perform.andExpect(status().isOk())

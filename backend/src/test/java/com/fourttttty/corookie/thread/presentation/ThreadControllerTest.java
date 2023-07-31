@@ -46,21 +46,18 @@ class ThreadControllerTest extends RestDocsTest {
     @MockBean
     private SimpMessageSendingOperations sendingOperations;
 
-    private Member member;
-    private Project project;
-    private TextChannel textChannel;
     private Thread thread;
 
     @BeforeEach
     void initTexture() {
-        member = new Member("name");
-        project = Project.of("project",
+        Member member = new Member("name");
+        Project project = Project.of("project",
                 "description",
                 true,
                 "http://test.com",
                 false,
                 member);
-        textChannel = TextChannel.of("channelName",
+        TextChannel textChannel = TextChannel.of("channelName",
                 true,
                 true,
                 project);
@@ -168,7 +165,7 @@ class ThreadControllerTest extends RestDocsTest {
         // when
         ResultActions perform = mockMvc.perform(put("/api/v1/projects/{projectId}/text-channels/{textChannelId}/threads/{threadId}", 1L, 1L, 1L)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(request)));;
+                .content(toJson(request)));
 
         // then
         perform.andExpect(status().isOk())
