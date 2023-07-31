@@ -22,12 +22,12 @@ public class ProjectMemberRepositoryImpl implements ProjectMemberRepository {
     }
 
     @Override
-    public Optional<ProjectMember> findByMemberAndProject(Project project, Member member) {
+    public Optional<ProjectMember> findByProjectAndMember(Project project, Member member) {
         return projectMemberJpaRepository.findByMemberAndProject(project, member);
     }
 
     @Override
-    public void deleteByMemberAndProject(Project project, Member member) {
+    public void deleteByProjectAndMember(Project project, Member member) {
         projectMemberJpaRepository.deleteByMemberAndProject(project, member);
     }
 
@@ -35,15 +35,5 @@ public class ProjectMemberRepositoryImpl implements ProjectMemberRepository {
     public long countByProject(Project project) {
         return projectMemberJpaRepository.countByProject(project);
     }
-
-    @Override
-    public Optional<Project> findProjectByProjectMemberId(ProjectMemberId id){
-        return projectMemberJpaRepository.findProjectByProjectMemberId(id);
-    };
-
-    @Override
-    public Optional<Member> findMemberByProjectMemberId(ProjectMemberId id){
-        return projectMemberJpaRepository.findMemberByProjectMemberId(id);
-    };
 }
 

@@ -1,6 +1,5 @@
 package com.fourttttty.corookie.project.application.repository;
 
-
 import com.fourttttty.corookie.member.domain.Member;
 import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.project.domain.ProjectMember;
@@ -12,9 +11,7 @@ import java.util.Optional;
 
 public interface ProjectMemberRepository {
     List<ProjectMember> findByProject(Project project);
-    Optional<ProjectMember> findByMemberAndProject(Project project, Member member);
-    void deleteByMemberAndProject(Project project, Member member);
+    Optional<ProjectMember> findByProjectAndMember(Project project, Member member);
+    void deleteByProjectAndMember(Project project, Member member);
     long countByProject(Project project);
-    Optional<Project> findProjectByProjectMemberId(ProjectMemberId id);
-    Optional<Member> findMemberByProjectMemberId(ProjectMemberId id);
 }

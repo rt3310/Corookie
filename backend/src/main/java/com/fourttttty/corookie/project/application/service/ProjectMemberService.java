@@ -25,7 +25,7 @@ public class ProjectMemberService {
         Member member = memberRepository.findById(memberId).orElseThrow(EntityNotFoundException::new);
         Project project = projectRepository.findById(projectId).orElseThrow(EntityNotFoundException::new);
 
-        projectMemberRepository.deleteByMemberAndProject(project, member);
+        projectMemberRepository.deleteByProjectAndMember(project, member);
 
         deleteIfNotExistsMember(project);
     }
