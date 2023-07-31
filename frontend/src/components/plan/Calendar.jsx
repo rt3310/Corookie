@@ -14,6 +14,7 @@ const Calendar = ({ currentMonth }) => {
     const endDate = endOfWeek(monthEnd)
     let rows = []
     let days = []
+    let plans = []
     let day = startDate
 
     while (day <= endDate) {
@@ -23,6 +24,7 @@ const Calendar = ({ currentMonth }) => {
                     {format(day, 'd')}
                 </S.DayNumber>,
             )
+            plans.push(<S.DayPlan key={day} value={currentMonth}></S.DayPlan>)
 
             day = addDays(day, 1)
         }
@@ -40,20 +42,13 @@ const Calendar = ({ currentMonth }) => {
                 <S.DayHeader>{days}</S.DayHeader>
                 <S.PlanBox>
                     <S.PlanRows>
-                        <S.PlanRow>
-                            <S.DayPlan></S.DayPlan>
-                            <S.DayPlan></S.DayPlan>
-                            <S.DayPlan></S.DayPlan>
-                            <S.DayPlan></S.DayPlan>
-                            <S.DayPlan></S.DayPlan>
-                            <S.DayPlan></S.DayPlan>
-                            <S.DayPlan></S.DayPlan>
-                        </S.PlanRow>
+                        <S.PlanRow>{plans}</S.PlanRow>
                     </S.PlanRows>
                 </S.PlanBox>
             </S.Week>,
         )
         days = []
+        plans = []
     }
 
     return <S.Calendar>{rows}</S.Calendar>
