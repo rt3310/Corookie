@@ -40,7 +40,13 @@ const Calendar = ({ currentMonth }) => {
                                     left: `${100.0 * (planStartDate.getDay() / 7)}%`,
                                     width: `${Math.min(
                                         100.0 - 100.0 * (planStartDate.getDay() / 7),
-                                        100.0 * ((planEndDate.getDate() - planStartDate.getDate() + 1) / 7),
+                                        100.0 *
+                                            ((Math.floor(
+                                                (planEndDate.getTime() - planStartDate.getTime()) /
+                                                    (24 * 60 * 60 * 1000),
+                                            ) +
+                                                1) /
+                                                7),
                                     )}%`,
                                 }}
                                 className="same"></S.DayPlan>
@@ -55,7 +61,12 @@ const Calendar = ({ currentMonth }) => {
                                     left: `${100.0 * (day.getDay() / 7)}%`,
                                     width: `${Math.min(
                                         100.0 - 100.0 * (day.getDay() / 7),
-                                        100.0 * ((planEndDate.getDate() - day.getDate() + 1) / 7),
+                                        100.0 *
+                                            ((Math.floor(
+                                                (planEndDate.getTime() - day.getTime()) / (24 * 60 * 60 * 1000),
+                                            ) +
+                                                1) /
+                                                7),
                                     )}%`,
                                 }}
                                 className="same"></S.DayPlan>
