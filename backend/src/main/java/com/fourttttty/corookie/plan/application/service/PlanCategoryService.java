@@ -23,13 +23,13 @@ public class PlanCategoryService {
         PlanCategory newPlanCategory = planCategoryRepository.findByContent(planCategoryCreateRequest.content())
             .orElse(planCategoryRepository.save(planCategoryCreateRequest.toEntity()));
 
-        categoryInPlanRepository.save(new CategoryInPlan(plan,newPlanCategory));
+        categoryInPlanRepository.save(CategoryInPlan.of(plan,newPlanCategory));
 
         return new PlanCategoryResponse(newPlanCategory.getContent());
     }
 
     public List<PlanCategoryResponse> findAllByPlan(Plan plan){
-        List<CategoryInPlan> categoryInPlans = categoryInPlanRepository.findAllbyPlan(plan);
+        List<CategoryInPlan> categoryInPlans = categoryInPlanRepository.findAllByPlan(plan);
         return categoryInPlans.stream()
             .map(categoryInPlan -> new PlanCategoryResponse(categoryInPlan.getId().getPlanCategory().getContent()))
             .toList();

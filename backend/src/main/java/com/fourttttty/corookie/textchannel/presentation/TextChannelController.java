@@ -1,8 +1,8 @@
 package com.fourttttty.corookie.textchannel.presentation;
 
 import com.fourttttty.corookie.textchannel.application.service.TextChannelService;
-import com.fourttttty.corookie.textchannel.dto.TextChannelCreateRequest;
-import com.fourttttty.corookie.textchannel.dto.TextChannelResponse;
+import com.fourttttty.corookie.textchannel.dto.request.TextChannelCreateRequest;
+import com.fourttttty.corookie.textchannel.dto.response.TextChannelResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

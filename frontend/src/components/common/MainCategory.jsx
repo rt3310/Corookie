@@ -10,7 +10,7 @@ const MainCategory = () => {
     return (
         <S.Wrap>
             <S.Container>
-                <S.Button>일정</S.Button>
+                <S.Button onClick={() => navigate(utils.URL.PLAN.CALENDER)}>일정</S.Button>
                 <S.Button onClick={() => navigate(utils.URL.TASK.BOARD)}>이슈</S.Button>
             </S.Container>
         </S.Wrap>

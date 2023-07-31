@@ -14,7 +14,11 @@ public class ProjectMember {
     @EmbeddedId
     private ProjectMemberId id;
 
-    public ProjectMember(Project project, Member member) {
+    private ProjectMember(Project project, Member member) {
         this.id = new ProjectMemberId(project, member);
+    }
+
+    public static ProjectMember of(Project project, Member member) {
+        return new ProjectMember(project, member);
     }
 }

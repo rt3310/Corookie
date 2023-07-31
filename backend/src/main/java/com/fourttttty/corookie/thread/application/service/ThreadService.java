@@ -2,7 +2,6 @@ package com.fourttttty.corookie.thread.application.service;
 
 import com.fourttttty.corookie.member.application.service.MemberService;
 import com.fourttttty.corookie.member.domain.Member;
-import com.fourttttty.corookie.member.dto.response.MemberResponse;
 import com.fourttttty.corookie.textchannel.application.service.TextChannelService;
 import com.fourttttty.corookie.textchannel.domain.TextChannel;
 import com.fourttttty.corookie.thread.application.repository.ThreadRepository;
@@ -30,9 +29,9 @@ public class ThreadService {
     public ThreadDetailResponse create(ThreadCreateRequest request, Long writerId) {
         TextChannel textChannel = textChannelService.findEntityById(request.textChannelId());
         Member writer = memberService.findEntityById(writerId);
-        Thread thread = Thread.create(request.content(), textChannel, writer, true);
+        Thread thread = Thread.of(request.content(), true, 0, textChannel, writer);
         threadRepository.save(thread);
-        return ThreadDetailResponse.of(thread);
+        return ThreadDetailResponse.from(thread);
     }
 
     public Thread findEntityById(Long threadId) {
@@ -41,13 +40,13 @@ public class ThreadService {
 
     public ThreadDetailResponse findById(Long threadId) {
         Thread thread = threadRepository.findById(threadId).orElseThrow(EntityNotFoundException::new);
-        return ThreadDetailResponse.of(thread);
+        return ThreadDetailResponse.from(thread);
     }
 
     public List<ThreadDetailResponse> findAll(Long TextChannelId) {
         return threadRepository.findAll(TextChannelId)
                 .stream()
-                .map(ThreadDetailResponse::of)
+                .map(ThreadDetailResponse::from)
                 .toList();
     }
 
@@ -61,6 +60,6 @@ public class ThreadService {
     public ThreadDetailResponse modify(ThreadModifyRequest request, Long threadId) {
         Thread thread = threadRepository.findById(threadId).orElseThrow(EntityNotFoundException::new);
         thread.modify(request);
-        return ThreadDetailResponse.of(thread);
+        return ThreadDetailResponse.from(thread);
     }
 }

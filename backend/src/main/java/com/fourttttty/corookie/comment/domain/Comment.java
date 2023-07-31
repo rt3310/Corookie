@@ -4,10 +4,10 @@ import com.fourttttty.corookie.global.audit.BaseTime;
 import com.fourttttty.corookie.member.domain.Member;
 import com.fourttttty.corookie.thread.domain.Thread;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "comment")
@@ -34,15 +34,15 @@ public class Comment extends BaseTime {
     @JoinColumn(name = "member_id")
     private Member writer;
 
-    public static Comment create(String content, Thread thread, Member writer, Boolean enabled) {
-        Comment comment = new Comment();
+    private Comment(String content, Boolean enabled, Thread thread, Member writer) {
+        this.content = content;
+        this.enabled = enabled;
+        this.thread = thread;
+        this.writer = writer;
+    }
 
-        comment.content = content;
-        comment.thread = thread;
-        comment.writer = writer;
-        comment.enabled = enabled;
-
-        return comment;
+    public static Comment of(String content, Boolean enabled, Thread thread, Member writer) {
+        return new Comment(content, enabled, thread, writer);
     }
 
     public void modify(String content) {

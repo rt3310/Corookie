@@ -68,6 +68,7 @@ export const statusState = create(set => ({
     setValue: input => set(state => ({ value: input })),
 }))
 
+
 export const issueDetailState = create(set => ({
     issueDetailOpened: '-1',
     openIssueDetail: input => set(state => ({ issueDetailOpened: input })),
@@ -78,4 +79,15 @@ export const issueCreateState = create(set => ({
     issueCreateOpened: false,
     openIssueCreate: () => set(state => ({ issueCreateOpened: true })),
     closeIssueCreate: () => set(state => ({ issueCreateOpened: false })),
+}))
+
+export const dateState = create(set => ({
+    monthStart: -1,
+    monthEnd: -1,
+    startDate: -1,
+    endDate: -1,
+    setMonthStart: input => set(state => ({ monthStart: input })),
+    setMonthEnd: input => set(state => ({ monthEnd: input })),
+    setStartDate: input => set(state => ({ startDate: input })),
+    setEndDate: input => set(state => ({ endDate: input })),
 }))

@@ -25,4 +25,8 @@ public class PlanCategory extends BaseTime {
     public PlanCategory(String content) {
         this.content = content;
     }
+
+    public static PlanCategory of(String content) {
+        return new PlanCategory(content);
+    }
 }

@@ -35,7 +35,7 @@ public class ProjectController {
 
     @PutMapping("/{projectId}")
     public ResponseEntity<ProjectResponse> projectModify(@PathVariable Long projectId,
-                                                         @RequestBody @Validated ProjectUpdateRequest projectUpdateRequest){
+                                                         @RequestBody @Validated ProjectUpdateRequest projectUpdateRequest) {
         return ResponseEntity.ok(projectService.modify(projectUpdateRequest, projectId));
     }
 
