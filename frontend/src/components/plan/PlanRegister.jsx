@@ -7,14 +7,37 @@ import { IoIosClose } from 'react-icons/io'
 
 import * as components from 'components'
 import * as style from 'style'
+import * as hooks from 'hooks'
 
 const PlanRegister = ({ setOpenRegister }) => {
-    const [startDate, setStartDate] = useState(new Date())
-    const [endDate, setEndDate] = useState(new Date())
+    const { planStartDate, setPlanStartDate, planEndDate, setPlanEndDate } = hooks.planRegisterState()
 
     useEffect(() => {
-        console.log(startDate, endDate)
-    }, [startDate, endDate])
+        const now = new Date()
+        setPlanEndDate(now)
+        setPlanStartDate(now)
+
+        return () => {
+            setPlanEndDate(null)
+            setPlanStartDate(null)
+        }
+    }, [])
+
+    const changeStartDate = startDate => {
+        if (startDate > planEndDate) {
+            setPlanEndDate(startDate)
+        }
+
+        setPlanStartDate(startDate)
+    }
+
+    const changeEndDate = endDate => {
+        if (endDate < planStartDate) {
+            setPlanStartDate(endDate)
+        }
+
+        setPlanEndDate(endDate)
+    }
 
     return (
         <S.Wrap>
@@ -32,15 +55,15 @@ const PlanRegister = ({ setOpenRegister }) => {
                 <S.PlanDateLabel>날짜</S.PlanDateLabel>
                 <S.PlanDatePickerBox>
                     <S.PlanDatePicker
-                        selected={startDate}
-                        onChange={date => setStartDate(date)}
+                        selected={planStartDate}
+                        onChange={date => changeStartDate(date)}
                         dateFormat="yyyy.MM.dd"
                         locale={ko}
                     />
                     <span> ~ </span>
                     <S.PlanDatePicker
-                        selected={endDate}
-                        onChange={date => setEndDate(date)}
+                        selected={planEndDate}
+                        onChange={date => changeEndDate(date)}
                         dateFormat="yyyy.MM.dd"
                         locale={ko}
                     />
