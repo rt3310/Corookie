@@ -1,180 +1,182 @@
 import React, { useState } from 'react'
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import styled from 'styled-components'
 
 const KanbanBoard = () => {
-    const [lists, setLists] = useState({
-        todo: [
-            { id: 1, name: 'Task 1' },
-            { id: 2, name: 'Task 2' },
-        ],
-        inProgress: [{ id: 3, name: 'Task 3' }],
-        done: [],
-    })
+    const tasks = [
+        { id: '1', content: 'First task' },
+        { id: '2', content: 'Second task' },
+        { id: '3', content: 'Third task' },
+        { id: '4', content: 'Fourth task' },
+        { id: '5', content: 'Fifth task' },
+    ]
 
-    const [draggedItem, setDraggedItem] = useState(null)
-    const [draggedOverList, setDraggedOverList] = useState(null)
-
-    const onDragStart = (event, listItem, sourceList) => {
-        event.dataTransfer.effectAllowed = 'move'
-        event.dataTransfer.setData('text/plain', listItem.id.toString())
-        setDraggedItem(listItem)
-        setDraggedOverList(sourceList)
+    const taskStatus = {
+        toDo: {
+            name: 'ToDo',
+            items: tasks,
+        },
+        inProgress: {
+            name: 'InProgress',
+            items: [],
+        },
+        done: {
+            name: 'Done',
+            items: [],
+        },
     }
+    const [columns, setColumns] = useState(taskStatus)
 
-    const onDragOver = (event, targetList) => {
-        event.preventDefault()
-        setDraggedOverList(targetList)
-    }
+    const onDragEnd = (result, columns, setColumns) => {
+        if (!result.destination) return
+        const { source, destination } = result
 
-    const onDrop = event => {
-        event.preventDefault()
-        const itemId = parseInt(event.dataTransfer.getData('text'))
-        const targetList = draggedOverList
-        if (targetList && draggedItem && draggedOverList !== draggedItem) {
-            const updatedSourceList = lists[draggedOverList].filter(item => item.id !== itemId)
-            const targetIndex = lists[targetList].findIndex(item => item.id === itemId)
-            const updatedTargetList = [...lists[targetList]]
-            updatedTargetList.splice(targetIndex + 1, 0, draggedItem)
-            setLists({
-                ...lists,
-                [draggedOverList]: updatedSourceList,
-                [targetList]: updatedTargetList,
+        if (source.droppableId !== destination.droppableId) {
+            const sourceColumn = columns[source.droppableId]
+            const destColumn = columns[destination.droppableId]
+            const sourceItems = [...sourceColumn.items]
+            const destItems = [...destColumn.items]
+            const [removed] = sourceItems.splice(source.index, 1)
+            destItems.splice(destination.index, 0, removed)
+            setColumns({
+                ...columns,
+                [source.droppableId]: {
+                    ...sourceColumn,
+                    items: sourceItems,
+                },
+                [destination.droppableId]: {
+                    ...destColumn,
+                    items: destItems,
+                },
             })
-            setDraggedItem(null)
-            setDraggedOverList(null)
+        } else {
+            const column = columns[source.droppableId]
+            const copiedItems = [...column.items]
+            const [removed] = copiedItems.splice(source.index, 1)
+            copiedItems.splice(destination.index, 0, removed)
+            setColumns({
+                ...columns,
+                [source.droppableId]: {
+                    ...column,
+                    items: copiedItems,
+                },
+            })
         }
     }
 
     return (
-        <S.Wrap>
-            <S.Todo onDragOver={e => onDragOver(e, 'todo')} onDrop={onDrop} draggable={false}>
-                Todo
-                <S.TaskBox>
-                    <ul>
-                        {lists.todo.map(item => (
-                            <li key={item.id} draggable onDragStart={e => onDragStart(e, item, 'todo')}>
-                                <p>{item.name}</p>
-                            </li>
-                        ))}
-                    </ul>
-                </S.TaskBox>
-            </S.Todo>
-            <S.InProgress onDragOver={e => onDragOver(e, 'inProgress')} onDrop={onDrop} draggable={false}>
-                InProgress
-                <S.TaskBox>
-                    <ul>
-                        {lists.inProgress.map(item => (
-                            <li key={item.id} draggable onDragStart={e => onDragStart(e, item, 'inProgress')}>
-                                <p>{item.name}</p>
-                            </li>
-                        ))}
-                    </ul>
-                </S.TaskBox>
-            </S.InProgress>
-            <S.Done onDragOver={e => onDragOver(e, 'done')} onDrop={onDrop} draggable={false}>
-                Done
-                <S.TaskBox>
-                    <ul>
-                        {lists.done.map(item => (
-                            <li key={item.id} draggable onDragStart={e => onDragStart(e, item, 'done')}>
-                                <p>{item.name}</p>
-                            </li>
-                        ))}
-                    </ul>
-                </S.TaskBox>
-            </S.Done>
-        </S.Wrap>
+        <div>
+            <S.Wrap>
+                <DragDropContext onDragEnd={result => onDragEnd(result, columns, setColumns)}>
+                    {Object.entries(columns).map(([columnId, column], index) => {
+                        return (
+                            <S.Column key={columnId}>
+                                {columnId === 'toDo' && <S.Todo>{column.name}</S.Todo>}
+                                {columnId === 'inProgress' && <S.InProgress>{column.name}</S.InProgress>}
+                                {columnId === 'done' && <S.Done>{column.name}</S.Done>}
+                                <S.TaskBox>
+                                    <Droppable droppableId={columnId} key={columnId}>
+                                        {(provided, snapshot) => {
+                                            return (
+                                                <S.IssueContainer {...provided.droppableProps} ref={provided.innerRef}>
+                                                    {column.items.map((item, index) => {
+                                                        return (
+                                                            <Draggable
+                                                                key={item.id}
+                                                                draggableId={item.id}
+                                                                index={index}>
+                                                                {(provided, snapshot) => {
+                                                                    return (
+                                                                        <S.IssueDrag
+                                                                            ref={provided.innerRef}
+                                                                            {...provided.draggableProps}
+                                                                            {...provided.dragHandleProps}
+                                                                            style={{
+                                                                                backgroundColor: snapshot.isDragging
+                                                                                    ? '#286EF0'
+                                                                                    : 'white',
+                                                                                ...provided.draggableProps.style,
+                                                                            }}>
+                                                                            {item.content}
+                                                                        </S.IssueDrag>
+                                                                    )
+                                                                }}
+                                                            </Draggable>
+                                                        )
+                                                    })}
+                                                    {provided.placeholder}
+                                                </S.IssueContainer>
+                                            )
+                                        }}
+                                    </Droppable>
+                                </S.TaskBox>
+                            </S.Column>
+                        )
+                    })}
+                </DragDropContext>
+            </S.Wrap>
+        </div>
     )
 }
 
 const S = {
+    Column: styled.div`
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 0 12px;
+        width: 100%;
+    `,
     Wrap: styled.div`
         display: flex;
+        align-items: center;
         justify-content: space-between;
         background-color: ${({ theme }) => theme.color.background};
         padding: 0 4px;
+        height: 100%;
     `,
     TaskBox: styled.div`
-        display: flex;
-        background-color: ${({ theme }) => theme.color.background};
-        padding: 0 0;
-        margin: 16px 0;
+        margin: 8px 0;
+        width: 100%;
+    `,
+    IssueContainer: styled.div`
+        width: 100%;
+        border-radius: 8;
+        min-height: 500px;
+    `,
+    IssueDrag: styled.div`
+        user-select: 'none';
+        padding: 16px;
+        margin: 0 0 8px 0;
+        min-height: 50px;
+        border-radius: 8px;
     `,
     Todo: styled.div`
         border-radius: 8px;
         background-color: ${({ theme }) => theme.color.success};
         padding: 8px 16px;
-        margin: 8px 12px;
+        margin: 8px 0 4px 0;
         width: 100%;
         height: 32px;
         color: ${({ theme }) => theme.color.white};
-        cursor: pointer;
-        ul {
-            list-style: none;
-            padding: 0;
-            width: 100%;
-        }
-        li {
-            background-color: ${({ theme }) => theme.color.white};
-            margin: 16px 0 16px 0;
-            padding: 8px;
-            border-radius: 4px;
-            height: 120px;
-            color: ${({ theme }) => theme.color.black};
-
-            cursor: pointer;
-        }
     `,
     InProgress: styled.div`
         border-radius: 8px;
         background-color: ${({ theme }) => theme.color.pending};
         padding: 8px 16px;
-        margin: 8px 12px;
+        margin: 8px 0 4px 0;
         width: 100%;
         height: 32px;
         color: ${({ theme }) => theme.color.white};
-        cursor: pointer;
-        ul {
-            list-style: none;
-            padding: 0;
-            width: 100%;
-        }
-        li {
-            background-color: ${({ theme }) => theme.color.white};
-            margin: 16px 0 16px 0;
-            padding: 8px;
-            border-radius: 4px;
-            height: 120px;
-            color: ${({ theme }) => theme.color.black};
-
-            cursor: pointer;
-        }
     `,
     Done: styled.div`
         border-radius: 8px;
         background-color: ${({ theme }) => theme.color.orange};
         padding: 8px 16px;
-        margin: 8px 12px;
+        margin: 8px 0 4px 0;
         width: 100%;
         height: 32px;
         color: ${({ theme }) => theme.color.white};
-        cursor: pointer;
-        ul {
-            list-style: none;
-            padding: 0;
-            width: 100%;
-            height: 120px;
-        }
-        li {
-            background-color: ${({ theme }) => theme.color.white};
-            margin: 16px 0 16px 0;
-            padding: 8px;
-            border-radius: 4px;
-            height: 120px;
-            color: ${({ theme }) => theme.color.black};
-
-            cursor: pointer;
-        }
     `,
 }
 
