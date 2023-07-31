@@ -14,6 +14,10 @@ export { default as Comment } from './textchat/Comment'
 
 export { default as TaskHeader } from './taskboard/TaskHeader'
 export { default as ToggleButton } from './taskboard/ToggleButton'
+export { default as IssueBoard } from './taskboard/IssueBoard'
+export { default as IssuePreview } from './taskboard/IssuePreview'
+export { default as IssueDetail } from './taskboard/IssueDetail'
+export { default as IssueCreate } from './taskboard/IssueCreate'
 
 export { default as Calendar } from './plan/Calendar'
 export { default as PlanDetail } from './plan/PlanDetail'

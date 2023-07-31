@@ -8,6 +8,7 @@ import * as hooks from 'hooks'
 const TopTab = () => {
     const { profileOpened, openProfile, closeProfile } = hooks.profileState()
     const { closeComment } = hooks.commentState()
+    const { closeIssueDetail } = hooks.issueDetailState()
     const navigate = useNavigate()
 
     const toggleProfile = () => {
@@ -16,6 +17,7 @@ const TopTab = () => {
         } else {
             openProfile()
             closeComment()
+            closeIssueDetail()
         }
     }
 
@@ -40,6 +42,7 @@ const S = {
     Title: styled.div`
         height: 100%;
         width: 167px;
+        font-family: 'Futura PT';
         font-size: ${({ theme }) => theme.fontsize.logo};
         font-weight: 700;
         color: ${({ theme }) => theme.color.main};
