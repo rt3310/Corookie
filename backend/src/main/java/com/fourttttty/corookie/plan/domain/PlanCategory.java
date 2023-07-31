@@ -26,7 +26,16 @@ public class PlanCategory extends BaseTime {
         this.content = content;
     }
 
+    private PlanCategory(Long id, String content) {
+        this.id = id;
+        this.content = content;
+    }
+
     public static PlanCategory of(String content) {
         return new PlanCategory(content);
+    }
+
+    public static PlanCategory of(Long id, String content) {
+        return new PlanCategory(id, content);
     }
 }

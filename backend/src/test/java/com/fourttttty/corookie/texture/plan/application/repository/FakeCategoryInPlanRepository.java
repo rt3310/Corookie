@@ -7,12 +7,22 @@ import com.fourttttty.corookie.plan.domain.Plan;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Optional;
+
 public class FakeCategoryInPlanRepository implements CategoryInPlanRepository {
     private final Map<CategoryInPlanId, CategoryInPlan> store = new HashMap<>();
 
     @Override
     public CategoryInPlan save(CategoryInPlan categoryInPlan) {
-        return store.put(categoryInPlan.getId(), categoryInPlan);
+        Optional<Entry<CategoryInPlanId,CategoryInPlan>> first = store.entrySet().stream()
+            .filter(entry->(entry.getValue().getId().getPlan().equals(categoryInPlan.getId().getPlan()))
+            &&(entry.getValue().getId().getPlanCategory().equals(categoryInPlan.getId().getPlanCategory())))
+            .findFirst();
+        if(first.isEmpty()){
+            return store.put(categoryInPlan.getId(),categoryInPlan);
+        }
+        return first.get().getValue();
     }
 
     @Override

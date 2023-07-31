@@ -21,7 +21,14 @@ public class FakePlanRepository implements PlanRepository {
 
     @Override
     public Plan save(Plan plan) {
-        store.put(autoIncrementId++, plan);
-        return plan;
+        store.put(autoIncrementId, Plan.of(autoIncrementId,
+            plan.getPlanName(),
+            plan.getDescription(),
+            plan.getPlanStart(),
+            plan.getPlanEnd(),
+            plan.getEnabled(),
+            plan.getProject()));
+
+        return store.get(autoIncrementId++);
     }
 }

@@ -19,8 +19,10 @@ public class CategoryInPlanService {
     private final PlanCategoryService planCategoryService;
 
     @Transactional
-    public CategoryInPlan create(Plan plan, PlanCategory planCategory) {
-        return categoryInPlanRepository.save(CategoryInPlan.of(plan, planCategory));
+    public PlanCategoryResponse create(Plan plan, String content) {
+        PlanCategory newPlanCategory = planCategoryService.create(content);
+        categoryInPlanRepository.save(CategoryInPlan.of(plan,newPlanCategory));
+        return PlanCategoryResponse.from(newPlanCategory);
     }
 
     public List<CategoryInPlan> findAllByPlan(Plan plan) {
@@ -30,21 +32,5 @@ public class CategoryInPlanService {
     @Transactional
     public void deleteCategoryInPlan(CategoryInPlan categoryInPlan) {
         categoryInPlanRepository.delete(categoryInPlan);
-    }
-
-    @Transactional
-    public List<PlanCategoryResponse> modifyCategoryInPlan(Plan plan,
-                                                           List<PlanCategoryUpdateRequest> requests) {
-        List<PlanCategoryResponse> updatePlanCategories = requests.stream()
-            .map(request -> planCategoryService.findByContent(request.content()))
-            .toList();
-
-        findAllByPlan(plan).stream()
-            .filter(categoryInPlan -> categoryInPlan.exists(updatePlanCategories.stream()
-                .map(PlanCategoryResponse::id)
-                .toList()))
-            .forEach(this::deleteCategoryInPlan);
-
-        return updatePlanCategories;
     }
 }

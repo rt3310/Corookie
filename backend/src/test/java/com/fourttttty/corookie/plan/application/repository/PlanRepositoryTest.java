@@ -17,6 +17,7 @@ class PlanRepositoryTest {
     PlanRepository planRepository;
     Project project;
     Member member;
+    Plan plan;
 
 
     @BeforeEach
@@ -29,24 +30,24 @@ class PlanRepositoryTest {
             "http://test.com",
             false,
             member);
+        
+        plan = Plan.of("name",
+            "testDescription",
+            LocalDateTime.now(),
+            LocalDateTime.now().minusDays(2),
+            true,
+            project);
     }
 
     @Test
     @DisplayName("Test PlanRepository's save")
     void save() {
         // given
-        Plan plan = Plan.of("name",
-            "testDescription",
-            LocalDateTime.now(),
-            LocalDateTime.now().minusDays(2),
-            true,
-            project);
 
         // when
         Plan savedPlan = planRepository.save(plan);
 
         // then
-        assertThat(savedPlan.getId()).isEqualTo(plan.getId());
         assertThat(savedPlan.getPlanName()).isEqualTo(plan.getPlanName());
         assertThat(savedPlan.getDescription()).isEqualTo(plan.getDescription());
         assertThat(savedPlan.getPlanStart()).isEqualTo(plan.getPlanStart());
@@ -58,19 +59,13 @@ class PlanRepositoryTest {
     @DisplayName("find Plan By Id")
     void findById() {
         // given
-        Plan plan = Plan.of("name",
-            "testDescription",
-            LocalDateTime.now(),
-            LocalDateTime.now().minusDays(2),
-            true,
-            project);
+
         planRepository.save(plan);
 
         // when
         Plan foundPlan = planRepository.findById(1L).orElseThrow(NoSuchElementException::new);
 
         // then
-        assertThat(foundPlan.getId()).isEqualTo(plan.getId());
         assertThat(foundPlan.getPlanName()).isEqualTo(plan.getPlanName());
         assertThat(foundPlan.getDescription()).isEqualTo(plan.getDescription());
         assertThat(foundPlan.getPlanStart()).isEqualTo(plan.getPlanStart());

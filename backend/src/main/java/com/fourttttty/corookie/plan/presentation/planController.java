@@ -4,6 +4,7 @@ import com.fourttttty.corookie.plan.application.service.PlanService;
 import com.fourttttty.corookie.plan.dto.request.PlanCreateRequest;
 
 import com.fourttttty.corookie.plan.dto.request.PlanUpdateRequest;
+import com.fourttttty.corookie.plan.dto.response.PlanCategoryResponse;
 import com.fourttttty.corookie.plan.dto.response.PlanResponse;
 import lombok.RequiredArgsConstructor;
 
@@ -39,6 +40,19 @@ public class planController {
     @DeleteMapping("/{planId}")
     public ResponseEntity<Object> planDelete(@PathVariable Long planId) {
         planService.deletePlan(planId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{planId}/categories")
+    public ResponseEntity<PlanCategoryResponse> categoryInsert(@PathVariable Long planId,
+        @RequestParam("categoryContent") String content){
+        return ResponseEntity.ok(planService.createPlanCategory(planId,content));
+    }
+
+    @DeleteMapping("/{planId}/categories")
+    public ResponseEntity<Object> categoryDelete(@PathVariable Long planId,
+        @RequestParam("categoryContent") String content){
+        planService.deleteCategory(planId,content);
         return ResponseEntity.noContent().build();
     }
 }

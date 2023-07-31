@@ -56,6 +56,22 @@ public class Plan extends BaseTime {
         this.project = project;
     }
 
+    private Plan(Long id,
+                 String planName,
+                 String description,
+                 LocalDateTime planStart,
+                 LocalDateTime planEnd,
+                 Boolean enabled,
+                 Project project) {
+        this.id = id;
+        this.planName = planName;
+        this.description = description;
+        this.planStart = planStart;
+        this.planEnd = planEnd;
+        this.enabled = enabled;
+        this.project = project;
+    }
+
     public static Plan of(String planName,
                           String description,
                           LocalDateTime planStart,
@@ -63,6 +79,22 @@ public class Plan extends BaseTime {
                           Boolean enabled,
                           Project project) {
         return new Plan(planName,
+                description,
+                planStart,
+                planEnd,
+                enabled,
+                project);
+    }
+
+    public static Plan of(Long id,
+                          String planName,
+                          String description,
+                          LocalDateTime planStart,
+                          LocalDateTime planEnd,
+                          Boolean enabled,
+                          Project project) {
+        return new Plan(id,
+                planName,
                 description,
                 planStart,
                 planEnd,
