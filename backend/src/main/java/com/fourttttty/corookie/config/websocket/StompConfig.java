@@ -26,14 +26,14 @@ public class StompConfig implements WebSocketMessageBrokerConfigurer {
         // Client에서 SEND 요청을 처리
         // "/send" 경로로 시작하는 STOMP 메세지의 "destination" 헤더는
         // @Controller 객체의 @MessageMapping 메서드로 라우팅된다.
-        registry.setApplicationDestinationPrefixes("/send");
+        registry.setApplicationDestinationPrefixes("/app");
 
 
         // 해당 경로로 SimpleBroker 등록한다.
         // SimpleBroker는 해당하는 경로를 SUBSCRIBE하는 Client에게 메세지를 전달하는 간단한 작업을 수행한다.
         // "/topic", "/queue"로 시작하는 "destination" 헤더를 가진 메세지를 브로커로 라우팅한다.
         // 내장된 Simple Message Broker는 /topic, /queue prefix에 대해 특별한 의미를 부여하지 않는다.
-        registry.enableSimpleBroker("/queue", "/topic");
+        registry.enableSimpleBroker("/topic");
 
 
         // SimpleBroker의 기능과
