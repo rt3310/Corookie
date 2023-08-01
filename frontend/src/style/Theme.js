@@ -30,6 +30,10 @@ const color = {
     warningFilter: 'invert(16%) sepia(51%) saturate(7032%) hue-rotate(357deg) brightness(105%) contrast(108%)',
 }
 
+const font = {
+    main: `'Noto Sans KR', 'Pretendard', sans-serif`,
+}
+
 const fontsize = {
     content: '14px',
     logo: '27px',
@@ -55,6 +59,7 @@ const Theme = {
     common,
     color,
     shadow,
+    font,
     fontsize,
     lineheight,
 }
