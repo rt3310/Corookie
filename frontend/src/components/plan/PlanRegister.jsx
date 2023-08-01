@@ -9,13 +9,33 @@ import * as components from 'components'
 import * as style from 'style'
 import * as hooks from 'hooks'
 
-const PlanRegister = ({ setOpenRegister }) => {
-    const { planStartDate, setPlanStartDate, planEndDate, setPlanEndDate } = hooks.planRegisterState()
+const PlanRegister = () => {
+    const { planStartDate, setPlanStartDate, planEndDate, setPlanEndDate } = hooks.planDateState()
+    const { closePlanRegister } = hooks.planRegisterState()
+    const [title, setTitle] = useState('')
+    const [member, setMember] = useState({
+        id: null,
+        name: '참여자 선택',
+    })
+    const [category, setCategory] = useState({
+        id: null,
+        name: '분류 선택',
+    })
+    const [content, setContent] = useState('')
+
+    useEffect(() => {
+        console.log(title)
+    }, [title])
 
     useEffect(() => {
         const now = new Date()
-        setPlanEndDate(now)
-        setPlanStartDate(now)
+        if (planStartDate === null) {
+            setPlanEndDate(now)
+        }
+
+        if (planEndDate === null) {
+            setPlanStartDate(now)
+        }
 
         return () => {
             setPlanEndDate(null)
@@ -43,13 +63,13 @@ const PlanRegister = ({ setOpenRegister }) => {
         <S.Wrap>
             <S.Header>
                 <S.Title>일정 생성</S.Title>
-                <S.CloseButton onClick={() => setOpenRegister(false)}>
+                <S.CloseButton onClick={() => closePlanRegister()}>
                     <IoIosClose />
                 </S.CloseButton>
             </S.Header>
             <S.PlanTitleBox>
                 <S.PlanTitleLabel>제목</S.PlanTitleLabel>
-                <S.PlanTitleInput placeholder="제목 작성" />
+                <S.PlanTitleInput placeholder="제목 작성" onChange={e => setTitle(e.target.value)} />
             </S.PlanTitleBox>
             <S.PlanDateBox>
                 <S.PlanDateLabel>날짜</S.PlanDateLabel>
@@ -69,11 +89,13 @@ const PlanRegister = ({ setOpenRegister }) => {
                     />
                 </S.PlanDatePickerBox>
             </S.PlanDateBox>
-            <components.PlanOptionToggle state="member" />
-            <components.PlanOptionToggle state="category" />
+            <components.PlanOptionToggle state="member" selected={member} setSelected={setMember} />
+            <components.PlanOptionToggle state="category" selected={category} setSelected={setCategory} />
             <S.PlanContentBox>
                 <S.PlanContentHeader>내용</S.PlanContentHeader>
-                <S.PlanContentInput placeholder="내용을 입력하세요"></S.PlanContentInput>
+                <S.PlanContentInput
+                    placeholder="내용을 입력하세요"
+                    onChange={e => setContent(e.target.value)}></S.PlanContentInput>
             </S.PlanContentBox>
             <S.SaveButton>저장</S.SaveButton>
         </S.Wrap>
