@@ -2,6 +2,7 @@ package com.fourttttty.corookie.support;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fourttttty.corookie.support.security.MockSecurityFilter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
@@ -43,6 +45,7 @@ public abstract class RestDocsTest {
                         .withScheme("http")
                         .withHost("localhost")
                         .withPort(8080))
+                .apply(springSecurity(new MockSecurityFilter()))
                 .addFilter(new CharacterEncodingFilter("UTF-8", true))
                 .alwaysDo(print())
                 .alwaysDo(document("api/v1"))

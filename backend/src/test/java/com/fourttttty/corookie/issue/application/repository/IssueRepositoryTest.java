@@ -3,7 +3,9 @@ package com.fourttttty.corookie.issue.application.repository;
 import com.fourttttty.corookie.issue.domain.Issue;
 import com.fourttttty.corookie.issue.domain.IssuePriority;
 import com.fourttttty.corookie.issue.domain.IssueProgress;
+import com.fourttttty.corookie.member.domain.AuthProvider;
 import com.fourttttty.corookie.member.domain.Member;
+import com.fourttttty.corookie.member.domain.Oauth2;
 import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.texture.issue.application.repository.FakeIssueRepository;
 import org.assertj.core.api.Assertions;
@@ -22,7 +24,7 @@ class IssueRepositoryTest {
     @BeforeEach
     void initObjects() {
         issueRepository = new FakeIssueRepository();
-        member = new Member("name");
+        member = Member.of("name", Oauth2.of(AuthProvider.KAKAO, "account"));
         project = Project.of("name",
                 "description",
                 true,
