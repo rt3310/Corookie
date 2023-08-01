@@ -16,6 +16,19 @@ export const URL = {
     },
 }
 
+export const ISSUE_OPTIONS = {
+    priority: 'priority',
+    manager: 'manager',
+    category: 'category',
+    status: 'status',
+    createManager: 'createManager',
+    createPriority: 'createPriority',
+    createCategory: 'createCategory',
+    detailManager: 'detailManager',
+    detailPriority: 'detailPriority',
+    detailCategory: 'detailCategory',
+}
+
 export const PLAN_OPTIONS = {
     member: {
         label: '참여자',

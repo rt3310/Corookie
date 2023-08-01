@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import * as components from 'components'
 
 import * as hooks from 'hooks'
+import * as utils from 'utils'
 import { IoSearch, IoAdd } from 'react-icons/io5'
 
 const TaskHeader = () => {
@@ -38,18 +39,18 @@ const TaskHeader = () => {
                         </S.SearchButton>
                     </S.TopicFilter>
                     <S.ToggleFilter>
-                        <components.ToggleButton defaultVal="priority" list={priorityList} />
+                        <components.ToggleButton defaultVal={utils.ISSUE_OPTIONS.priority} list={priorityList} />
                     </S.ToggleFilter>
                     <S.ToggleFilter>
-                        <components.ToggleButton defaultVal="manager" list={managerList} />
+                        <components.ToggleButton defaultVal={utils.ISSUE_OPTIONS.manager} list={managerList} />
                     </S.ToggleFilter>
-                    <S.ToggleFilter>
-                        <components.ToggleButton defaultVal="category" list={categoryList} />
-                    </S.ToggleFilter>
+                    <S.CategoryToggleFilter>
+                        <components.ToggleButton defaultVal={utils.ISSUE_OPTIONS.category} list={categoryList} />
+                    </S.CategoryToggleFilter>
                     {showIssue && (
-                        <S.ToggleFilter>
-                            <components.ToggleButton defaultVal="status" list={statusList} />
-                        </S.ToggleFilter>
+                        <S.StatusToggleFilter>
+                            <components.ToggleButton defaultVal={utils.ISSUE_OPTIONS.status} list={statusList} />
+                        </S.StatusToggleFilter>
                     )}
                 </S.Filters>
                 {showIssue && (
@@ -146,6 +147,23 @@ const S = {
         display: flex;
         align-items: center;
         justify-content: space-between;
+        width: 80px;
+        max-height: 31px;
+        margin: 0 8px;
+    `,
+    CategoryToggleFilter: styled.div`
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 115px;
+        max-height: 31px;
+        margin: 0 8px;
+    `,
+    StatusToggleFilter: styled.div`
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100px;
         max-height: 31px;
         margin: 0 8px;
     `,
@@ -156,8 +174,22 @@ const S = {
         height: 31px;
         margin: 0 8px;
         padding: 8px;
+        border-radius: 8px;
+        white-space: nowrap;
+        border: 1px solid ${({ theme }) => theme.color.main};
         background-color: ${({ theme }) => theme.color.main};
-        border-radius: 4px;
+        color: ${({ theme }) => theme.color.white};
+        margin: 0 16px;
+        transition-duration: 0.2s;
+
+        &:hover {
+            background-color: ${({ theme }) => theme.color.white};
+            color: ${({ theme }) => theme.color.main};
+            box-shadow: none;
+            & svg {
+                color: ${({ theme }) => theme.color.main};
+            }
+        }
         cursor: pointer;
         & svg {
             color: ${({ theme }) => theme.color.white};
@@ -167,7 +199,6 @@ const S = {
     `,
     CreateText: styled.div`
         font-size: ${({ theme }) => theme.fontsize.sub1};
-        color: ${({ theme }) => theme.color.white};
     `,
 }
 export default TaskHeader

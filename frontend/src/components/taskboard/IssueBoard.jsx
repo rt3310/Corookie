@@ -96,12 +96,11 @@ const S = {
         flex-grow: 1;
         max-height: calc(100vh - 208px);
         margin: 0 16px 16px;
-        padding: 16px 0;
         border-radius: 8px;
-        background-color: ${({ theme }) => theme.color.white};
+        /* background-color: ${({ theme }) => theme.color.white}; */
     `,
     Wrap: styled.div`
-        padding: 0 16px;
+        /* padding: 0 16px; */
         overflow-y: auto;
         &::-webkit-scrollbar {
             height: 0px;

@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 
 import * as hooks from 'hooks'
 import * as components from 'components'
 import { IoTrashOutline, IoClose, IoPencil } from 'react-icons/io5'
+import * as utils from 'utils'
 
 const IssueDetail = ({ id }) => {
     const { closeIssueDetail } = hooks.issueDetailState()
@@ -17,6 +18,24 @@ const IssueDetail = ({ id }) => {
     )
     const [editTitle, setEditTitle] = useState(false)
     const [editContent, setEditContent] = useState(false)
+
+    let titleRef = useRef()
+    let contentRef = useRef()
+
+    useEffect(() => {
+        if (editTitle === true) {
+            titleRef.current.focus()
+        }
+    }, [editTitle])
+
+    useEffect(() => {
+        if (editContent === true) {
+            const focusContent = contentRef.current
+            focusContent.selectionStart = focusContent.value.length
+            focusContent.focus()
+        }
+    }, [editContent])
+
     const handleTitleChange = e => setTitle(e.target.value)
     const titleKeyDown = e => {
         if (e.key === 'Enter') {
@@ -43,6 +62,7 @@ const IssueDetail = ({ id }) => {
                     <S.IssueTitle>
                         {editTitle ? (
                             <S.TitleEdit
+                                ref={titleRef}
                                 type="text"
                                 value={title}
                                 onChange={handleTitleChange}
@@ -70,15 +90,21 @@ const IssueDetail = ({ id }) => {
                 </S.Status>
                 <S.Manager>
                     <S.Text>담당자</S.Text>
-                    <components.ToggleButton defaultVal="detailManager" list={managerList} />
+                    <S.ButtonContainer>
+                        <components.ToggleButton defaultVal={utils.ISSUE_OPTIONS.detailManager} list={managerList} />
+                    </S.ButtonContainer>
                 </S.Manager>
                 <S.Priority>
                     <S.Text>중요도</S.Text>
-                    <components.ToggleButton defaultVal="detailPriority" list={priorityList} />
+                    <S.ButtonContainer>
+                        <components.ToggleButton defaultVal={utils.ISSUE_OPTIONS.detailPriority} list={priorityList} />
+                    </S.ButtonContainer>
                 </S.Priority>
                 <S.Category>
                     <S.Text>분류</S.Text>
-                    <components.ToggleButton defaultVal="detailCategory" list={categoryList} />
+                    <S.ButtonContainer>
+                        <components.ToggleButton defaultVal={utils.ISSUE_OPTIONS.detailCategory} list={categoryList} />
+                    </S.ButtonContainer>
                 </S.Category>
                 <S.DescriptionBox>
                     <S.DescriptionBoxHeader>
@@ -87,7 +113,12 @@ const IssueDetail = ({ id }) => {
                     </S.DescriptionBoxHeader>
                     <S.Line></S.Line>
                     {editContent ? (
-                        <S.ContentEdit value={content} onChange={handleContentChange} onKeyDown={contentKeyDown} />
+                        <S.ContentEdit
+                            ref={contentRef}
+                            value={content}
+                            onChange={handleContentChange}
+                            onKeyDown={contentKeyDown}
+                        />
                     ) : (
                         <S.DescriptionBoxContent>{content}</S.DescriptionBoxContent>
                     )}
@@ -121,6 +152,11 @@ const S = {
         align-items: center;
         margin-bottom: 20px;
     `,
+    ButtonContainer: styled.div`
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    `,
     Close: styled.div`
         display: flex;
         align-items: center;
@@ -135,13 +171,17 @@ const S = {
         display: flex;
         justify-content: flex-start;
         align-items: center;
-        padding: 12px 8px;
+        padding: 12px 8px 16px;
         width: 100%;
         & svg {
             width: 16px;
             height: 16px;
             cursor: pointer;
-            color: ${({ theme }) => theme.color.black};
+            transition: 0.2s;
+            color: ${({ theme }) => theme.color.gray};
+            &:hover {
+                color: ${({ theme }) => theme.color.main};
+            }
             margin-left: 8px;
         }
     `,
@@ -180,7 +220,7 @@ const S = {
     Status: styled.div`
         display: flex;
         justify-content: space-between;
-        margin-bottom: 8px;
+        margin-bottom: 16px;
         padding: 0 10px;
     `,
     StatusBox: styled.div`
@@ -201,6 +241,7 @@ const S = {
                 ? theme.color.pending
                 : theme.color.warning};
         border-radius: 8px;
+        transition-duration: 0.2s;
         &:hover {
             background-color: ${({ status, theme }) =>
                 status === 'todo'
@@ -222,6 +263,7 @@ const S = {
     Text: styled.p`
         font-size: ${({ theme }) => theme.fontsize.content};
         color: ${({ theme }) => theme.color.black};
+        white-space: nowrap;
     `,
     Priority: styled.div`
         display: flex;
@@ -260,7 +302,11 @@ const S = {
             width: 16px;
             height: 16px;
             cursor: pointer;
-            color: ${({ theme }) => theme.color.black};
+            color: ${({ theme }) => theme.color.gray};
+            transition: 0.2s;
+            &:hover {
+                color: ${({ theme }) => theme.color.main};
+            }
         }
     `,
     Line: styled.div`

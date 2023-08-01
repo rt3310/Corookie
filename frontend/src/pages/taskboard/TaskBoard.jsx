@@ -9,7 +9,7 @@ const TaskBoard = () => {
     const { setValue: setManagerValue } = hooks.managerState()
     const { setValue: setCategoryValue } = hooks.categoryState()
     const { setValue: setStatusValue } = hooks.statusState()
-    const { showIssue } = hooks.taskState()
+    const { showIssue, openIssue } = hooks.taskState()
     const { issueDetailOpened, closeIssueDetail } = hooks.issueDetailState()
 
     useEffect(() => {
@@ -18,6 +18,7 @@ const TaskBoard = () => {
         setCategoryValue('분류')
         setStatusValue('상태')
         closeIssueDetail()
+        openIssue()
     }, [])
 
     useEffect(() => {
@@ -25,6 +26,7 @@ const TaskBoard = () => {
         setManagerValue('책임자')
         setCategoryValue('분류')
         setStatusValue('상태')
+        closeIssueDetail()
     }, [showIssue])
 
     return (
