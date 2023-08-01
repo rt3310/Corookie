@@ -52,7 +52,7 @@ const S = {
     Profile: styled.div`
         width: 40px;
         margin: 16px 16px 0 0;
-
+        cursor: pointer;
         & img {
             width: 40px;
             height: 40px;

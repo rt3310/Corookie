@@ -9,6 +9,7 @@ import { IoSearch, IoAdd } from 'react-icons/io5'
 const TaskHeader = () => {
     const { showIssue, openIssue, openKanban } = hooks.taskState()
     const { issueCreateOpened, openIssueCreate } = hooks.issueCreateState()
+    const { closeIssueDetail } = hooks.issueDetailState()
 
     const priorityList = ['Highest', 'High', 'Normal', 'Low', 'Lowest']
     const managerList = ['황상미', '최효빈', '신승수', '박종서', '서원호', '권현수']
@@ -19,6 +20,11 @@ const TaskHeader = () => {
         console.log(issueCreateOpened)
     }, [issueCreateOpened])
 
+    const openKanbanHandle = () => {
+        openKanban()
+        closeIssueDetail()
+    }
+
     return (
         <S.Header>
             <S.Title>
@@ -26,7 +32,7 @@ const TaskHeader = () => {
                     이슈 리스트
                 </S.IssueTitle>
                 <S.DivisionLine></S.DivisionLine>
-                <S.KanbanTitle onClick={() => openKanban()} showIssue={showIssue}>
+                <S.KanbanTitle onClick={() => openKanbanHandle()} showIssue={showIssue}>
                     칸반 보드
                 </S.KanbanTitle>
             </S.Title>

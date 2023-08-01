@@ -36,6 +36,7 @@ const TaskBoard = () => {
                 {showIssue && <components.IssueBoard />}
                 {issueDetailOpened !== '-1' && <components.IssueDetail id={issueDetailOpened} />}
             </S.IssueContainer>
+            {!showIssue && <components.KanbanBoard />}
         </S.Wrap>
     )
 }
