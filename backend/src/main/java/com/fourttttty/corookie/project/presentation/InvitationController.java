@@ -38,7 +38,7 @@ public class InvitationController {
         }else if(!project.getInvitationStatus()){
             throw new ProjectNotOpenForInvitationException();
         }
-        //projectMemberService.create(new ProjectMemberCreateRequest(project.getId(), member.getId()));
+        projectMemberService.create(new ProjectMemberCreateRequest(project.getId(), member.getId()));
         return ResponseEntity.ok().build();
     }
 }
