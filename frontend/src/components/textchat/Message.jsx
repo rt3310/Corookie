@@ -4,13 +4,6 @@ import Prism from 'prismjs'
 import styled from 'styled-components'
 import 'prismjs/components/prism-java'
 import '../../style/prism-material-light.css'
-// import 'prismjs/themes/prism-twilight.css'
-// import 'prismjs/themes/prism-okaidia.css'
-// import 'prismjs/themes/prism-tomorrow.css'
-// import 'prismjs/themes/prism-funky.css'
-// import 'prismjs/themes/prism-coy.css'
-// import 'prismjs/themes/prism-solarizedlight.css'
-// import 'prismjs/themes/prism.css'
 
 const Message = ({ isCode, text, language }) => {
     if (isCode) {
