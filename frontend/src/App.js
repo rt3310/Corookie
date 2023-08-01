@@ -17,7 +17,11 @@ const App = () => {
                         <Route path={utils.URL.HOME.MAIN} element={<pages.Main />} />
                         <Route path={utils.URL.CHAT.TEXT} element={<pages.TextChat />} />
                         <Route path={utils.URL.TASK.BOARD} element={<pages.TaskBoard />} />
+<<<<<<< HEAD
                         <Route path={utils.URL.PLAN.CALENDER} element={<pages.Plan />} />
+=======
+                        <Route path={utils.URL.CALENDAR.BOARD} element={<pages.CalendarBoard />} />
+>>>>>>> 2faf8c17ad971d851d5c5f36727136b7bc9a9277
                     </Route>
                 </Routes>
             </Router>
