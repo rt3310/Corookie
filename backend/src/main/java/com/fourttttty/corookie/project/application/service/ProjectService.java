@@ -1,6 +1,8 @@
 package com.fourttttty.corookie.project.application.service;
 
+import com.fourttttty.corookie.global.util.Base62UuidGenerator;
 import com.fourttttty.corookie.member.application.service.MemberService;
+import com.fourttttty.corookie.member.domain.Member;
 import com.fourttttty.corookie.project.application.repository.ProjectRepository;
 import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.project.dto.request.ProjectCreateRequest;
@@ -39,7 +41,9 @@ public class ProjectService {
 
     @Transactional
     public ProjectResponse create(ProjectCreateRequest projectCreateRequest, Long memberId) {
-        Project project = projectRepository.save(projectCreateRequest.toEntity(memberService.findEntityById(memberId)));
+        String inviationLink = Base62UuidGenerator.generateCode();
+        Member member =  memberService.findEntityById(memberId);
+        Project project = projectRepository.save(projectCreateRequest.toEntity(inviationLink, member));
         createInitialTextChannel(project.getId());
         return ProjectResponse.from(project);
     }

@@ -48,7 +48,7 @@ public class ProjectServiceTest {
     @DisplayName("프로젝트 생성")
     void createProject() {
         // given
-        ProjectCreateRequest request = new ProjectCreateRequest("name", "description", "http://test.com", Boolean.FALSE);
+        ProjectCreateRequest request = new ProjectCreateRequest("name", "description", Boolean.FALSE);
         memberRepository.save(member);
 
         // when
@@ -77,7 +77,6 @@ public class ProjectServiceTest {
         assertThat(response.name()).isEqualTo(project.getName());
         assertThat(response.description()).isEqualTo(project.getDescription());
         assertThat(response.enabled()).isEqualTo(project.getEnabled());
-        assertThat(response.invitationLink()).isEqualTo(project.getInvitationLink());
         assertThat(response.invitationStatus()).isEqualTo(project.getInvitationStatus());
     }
 

@@ -20,6 +20,7 @@ import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -125,11 +126,12 @@ public class ProjectControllerTest extends RestDocsTest {
     @Test
     @DisplayName("프로젝트 생성")
     void createProject() throws Exception {
+
         //given
         given(projectService.create(any(ProjectCreateRequest.class), any(Long.class)))
                 .willReturn(ProjectResponse.from(project));
 
-        ProjectCreateRequest request = new ProjectCreateRequest("name", "description", "http://test.com", Boolean.FALSE);
+        ProjectCreateRequest request = new ProjectCreateRequest("name", "description", Boolean.FALSE);
 
 
         //when
@@ -141,7 +143,6 @@ public class ProjectControllerTest extends RestDocsTest {
         perform.andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value(request.name()))
                 .andExpect(jsonPath("$.description").value(request.description()))
-                .andExpect(jsonPath("$.invitationLink").value(request.invitationLink()))
                 .andExpect(jsonPath("$.invitationStatus").value(request.invitationStatus()));
 
         perform.andDo(print())

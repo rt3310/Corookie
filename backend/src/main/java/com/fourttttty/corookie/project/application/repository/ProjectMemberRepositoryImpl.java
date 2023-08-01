@@ -35,5 +35,10 @@ public class ProjectMemberRepositoryImpl implements ProjectMemberRepository {
     public long countByProject(Project project) {
         return projectMemberJpaRepository.countByProject(project);
     }
+
+    @Override
+    public void create(Project project, Member member) {
+        projectMemberJpaRepository.save(new ProjectMember(project, member));
+    }
 }
 

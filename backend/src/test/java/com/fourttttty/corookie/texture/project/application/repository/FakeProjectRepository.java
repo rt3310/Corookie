@@ -2,6 +2,7 @@ package com.fourttttty.corookie.texture.project.application.repository;
 
 import com.fourttttty.corookie.project.application.repository.ProjectRepository;
 import com.fourttttty.corookie.project.domain.Project;
+import jakarta.persistence.EntityNotFoundException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +17,17 @@ public class FakeProjectRepository implements ProjectRepository {
     @Override
     public Optional<Project> findById(Long id) {
         return Optional.ofNullable(store.get(id));
+    }
+
+    @Override
+    public Optional<Project> findByInvitationLink(String invitationLink) {
+        for (Map.Entry<Long, Project> item : store.entrySet()) {
+            Project project = item.getValue();
+            if(project.getInvitationLink().equals(invitationLink)){
+                return Optional.of(project);
+            }
+        }
+       throw new EntityNotFoundException();
     }
 
     @Override

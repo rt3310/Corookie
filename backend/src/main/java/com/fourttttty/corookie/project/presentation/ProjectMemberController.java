@@ -2,12 +2,11 @@ package com.fourttttty.corookie.project.presentation;
 
 
 import com.fourttttty.corookie.project.application.service.ProjectMemberService;
+import com.fourttttty.corookie.project.dto.request.ProjectMemberCreateRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,6 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProjectMemberController {
 
     private final ProjectMemberService projectMemberService;
+
+    @PostMapping
+    public ResponseEntity<Object> projectMemberCreate(ProjectMemberCreateRequest request){
+        projectMemberService.create(request);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
 
     @DeleteMapping("/{memberId}")
     public ResponseEntity<Object> projectMemberDelete(@PathVariable Long memberId, @PathVariable Long projectId) {

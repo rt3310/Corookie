@@ -5,6 +5,7 @@ import com.fourttttty.corookie.member.domain.Member;
 import com.fourttttty.corookie.project.application.repository.ProjectMemberRepository;
 import com.fourttttty.corookie.project.application.repository.ProjectRepository;
 import com.fourttttty.corookie.project.domain.Project;
+import com.fourttttty.corookie.project.dto.request.ProjectMemberCreateRequest;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,17 @@ public class ProjectMemberService {
     private final MemberRepository memberRepository;
     private final ProjectRepository projectRepository;
     private final ProjectService projectService;
+
+    @Transactional
+    public void create(ProjectMemberCreateRequest request) {
+        Long projectId = request.projectId();
+        Long memberId = request.memberId();
+
+        Member member = memberRepository.findById(memberId).orElseThrow(EntityNotFoundException::new);
+        Project project = projectRepository.findById(projectId).orElseThrow(EntityNotFoundException::new);
+
+        projectMemberRepository.create(project, member);
+    }
 
     @Transactional
     public void deleteProjectMember(Long projectId, Long memberId) {
