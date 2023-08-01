@@ -11,6 +11,7 @@ export { default as CommentBox } from './textchat/CommentBox'
 export { default as CommentEditBox } from './textchat/CommentEditBox'
 export { default as EditBox } from './textchat/EditBox'
 export { default as Comment } from './textchat/Comment'
+export { default as Message } from './textchat/Message'
 
 export { default as TaskHeader } from './taskboard/TaskHeader'
 export { default as ToggleButton } from './taskboard/ToggleButton'

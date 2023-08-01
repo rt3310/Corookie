@@ -75,7 +75,6 @@ const S = {
         border-radius: 4px;
         height: 31px;
         flex-grow: 1;
-        /* width: 100px; */
         cursor: pointer;
         padding: 0 8px;
         &.active ul {
@@ -85,13 +84,15 @@ const S = {
     `,
     Label: styled.button`
         display: flex;
-        justify-content: space-between;
+        /* justify-content: space-around; */
         align-items: center;
         width: 100%;
     `,
     text: styled.div`
-        justify-content: center;
+        display: flex;
+        flex-grow: 1;
         width: auto;
+        padding: 0 4px;
     `,
     Options: styled.ul`
         position: absolute;

@@ -1,5 +1,10 @@
 import { create } from 'zustand'
 
+export const menuState = create(set => ({
+    menu: '',
+    openMenu: menu => set(state => ({ openedMenu: menu })),
+}))
+
 export const profileState = create(set => ({
     profileOpened: false,
     openProfile: () => set(state => ({ profileOpened: true })),
