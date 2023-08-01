@@ -39,6 +39,10 @@ public class ProjectService {
         return projectRepository.findById(projectId).orElseThrow(EntityNotFoundException::new);
     }
 
+    public Project findEntityByInvitationLink(String invitationLink){
+        return projectRepository.findByInvitationLink(invitationLink).orElseThrow(EntityNotFoundException::new);
+    }
+
     @Transactional
     public ProjectResponse create(ProjectCreateRequest projectCreateRequest, Long memberId) {
         String inviationLink = Base62UuidGenerator.generateCode();

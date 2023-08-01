@@ -11,8 +11,8 @@ import java.util.Optional;
 
 public interface ProjectMemberRepository {
     List<ProjectMember> findByProject(Project project);
-    Optional<ProjectMember> findByProjectAndMember(Project project, Member member);
-    void deleteByProjectAndMember(Project project, Member member);
+    Optional<ProjectMember> findById(ProjectMemberId id);
+    void deleteByProjectAndMember(ProjectMemberId id);
     long countByProject(Project project);
     void create(Project project, Member member);
 }

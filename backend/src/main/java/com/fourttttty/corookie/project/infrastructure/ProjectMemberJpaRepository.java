@@ -10,10 +10,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ProjectMemberJpaRepository extends JpaRepository<ProjectMember, ProjectMemberId>{
-    List<ProjectMember> findByProject(Project project);
-    Optional<ProjectMember> findByMemberAndProject(Project project, Member member);
-    void deleteByMemberAndProject(Project project, Member member);
-    long countByProject(Project project);
-    Optional<Project> findProjectByProjectMemberId(ProjectMemberId id);
-    Optional<Member> findMemberByProjectMemberId(ProjectMemberId id);
+    List<ProjectMember> findByIdProject(Project project);
+    Optional<ProjectMember> findById(ProjectMemberId id);
+    long countByIdProject(Project project);
+    void deleteById(ProjectMemberId id);
+    /*
+    Optional<Project> findProjectById(ProjectMemberId id);
+    Optional<Member> findMemberById(ProjectMemberId id);*/
 }
