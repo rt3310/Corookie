@@ -31,6 +31,7 @@ public class PlanService {
 
     public PlanResponse findById(Long id) {
         Plan plan = planRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        if(!plan.getEnabled()) return null;
         return PlanResponse.from(plan, categoryInPlanService.findAllByPlan(plan).stream()
             .map(categoryInPlan -> PlanCategoryResponse.from(planCategoryService.findById(categoryInPlan.getId().getPlanCategory()
                 .getId())))

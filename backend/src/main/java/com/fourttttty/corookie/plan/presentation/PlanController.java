@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/projects/{projectId}/plans")
-public class planController {
+public class PlanController {
     private final PlanService planService;
 
     @GetMapping("/{planId}")
@@ -30,11 +30,10 @@ public class planController {
     }
 
     @PutMapping("/{planId}")
-    public ResponseEntity<Object> planModify(@PathVariable Long projectId,
+    public ResponseEntity<PlanResponse> planModify(@PathVariable Long projectId,
                                              @PathVariable Long planId,
                                              @RequestBody @Validated PlanUpdateRequest planUpdateRequest) {
-        planService.modifyPlan(planUpdateRequest, planId, projectId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(planService.modifyPlan(planUpdateRequest, planId, projectId));
     }
 
     @DeleteMapping("/{planId}")
@@ -44,7 +43,7 @@ public class planController {
     }
 
     @PostMapping("/{planId}/categories")
-    public ResponseEntity<PlanCategoryResponse> categoryInsert(@PathVariable Long planId,
+    public ResponseEntity<PlanCategoryResponse> categoryCreate(@PathVariable Long planId,
         @RequestParam("categoryContent") String content){
         return ResponseEntity.ok(planService.createPlanCategory(planId,content));
     }
