@@ -59,7 +59,6 @@ class PlanRepositoryTest {
     @DisplayName("find Plan By Id")
     void findById() {
         // given
-
         planRepository.save(plan);
 
         // when

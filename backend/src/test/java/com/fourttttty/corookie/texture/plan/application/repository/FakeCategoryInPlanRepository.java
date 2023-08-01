@@ -27,7 +27,7 @@ public class FakeCategoryInPlanRepository implements CategoryInPlanRepository {
 
     @Override
     public void delete(CategoryInPlan categoryInPlan) {
-        store.remove(categoryInPlan);
+        store.remove(categoryInPlan.getId());
     }
 
     @Override

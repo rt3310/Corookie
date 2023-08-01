@@ -80,7 +80,7 @@ class PlanServiceTest {
     }
 
     @Test
-    @DisplayName("Make plan")
+    @DisplayName("일정 생성")
     void createPlan() {
         // given
 
@@ -97,7 +97,7 @@ class PlanServiceTest {
     }
 
     @Test
-    @DisplayName("Find plan by id")
+    @DisplayName("일정 조회")
     void findById() {
         // given
         memberRepository.save(member);
@@ -115,7 +115,7 @@ class PlanServiceTest {
     }
 
     @Test
-    @DisplayName("Modify plan")
+    @DisplayName("일정 수정")
     void modifyPlan() {
         // given
         memberRepository.save(member);
@@ -135,16 +135,29 @@ class PlanServiceTest {
             });
 
         // when
+        planService.deleteCategory(1L,"testCategory1");
+        planService.deleteCategory(1L,"testCategory2");
+        planService.createPlanCategory(1L,"updateCategory1");
+        planService.createPlanCategory(1L,"updateCategory2");
         PlanResponse modifiedResponse = planService.modifyPlan(updateRequest,1L,1L);
 
         // then
         assertThat(modifiedResponse.planName()).isEqualTo("modifyPlan");
         assertThat(modifiedResponse.description()).isEqualTo("modifyPlanDescription");
-        System.out.println(modifiedResponse.toString());
     }
 
     @Test
-    @DisplayName("delete Plan")
+    @DisplayName("일정 삭제")
     void deletePlan() {
+        // given
+        memberRepository.save(member);
+        projectRepository.save(project);
+        PlanResponse savedResponse = planService.createPlan(planCreateRequest,1L);
+
+        //when
+        planService.deletePlan(1L);
+
+        //then
+        assertThat(planService.findById(1L)).isNull();
     }
 }
