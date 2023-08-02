@@ -2,7 +2,9 @@ package com.fourttttty.corookie.plan.application.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.fourttttty.corookie.member.domain.AuthProvider;
 import com.fourttttty.corookie.member.domain.Member;
+import com.fourttttty.corookie.member.domain.Oauth2;
 import com.fourttttty.corookie.plan.domain.Plan;
 import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.texture.plan.application.repository.FakePlanRepository;
@@ -23,7 +25,7 @@ class PlanRepositoryTest {
     @BeforeEach
     void initObjects() {
         planRepository = new FakePlanRepository();
-        member = new Member("name");
+        member = Member.of(1L,"name","email", Oauth2.of(AuthProvider.KAKAO, "account"));
         project = Project.of("name",
             "description",
             true,

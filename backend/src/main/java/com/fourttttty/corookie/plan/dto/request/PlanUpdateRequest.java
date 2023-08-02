@@ -13,5 +13,5 @@ public record PlanUpdateRequest(@NotNull String planName,
         @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         @NotNull LocalDateTime planEnd,
         @NotNull List<PlanCategoryDeleteRequest> categories,
-        @NotNull List<PlanMember> members) {
+        @NotNull List<PlanMemberDeleteRequest> members) {
 }

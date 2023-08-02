@@ -21,7 +21,6 @@ public class FakePlanCategoryRepository implements PlanCategoryRepository {
             store.put(autoIncrementedId, planCategory.of(autoIncrementedId,planCategory.getContent()));
             return store.get(autoIncrementedId++);
         }
-        System.out.println(first.get().getValue().getContent());
         return first.get().getValue();
     }
 
