@@ -38,7 +38,6 @@ public class Project extends BaseTime {
     @Column(nullable = false)
     private Boolean invitationStatus;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;

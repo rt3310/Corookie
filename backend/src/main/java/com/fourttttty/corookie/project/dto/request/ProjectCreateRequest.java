@@ -1,6 +1,5 @@
 package com.fourttttty.corookie.project.dto.request;
 
-import com.fourttttty.corookie.global.util.Base62UuidGenerator;
 import com.fourttttty.corookie.member.domain.Member;
 import com.fourttttty.corookie.project.domain.Project;
 import jakarta.validation.constraints.NotBlank;

@@ -1,6 +1,5 @@
 package com.fourttttty.corookie.project.application.service;
 
-import com.fourttttty.corookie.global.util.Base62UuidGenerator;
 import com.fourttttty.corookie.member.application.service.MemberService;
 import com.fourttttty.corookie.member.domain.Member;
 import com.fourttttty.corookie.project.application.repository.ProjectRepository;
@@ -45,9 +44,10 @@ public class ProjectService {
 
     @Transactional
     public ProjectResponse create(ProjectCreateRequest projectCreateRequest, Long memberId) {
-        String inviationLink = Base62UuidGenerator.generateCode();
         Member member =  memberService.findEntityById(memberId);
-        Project project = projectRepository.save(projectCreateRequest.toEntity(inviationLink, member));
+        String invitationLink = null;
+        //To-Do : invitationLink 실제 링크 생성해서 넣기
+        Project project = projectRepository.save(projectCreateRequest.toEntity(invitationLink, member));
         createInitialTextChannel(project.getId());
         return ProjectResponse.from(project);
     }

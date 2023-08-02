@@ -41,7 +41,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
 /*
 To-Do :
 JpaAuditingConfig 정상 동작하게 하기
@@ -128,7 +127,6 @@ public class ProjectControllerTest extends RestDocsTest {
     @Test
     @DisplayName("프로젝트 생성")
     void createProject() throws Exception {
-
         //given
         given(projectService.create(any(ProjectCreateRequest.class), any(Long.class)))
                 .willReturn(ProjectResponse.from(project));

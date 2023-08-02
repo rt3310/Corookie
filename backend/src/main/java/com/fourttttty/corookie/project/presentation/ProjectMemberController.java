@@ -12,17 +12,17 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/projects/{projectId}/members")
 public class ProjectMemberController {
-
     private final ProjectMemberService projectMemberService;
 
     @PostMapping
-    public ResponseEntity<Object> projectMemberCreate(ProjectMemberCreateRequest request){
+    public ResponseEntity<Object> projectMemberCreate(ProjectMemberCreateRequest request) {
         projectMemberService.create(request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @DeleteMapping("/{memberId}")
-    public ResponseEntity<Object> projectMemberDelete(@PathVariable Long memberId, @PathVariable Long projectId) {
+    public ResponseEntity<Object> projectMemberDelete(@PathVariable Long memberId,
+                                                      @PathVariable Long projectId) {
         projectMemberService.deleteProjectMember(memberId, projectId);
         return ResponseEntity.noContent().build();
     }

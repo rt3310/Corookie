@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface ProjectMemberJpaRepository extends JpaRepository<ProjectMember, ProjectMemberId>{
+public interface ProjectMemberJpaRepository extends JpaRepository<ProjectMember, ProjectMemberId> {
     List<ProjectMember> findByIdProject(Project project);
     Optional<ProjectMember> findById(ProjectMemberId id);
     long countByIdProject(Project project);
