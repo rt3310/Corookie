@@ -42,4 +42,10 @@ export const PLAN_OPTIONS = {
     },
 }
 
+export const IMOTICON_OPTIONS = {
+    thumb: 'thumb',
+    happy: 'happy',
+    sad: 'sad',
+}
+
 export const MAX_WIDTH = '1920px'
