@@ -102,3 +102,9 @@ export const planRegisterState = create(set => ({
     setPlanStartDate: input => set(state => ({ planStartDate: input })),
     setPlanEndDate: input => set(state => ({ planEndDate: input })),
 }))
+
+export const chatBoxState = create(set => ({
+    chatboxOpened: false,
+    openChatbox: () => set(state => ({ chatboxOpened: true })),
+    closeChatbox: () => set(state => ({ chatboxOpened: false })),
+}))

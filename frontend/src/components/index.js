@@ -27,3 +27,7 @@ export { default as PlanRegister } from './plan/PlanRegister'
 export { default as PlanOptionToggle } from './plan/PlanOptionToggle'
 
 export { default as KanbanBoard } from './taskboard/KanbanBoard'
+
+export { default as VideoBoard } from './videochat/VideoBoard'
+export { default as TextChatBox } from './videochat/TextChatBox'
+export { default as VideoControl } from './videochat/VideoControl'

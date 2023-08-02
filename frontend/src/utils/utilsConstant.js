@@ -7,6 +7,7 @@ export const URL = {
     },
     CHAT: {
         TEXT: '/chat/text',
+        VIDEO: '/chat/video',
     },
     TASK: {
         BOARD: '/task/board',
