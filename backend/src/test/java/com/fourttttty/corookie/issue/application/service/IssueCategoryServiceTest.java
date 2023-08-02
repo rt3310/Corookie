@@ -9,7 +9,9 @@ import com.fourttttty.corookie.issue.domain.IssueProgress;
 import com.fourttttty.corookie.issue.dto.request.IssueCategoryCreateRequest;
 import com.fourttttty.corookie.issue.dto.response.IssueDetailResponse;
 import com.fourttttty.corookie.member.application.repository.MemberRepository;
+import com.fourttttty.corookie.member.domain.AuthProvider;
 import com.fourttttty.corookie.member.domain.Member;
+import com.fourttttty.corookie.member.domain.Oauth2;
 import com.fourttttty.corookie.project.application.repository.ProjectRepository;
 import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.texture.issue.application.repository.FakeIssueCategoryRepository;
@@ -45,7 +47,7 @@ class IssueCategoryServiceTest {
         issueCategoryRepository = new FakeIssueCategoryRepository();
         issueService = new IssueService(issueRepository, projectRepository, memberRepository,
                 new IssueCategoryService(issueCategoryRepository));
-        member = new Member("name");
+        member = Member.of("name", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
         project = Project.of("name", "description", true,
                 "http://test.com", false, member);
     }

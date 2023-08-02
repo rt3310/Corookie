@@ -17,6 +17,11 @@ public class FakeMemberRepository implements MemberRepository {
     }
 
     @Override
+    public Optional<Member> findByOAuth2Account(String account) {
+        return Optional.empty();
+    }
+
+    @Override
     public Member save(Member member) {
         store.put(autoIncrementId++, member);
         return member;
