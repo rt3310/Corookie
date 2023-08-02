@@ -17,7 +17,7 @@ const color = {
     main: '#286EF0',
     pending: '#FFC908',
     warning: '#FF1304',
-    success: '#0DDB9D',
+    success: '#2BEFB4',
     white: '#FFF',
     black: '#000',
     darkgray: '#333',
@@ -25,9 +25,15 @@ const color = {
     middlegray: '#BDBDBD',
     lightgray: '#EEE',
     gray: '#A0A0A0',
+    orange: '#FF8A00',
+    pink: '#FF5BDB',
 
     mainFilter: 'invert(34%) sepia(44%) saturate(5088%) hue-rotate(211deg) brightness(99%) contrast(90%)',
     warningFilter: 'invert(16%) sepia(51%) saturate(7032%) hue-rotate(357deg) brightness(105%) contrast(108%)',
+}
+
+const font = {
+    main: `'Noto Sans KR', 'Pretendard', sans-serif`,
 }
 
 const fontsize = {
@@ -55,6 +61,7 @@ const Theme = {
     common,
     color,
     shadow,
+    font,
     fontsize,
     lineheight,
 }

@@ -1,12 +1,44 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
+import DatePicker from 'react-datepicker'
+import { ko } from 'date-fns/esm/locale'
 
 import { IoIosClose } from 'react-icons/io'
 
 import * as components from 'components'
 import * as style from 'style'
+import * as hooks from 'hooks'
 
 const PlanRegister = ({ setOpenRegister }) => {
+    const { planStartDate, setPlanStartDate, planEndDate, setPlanEndDate } = hooks.planRegisterState()
+
+    useEffect(() => {
+        const now = new Date()
+        setPlanEndDate(now)
+        setPlanStartDate(now)
+
+        return () => {
+            setPlanEndDate(null)
+            setPlanStartDate(null)
+        }
+    }, [])
+
+    const changeStartDate = startDate => {
+        if (startDate > planEndDate) {
+            setPlanEndDate(startDate)
+        }
+
+        setPlanStartDate(startDate)
+    }
+
+    const changeEndDate = endDate => {
+        if (endDate < planStartDate) {
+            setPlanStartDate(endDate)
+        }
+
+        setPlanEndDate(endDate)
+    }
+
     return (
         <S.Wrap>
             <S.Header>
@@ -19,7 +51,24 @@ const PlanRegister = ({ setOpenRegister }) => {
                 <S.PlanTitleLabel>제목</S.PlanTitleLabel>
                 <S.PlanTitleInput placeholder="제목 작성" />
             </S.PlanTitleBox>
-            <components.PlanOptionToggle state="date" />
+            <S.PlanDateBox>
+                <S.PlanDateLabel>날짜</S.PlanDateLabel>
+                <S.PlanDatePickerBox>
+                    <S.PlanDatePicker
+                        selected={planStartDate}
+                        onChange={date => changeStartDate(date)}
+                        dateFormat="yyyy.MM.dd"
+                        locale={ko}
+                    />
+                    <span> ~ </span>
+                    <S.PlanDatePicker
+                        selected={planEndDate}
+                        onChange={date => changeEndDate(date)}
+                        dateFormat="yyyy.MM.dd"
+                        locale={ko}
+                    />
+                </S.PlanDatePickerBox>
+            </S.PlanDateBox>
             <components.PlanOptionToggle state="member" />
             <components.PlanOptionToggle state="category" />
             <S.PlanContentBox>
@@ -42,7 +91,23 @@ const S = {
         box-shadow: ${({ theme }) => theme.shadow.card};
         margin: 16px;
         padding: 16px;
+        overflow: auto;
         /* animation: ${style.leftSlide} 0.4s linear; */
+
+        &::-webkit-scrollbar {
+            height: 0px;
+            width: 4px;
+        }
+        &::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        &::-webkit-scrollbar-thumb {
+            background: ${({ theme }) => theme.color.gray};
+            border-radius: 45px;
+        }
+        &::-webkit-scrollbar-thumb:hover {
+            background: ${({ theme }) => theme.color.gray};
+        }
     `,
     Header: styled.div`
         display: flex;
@@ -87,8 +152,37 @@ const S = {
         flex-grow: 5;
         border: none;
         outline: none;
+        font-family: ${({ theme }) => theme.font.main};
         font-size: ${({ theme }) => theme.fontsize.title3};
         padding: 0 16px;
+    `,
+    PlanDateBox: styled.div`
+        display: flex;
+        align-items: center;
+        margin: 10px 0;
+        padding: 0 48px 0 14px;
+    `,
+    PlanDateLabel: styled.div``,
+    PlanDatePickerBox: styled.div`
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 230px;
+        flex-wrap: nowrap;
+        white-space: nowrap;
+        margin: 0 0 0 auto;
+
+        & > span {
+            flex-grow: 1;
+            text-align: center;
+        }
+    `,
+    PlanDatePicker: styled(DatePicker)`
+        width: 100px;
+        height: 32px;
+        padding: 8px 16px;
+        border-radius: 8px;
+        border: 1px solid ${({ theme }) => theme.color.gray};
     `,
     PlanContentBox: styled.div`
         min-height: 300px;
@@ -111,12 +205,13 @@ const S = {
         resize: none;
         border: none;
         padding: 16px 0;
-        font-family: 'Noto Sans KR', 'Pretendard', sans-serif;
+        font-family: ${({ theme }) => theme.font.main};
         font-size: ${({ theme }) => theme.fontsize.sub1};
     `,
     SaveButton: styled.button`
         width: 60px;
         height: 38px;
+        min-height: 38px;
         align-self: center;
         border-radius: 8px;
         border: 1px solid ${({ theme }) => theme.color.main};

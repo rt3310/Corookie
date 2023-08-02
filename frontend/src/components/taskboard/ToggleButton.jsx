@@ -74,8 +74,9 @@ const S = {
         border: solid 1px ${({ theme }) => theme.color.gray};
         border-radius: 4px;
         height: 31px;
-        width: 100px;
+        flex-grow: 1;
         cursor: pointer;
+        padding: 0 8px;
         &.active ul {
             max-height: 500px;
             border: solid 1px ${({ theme }) => theme.color.gray};
@@ -83,19 +84,21 @@ const S = {
     `,
     Label: styled.button`
         display: flex;
-        justify-content: space-around;
+        /* justify-content: space-around; */
         align-items: center;
         width: 100%;
     `,
     text: styled.div`
-        justify-content: center;
+        display: flex;
+        flex-grow: 1;
         width: auto;
+        padding: 0 4px;
     `,
     Options: styled.ul`
         position: absolute;
         top: 31px;
         left: 0;
-        width: inherit;
+        width: 100%;
         background: #fff;
         color: #000;
         list-style-type: none;
@@ -107,6 +110,14 @@ const S = {
         transition: 0.3s;
         font-size: 10pt;
         z-index: 999;
+
+        &::-webkit-scrollbar {
+            height: 0px;
+            width: 0px;
+        }
+        &::-webkit-scrollbar-track {
+            background: transparent;
+        }
     `,
     Option: styled.li`
         padding: 8px;

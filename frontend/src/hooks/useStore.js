@@ -1,5 +1,10 @@
 import { create } from 'zustand'
 
+export const menuState = create(set => ({
+    menu: '',
+    openMenu: menu => set(state => ({ openedMenu: menu })),
+}))
+
 export const profileState = create(set => ({
     profileOpened: false,
     openProfile: () => set(state => ({ profileOpened: true })),
@@ -68,7 +73,6 @@ export const statusState = create(set => ({
     setValue: input => set(state => ({ value: input })),
 }))
 
-
 export const issueDetailState = create(set => ({
     issueDetailOpened: '-1',
     openIssueDetail: input => set(state => ({ issueDetailOpened: input })),
@@ -90,4 +94,11 @@ export const dateState = create(set => ({
     setMonthEnd: input => set(state => ({ monthEnd: input })),
     setStartDate: input => set(state => ({ startDate: input })),
     setEndDate: input => set(state => ({ endDate: input })),
+}))
+
+export const planRegisterState = create(set => ({
+    planStartDate: null,
+    planEndDate: null,
+    setPlanStartDate: input => set(state => ({ planStartDate: input })),
+    setPlanEndDate: input => set(state => ({ planEndDate: input })),
 }))

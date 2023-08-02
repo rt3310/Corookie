@@ -3,11 +3,13 @@ import styled from 'styled-components'
 import * as components from 'components'
 
 import * as hooks from 'hooks'
+import * as utils from 'utils'
 import { IoSearch, IoAdd } from 'react-icons/io5'
 
 const TaskHeader = () => {
     const { showIssue, openIssue, openKanban } = hooks.taskState()
     const { issueCreateOpened, openIssueCreate } = hooks.issueCreateState()
+    const { closeIssueDetail } = hooks.issueDetailState()
 
     const priorityList = ['Highest', 'High', 'Normal', 'Low', 'Lowest']
     const managerList = ['황상미', '최효빈', '신승수', '박종서', '서원호', '권현수']
@@ -18,6 +20,11 @@ const TaskHeader = () => {
         console.log(issueCreateOpened)
     }, [issueCreateOpened])
 
+    const openKanbanHandle = () => {
+        openKanban()
+        closeIssueDetail()
+    }
+
     return (
         <S.Header>
             <S.Title>
@@ -25,7 +32,7 @@ const TaskHeader = () => {
                     이슈 리스트
                 </S.IssueTitle>
                 <S.DivisionLine></S.DivisionLine>
-                <S.KanbanTitle onClick={() => openKanban()} showIssue={showIssue}>
+                <S.KanbanTitle onClick={() => openKanbanHandle()} showIssue={showIssue}>
                     칸반 보드
                 </S.KanbanTitle>
             </S.Title>
@@ -38,18 +45,18 @@ const TaskHeader = () => {
                         </S.SearchButton>
                     </S.TopicFilter>
                     <S.ToggleFilter>
-                        <components.ToggleButton defaultVal="priority" list={priorityList} />
+                        <components.ToggleButton defaultVal={utils.ISSUE_OPTIONS.priority} list={priorityList} />
                     </S.ToggleFilter>
                     <S.ToggleFilter>
-                        <components.ToggleButton defaultVal="manager" list={managerList} />
+                        <components.ToggleButton defaultVal={utils.ISSUE_OPTIONS.manager} list={managerList} />
                     </S.ToggleFilter>
-                    <S.ToggleFilter>
-                        <components.ToggleButton defaultVal="category" list={categoryList} />
-                    </S.ToggleFilter>
+                    <S.CategoryToggleFilter>
+                        <components.ToggleButton defaultVal={utils.ISSUE_OPTIONS.category} list={categoryList} />
+                    </S.CategoryToggleFilter>
                     {showIssue && (
-                        <S.ToggleFilter>
-                            <components.ToggleButton defaultVal="status" list={statusList} />
-                        </S.ToggleFilter>
+                        <S.StatusToggleFilter>
+                            <components.ToggleButton defaultVal={utils.ISSUE_OPTIONS.status} list={statusList} />
+                        </S.StatusToggleFilter>
                     )}
                 </S.Filters>
                 {showIssue && (
@@ -146,6 +153,23 @@ const S = {
         display: flex;
         align-items: center;
         justify-content: space-between;
+        width: 80px;
+        max-height: 31px;
+        margin: 0 8px;
+    `,
+    CategoryToggleFilter: styled.div`
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 115px;
+        max-height: 31px;
+        margin: 0 8px;
+    `,
+    StatusToggleFilter: styled.div`
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100px;
         max-height: 31px;
         margin: 0 8px;
     `,
@@ -156,8 +180,22 @@ const S = {
         height: 31px;
         margin: 0 8px;
         padding: 8px;
+        border-radius: 8px;
+        white-space: nowrap;
+        border: 1px solid ${({ theme }) => theme.color.main};
         background-color: ${({ theme }) => theme.color.main};
-        border-radius: 4px;
+        color: ${({ theme }) => theme.color.white};
+        margin: 0 16px;
+        transition-duration: 0.2s;
+
+        &:hover {
+            background-color: ${({ theme }) => theme.color.white};
+            color: ${({ theme }) => theme.color.main};
+            box-shadow: none;
+            & svg {
+                color: ${({ theme }) => theme.color.main};
+            }
+        }
         cursor: pointer;
         & svg {
             color: ${({ theme }) => theme.color.white};
@@ -167,7 +205,6 @@ const S = {
     `,
     CreateText: styled.div`
         font-size: ${({ theme }) => theme.fontsize.sub1};
-        color: ${({ theme }) => theme.color.white};
     `,
 }
 export default TaskHeader

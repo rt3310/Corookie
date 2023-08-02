@@ -55,6 +55,7 @@ const S = {
         margin: 0 0 0 auto;
         cursor: pointer;
         &.active ul {
+            border: solid 1px ${({ theme }) => theme.color.gray};
             max-height: 500px;
         }
     `,
@@ -82,11 +83,21 @@ const S = {
         max-height: 0;
         transition: 0.3s;
         font-size: ${({ theme }) => theme.fontsize.sub1};
-        border: solid 1px ${({ theme }) => theme.color.gray};
         z-index: 999;
 
-        .isActive & {
-            border: solid 1px ${({ theme }) => theme.color.gray};
+        &::-webkit-scrollbar {
+            height: 0px;
+            width: 4px;
+        }
+        &::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        &::-webkit-scrollbar-thumb {
+            background: ${({ theme }) => theme.color.gray};
+            border-radius: 45px;
+        }
+        &::-webkit-scrollbar-thumb:hover {
+            background: ${({ theme }) => theme.color.gray};
         }
     `,
     Option: styled.li`
@@ -95,6 +106,7 @@ const S = {
         white-space: nowrap;
         &:hover {
             background-color: ${({ theme }) => theme.color.main};
+            color: ${({ theme }) => theme.color.white};
         }
 
         &:first-child {
