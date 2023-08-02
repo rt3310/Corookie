@@ -33,10 +33,9 @@ const TaskBoard = () => {
         <S.Wrap>
             <components.TaskHeader />
             <S.IssueContainer>
-                {showIssue && <components.IssueBoard />}
+                {showIssue ? <components.IssueBoard /> : <components.KanbanBoard />}
                 {issueDetailOpened !== '-1' && <components.IssueDetail id={issueDetailOpened} />}
             </S.IssueContainer>
-            {!showIssue && <components.KanbanBoard />}
         </S.Wrap>
     )
 }
@@ -51,6 +50,7 @@ const S = {
         display: flex;
         width: 100%;
         height: 100%;
+        max-height: calc(100vh - 208px);
     `,
 }
 
