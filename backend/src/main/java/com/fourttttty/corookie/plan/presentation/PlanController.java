@@ -1,10 +1,14 @@
 package com.fourttttty.corookie.plan.presentation;
 
 import com.fourttttty.corookie.plan.application.service.PlanService;
+import com.fourttttty.corookie.plan.dto.request.PlanCategoryCreateRequest;
 import com.fourttttty.corookie.plan.dto.request.PlanCreateRequest;
 
+import com.fourttttty.corookie.plan.dto.request.PlanMemberCreateRequest;
+import com.fourttttty.corookie.plan.dto.request.PlanMemberDeleteRequest;
 import com.fourttttty.corookie.plan.dto.request.PlanUpdateRequest;
 import com.fourttttty.corookie.plan.dto.response.PlanCategoryResponse;
+import com.fourttttty.corookie.plan.dto.response.PlanMemberResponse;
 import com.fourttttty.corookie.plan.dto.response.PlanResponse;
 import lombok.RequiredArgsConstructor;
 
@@ -25,15 +29,15 @@ public class PlanController {
 
     @PostMapping
     public ResponseEntity<PlanResponse> planCreate(@PathVariable Long projectId,
-                                                   @RequestBody @Validated PlanCreateRequest planCreateRequest) {
-        return ResponseEntity.ok(planService.createPlan(planCreateRequest, projectId));
+        @RequestBody @Validated PlanCreateRequest request) {
+        return ResponseEntity.ok(planService.createPlan(request, projectId));
     }
 
     @PutMapping("/{planId}")
     public ResponseEntity<PlanResponse> planModify(@PathVariable Long projectId,
-                                             @PathVariable Long planId,
-                                             @RequestBody @Validated PlanUpdateRequest planUpdateRequest) {
-        return ResponseEntity.ok(planService.modifyPlan(planUpdateRequest, planId, projectId));
+        @PathVariable Long planId,
+        @RequestBody @Validated PlanUpdateRequest request) {
+        return ResponseEntity.ok(planService.modifyPlan(request, planId, projectId));
     }
 
     @DeleteMapping("/{planId}")
@@ -44,14 +48,27 @@ public class PlanController {
 
     @PostMapping("/{planId}/categories")
     public ResponseEntity<PlanCategoryResponse> categoryCreate(@PathVariable Long planId,
-        @RequestParam("categoryContent") String content){
-        return ResponseEntity.ok(planService.createPlanCategory(planId,content));
+        @RequestBody @Validated PlanCategoryCreateRequest request) {
+        return ResponseEntity.ok(planService.createPlanCategory(planId, request));
     }
 
     @DeleteMapping("/{planId}/categories")
     public ResponseEntity<Object> categoryDelete(@PathVariable Long planId,
-        @RequestParam("categoryContent") String content){
-        planService.deleteCategory(planId,content);
+        @RequestBody @Validated String content) {
+        planService.deletePlanCategory(planId, content);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{planId}/members")
+    public ResponseEntity<PlanMemberResponse> memberCreate(@PathVariable Long planId,
+        @RequestBody @Validated PlanMemberCreateRequest request) {
+        return ResponseEntity.ok(planService.createPlanMember(planId, request));
+    }
+
+    @DeleteMapping("/{planId}/members")
+    public ResponseEntity<Object> memberDelete(@PathVariable Long planId,
+        @RequestBody @Validated PlanMemberDeleteRequest request){
+        planService.deletePlanMember(planId, request);
         return ResponseEntity.noContent().build();
     }
 }

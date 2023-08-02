@@ -2,6 +2,7 @@ package com.fourttttty.corookie.plan.application.service;
 
 import com.fourttttty.corookie.plan.application.repository.PlanCategoryRepository;
 import com.fourttttty.corookie.plan.domain.PlanCategory;
+import com.fourttttty.corookie.plan.dto.request.PlanCategoryCreateRequest;
 import com.fourttttty.corookie.plan.dto.response.PlanCategoryResponse;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -14,9 +15,9 @@ public class PlanCategoryService {
     private final PlanCategoryRepository planCategoryRepository;
 
     @Transactional
-    public PlanCategory create(String content) {
-        return planCategoryRepository.findByContent(content)
-            .orElse(planCategoryRepository.save(PlanCategory.of(content)));
+    public PlanCategory create(PlanCategoryCreateRequest request) {
+        return planCategoryRepository.findByContent(request.content())
+            .orElse(planCategoryRepository.save(PlanCategory.of(request.content())));
     }
 
     public PlanCategory findById(Long id){

@@ -1,6 +1,5 @@
 package com.fourttttty.corookie.plan.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fourttttty.corookie.plan.domain.Plan;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
@@ -11,12 +10,12 @@ import java.time.LocalDateTime;
 public record PlanResponse(@NotNull Long planId,
                            @NotNull String planName,
                            @NotNull String description,
-                           @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
                            @NotNull LocalDateTime planStart,
-                           @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
                            @NotNull LocalDateTime planEnd,
-                           @NotNull List<PlanCategoryResponse> categories) {
-    public static PlanResponse from(Plan plan, List<PlanCategoryResponse> categories) {
+                           @NotNull List<PlanCategoryResponse> categories,
+                           @NotNull List<PlanMemberResponse> members,
+                           @NotNull Boolean enabled) {
+    public static PlanResponse from(Plan plan, List<PlanCategoryResponse> categories, List<PlanMemberResponse> members) {
         return PlanResponse.builder()
             .planId(plan.getId())
             .planName(plan.getPlanName())
@@ -24,6 +23,8 @@ public record PlanResponse(@NotNull Long planId,
             .planStart(plan.getPlanStart())
             .planEnd(plan.getPlanEnd())
             .categories(categories)
+            .members(members)
+            .enabled(plan.getEnabled())
             .build();
     }
 }

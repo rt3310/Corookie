@@ -4,7 +4,7 @@ import com.fourttttty.corookie.plan.application.repository.CategoryInPlanReposit
 import com.fourttttty.corookie.plan.domain.CategoryInPlan;
 import com.fourttttty.corookie.plan.domain.Plan;
 import com.fourttttty.corookie.plan.domain.PlanCategory;
-import com.fourttttty.corookie.plan.dto.request.PlanCategoryUpdateRequest;
+import com.fourttttty.corookie.plan.dto.request.PlanCategoryCreateRequest;
 import com.fourttttty.corookie.plan.dto.response.PlanCategoryResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +19,8 @@ public class CategoryInPlanService {
     private final PlanCategoryService planCategoryService;
 
     @Transactional
-    public PlanCategoryResponse create(Plan plan, String content) {
-        PlanCategory newPlanCategory = planCategoryService.create(content);
+    public PlanCategoryResponse create(Plan plan, PlanCategoryCreateRequest request) {
+        PlanCategory newPlanCategory = planCategoryService.create(request);
         categoryInPlanRepository.save(CategoryInPlan.of(plan,newPlanCategory));
         return PlanCategoryResponse.from(newPlanCategory);
     }

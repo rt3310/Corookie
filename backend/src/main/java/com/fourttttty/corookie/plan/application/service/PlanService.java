@@ -1,12 +1,18 @@
 package com.fourttttty.corookie.plan.application.service;
 
+import com.fourttttty.corookie.member.application.service.MemberService;
 import com.fourttttty.corookie.plan.application.repository.PlanCategoryRepository;
 import com.fourttttty.corookie.plan.application.repository.PlanRepository;
 import com.fourttttty.corookie.plan.domain.CategoryInPlan;
 import com.fourttttty.corookie.plan.domain.Plan;
+import com.fourttttty.corookie.plan.domain.PlanMember;
+import com.fourttttty.corookie.plan.dto.request.PlanCategoryCreateRequest;
 import com.fourttttty.corookie.plan.dto.request.PlanCreateRequest;
+import com.fourttttty.corookie.plan.dto.request.PlanMemberCreateRequest;
+import com.fourttttty.corookie.plan.dto.request.PlanMemberDeleteRequest;
 import com.fourttttty.corookie.plan.dto.request.PlanUpdateRequest;
 import com.fourttttty.corookie.plan.dto.response.PlanCategoryResponse;
+import com.fourttttty.corookie.plan.dto.response.PlanMemberResponse;
 import com.fourttttty.corookie.plan.dto.response.PlanResponse;
 
 import com.fourttttty.corookie.project.application.repository.ProjectRepository;
@@ -28,57 +34,87 @@ public class PlanService {
     private final PlanCategoryService planCategoryService;
     private final ProjectRepository projectRepository;
     private final PlanCategoryRepository planCategoryRepository;
+    private final PlanMemberService planMemberService;
+    private final MemberService memberService;
 
     public PlanResponse findById(Long id) {
         Plan plan = planRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-        if(!plan.getEnabled()) return null;
-        return PlanResponse.from(plan, categoryInPlanService.findAllByPlan(plan).stream()
-            .map(categoryInPlan -> PlanCategoryResponse.from(planCategoryService.findById(categoryInPlan.getId().getPlanCategory()
-                .getId())))
-            .toList());
+        return PlanResponse.from(plan,
+            categoryInPlanService.findAllByPlan(plan).stream()
+                .map(categoryInPlan -> PlanCategoryResponse.from(
+                    planCategoryService.findById(categoryInPlan
+                        .getId()
+                        .getPlanCategory()
+                        .getId())))
+                .toList(),
+            planMemberService.findAllByPlan(plan));
+    }
+
+    public Plan findEntityById(Long id) {
+        return planRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
     @Transactional
-    public PlanResponse createPlan(PlanCreateRequest planCreateRequest, Long projectId) {
-        Plan plan = planRepository.save(Plan.of(planCreateRequest.planName(),
-            planCreateRequest.description(),
-            planCreateRequest.planStart(),
-            planCreateRequest.planEnd(),
+    public PlanResponse createPlan(PlanCreateRequest request, Long projectId) {
+        Plan plan = planRepository.save(Plan.of(request.planName(),
+            request.description(),
+            request.planStart(),
+            request.planEnd(),
             true,
             projectRepository.findById(projectId).orElseThrow(EntityNotFoundException::new)));
 
-        return PlanResponse.from(plan, planCreateRequest.categories().stream()
-            .map(request -> categoryInPlanService.create(plan,request.content()))
-            .toList());
+        return PlanResponse.from(plan,
+            request.categories().stream()
+                .map(categoryRequest -> categoryInPlanService.create(plan, categoryRequest))
+                .toList(),
+            request.members().stream()
+                .map(memberRequest -> planMemberService.create(plan, memberRequest))
+                .toList());
     }
 
     @Transactional
-    public PlanResponse modifyPlan(PlanUpdateRequest planUpdateRequest, Long planId, Long projectId) {
-        Plan plan = planRepository.findById(planId).orElseThrow(EntityNotFoundException::new);
-        plan.update(planUpdateRequest.planName(),
-                planUpdateRequest.description(),
-                planUpdateRequest.planStart(),
-                planUpdateRequest.planEnd(),
-                projectRepository.findById(projectId).orElseThrow(EntityNotFoundException::new));
+    public PlanResponse modifyPlan(PlanUpdateRequest request, Long planId,
+        Long projectId) {
+        Plan plan = findEntityById(planId);
+        plan.update(request.planName(),
+            request.description(),
+            request.planStart(),
+            request.planEnd(),
+            projectRepository.findById(projectId).orElseThrow(EntityNotFoundException::new));
 
-        return PlanResponse.from(plan,categoryInPlanService.findAllByPlan(plan).stream()
-            .map(categoryInPlan -> PlanCategoryResponse.from(categoryInPlan.getId().getPlanCategory()))
-            .toList());
+        return PlanResponse.from(plan,
+            categoryInPlanService.findAllByPlan(plan).stream()
+                .map(categoryInPlan -> PlanCategoryResponse.from(
+                    categoryInPlan.getId().getPlanCategory()))
+                .toList(),
+            planMemberService.findAllByPlan(plan));
     }
 
     @Transactional
     public void deletePlan(Long planId) {
-        planRepository.findById(planId).orElseThrow(EntityNotFoundException::new).delete();
+        findEntityById(planId).delete();
     }
 
     @Transactional
-    public PlanCategoryResponse createPlanCategory(Long id, String content){
-        return categoryInPlanService.create(planRepository.findById(id).orElseThrow(EntityNotFoundException::new),content);
+    public PlanCategoryResponse createPlanCategory(Long id, PlanCategoryCreateRequest request) {
+        return categoryInPlanService.create(findEntityById(id), request);
     }
 
     @Transactional
-    public void deleteCategory(Long id, String content){
-        categoryInPlanService.deleteCategoryInPlan(CategoryInPlan.of(planRepository.findById(id).orElseThrow(EntityNotFoundException::new),
-            planCategoryRepository.findByContent(content).orElseThrow(EntityNotFoundException::new)));
+    public void deletePlanCategory(Long id, String content) {
+        categoryInPlanService.deleteCategoryInPlan(
+            CategoryInPlan.of(findEntityById(id),
+                planCategoryRepository.findByContent(content)
+                    .orElseThrow(EntityNotFoundException::new)));
+    }
+
+    @Transactional
+    public PlanMemberResponse createPlanMember(Long id, PlanMemberCreateRequest request) {
+        return planMemberService.create(findEntityById(id), request);
+    }
+
+    @Transactional
+    public void deletePlanMember(Long id, PlanMemberDeleteRequest request) {
+        planMemberService.deletePlanMember(PlanMember.of(memberService.findEntityById(request.id()), findEntityById(id)));
     }
 }
