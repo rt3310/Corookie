@@ -36,7 +36,7 @@ public class ProjectMemberRepositoryImpl implements ProjectMemberRepository {
     }
 
     @Override
-    public void create(Project project, Member member) {
+    public void save(Project project, Member member) {
         projectMemberJpaRepository.save(new ProjectMember(project, member));
     }
 }
