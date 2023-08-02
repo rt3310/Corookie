@@ -24,13 +24,10 @@ public class ProjectMemberService {
 
     @Transactional
     public void create(ProjectMemberCreateRequest request) {
-        Long projectId = request.projectId();
-        Long memberId = request.memberId();
-
-        Member member = memberRepository.findById(memberId).orElseThrow(EntityNotFoundException::new);
-        Project project = projectRepository.findById(projectId).orElseThrow(EntityNotFoundException::new);
-
-        projectMemberRepository.create(project, member);
+        projectMemberRepository.save(projectRepository
+                        .findById(request.projectId())
+                        .orElseThrow(EntityNotFoundException::new),
+                memberRepository.findById(request.memberId()).orElseThrow(EntityNotFoundException::new));
     }
 
     @Transactional

@@ -1,5 +1,6 @@
 package com.fourttttty.corookie.project.application.service;
 
+import com.fourttttty.corookie.member.application.repository.MemberRepository;
 import com.fourttttty.corookie.member.application.service.MemberService;
 import com.fourttttty.corookie.member.domain.Member;
 import com.fourttttty.corookie.project.application.repository.ProjectRepository;
@@ -7,22 +8,25 @@ import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.project.dto.request.ProjectCreateRequest;
 import com.fourttttty.corookie.project.dto.request.ProjectUpdateRequest;
 import com.fourttttty.corookie.project.dto.response.ProjectResponse;
+import com.fourttttty.corookie.textchannel.application.repository.TextChannelRepository;
 import com.fourttttty.corookie.textchannel.application.service.TextChannelService;
 import com.fourttttty.corookie.textchannel.domain.DefaultChannel;
+import com.fourttttty.corookie.textchannel.domain.TextChannel;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class ProjectService {
     private final ProjectRepository projectRepository;
-    private final TextChannelService textChannelService;
-    private final MemberService memberService;
+    private final TextChannelRepository textChannelRepository;
+    private final MemberRepository memberRepository;
 
     public List<ProjectResponse> findAll() {
         return projectRepository.findAll().stream()
@@ -38,24 +42,14 @@ public class ProjectService {
         return projectRepository.findById(projectId).orElseThrow(EntityNotFoundException::new);
     }
 
-    public Project findEntityByInvitationLink(String invitationLink){
-        return projectRepository.findByInvitationLink(invitationLink).orElseThrow(EntityNotFoundException::new);
-    }
-
     @Transactional
     public ProjectResponse create(ProjectCreateRequest projectCreateRequest, Long memberId) {
-        Member member =  memberService.findEntityById(memberId);
+        Member member = memberRepository.findById(memberId).orElseThrow(EntityNotFoundException::new);
         String invitationLink = null;
         //To-Do : invitationLink 실제 링크 생성해서 넣기
         Project project = projectRepository.save(projectCreateRequest.toEntity(invitationLink, member));
-        createInitialTextChannel(project.getId());
+        project.createDefaultTextChannels().forEach(textChannelRepository::save);
         return ProjectResponse.from(project);
-    }
-
-    private void createInitialTextChannel(Long projectId) {
-        for (DefaultChannel defaultChannel : DefaultChannel.values()) {
-            textChannelService.createDefaultChannel(defaultChannel.getChannelName(), projectId);
-        }
     }
 
     @Transactional

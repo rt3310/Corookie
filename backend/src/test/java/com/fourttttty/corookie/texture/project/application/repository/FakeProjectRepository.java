@@ -15,6 +15,12 @@ public class FakeProjectRepository implements ProjectRepository {
     private final Map<Long, Project> store = new HashMap<>();
 
     @Override
+    public Project save(Project project) {
+        store.put(autoIncrementId++, project);
+        return project;
+    }
+
+    @Override
     public Optional<Project> findById(Long id) {
         return Optional.ofNullable(store.get(id));
     }
@@ -34,11 +40,5 @@ public class FakeProjectRepository implements ProjectRepository {
     public List<Project> findAll() {
         return store.values().stream()
                 .toList();
-    }
-
-    @Override
-    public Project save(Project project) {
-        store.put(autoIncrementId++, project);
-        return project;
     }
 }

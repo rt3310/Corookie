@@ -30,6 +30,7 @@ public class ProjectMemberRepositoryImpl implements ProjectMemberRepository {
     public void deleteByProjectAndMember(ProjectMemberId id) {
         projectMemberJpaRepository.deleteById(id);
     }
+
     @Override
     public long countByProject(Project project) {
         return projectMemberJpaRepository.countByIdProject(project);
