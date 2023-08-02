@@ -24,13 +24,6 @@ public class Base62UuidGenerator {
         return Base62UuidGenerator.encode(uuidBytes.array());
     }
 
-    /**
-     * This array is a lookup table that translates 6-bit positive integer index values into their "Base62 Alphabet"
-     * equivalents as specified in Table 1 of RFC 2045 excepting special characters for 62 and 63 values.
-     *
-     * Thanks to "commons" project in ws.apache.org for this code.
-     * http://svn.apache.org/repos/asf/webservices/commons/trunk/modules/util/
-     */
     private static final char[] ENCODE_TABLE = {
             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
             'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f',
@@ -38,17 +31,6 @@ public class Base62UuidGenerator {
             'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
     };
 
-    /**
-     * This array is a lookup table that translates Unicode characters drawn from the "Base64 Alphabet" (as specified in
-     * Table 1 of RFC 2045) into their 6-bit positive integer equivalents. Characters that are not in the Base62
-     * alphabet but fall within the bounds of the array are translated to -1.
-     *
-     * Note that there is no special characters in Base62 alphabet that could represent 62 and 63 values, so they both
-     * is absent in this decode table.
-     *
-     * Thanks to "commons" project in ws.apache.org for this code.
-     * http://svn.apache.org/repos/asf/webservices/commons/trunk/modules/util/
-     */
     private static final byte[] DECODE_TABLE = {
             -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
             -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
@@ -60,22 +42,10 @@ public class Base62UuidGenerator {
             41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51
     };
 
-    /**
-     * Special mask for the data that should be written in compact 5-bits form
-     */
     private static final int COMPACT_MASK = 0x1E; // 00011110
 
-    /**
-     * Mask for extracting 5 bits of the data
-     */
     private static final int MASK_5BITS = 0x1F; // 00011111
 
-    /**
-     * Encodes binary data using a Base62 algorithm.
-     *
-     * @param data binary data to encode
-     * @return String containing Base62 characters
-     */
     public static String encode(byte[] data) {
         // Reserving capacity for the worst case when each output character represents compacted 5-bits data
         final StringBuilder sb = new StringBuilder(data.length * 8 / 5 + 1);
@@ -105,12 +75,6 @@ public class Base62UuidGenerator {
         return sb.toString();
     }
 
-    /**
-     * Decodes a Base62 String into byte array.
-     *
-     * @param base62String String containing Base62 data
-     * @return Array containing decoded data.
-     */
     public static byte[] decode(String base62String) {
         final int length = base62String.length();
 
