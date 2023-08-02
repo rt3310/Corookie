@@ -24,7 +24,7 @@ class IssueRepositoryTest {
     @BeforeEach
     void initObjects() {
         issueRepository = new FakeIssueRepository();
-        member = Member.of("name", Oauth2.of(AuthProvider.KAKAO, "account"));
+        member = Member.of("name", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
         project = Project.of("name",
                 "description",
                 true,

@@ -22,6 +22,9 @@ public class Member {
     @Column(nullable = false)
     private String name;
 
+    @Column
+    private String email;
+
     @Embedded
     private Oauth2 oauth2;
 
@@ -29,13 +32,14 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private List<Role> role = new ArrayList<>(List.of(Role.ROLE_USER));
 
-    private Member(String name, Oauth2 oauth2) {
+    private Member(String name, String email, Oauth2 oauth2) {
         this.name = name;
+        this.email = email;
         this.oauth2 = oauth2;
     }
 
-    public static Member of(String name, Oauth2 oauth2) {
-        return new Member(name, oauth2);
+    public static Member of(String name, String email, Oauth2 oauth2) {
+        return new Member(name, email, oauth2);
     }
 
     public List<SimpleGrantedAuthority> getRole() {

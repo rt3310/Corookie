@@ -47,7 +47,7 @@ class IssueCategoryServiceTest {
         issueCategoryRepository = new FakeIssueCategoryRepository();
         issueService = new IssueService(issueRepository, projectRepository, memberRepository,
                 new IssueCategoryService(issueCategoryRepository));
-        member = Member.of("name", Oauth2.of(AuthProvider.KAKAO, "account"));
+        member = Member.of("name", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
         project = Project.of("name", "description", true,
                 "http://test.com", false, member);
     }

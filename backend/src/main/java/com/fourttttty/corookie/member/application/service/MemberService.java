@@ -16,7 +16,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     public Member save(OAuth2Request oAuth2Request) {
-        return memberRepository.save(Member.of(oAuth2Request.getName(),
+        return memberRepository.save(Member.of(oAuth2Request.getName(), oAuth2Request.getEmail(),
                 Oauth2.of(oAuth2Request.getAuthProvider(), oAuth2Request.getAccountId())));
     }
 

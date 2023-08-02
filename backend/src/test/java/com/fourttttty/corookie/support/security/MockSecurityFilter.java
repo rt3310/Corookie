@@ -25,7 +25,7 @@ public class MockSecurityFilter implements Filter {
     }
 
     private Member createMember() {
-        Member member = Member.of("name", Oauth2.of(AuthProvider.KAKAO, "account"));
+        Member member = Member.of("name", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
         Class<Member> memberClass = Member.class;
         try {
             Field id = memberClass.getDeclaredField("id");
