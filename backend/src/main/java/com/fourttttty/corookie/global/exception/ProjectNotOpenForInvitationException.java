@@ -6,11 +6,11 @@ import lombok.Getter;
 public class ProjectNotOpenForInvitationException extends RuntimeException {
     private final ExceptionCode exceptionCode;
 
-    public ProjectNotOpenForInvitationException(){
+    public ProjectNotOpenForInvitationException() {
         this(ExceptionCode.PROJECT_NOT_OPEN_FOR_INVITATION);
     }
 
-    public ProjectNotOpenForInvitationException(ExceptionCode exceptionCode){
+    public ProjectNotOpenForInvitationException(ExceptionCode exceptionCode) {
         super(exceptionCode.getMessage());
         this.exceptionCode = exceptionCode;
     }
