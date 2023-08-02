@@ -7,8 +7,13 @@ export const menuState = create(set => ({
 
 export const profileState = create(set => ({
     profileOpened: false,
+    profileEdit: false,
+    profileName: '황상미',
     openProfile: () => set(state => ({ profileOpened: true })),
     closeProfile: () => set(state => ({ profileOpened: false })),
+    openEdit: () => set(state => ({ profileEdit: true })),
+    closeEdit: () => set(state => ({ profileEdit: false })),
+    setName: name => set(state => ({ profileName: name })),
 }))
 
 export const commentState = create(set => ({
