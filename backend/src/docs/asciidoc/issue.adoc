@@ -1,0 +1,30 @@
+= Comment API
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+
+== 이슈 등록
+
+=== Request
+
+include::{snippets}/issue-create/http-request.adoc[]
+
+include::{snippets}/issue-create/path-parameters.adoc[]
+
+include::{snippets}/issue-create/query-parameters.adoc[]
+
+include::{snippets}/issue-create/request-fields.adoc[]
+
+=== Response
+
+include::{snippets}/issue-create/http-response.adoc[]
+
+include::{snippets}/issue-create/response-fields.adoc[]
