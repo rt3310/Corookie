@@ -29,7 +29,8 @@ public class InvitationController {
         - 로그인되지 않으면 로그인 페이지로 보내기
         - 로그인되어있는 멤버 정보 얻어오기
         */
-        Member member = new Member("temp_member");
+        Member member = Member.of("이름", "test@test.com", null);
+        //실제 멤버가 아닌 가상의 멤버 정보임, 실제 로그인된 멤버 정보로 대체할 것.
 
         // 프로젝트
         Project project = projectService.findEntityByInvitationLink(invitationLink);

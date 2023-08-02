@@ -2,7 +2,9 @@ package com.fourttttty.corookie.project.application.service;
 
 import com.fourttttty.corookie.member.application.repository.MemberRepository;
 import com.fourttttty.corookie.member.application.service.MemberService;
+import com.fourttttty.corookie.member.domain.AuthProvider;
 import com.fourttttty.corookie.member.domain.Member;
+import com.fourttttty.corookie.member.domain.Oauth2;
 import com.fourttttty.corookie.project.application.repository.ProjectRepository;
 import com.fourttttty.corookie.project.dto.request.ProjectCreateRequest;
 import com.fourttttty.corookie.project.dto.response.ProjectResponse;
@@ -36,7 +38,7 @@ public class ProjectServiceTest {
         projectRepository = new FakeProjectRepository();
         memberRepository = new FakeMemberRepository();
         textChannelRepository = new FakeTextChannelRepository();
-        member = new Member("name");
+        member = Member.of("이름", "test@test.com", null);
         project = Project.of("name", "description", true,
                 "http://test.com", false, member);
         memberService = new MemberService(memberRepository);
@@ -84,7 +86,7 @@ public class ProjectServiceTest {
     @DisplayName("프로젝트 목록 조회")
     void findAll() {
         // given
-        member = new Member("Test Member");
+        member = Member.of("name", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
         List<Project> projectList = new ArrayList<>();
         Project project1 = Project.of("Project 1", "Project 1 Description", Boolean.FALSE, "corookie.com/testlink1", Boolean.FALSE, member);
         Project project2 = Project.of("Project 2", "Project 2 Description", Boolean.TRUE, "corookie.com/testlink2", Boolean.FALSE, member);

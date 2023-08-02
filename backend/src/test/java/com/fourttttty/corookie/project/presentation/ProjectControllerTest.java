@@ -1,7 +1,9 @@
 package com.fourttttty.corookie.project.presentation;
 
 import com.fourttttty.corookie.config.audit.JpaAuditingConfig;
+import com.fourttttty.corookie.member.domain.AuthProvider;
 import com.fourttttty.corookie.member.domain.Member;
+import com.fourttttty.corookie.member.domain.Oauth2;
 import com.fourttttty.corookie.project.application.service.ProjectService;
 import com.fourttttty.corookie.project.dto.request.ProjectUpdateRequest;
 import com.fourttttty.corookie.project.domain.Project;
@@ -66,7 +68,7 @@ public class ProjectControllerTest extends RestDocsTest {
 
     @BeforeEach
     void initTexture() {
-        member = new Member("member");
+        member = Member.of("name", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
         project = Project.of("name",
                 "description",
                 true,

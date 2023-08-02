@@ -1,7 +1,9 @@
 package com.fourttttty.corookie.project.application.repository;
 
 
+import com.fourttttty.corookie.member.domain.AuthProvider;
 import com.fourttttty.corookie.member.domain.Member;
+import com.fourttttty.corookie.member.domain.Oauth2;
 import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.texture.project.application.repository.FakeProjectRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +24,7 @@ class ProjectRepositoryTest {
     @BeforeEach
     void initObjects() {
         projectRepository = new FakeProjectRepository();
-        member = new Member("name");
+        member = Member.of("name", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
         project = Project.of("name",
                 "description",
                 true,
@@ -35,7 +37,6 @@ class ProjectRepositoryTest {
     @DisplayName("프로젝트 저장 테스트")
     void saveProject() {
         // given
-        Member member = new Member("Member");
         Project project = Project.of("New Project", "Project Description", Boolean.FALSE, "corookie.com/testlink", Boolean.FALSE, member);
 
         // when
@@ -75,7 +76,6 @@ class ProjectRepositoryTest {
     @DisplayName("프로젝트 목록 조회")
     void findAll() {
         // given
-        member = new Member("Test Member");
         List<Project> projectList = new ArrayList<>();
         Project project1 = Project.of("Project 1", "Project 1 Description", Boolean.FALSE, "corookie.com/testlink1", Boolean.FALSE, member);
         Project project2 = Project.of("Project 2", "Project 2 Description", Boolean.TRUE, "corookie.com/testlink2", Boolean.FALSE, member);
