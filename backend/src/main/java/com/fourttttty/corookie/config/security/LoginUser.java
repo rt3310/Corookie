@@ -35,4 +35,8 @@ public class LoginUser implements OAuth2User {
     public String getName() {
         return member.getId().toString();
     }
+
+    public Long getMemberId() {
+        return member.getId();
+    }
 }

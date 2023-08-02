@@ -2,12 +2,14 @@ package com.fourttttty.corookie.support;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fourttttty.corookie.config.security.jwt.JwtAuthenticationFilter;
 import com.fourttttty.corookie.support.security.MockSecurityFilter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
@@ -31,6 +33,9 @@ public abstract class RestDocsTest {
     @Autowired
     private ObjectMapper objectMapper;
     protected MockMvc mockMvc;
+
+    @MockBean
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     protected String toJson(Object value) throws JsonProcessingException {
         return objectMapper.writeValueAsString(value);
