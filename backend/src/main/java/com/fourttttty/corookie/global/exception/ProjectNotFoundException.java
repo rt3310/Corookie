@@ -6,11 +6,11 @@ import lombok.Getter;
 public class ProjectNotFoundException extends RuntimeException {
     private final ExceptionCode exceptionCode;
 
-    public ProjectNotFoundException(){
+    public ProjectNotFoundException() {
         this(ExceptionCode.PROJECT_NOT_FOUND);
     }
 
-    public ProjectNotFoundException(ExceptionCode exceptionCode){
+    public ProjectNotFoundException(ExceptionCode exceptionCode) {
         super(exceptionCode.getMessage());
         this.exceptionCode = exceptionCode;
     }
