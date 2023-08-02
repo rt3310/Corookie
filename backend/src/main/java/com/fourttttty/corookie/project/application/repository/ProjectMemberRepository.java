@@ -14,5 +14,5 @@ public interface ProjectMemberRepository {
     Optional<ProjectMember> findById(ProjectMemberId id);
     void deleteByProjectAndMember(ProjectMemberId id);
     long countByProject(Project project);
-    void create(Project project, Member member);
+    void save(Project project, Member member);
 }
