@@ -41,28 +41,23 @@ class IssueControllerTest extends RestDocsTest {
     @MockBean
     private IssueService issueService;
 
-    private Member member;
-    private Project project;
     private Issue issue;
-    private IssueCategory issueCategory;
 
     @BeforeEach
     void initTexture() {
-        member = Member.of("name", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
-        project = Project.of("project",
-                "description",
-                true,
-                "http://test.com",
-                false,
-                member);
+        Member member = Member.of("name", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
         issue = Issue.of("topic",
                 "description",
                 IssueProgress.TODO,
                 IssuePriority.HIGH,
                 true,
-                project,
+                Project.of("project",
+                        "description",
+                        true,
+                        "http://test.com",
+                        false,
+                        member),
                 member);
-        issueCategory = IssueCategory.of(Category.BACKEND, issue);
     }
 
     @Test

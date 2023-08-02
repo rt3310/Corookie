@@ -14,7 +14,7 @@ public class ProjectMember {
     @EmbeddedId
     private ProjectMemberId id;
 
-    private ProjectMember(Project project, Member member) {
+    public ProjectMember(Project project, Member member) {
         this.id = new ProjectMemberId(project, member);
     }
 

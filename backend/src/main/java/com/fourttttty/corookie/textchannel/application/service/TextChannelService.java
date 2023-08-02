@@ -45,13 +45,6 @@ public class TextChannelService {
     }
 
     @Transactional
-    public void createDefaultChannel(String channelName, Long projectId) {
-        TextChannel.of(channelName, true, false,
-                projectRepository.findById(projectId).orElseThrow(EntityNotFoundException::new))
-                .changeNotDeletableChannel();
-    }
-
-    @Transactional
     public TextChannelResponse modify(Long id, String name) {
         TextChannel textChannel = textChannelRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         textChannel.modifyChannelName(name);

@@ -2,6 +2,7 @@ package com.fourttttty.corookie.thread.application.service;
 
 import com.fourttttty.corookie.member.application.service.MemberService;
 import com.fourttttty.corookie.member.domain.Member;
+import com.fourttttty.corookie.textchannel.application.repository.TextChannelRepository;
 import com.fourttttty.corookie.textchannel.application.service.TextChannelService;
 import com.fourttttty.corookie.textchannel.domain.TextChannel;
 import com.fourttttty.corookie.thread.application.repository.ThreadRepository;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.NotActiveException;
 import java.util.List;
 
 @Service
@@ -22,12 +24,12 @@ import java.util.List;
 public class ThreadService {
 
     private final ThreadRepository threadRepository;
-    private final TextChannelService textChannelService;
+    private final TextChannelRepository textChannelRepository;
     private final MemberService memberService;
 
     @Transactional
     public ThreadDetailResponse create(ThreadCreateRequest request, Long writerId) {
-        TextChannel textChannel = textChannelService.findEntityById(request.textChannelId());
+        TextChannel textChannel = textChannelRepository.findById(request.textChannelId()).orElseThrow(EntityNotFoundException::new);
         Member writer = memberService.findEntityById(writerId);
         Thread thread = Thread.of(request.content(), true, 0, textChannel, writer);
         threadRepository.save(thread);
