@@ -1,7 +1,8 @@
 import React, { useRef, useState, useEffect } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { IoIosArrowForward, IoIosArrowDown, IoIosArrowUp } from 'react-icons/io'
+import { IoAdd, IoHappyOutline, IoSadOutline, IoThumbsUp } from 'react-icons/io5'
 import * as components from 'components'
 import * as hooks from 'hooks'
 import * as utils from 'utils'
@@ -10,16 +11,27 @@ const Thread = () => {
     const text = useRef(null)
     const [overText, setOverText] = useState(false)
     const [closedText, setClosedText] = useState(false)
+    const [addImoticon, setAddImoticon] = useState(false)
     const { closeProfile } = hooks.profileState()
     const { commentOpened, openComment, closeComment } = hooks.commentState()
 
-    const msg =
-        '내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용'
+    const [thumbCnt, setThumbCnt] = useState(0)
+    const [happyCnt, setHappyCnt] = useState(0)
+    const [sadCnt, setSadCnt] = useState(0)
+
+    const updateCounts = {
+        [utils.IMOTICON_OPTIONS.thumb]: () => setThumbCnt(thumbCnt + 1),
+        [utils.IMOTICON_OPTIONS.happy]: () => setHappyCnt(happyCnt + 1),
+        [utils.IMOTICON_OPTIONS.sad]: () => setSadCnt(sadCnt + 1),
+    }
+
+    // const msg =
+    //     '내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용'
 
     // const msg =
     //     '```java\npackage boj;\nimport java.io.BufferedReader;\nimport java.io.ioException;\n"문자열"\nimport java.io.InputStreamReader;\npublic class Problem2847\n\tpublic static void main(String[] args)throws Exception, IOException(\n\t\tBufferedReader br = new BufferedReader(new InputStreamReader(System.in));\n\t\tint N = Integer.parseInt(br.readLine());\n\t\tint[] score = new int[N];\n\t\tfor (int i=0; i<N; i++) {\n\t\t\tscore[i]=Integer.parseInt(br.readLine());\n\t\t}\n\t\t int prev=score[N-1];\n\t\t int cnt=0;\n\t\t for (int i=N-2; i>=0; i--) {\n\t\t\t if (score[i]>=prev) {\n\t\t\t	cnt+=score[i]-prev+1;\n\t\t\t	score[i]=prev-1;\n\t\t}\n\t\t prev=score[i];\n\t\t }\n\t\t System.out.println(cnt);\n\t }\n}\n```'
 
-    // const msg = '내용'
+    const msg = '나는 모든 걸 갖췄다. 재미. 세련미. 미. 그리고 황상미.'
 
     const regex = /```(\w*)\n([\s\S]*?)\n```/
     const matches = msg.match(regex)
@@ -64,6 +76,33 @@ const Thread = () => {
         }
     }
 
+    const childImoticonData = [
+        { angle: -60, dist: 40, type: utils.IMOTICON_OPTIONS.thumb },
+        { angle: 0, dist: 40, type: utils.IMOTICON_OPTIONS.happy },
+        { angle: 60, dist: 40, type: utils.IMOTICON_OPTIONS.sad },
+    ]
+
+    const calculatePosition = (angle, dist) => {
+        const radian = angle * (Math.PI / 180)
+        const x = dist * Math.cos(radian)
+        const y = dist * Math.sin(radian)
+        return { x, y }
+    }
+
+    let imoticonRef = useRef(null)
+
+    useEffect(() => {
+        const handleOutside = e => {
+            if (imoticonRef.current && !imoticonRef.current.contains(e.target)) {
+                setAddImoticon(false)
+            }
+        }
+        document.addEventListener('mousedown', handleOutside)
+        return () => {
+            document.removeEventListener('mousedown', handleOutside)
+        }
+    }, [imoticonRef])
+
     return (
         <S.Wrap>
             <S.ChatBox>
@@ -83,7 +122,6 @@ const Thread = () => {
                             3개의 댓글 <IoIosArrowForward />
                         </S.CommentButton>
                     </S.MemberInfoBox>
-                    {/* <S.Text>나는 모든 걸 갖췄다. 재미. 세련미. 미. 그리고 황상미.</S.Text> */}
                     <S.Text ref={text}>
                         <components.Message isCode={isCode} text={code} language={language} />
                     </S.Text>
@@ -101,12 +139,55 @@ const Thread = () => {
                             </div>
                         </S.MoreButton>
                     )}
+                    {!overText && <S.NoMoreButton />}
                 </S.ContentBox>
             </S.ChatBox>
             <S.Imoticons>
-                <components.Imoticon icon={utils.IMOTICON_OPTIONS.thumb} count={'990'} />
-                <components.Imoticon icon={utils.IMOTICON_OPTIONS.happy} count={'2'} />
-                <components.Imoticon icon={utils.IMOTICON_OPTIONS.sad} count={'1'} />
+                <components.Imoticon
+                    onClick={() => setThumbCnt(thumbCnt + 1)}
+                    icon={utils.IMOTICON_OPTIONS.thumb}
+                    count={thumbCnt}
+                    onIconClick={setThumbCnt}
+                />
+                <components.Imoticon
+                    onClick={() => setHappyCnt(happyCnt + 1)}
+                    icon={utils.IMOTICON_OPTIONS.happy}
+                    count={happyCnt}
+                    onIconClick={setHappyCnt}
+                />
+                <components.Imoticon
+                    onClick={() => setSadCnt(sadCnt + 1)}
+                    icon={utils.IMOTICON_OPTIONS.sad}
+                    count={sadCnt}
+                    onIconClick={setSadCnt}
+                />
+                <S.ImoticonAccess ref={imoticonRef}>
+                    <S.AddButton onClick={() => setAddImoticon(!addImoticon)}>
+                        <IoAdd />
+                    </S.AddButton>
+                    <S.NewImoticons>
+                        {childImoticonData.map((item, idx) => {
+                            const pos = calculatePosition(item.angle, item.dist)
+                            return (
+                                <S.NewImoticon
+                                    key={idx}
+                                    open={addImoticon}
+                                    x={pos.x}
+                                    y={pos.y}
+                                    type={item.type}
+                                    onClick={addImoticon ? updateCounts[item.type] : null}>
+                                    {item.type === utils.IMOTICON_OPTIONS.thumb ? (
+                                        <IoThumbsUp />
+                                    ) : item.type === utils.IMOTICON_OPTIONS.happy ? (
+                                        <IoHappyOutline />
+                                    ) : (
+                                        <IoSadOutline />
+                                    )}
+                                </S.NewImoticon>
+                            )
+                        })}
+                    </S.NewImoticons>
+                </S.ImoticonAccess>
             </S.Imoticons>
         </S.Wrap>
     )
@@ -224,6 +305,12 @@ const S = {
             color: ${({ theme }) => theme.color.main};
         }
     `,
+    NoMoreButton: styled.div`
+        display: flex;
+        justify-content: center;
+        height: 24px;
+        width: 100%;
+    `,
     HideButton: styled.div`
         display: flex;
         justify-content: center;
@@ -239,9 +326,94 @@ const S = {
     `,
     Imoticons: styled.div`
         display: flex;
-        justify-content: flex-end;
+        justify-content: flex-start;
         width: 100%;
         height: 24px;
+        padding-left: 52px;
+    `,
+    ImoticonAccess: styled.div`
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: 4px;
+        position: relative;
+    `,
+    AddButton: styled.div`
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        width: 100%;
+        padding: 4px;
+        background-color: ${({ theme }) => theme.color.lightgray};
+        border-radius: 8px;
+        cursor: pointer;
+        z-index: 999;
+
+        &:hover {
+            background-color: ${({ theme }) => theme.color.main};
+        }
+        &:hover > svg {
+            color: ${({ theme }) => theme.color.white};
+        }
+
+        & > svg {
+            width: 100%;
+            height: 100%;
+            color: ${({ theme }) => theme.color.middlegray};
+        }
+    `,
+    NewImoticons: styled.div`
+        position: absolute;
+        display: flex;
+        width: 0px;
+        height: 0px;
+        top: -3px;
+        left: -3px;
+    `,
+    NewImoticon: styled.div`
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
+        background-color: ${({ theme }) => theme.color.main};
+        cursor: pointer;
+        opacity: 0;
+        transition:
+            opacity 0.3s,
+            transform 0.3s;
+        transform: translate(0, 0);
+        background-color: ${props => {
+            switch (props.type) {
+                case utils.IMOTICON_OPTIONS.thumb:
+                    return props.theme.color.success
+                case utils.IMOTICON_OPTIONS.happy:
+                    return props.theme.color.pending
+                case utils.IMOTICON_OPTIONS.sad:
+                    return props.theme.color.warning
+                default:
+                    return props.theme.color.main
+            }
+        }};
+
+        &:hover {
+            transform: ${props => `translate(${props.x}px, ${props.y - 3}px)`};
+        }
+        & svg {
+            width: 80%;
+            height: 80%;
+            color: ${({ theme }) => theme.color.white};
+        }
+
+        ${props =>
+            props.open &&
+            css`
+                opacity: 1;
+                transform: ${props => `translate(${props.x}px, ${props.y}px)`};
+            `}
     `,
 }
 

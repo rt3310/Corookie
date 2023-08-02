@@ -1,20 +1,19 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 import { IoHappyOutline, IoSadOutline, IoThumbsUp } from 'react-icons/io5'
 import * as utils from 'utils'
 
-const Imoticon = ({ icon, count }) => {
-    const [clicked, setClicked] = useState(count)
-    const clickImoticon = () => {
-        if (clicked < 1000) {
-            setClicked(Number(clicked) + 1)
+const Imoticon = ({ icon, count, onIconClick }) => {
+    const handleClick = () => {
+        if (count < 1000) {
+            onIconClick(count + 1)
         }
     }
     return (
         <S.Wrap>
             {count > 0 ? (
-                <S.Container icon={icon} onClick={() => clickImoticon()}>
+                <S.Container icon={icon} onClick={handleClick}>
                     <S.Icon>
                         {icon === utils.IMOTICON_OPTIONS.thumb ? (
                             <IoThumbsUp />
@@ -24,7 +23,7 @@ const Imoticon = ({ icon, count }) => {
                             <IoSadOutline />
                         )}
                     </S.Icon>
-                    <S.Pressed>{clicked >= 1000 ? '+999' : clicked}</S.Pressed>
+                    <S.Pressed>{count >= 1000 ? '+999' : count}</S.Pressed>
                 </S.Container>
             ) : null}
         </S.Wrap>

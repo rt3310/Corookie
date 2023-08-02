@@ -98,11 +98,11 @@ const S = {
         &::after {
             content: '';
             position: absolute;
-            bottom: -20px; /* 선의 위치를 조정하세요 (더 낮게 내리려면 값을 늘립니다) */
+            bottom: -20px;
             left: 0;
             width: 100%;
             height: 1px;
-            background-color: ${({ theme }) => theme.color.lightgray}; /* 선의 색상을 설정합니다. */
+            background-color: ${({ theme }) => theme.color.lightgray};
         }
     `,
 
