@@ -1,17 +1,19 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { IoIosClose } from 'react-icons/io'
+import { IoClose } from 'react-icons/io5'
 
+import * as hooks from 'hooks'
 import * as components from 'components'
 import * as style from 'style'
 
-const CommentBox = ({ openComment, setOpenComment }) => {
+const CommentBox = () => {
+    const { closeComment } = hooks.commentState()
     return (
         <S.Wrap>
             <S.CloseHeader>
-                <S.CloseButton onClick={() => setOpenComment(!openComment)}>
-                    <IoIosClose />
+                <S.CloseButton onClick={() => closeComment()}>
+                    <IoClose />
                 </S.CloseButton>
             </S.CloseHeader>
             <S.Header>3개의 댓글</S.Header>
@@ -56,8 +58,8 @@ const S = {
             color: ${({ theme }) => theme.color.main};
         }
         & svg {
-            width: 40.4px;
-            height: 40.4px;
+            width: 20px;
+            height: 20px;
         }
     `,
     Header: styled.div`

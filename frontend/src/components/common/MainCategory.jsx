@@ -3,15 +3,31 @@ import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
 import * as utils from 'utils'
+import * as hooks from 'hooks'
 
 const MainCategory = () => {
     const navigate = useNavigate()
+    const { menu, openMenu } = hooks.menuState()
+
+    const planClick = () => {
+        navigate(utils.URL.PLAN.CALENDER)
+        openMenu('plan')
+    }
+
+    const taskClick = () => {
+        navigate(utils.URL.TASK.BOARD)
+        openMenu('task')
+    }
 
     return (
         <S.Wrap>
             <S.Container>
-                <S.Button>일정</S.Button>
-                <S.Button onClick={() => navigate(utils.URL.TASK.BOARD)}>이슈</S.Button>
+                <S.Button onClick={() => planClick()} menu={menu} button={'plan'}>
+                    일정
+                </S.Button>
+                <S.Button onClick={() => taskClick()} menu={menu} button={'task'}>
+                    이슈
+                </S.Button>
             </S.Container>
         </S.Wrap>
     )
@@ -39,6 +55,8 @@ const S = {
         padding: 16px;
         font-size: ${({ theme }) => theme.fontsize.sub1};
         cursor: pointer;
+
+        background-color: ${({ theme, menu, button }) => (menu === button ? theme.color.primary : theme.color.white)};
 
         &:hover {
             background-color: ${({ theme }) => theme.color.main};
