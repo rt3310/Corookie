@@ -3,6 +3,7 @@ plugins {
 	id 'org.springframework.boot' version '3.1.1'
 	id 'io.spring.dependency-management' version '1.1.0'
 	id 'org.asciidoctor.jvm.convert' version '3.3.2'
+	id 'jacoco'
 }
 
 group = 'com.fourttttty'
@@ -12,13 +13,13 @@ java {
 	sourceCompatibility = '17'
 }
 
+
 configurations {
 	asciidoctorExtensions
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
 }
-
 
 ext {
 	set('snippetsDir', file("build/generated-snippets"))
@@ -84,4 +85,58 @@ dependencies {
 tasks.named('test') {
 	outputs.dir snippetsDir
 	useJUnitPlatform()
+	finalizedBy jacocoTestReport
+
+	jacoco {
+		destinationFile = file("$buildDir/jacoco/jacoco.exec")
+	}
+}
+
+jacoco {
+	toolVersion '0.8.10'
+}
+
+jacocoTestReport {
+	dependsOn test
+	reports {
+		html.required = true
+		xml.required = false
+		csv.required = false
+
+		html.outputLocation = file("$buildDir/jacocoHtml")
+	}
+	finalizedBy jacocoTestCoverageVerification
+}
+
+jacocoTestCoverageVerification {
+	violationRules {
+		rule {
+//			enabled = true
+//			element = 'CLASS'
+//
+//			limit {
+//				counter = 'BRANCH'
+//				value = 'COVEREDRATIO'
+//				minimum = 0.20
+//			}
+//
+//			limit {
+//				counter = "LINE"
+//				value = "COVEREDRATIO"
+//				minimum = 0.20
+//			}
+//
+//			limit {
+//				counter = "METHOD"
+//				value = 'COVEREDRATIO'
+//				minimum = 0.20
+//			}
+
+
+			excludes = ['*.Application',
+						'com.fourttttty.corookie.global.**',
+						'com.fourttttty.corookie.config.**'
+			]
+		}
+	}
 }

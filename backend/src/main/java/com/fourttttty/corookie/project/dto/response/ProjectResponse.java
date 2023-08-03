@@ -24,5 +24,4 @@ public record ProjectResponse(String name,
                 .invitationStatus(project.getInvitationStatus())
                 .build();
          }
-
 }
