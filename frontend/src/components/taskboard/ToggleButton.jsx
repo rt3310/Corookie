@@ -93,6 +93,7 @@ const S = {
         flex-grow: 1;
         width: auto;
         padding: 0 4px;
+        white-space: nowrap;
     `,
     Options: styled.ul`
         position: absolute;
