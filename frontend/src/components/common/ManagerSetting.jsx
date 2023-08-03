@@ -44,7 +44,11 @@ const ManagerSetting = ({ managerTextRef }) => {
                                     <S.ManagerButton>
                                         <FaCrown onClick={() => managerChange(member.name)} />
                                     </S.ManagerButton>
-                                ) : null}
+                                ) : (
+                                    <S.CurrentManager>
+                                        <FaCrown />
+                                    </S.CurrentManager>
+                                )}
                             </S.Member>
                         )
                     })}
@@ -114,11 +118,21 @@ const S = {
         & svg {
             width: 16px;
             height: 16px;
-            color: ${({ theme }) => theme.color.black};
+            color: ${({ theme }) => theme.color.lightgray};
             cursor: pointer;
             &:hover {
-                color: ${({ theme }) => theme.color.main};
+                color: ${({ theme }) => theme.color.pending};
             }
+        }
+    `,
+    CurrentManager: styled.div`
+        display: flex;
+        width: 100%;
+        justify-content: flex-end;
+        & svg {
+            width: 16px;
+            height: 16px;
+            color: ${({ theme }) => theme.color.main};
         }
     `,
 }
