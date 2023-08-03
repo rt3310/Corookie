@@ -8,6 +8,7 @@ import * as hooks from 'hooks'
 const TopTab = () => {
     const { profileOpened, openProfile, closeProfile } = hooks.profileState()
     const { closeComment } = hooks.commentState()
+    const { closeChatbox } = hooks.chatBoxState()
     const { closeIssueDetail } = hooks.issueDetailState()
     const navigate = useNavigate()
 
@@ -18,6 +19,7 @@ const TopTab = () => {
             openProfile()
             closeComment()
             closeIssueDetail()
+            closeChatbox()
         }
     }
 

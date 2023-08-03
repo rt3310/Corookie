@@ -83,21 +83,6 @@ const S = {
         overflow-y: auto;
         padding: 0 0 16px;
         margin: 0 0 auto 0;
-
-        &::-webkit-scrollbar {
-            height: 0px;
-            width: 4px;
-        }
-        &::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        &::-webkit-scrollbar-thumb {
-            background: ${({ theme }) => theme.color.gray};
-            border-radius: 45px;
-        }
-        &::-webkit-scrollbar-thumb:hover {
-            background: ${({ theme }) => theme.color.gray};
-        }
     `,
 }
 
