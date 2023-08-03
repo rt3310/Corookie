@@ -133,9 +133,17 @@ export const dateState = create(set => ({
     setEndDate: input => set(state => ({ endDate: input })),
 }))
 
-export const planRegisterState = create(set => ({
+export const planDateState = create(set => ({
+    onDragDate: null,
     planStartDate: null,
     planEndDate: null,
+    setOnDragDate: input => set(state => ({ onDragDate: input })),
     setPlanStartDate: input => set(state => ({ planStartDate: input })),
     setPlanEndDate: input => set(state => ({ planEndDate: input })),
+}))
+
+export const planRegisterState = create(set => ({
+    planRegisterOpened: false,
+    openPlanRegister: () => set(state => ({ planRegisterOpened: true })),
+    closePlanRegister: () => set(state => ({ planRegisterOpened: false })),
 }))
