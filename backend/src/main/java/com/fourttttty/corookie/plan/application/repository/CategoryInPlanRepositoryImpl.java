@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class CategoryInPlanRepositoryImpl implements CategoryInPlanRepository {
     private final CategoryInPlanJpaRepository categoryInPlanJpaRepository;
+
     @Override
     public void save(CategoryInPlan categoryInPlan) {
         categoryInPlanJpaRepository.save(categoryInPlan);
