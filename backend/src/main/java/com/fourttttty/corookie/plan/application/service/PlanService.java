@@ -1,6 +1,6 @@
 package com.fourttttty.corookie.plan.application.service;
 
-import com.fourttttty.corookie.member.application.service.MemberService;
+import com.fourttttty.corookie.member.application.repository.MemberRepository;
 import com.fourttttty.corookie.plan.application.repository.PlanCategoryRepository;
 import com.fourttttty.corookie.plan.application.repository.PlanRepository;
 import com.fourttttty.corookie.plan.domain.CategoryInPlan;
@@ -35,7 +35,7 @@ public class PlanService {
     private final ProjectRepository projectRepository;
     private final PlanCategoryRepository planCategoryRepository;
     private final PlanMemberService planMemberService;
-    private final MemberService memberService;
+    private final MemberRepository memberRepository;
 
     public PlanResponse findById(Long id) {
         Plan plan = planRepository.findById(id).orElseThrow(EntityNotFoundException::new);
@@ -115,6 +115,8 @@ public class PlanService {
 
     @Transactional
     public void deletePlanMember(Long id, PlanMemberDeleteRequest request) {
-        planMemberService.deletePlanMember(PlanMember.of(memberService.findEntityById(request.id()), findEntityById(id)));
+        planMemberService.deletePlanMember(PlanMember.of(
+            memberRepository.findById(request.id()).orElseThrow(EntityNotFoundException::new),
+            findEntityById(id)));
     }
 }

@@ -1,7 +1,6 @@
 package com.fourttttty.corookie.plan.application.service;
 
 import com.fourttttty.corookie.member.application.repository.MemberRepository;
-import com.fourttttty.corookie.member.application.service.MemberService;
 import com.fourttttty.corookie.member.domain.AuthProvider;
 import com.fourttttty.corookie.member.domain.Member;
 import com.fourttttty.corookie.member.domain.Oauth2;
@@ -10,7 +9,6 @@ import com.fourttttty.corookie.plan.application.repository.PlanCategoryRepositor
 import com.fourttttty.corookie.plan.application.repository.PlanMemberRepository;
 import com.fourttttty.corookie.plan.application.repository.PlanRepository;
 import com.fourttttty.corookie.plan.domain.Plan;
-import com.fourttttty.corookie.plan.domain.PlanMember;
 import com.fourttttty.corookie.plan.dto.request.PlanCategoryCreateRequest;
 import com.fourttttty.corookie.plan.dto.request.PlanCategoryDeleteRequest;
 import com.fourttttty.corookie.plan.dto.request.PlanCreateRequest;
@@ -27,7 +25,6 @@ import com.fourttttty.corookie.texture.plan.application.repository.FakePlanMembe
 import com.fourttttty.corookie.texture.plan.application.repository.FakePlanRepository;
 import com.fourttttty.corookie.texture.project.application.repository.FakeProjectRepository;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -48,12 +45,10 @@ class PlanServiceTest {
     PlanCategoryService planCategoryService;
     CategoryInPlanService categoryInPlanService;
     PlanMemberService planMemberService;
-    MemberService memberService;
 
     private Member member;
     private Project project;
     private PlanCreateRequest planCreateRequest;
-    private List<String> deleteList;
     private Plan plan;
 
 
@@ -66,13 +61,12 @@ class PlanServiceTest {
         projectRepository = new FakeProjectRepository();
         planMemberRepository = new FakePlanMemberRepository();
 
-        memberService = new MemberService(memberRepository);
         planCategoryService = new PlanCategoryService(planCategoryRepository);
         categoryInPlanService = new CategoryInPlanService(categoryInPlanRepository,
             planCategoryService);
-        planMemberService = new PlanMemberService(planMemberRepository, memberService);
+        planMemberService = new PlanMemberService(planMemberRepository, memberRepository);
         planService = new PlanService(planRepository, categoryInPlanService, planCategoryService,
-            projectRepository, planCategoryRepository, planMemberService, memberService);
+            projectRepository, planCategoryRepository, planMemberService, memberRepository);
 
         member = Member.of(1L, "name", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
         project = Project.of("name", "description", true,
@@ -90,23 +84,14 @@ class PlanServiceTest {
             "createPlanDescription",
             LocalDateTime.now().minusDays(2),
             LocalDateTime.now(),
-            List.of(new PlanCategoryCreateRequest("modifyCategory1")),
+            List.of(new PlanCategoryCreateRequest("CreateCategory")),
             List.of(new PlanMemberCreateRequest(1L)));
-        deleteList = new ArrayList<String>() {
-            {
-                add("testCategory1");
-                add("testCategory2");
-            }
-        };
     }
 
     @Test
     @DisplayName("일정 생성")
     void createPlan() {
         // given
-        planMemberRepository.save(PlanMember.of(member, plan));
-        planMemberRepository.save(PlanMember.of(member, plan));
-        planMemberRepository.save(PlanMember.of(member, plan));
 
         // when
         memberRepository.save(member);
@@ -148,8 +133,8 @@ class PlanServiceTest {
 
         PlanUpdateRequest updateRequest = new PlanUpdateRequest("modifyPlan",
             "modifyPlanDescription",
+            LocalDateTime.now().minusDays(4),
             LocalDateTime.now().minusDays(2),
-            LocalDateTime.now(),
             List.of(new PlanCategoryDeleteRequest("modifyCategory1")),
             List.of(new PlanMemberDeleteRequest(1L)));
 
@@ -157,8 +142,8 @@ class PlanServiceTest {
         PlanResponse modifiedResponse = planService.modifyPlan(updateRequest, 1L, 1L);
 
         // then
-        assertThat(modifiedResponse.planName()).isEqualTo("modifyPlan");
-        assertThat(modifiedResponse.description()).isEqualTo("modifyPlanDescription");
+        assertThat(modifiedResponse.planName()).isEqualTo(updateRequest.planName());
+        assertThat(modifiedResponse.description()).isEqualTo(updateRequest.description());
     }
 
     @Test
@@ -167,12 +152,12 @@ class PlanServiceTest {
         // given
         memberRepository.save(member);
         projectRepository.save(project);
-        PlanResponse savedResponse = planService.createPlan(planCreateRequest, 1L);
+        planService.createPlan(planCreateRequest, 1L);
 
         //when
         planService.deletePlan(1L);
 
         //then
-        assertThat(planService.findById(1L)).isNull();
+        assertThat(planService.findById(1L).enabled()).isEqualTo(false);
     }
 }

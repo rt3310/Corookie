@@ -7,25 +7,17 @@ import com.fourttttty.corookie.plan.domain.PlanMemberId;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Objects;
-import java.util.Optional;
 
 public class FakePlanMemberRepository implements PlanMemberRepository {
-
+    private final Map<Id, PlanMember> store = new HashMap<>();
     class Id{
         public Long planId;
         public Long memberId;
 
         @Override
-        public boolean equals(Object o) {
-            PlanMember planMember = (PlanMember) o;
-            return planId.equals(planMember.getId().getPlan().getId()) &&
-                memberId.equals(planMember.getId().getMember().getId());
-        }
-        @Override
         public int hashCode() {
-            return Objects.hash(planId,memberId);
+            return Objects.hash(this.planId,this.memberId);
         }
 
         private Id(PlanMemberId planMemberId){
@@ -33,7 +25,6 @@ public class FakePlanMemberRepository implements PlanMemberRepository {
             this.memberId = planMemberId.getMember().getId();
         }
     }
-    private final Map<Id, PlanMember> store = new HashMap<>();
     @Override
     public List<PlanMember> findAllbyPlan(Plan plan) {
         return store.entrySet().stream()
@@ -41,17 +32,9 @@ public class FakePlanMemberRepository implements PlanMemberRepository {
             .map(entry->store.get(entry.getKey()))
             .toList();
     }
-
     @Override
     public PlanMember save(PlanMember planMember) {
-        Optional<Entry<Id, PlanMember>> first = store.entrySet().stream()
-            .filter(entry->entry.equals(planMember))
-            .findFirst();
-        if(first.isEmpty()){
-            System.out.println(new Id(planMember.getId()));
-            return store.put(new Id(planMember.getId()),planMember);
-        }
-        return first.get().getValue();
+        return store.put(new Id(planMember.getId()),planMember);
     }
 
     @Override
