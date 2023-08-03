@@ -348,7 +348,7 @@ const S = {
         background-color: ${({ theme }) => theme.color.lightgray};
         border-radius: 8px;
         cursor: pointer;
-        z-index: 999;
+        z-index: 99;
 
         &:hover {
             background-color: ${({ theme }) => theme.color.main};

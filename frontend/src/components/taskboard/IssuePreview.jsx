@@ -5,7 +5,7 @@ import * as hooks from 'hooks'
 import { IoReorderTwoSharp } from 'react-icons/io5'
 
 const IssuePreview = ({ id, title, type, manager, priority }) => {
-    const { issueDetailOpened, openIssueDetail } = hooks.issueDetailState()
+    const { issueDetailOpened, openIssueDetail, closeIssueDetail } = hooks.issueDetailState()
     const { closeProfile } = hooks.profileState()
     const renderPriority = priority => {
         switch (priority) {
@@ -17,8 +17,12 @@ const IssuePreview = ({ id, title, type, manager, priority }) => {
     }
 
     const toggleIssueDetail = id => {
-        openIssueDetail(id)
-        closeProfile()
+        if (issueDetailOpened !== '-1') {
+            closeIssueDetail()
+        } else {
+            openIssueDetail(id)
+            closeProfile()
+        }
     }
 
     const renderProfile = manager => {
