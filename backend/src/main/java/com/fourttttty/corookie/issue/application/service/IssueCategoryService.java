@@ -21,8 +21,8 @@ public class IssueCategoryService {
                         .save(issueCategoryCreateRequest.toEntity(issue)).getCategory()));
     }
 
-    public List<IssueCategoryResponse> findByIssueId(Long issueId) {
-        return issueCategoryRepository.findByIssueId(issueId).stream()
+    public List<IssueCategoryResponse> findByIssue(Issue issue) {
+        return issueCategoryRepository.findByIssue(issue).stream()
                 .map(issueCategory -> IssueCategoryResponse.from(issueCategory.getCategory()))
                 .toList();
     }

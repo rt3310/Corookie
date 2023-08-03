@@ -25,7 +25,7 @@ public class Project extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "project_id", nullable = false)
-    public Long id;
+    private Long id;
 
     @Column(nullable = false)
     private String name;

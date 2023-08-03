@@ -12,17 +12,17 @@ import lombok.NoArgsConstructor;
 public class Oauth2 {
 
     @Enumerated(EnumType.STRING)
-    private AuthProvider authProvider;
+    private AuthProvider provider;
 
     @Column(nullable = false)
     private String account;
 
-    private Oauth2(AuthProvider authProvider, String account) {
-        this.authProvider = authProvider;
+    private Oauth2(AuthProvider provider, String account) {
+        this.provider = provider;
         this.account = account;
     }
 
-    public static Oauth2 of(AuthProvider authProvider, String account) {
-        return new Oauth2(authProvider, account);
+    public static Oauth2 of(AuthProvider provider, String account) {
+        return new Oauth2(provider, account);
     }
 }
