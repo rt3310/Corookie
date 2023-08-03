@@ -154,7 +154,7 @@ const S = {
         & svg {
             width: 16px;
             height: 16px;
-            color: ${({ theme }) => theme.color.black};
+            color: ${({ theme }) => theme.color.main};
         }
     `,
     RemoveButton: styled.div`
