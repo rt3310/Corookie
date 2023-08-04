@@ -21,6 +21,7 @@ const App = () => {
                         <Route path={utils.URL.TASK.BOARD} element={<pages.TaskBoard />} />
                         <Route path={utils.URL.PLAN.CALENDER} element={<pages.Plan />} />
                     </Route>
+                    <Route path={utils.URL.LOGIN.LOGIN} element={<pages.Login />} />
                 </Routes>
             </Router>
         </ThemeProvider>

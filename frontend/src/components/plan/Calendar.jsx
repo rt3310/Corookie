@@ -8,31 +8,58 @@ import { isSameMonth, isSameDay, addDays } from 'date-fns'
 import * as hooks from 'hooks'
 
 const Calendar = ({ currentMonth }) => {
-    const draggingItemIndex = useRef(null)
-    const draggingOverItemIndex = useRef(null)
     const monthStart = startOfMonth(currentMonth)
     const monthEnd = endOfMonth(monthStart)
     const startDate = startOfWeek(monthStart)
     const endDate = endOfWeek(monthEnd)
-    const { planStartDate, planEndDate } = hooks.planRegisterState()
+    const { planStartDate, planEndDate, onDragDate, setPlanStartDate, setPlanEndDate, setOnDragDate } =
+        hooks.planDateState()
+    const { openPlanRegister } = hooks.planRegisterState()
     const [calendar, setCalendar] = useState([])
+
+    const setDate = date => {
+        if (date < planStartDate) {
+            setPlanStartDate(date)
+            setPlanEndDate(onDragDate)
+            return
+        }
+
+        if (date > planEndDate) {
+            setPlanStartDate(onDragDate)
+            setPlanEndDate(date)
+        }
+    }
 
     useEffect(() => {
         let rows = []
         let days = []
+        let dayNumbers = []
         let plans = []
-        let addedPlan = []
         let day = startDate
 
         while (day <= endDate) {
             for (let i = 0; i < 7; i++) {
                 days.push(
+                    <S.Day
+                        key={day}
+                        draggable={true}
+                        onDragStart={e => {
+                            setOnDragDate(new Date(e.target.firstChild.value))
+                            setPlanStartDate(new Date(e.target.firstChild.value))
+                            setPlanEndDate(new Date(e.target.firstChild.value))
+                        }}
+                        onDragEnter={e => setDate(new Date(e.target.firstChild.value))}
+                        onDragEnd={() => openPlanRegister()}>
+                        <input type="hidden" value={day} />
+                    </S.Day>,
+                )
+                dayNumbers.push(
                     <S.DayNumber key={day} className={format(currentMonth, 'M') !== format(day, 'M') ? 'disable' : ''}>
                         {format(day, 'd')}
                     </S.DayNumber>,
                 )
                 if (isSameDay(day, planStartDate)) {
-                    addedPlan.push(
+                    plans.push(
                         <S.PlanRow>
                             <S.DayPlan
                                 key={day}
@@ -53,7 +80,7 @@ const Calendar = ({ currentMonth }) => {
                         </S.PlanRow>,
                     )
                 } else if (day.getDay() === 0 && day <= planEndDate && day >= planStartDate) {
-                    addedPlan.push(
+                    plans.push(
                         <S.PlanRow>
                             <S.DayPlan
                                 key={day}
@@ -78,24 +105,16 @@ const Calendar = ({ currentMonth }) => {
             }
             rows.push(
                 <S.Week key={day}>
-                    <S.DayBox>
-                        <S.Day></S.Day>
-                        <S.Day></S.Day>
-                        <S.Day></S.Day>
-                        <S.Day></S.Day>
-                        <S.Day></S.Day>
-                        <S.Day></S.Day>
-                        <S.Day></S.Day>
-                    </S.DayBox>
-                    <S.DayHeader>{days}</S.DayHeader>
+                    <S.DayBox>{days}</S.DayBox>
+                    <S.DayHeader>{dayNumbers}</S.DayHeader>
                     <S.PlanBox>
-                        <S.PlanRows>{addedPlan}</S.PlanRows>
+                        <S.PlanRows>{plans}</S.PlanRows>
                     </S.PlanBox>
                 </S.Week>,
             )
-            addedPlan = []
             days = []
             plans = []
+            dayNumbers = []
         }
         setCalendar([rows])
     }, [currentMonth, planStartDate, planEndDate])
@@ -122,6 +141,14 @@ const S = {
         left: 0;
         width: 100%;
         height: 100%;
+
+        -ms-user-select: none;
+        -moz-user-select: -moz-none;
+        -khtml-user-select: none;
+        -webkit-user-select: none;
+        user-select: none;
+
+        z-index: 99;
     `,
     Day: styled.li`
         flex: 1 1 0%;
@@ -183,6 +210,7 @@ const S = {
         height: 100%;
         cursor: pointer;
         border-radius: 4px;
+        z-index: 100;
 
         &.same {
             background-color: ${({ theme }) => theme.color.main};

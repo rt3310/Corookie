@@ -2,6 +2,8 @@ package com.fourttttty.corookie.project.domain;
 
 import com.fourttttty.corookie.global.audit.BaseTime;
 import com.fourttttty.corookie.member.domain.Member;
+import com.fourttttty.corookie.textchannel.domain.DefaultChannel;
+import com.fourttttty.corookie.textchannel.domain.TextChannel;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -10,6 +12,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -21,7 +25,7 @@ public class Project extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "project_id", nullable = false)
-    public Long id;
+    private Long id;
 
     @Column(nullable = false)
     private String name;
@@ -82,5 +86,16 @@ public class Project extends BaseTime {
 
     public void delete() {
         this.enabled = false;
+    }
+
+    public List<TextChannel> createDefaultTextChannels() {
+        List<TextChannel> defaultChannels = new ArrayList<>();
+        for (DefaultChannel channel : DefaultChannel.values()) {
+            TextChannel textChannel = TextChannel.of(channel.getChannelName(), true, false, this);
+            textChannel.changeNotDeletableChannel();
+            defaultChannels.add(textChannel);
+        }
+
+        return defaultChannels;
     }
 }

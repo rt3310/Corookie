@@ -22,11 +22,20 @@ public class PlanCategory extends BaseTime {
     @Column(nullable = false)
     private String content;
 
-    public PlanCategory(String content) {
+    private PlanCategory(String content) {
         this.content = content;
     }
 
     public static PlanCategory of(String content) {
         return new PlanCategory(content);
+    }
+
+    private PlanCategory(Long id, String content) {
+        this.id = id;
+        this.content = content;
+    }
+
+    public static PlanCategory of(Long id, String content) {
+        return new PlanCategory(id, content);
     }
 }

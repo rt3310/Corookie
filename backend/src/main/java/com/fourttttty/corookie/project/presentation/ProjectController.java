@@ -30,15 +30,16 @@ public class ProjectController {
     }
 
     @PostMapping
-    public ResponseEntity<ProjectResponse> projectCreate(@RequestBody @Validated ProjectCreateRequest projectCreateRequest,
+    public ResponseEntity<ProjectResponse> projectCreate(@RequestBody @Validated ProjectCreateRequest request,
                                                          @AuthenticationPrincipal LoginUser loginUser) {
-        return ResponseEntity.ok(projectService.create(projectCreateRequest, loginUser.getMemberId()));
+        return ResponseEntity.ok(projectService.create(request, loginUser.getMemberId()));
     }
 
     @PutMapping("/{projectId}")
     public ResponseEntity<ProjectResponse> projectModify(@PathVariable Long projectId,
-                                                         @RequestBody @Validated ProjectUpdateRequest projectUpdateRequest) {
-        return ResponseEntity.ok(projectService.modify(projectUpdateRequest, projectId));
+                                                         @RequestBody
+                                                         @Validated ProjectUpdateRequest request) {
+        return ResponseEntity.ok(projectService.modify(request, projectId));
     }
 
     @DeleteMapping("/{projectId}")

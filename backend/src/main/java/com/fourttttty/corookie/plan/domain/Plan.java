@@ -5,16 +5,14 @@ import com.fourttttty.corookie.project.domain.Project;
 import jakarta.persistence.*;
 
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table(name="plan")
+@Table(name = "plan")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
@@ -45,11 +43,11 @@ public class Plan extends BaseTime {
     private Project project;
 
     private Plan(String planName,
-                 String description,
-                 LocalDateTime planStart,
-                 LocalDateTime planEnd,
-                 Boolean enabled,
-                 Project project) {
+        String description,
+        LocalDateTime planStart,
+        LocalDateTime planEnd,
+        Boolean enabled,
+        Project project) {
         this.planName = planName;
         this.description = description;
         this.planStart = planStart;
@@ -59,24 +57,58 @@ public class Plan extends BaseTime {
     }
 
     public static Plan of(String planName,
-                          String description,
-                          LocalDateTime planStart,
-                          LocalDateTime planEnd,
-                          Boolean enabled,
-                          Project project) {
+        String description,
+        LocalDateTime planStart,
+        LocalDateTime planEnd,
+        Boolean enabled,
+        Project project) {
         return new Plan(planName,
-                description,
-                planStart,
-                planEnd,
-                enabled,
-                project);
+            description,
+            planStart,
+            planEnd,
+            enabled,
+            project);
+    }
+
+    private Plan(
+        Long id,
+        String planName,
+        String description,
+        LocalDateTime planStart,
+        LocalDateTime planEnd,
+        Boolean enabled,
+        Project project) {
+        this.id = id;
+        this.planName = planName;
+        this.description = description;
+        this.planStart = planStart;
+        this.planEnd = planEnd;
+        this.enabled = enabled;
+        this.project = project;
+    }
+
+    public static Plan of(
+        Long id,
+        String planName,
+        String description,
+        LocalDateTime planStart,
+        LocalDateTime planEnd,
+        Boolean enabled,
+        Project project) {
+        return new Plan(id,
+            planName,
+            description,
+            planStart,
+            planEnd,
+            enabled,
+            project);
     }
 
     public void update(String planName,
-                       String description,
-                       LocalDateTime planStart,
-                       LocalDateTime planEnd,
-                       Project project) {
+        String description,
+        LocalDateTime planStart,
+        LocalDateTime planEnd,
+        Project project) {
         this.planName = planName;
         this.description = description;
         this.planStart = planStart;
@@ -84,7 +116,7 @@ public class Plan extends BaseTime {
         this.project = project;
     }
 
-    public void delete(){
+    public void delete() {
         this.enabled = false;
     }
 }

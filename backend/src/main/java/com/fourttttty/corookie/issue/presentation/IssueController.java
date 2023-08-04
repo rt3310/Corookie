@@ -20,9 +20,8 @@ public class IssueController {
     private final IssueService issueService;
 
     @GetMapping
-    public ResponseEntity<List<IssueListResponse>> issueList(@PathVariable Long projectId,
-                                                             @AuthenticationPrincipal LoginUser loginUser) {
-        return ResponseEntity.ok(issueService.findByProjectId(projectId, loginUser.getMemberId()));
+    public ResponseEntity<List<IssueListResponse>> issueList(@PathVariable Long projectId) {
+        return ResponseEntity.ok(issueService.findByProjectId(projectId));
     }
 
     @GetMapping("/{issueId}")
