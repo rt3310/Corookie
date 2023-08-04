@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import { IoIosArrowDown } from 'react-icons/io'
 import { BsPlus } from 'react-icons/bs'
-
+import { AiOutlinePushpin, AiFillPushpin } from 'react-icons/ai'
 import * as utils from 'utils'
 
 const ChannelNav = () => {
@@ -19,7 +19,10 @@ const ChannelNav = () => {
                     <S.ChannelHead onClick={() => setOpenText(!openText)}>
                         텍스트 채널 &nbsp; <IoIosArrowDown />
                     </S.ChannelHead>
-                    <S.Channel onClick={() => navigate(utils.URL.CHAT.TEXT)}>1. 공지</S.Channel>
+                    <S.Channel onClick={() => navigate(utils.URL.CHAT.TEXT)}>
+                        1. 공지
+                        <AiOutlinePushpin />
+                    </S.Channel>
                     <S.Channel>2. 자유</S.Channel>
                     <S.Channel>3. Backend</S.Channel>
                     <S.Channel>4. Frontend</S.Channel>
@@ -31,7 +34,7 @@ const ChannelNav = () => {
                     <S.ChannelHead onClick={() => setOpenDm(!openDm)}>
                         Direct Message &nbsp; <IoIosArrowDown />
                     </S.ChannelHead>
-                    <S.DmMember>
+                    <S.DmMember onClick={() => navigate(utils.URL.CHAT.DIRECT)}>
                         <S.DmProfileImage>
                             <img src={require('images/profile.png').default} alt="프로필" />
                         </S.DmProfileImage>
@@ -66,7 +69,7 @@ const ChannelNav = () => {
                     <S.ChannelHead onClick={() => setOpenVideo(!openVideo)}>
                         화상 채널 &nbsp; <IoIosArrowDown />
                     </S.ChannelHead>
-                    <S.Channel>1. 회의</S.Channel>
+                    <S.Channel onClick={() => navigate(utils.URL.CHAT.VIDEO)}>1. 회의</S.Channel>
                     <S.Channel>2. 자유</S.Channel>
                     <S.AddChannelButton>
                         <BsPlus /> 채널 추가
@@ -153,6 +156,10 @@ const S = {
         padding: 12px 16px;
         cursor: pointer;
         transition-duration: 0.2s;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
 
         &:hover {
             background-color: ${({ theme }) => theme.color.main};
@@ -168,7 +175,7 @@ const S = {
         }
 
         .opened & {
-            display: block;
+            display: flex;
         }
     `,
     AddChannelButton: styled.div`
