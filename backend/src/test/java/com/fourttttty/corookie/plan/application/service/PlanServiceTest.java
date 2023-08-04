@@ -64,7 +64,7 @@ class PlanServiceTest {
         planCategoryService = new PlanCategoryService(planCategoryRepository);
         categoryInPlanService = new CategoryInPlanService(categoryInPlanRepository,planRepository,planCategoryService);
         planMemberService = new PlanMemberService(planMemberRepository,memberRepository,planRepository);
-        planService = new PlanService(planRepository,categoryInPlanService,projectRepository,planCategoryRepository,planMemberService,memberRepository);
+        planService = new PlanService(planRepository,projectRepository,planCategoryRepository,memberRepository, categoryInPlanService, planMemberService);
 
         member = Member.of( "name", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
         project = Project.of("name", "description", true,

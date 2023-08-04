@@ -4,7 +4,9 @@ import com.fourttttty.corookie.comment.application.service.CommentService;
 import com.fourttttty.corookie.comment.domain.Comment;
 import com.fourttttty.corookie.comment.dto.request.CommentModifyRequest;
 import com.fourttttty.corookie.comment.dto.response.CommentDetailResponse;
+import com.fourttttty.corookie.member.domain.AuthProvider;
 import com.fourttttty.corookie.member.domain.Member;
+import com.fourttttty.corookie.member.domain.Oauth2;
 import com.fourttttty.corookie.member.dto.response.MemberResponse;
 import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.support.RestDocsTest;
@@ -50,7 +52,7 @@ class CommentControllerTest extends RestDocsTest {
 
     @BeforeEach
     void initTexture() {
-        Member member = new Member("name");
+        Member member = Member.of("name", "email", Oauth2.of(AuthProvider.KAKAO, "account"));
         Project project = Project.of("project",
                 "description",
                 true,
