@@ -43,7 +43,7 @@ const S = {
         height: 24px;
         justify-content: space-between;
         align-items: center;
-        padding: 6px 8px;
+        padding: 3px 8px;
         margin: 0 4px;
         border-radius: 8px;
         background-color: ${({ theme, icon }) =>
@@ -55,14 +55,14 @@ const S = {
         cursor: pointer;
     `,
     Icon: styled.div`
-        width: 12px;
-        max-height: 12px;
+        width: 16px;
+        max-height: 16px;
         display: flex;
         align-items: center;
         justify-content: center;
         & svg {
-            width: 12px;
-            height: 12px;
+            width: 16px;
+            height: 16px;
             color: ${({ theme }) => theme.color.white};
         }
     `,

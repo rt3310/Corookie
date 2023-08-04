@@ -17,6 +17,7 @@ export const URL = {
 }
 
 export const ISSUE_OPTIONS = {
+    title: 'title',
     priority: 'priority',
     manager: 'manager',
     category: 'category',
