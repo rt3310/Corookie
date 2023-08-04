@@ -53,6 +53,12 @@ export const commentState = create(set => ({
     closeComment: () => set(state => ({ commentOpened: false })),
 }))
 
+export const dmcommentState = create(set => ({
+    dmcommentOpened: false,
+    openDmComment: () => set(state => ({ dmcommentOpened: true })),
+    closeDmComment: () => set(state => ({ dmcommentOpened: false })),
+}))
+
 export const taskState = create(set => ({
     showIssue: true,
     openIssue: () => set(state => ({ showIssue: true })),
@@ -195,6 +201,12 @@ export const planDateState = create(set => ({
     setOnDragDate: input => set(state => ({ onDragDate: input })),
     setPlanStartDate: input => set(state => ({ planStartDate: input })),
     setPlanEndDate: input => set(state => ({ planEndDate: input })),
+}))
+
+export const chatBoxState = create(set => ({
+    chatboxOpened: false,
+    openChatbox: () => set(state => ({ chatboxOpened: true })),
+    closeChatbox: () => set(state => ({ chatboxOpened: false })),
 }))
 
 export const planRegisterState = create(set => ({

@@ -56,7 +56,7 @@ public class ThreadController {
                                              @PathVariable Long textChannelId,
                                              @PathVariable Long threadId) {
         threadService.delete(threadId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     // 스레드 수정
