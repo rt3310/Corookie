@@ -1,5 +1,6 @@
 package com.fourttttty.corookie.texture.plan.application.repository;
 
+import com.fourttttty.corookie.plan.application.repository.CategoryInPlanRepository;
 import com.fourttttty.corookie.plan.application.repository.PlanCategoryRepository;
 import com.fourttttty.corookie.plan.domain.PlanCategory;
 import java.util.HashMap;
@@ -8,28 +9,22 @@ import java.util.Optional;
 import java.util.Map;
 
 public class FakePlanCategoryRepository implements PlanCategoryRepository {
-
-    private long autoIncrementedId = 1L;
+    private CategoryInPlanRepository categoryInPlanRepository;
+    public FakePlanCategoryRepository(CategoryInPlanRepository categoryInPlanRepository){
+        this.categoryInPlanRepository = categoryInPlanRepository;
+    }
+    private long autoIncrementdId = 1L;
     private final Map<Long, PlanCategory> store = new HashMap<>();
 
     @Override
     public PlanCategory save(PlanCategory planCategory) {
-        Optional<Entry<Long, PlanCategory>> first = store.entrySet().stream()
-            .filter(entry -> entry.getValue().equals(planCategory.getContent()))
-            .findFirst();
-        if (first.isEmpty()) {
-            store.put(autoIncrementedId, planCategory.of(autoIncrementedId,planCategory.getContent()));
-            return store.get(autoIncrementedId++);
-        }
-        return first.get().getValue();
+        store.put(autoIncrementdId++, planCategory);
+        return planCategory;
     }
 
     @Override
     public Optional<PlanCategory> findById(Long id) {
-        return store.entrySet().stream()
-            .filter(entry -> entry.getKey().equals(id))
-            .map(entry -> store.get(entry.getKey()))
-            .findAny();
+        return Optional.ofNullable((store.get(id)));
     }
 
     @Override

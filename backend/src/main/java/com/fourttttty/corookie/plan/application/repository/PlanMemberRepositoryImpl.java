@@ -16,8 +16,8 @@ public class PlanMemberRepositoryImpl implements PlanMemberRepository{
     private final PlanMemberJpaRepository planMemberJpaRepository;
 
     @Override
-    public List<PlanMember> findAllbyPlan(Plan plan) {
-        return planMemberJpaRepository.findByIdPlan(plan);
+    public List<PlanMember> findByPlanId(Long planId) {
+        return planMemberJpaRepository.findAllById_PlanId(planId);
     }
 
     @Override

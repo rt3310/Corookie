@@ -1,5 +1,7 @@
 package com.fourttttty.corookie.plan.application.service;
 
+import com.fourttttty.corookie.global.exception.PlanNotFoundException;
+import com.fourttttty.corookie.global.exception.ProjectNotFoundException;
 import com.fourttttty.corookie.member.application.repository.MemberRepository;
 import com.fourttttty.corookie.plan.application.repository.PlanCategoryRepository;
 import com.fourttttty.corookie.plan.application.repository.PlanRepository;
@@ -31,27 +33,24 @@ public class PlanService {
 
     private final PlanRepository planRepository;
     private final CategoryInPlanService categoryInPlanService;
-    private final PlanCategoryService planCategoryService;
     private final ProjectRepository projectRepository;
     private final PlanCategoryRepository planCategoryRepository;
     private final PlanMemberService planMemberService;
     private final MemberRepository memberRepository;
 
     public PlanResponse findById(Long id) {
-        Plan plan = planRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        Plan plan = planRepository.findById(id).orElseThrow(PlanNotFoundException::new);
         return PlanResponse.from(plan,
-            categoryInPlanService.findAllByPlan(plan).stream()
+            categoryInPlanService.findAllByPlanId(id).stream()
                 .map(categoryInPlan -> PlanCategoryResponse.from(
-                    planCategoryService.findById(categoryInPlan
-                        .getId()
-                        .getPlanCategory()
-                        .getId())))
+                    planCategoryRepository.findByContent(categoryInPlan.getId().getPlanCategory().getContent())
+                        .orElseThrow(EntityNotFoundException::new)))
                 .toList(),
-            planMemberService.findAllByPlan(plan));
+            planMemberService.findAllByPlanId(id));
     }
 
     public Plan findEntityById(Long id) {
-        return planRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        return planRepository.findById(id).orElseThrow(PlanNotFoundException::new);
     }
 
     @Transactional
@@ -61,7 +60,7 @@ public class PlanService {
             request.planStart(),
             request.planEnd(),
             true,
-            projectRepository.findById(projectId).orElseThrow(EntityNotFoundException::new)));
+            projectRepository.findById(projectId).orElseThrow(ProjectNotFoundException::new)));
 
         return PlanResponse.from(plan,
             request.categories().stream()
@@ -83,11 +82,11 @@ public class PlanService {
             projectRepository.findById(projectId).orElseThrow(EntityNotFoundException::new));
 
         return PlanResponse.from(plan,
-            categoryInPlanService.findAllByPlan(plan).stream()
+            categoryInPlanService.findAllByPlanId(planId).stream()
                 .map(categoryInPlan -> PlanCategoryResponse.from(
                     categoryInPlan.getId().getPlanCategory()))
                 .toList(),
-            planMemberService.findAllByPlan(plan));
+            planMemberService.findAllByPlanId(planId));
     }
 
     @Transactional

@@ -55,25 +55,22 @@ class PlanServiceTest {
     @BeforeEach
     void initObjects() {
         planRepository = new FakePlanRepository();
-        planCategoryRepository = new FakePlanCategoryRepository();
-        categoryInPlanRepository = new FakeCategoryInPlanRepository();
+        categoryInPlanRepository = new FakeCategoryInPlanRepository(planRepository);
+        planCategoryRepository = new FakePlanCategoryRepository(categoryInPlanRepository);
         memberRepository = new FakeMemberRepository();
         projectRepository = new FakeProjectRepository();
-        planMemberRepository = new FakePlanMemberRepository();
+        planMemberRepository = new FakePlanMemberRepository(planRepository);
 
         planCategoryService = new PlanCategoryService(planCategoryRepository);
-        categoryInPlanService = new CategoryInPlanService(categoryInPlanRepository,
-            planCategoryService);
-        planMemberService = new PlanMemberService(planMemberRepository, memberRepository);
-        planService = new PlanService(planRepository, categoryInPlanService, planCategoryService,
-            projectRepository, planCategoryRepository, planMemberService, memberRepository);
+        categoryInPlanService = new CategoryInPlanService(categoryInPlanRepository,planRepository,planCategoryService);
+        planMemberService = new PlanMemberService(planMemberRepository,memberRepository,planRepository);
+        planService = new PlanService(planRepository,categoryInPlanService,projectRepository,planCategoryRepository,planMemberService,memberRepository);
 
-        member = Member.of(1L, "name", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
+        member = Member.of( "name", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
         project = Project.of("name", "description", true,
             "http://test.com", false, member);
 
-        plan = Plan.of(1L,
-            "name",
+        plan = Plan.of("name",
             "testDescription",
             LocalDateTime.now(),
             LocalDateTime.now().minusDays(2),

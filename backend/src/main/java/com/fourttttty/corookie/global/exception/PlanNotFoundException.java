@@ -3,16 +3,15 @@ package com.fourttttty.corookie.global.exception;
 import lombok.Getter;
 
 @Getter
-public class ProjectNotEnabledException extends RuntimeException {
+public class PlanNotFoundException extends RuntimeException {
     private final ExceptionCode exceptionCode;
 
-    public ProjectNotEnabledException() {
+    public PlanNotFoundException() {
         this(ExceptionCode.PLAN_NOT_FOUND);
     }
 
-    public ProjectNotEnabledException(ExceptionCode exceptionCode) {
+    public PlanNotFoundException(ExceptionCode exceptionCode) {
         super(exceptionCode.getMessage());
         this.exceptionCode = exceptionCode;
     }
-
 }

@@ -25,8 +25,8 @@ public class CategoryInPlanRepositoryImpl implements CategoryInPlanRepository {
     }
 
     @Override
-    public List<CategoryInPlan> findAllbyPlan(Plan plan) {
-        return categoryInPlanJpaRepository.findByIdPlan(plan);
+    public List<CategoryInPlan> findByPlanId(Long planId) {
+        return categoryInPlanJpaRepository.findAllById_PlanId(planId);
     }
 
     @Override

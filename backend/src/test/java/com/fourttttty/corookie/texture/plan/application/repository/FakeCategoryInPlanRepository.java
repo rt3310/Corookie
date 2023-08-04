@@ -1,26 +1,49 @@
 package com.fourttttty.corookie.texture.plan.application.repository;
 
+import com.fourttttty.corookie.global.exception.PlanNotFoundException;
 import com.fourttttty.corookie.plan.application.repository.CategoryInPlanRepository;
+import com.fourttttty.corookie.plan.application.repository.PlanRepository;
 import com.fourttttty.corookie.plan.domain.CategoryInPlan;
 import com.fourttttty.corookie.plan.domain.CategoryInPlanId;
-import com.fourttttty.corookie.plan.domain.Plan;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Optional;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 
 public class FakeCategoryInPlanRepository implements CategoryInPlanRepository {
-    private final Map<CategoryInPlanId, CategoryInPlan> store = new HashMap<>();
+    private final Map<Id, CategoryInPlan> store = new HashMap<>();
+    private final PlanRepository planRepository;
+
+    public FakeCategoryInPlanRepository(PlanRepository planRepository){
+        this.planRepository = planRepository;
+    }
+
+    class Id{
+        private Long categoryId;
+        private Long planId;
+
+        private Id(CategoryInPlan categoryInPlan){
+            this.planId = categoryInPlan.getId().getPlan().getId();
+            this.categoryId = categoryInPlan.getId().getPlanCategory().getId();
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(this.categoryId,this.planId);
+        }
+    }
 
     @Override
     public CategoryInPlan save(CategoryInPlan categoryInPlan) {
-        Optional<Entry<CategoryInPlanId,CategoryInPlan>> first = store.entrySet().stream()
-            .filter(entry->(entry.getValue().getId().getPlan().equals(categoryInPlan.getId().getPlan()))
-            &&(entry.getValue().getId().getPlanCategory().equals(categoryInPlan.getId().getPlanCategory())))
+        Optional<Entry<Id,CategoryInPlan>> first = store.entrySet().stream()
+            .filter(entry->entry.getKey().equals(categoryInPlan.getId()))
             .findFirst();
         if(first.isEmpty()){
-            return store.put(categoryInPlan.getId(),categoryInPlan);
+            store.put(new Id(categoryInPlan),categoryInPlan);
+            return store.get(categoryInPlan.getId());
         }
         return first.get().getValue();
     }
@@ -31,12 +54,14 @@ public class FakeCategoryInPlanRepository implements CategoryInPlanRepository {
     }
 
     @Override
-    public List<CategoryInPlan> findAllbyPlan(Plan plan) {
+    public List<CategoryInPlan> findByPlanId(Long planId) {
         return store.entrySet().stream()
-            .filter(st -> st.getKey().getPlan().equals(plan))
-            .map(st -> store.get(st.getKey()))
+            .filter(entry->entry.getValue().getId().getPlan()
+                .equals(planRepository.findById(planId).orElseThrow(PlanNotFoundException::new)))
+            .map(entry->store.get(entry.getKey()))
             .toList();
     }
+
 
     @Override
     public Boolean exists(CategoryInPlanId categoryInPlanId) {

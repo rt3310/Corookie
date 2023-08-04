@@ -1,7 +1,8 @@
 package com.fourttttty.corookie.texture.plan.application.repository;
 
+import com.fourttttty.corookie.global.exception.PlanNotFoundException;
 import com.fourttttty.corookie.plan.application.repository.PlanMemberRepository;
-import com.fourttttty.corookie.plan.domain.Plan;
+import com.fourttttty.corookie.plan.application.repository.PlanRepository;
 import com.fourttttty.corookie.plan.domain.PlanMember;
 import com.fourttttty.corookie.plan.domain.PlanMemberId;
 import java.util.HashMap;
@@ -10,6 +11,10 @@ import java.util.Map;
 import java.util.Objects;
 
 public class FakePlanMemberRepository implements PlanMemberRepository {
+    private PlanRepository planRepository;
+    public FakePlanMemberRepository(PlanRepository planRepository){
+        this.planRepository = planRepository;
+    }
     private final Map<Id, PlanMember> store = new HashMap<>();
     class Id{
         public Long planId;
@@ -25,13 +30,16 @@ public class FakePlanMemberRepository implements PlanMemberRepository {
             this.memberId = planMemberId.getMember().getId();
         }
     }
+
     @Override
-    public List<PlanMember> findAllbyPlan(Plan plan) {
+    public List<PlanMember> findByPlanId(Long planId) {
         return store.entrySet().stream()
-            .filter(entry-> entry.getKey().planId.equals(plan.getId()))
+            .filter(entry->entry.getValue().getId().getPlan()
+                .equals(planRepository.findById(planId).orElseThrow(PlanNotFoundException::new)))
             .map(entry->store.get(entry.getKey()))
             .toList();
     }
+
     @Override
     public PlanMember save(PlanMember planMember) {
         return store.put(new Id(planMember.getId()),planMember);

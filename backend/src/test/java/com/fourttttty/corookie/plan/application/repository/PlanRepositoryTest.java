@@ -25,7 +25,7 @@ class PlanRepositoryTest {
     @BeforeEach
     void initObjects() {
         planRepository = new FakePlanRepository();
-        member = Member.of(1L,"name","email", Oauth2.of(AuthProvider.KAKAO, "account"));
+        member = Member.of("name","email", Oauth2.of(AuthProvider.KAKAO, "account"));
         project = Project.of("name",
             "description",
             true,

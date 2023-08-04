@@ -6,7 +6,7 @@ import com.fourttttty.corookie.plan.domain.PlanMemberId;
 import java.util.List;
 
 public interface PlanMemberRepository {
-    List<PlanMember> findAllbyPlan(Plan plan);
+    List<PlanMember> findByPlanId(Long planId);
 
     PlanMember save(PlanMember planMember);
 

@@ -68,11 +68,11 @@ class planControllerTest extends RestDocsTest {
 
     @BeforeEach
     void initTexture() {
-        member = Member.of(1L, "name", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
+        member = Member.of("name", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
         project = Project.of("name", "description", true,
             "http://test.com", false, member);
 
-        plan = Plan.of(1L,
+        plan = Plan.of(
             "name",
             "testDescription",
             LocalDateTime.now(),
@@ -82,18 +82,18 @@ class planControllerTest extends RestDocsTest {
 
         planCategories = new ArrayList<>() {
             {
-                add(PlanCategory.of(1L, "testCategory1"));
-                add(PlanCategory.of(2L, "testCategory2"));
+                add(PlanCategory.of( "testCategory1"));
+                add(PlanCategory.of( "testCategory2"));
             }
         };
 
         planMembers = new ArrayList<>() {
             {
-                add(Member.of(1L, "name1", "test@gmail.com",
+                add(Member.of( "name1", "test@gmail.com",
                     Oauth2.of(AuthProvider.KAKAO, "account")));
-                add(Member.of(2L, "name2", "test@gmail.com",
+                add(Member.of( "name2", "test@gmail.com",
                     Oauth2.of(AuthProvider.KAKAO, "account")));
-                add(Member.of(4L, "name3", "test@gmail.com",
+                add(Member.of( "name3", "test@gmail.com",
                     Oauth2.of(AuthProvider.KAKAO, "account")));
             }
         };
@@ -238,7 +238,7 @@ class planControllerTest extends RestDocsTest {
                 .toList()
         );
 
-        PlanResponse planResponse = PlanResponse.from(Plan.of(1L,
+        PlanResponse planResponse = PlanResponse.from(Plan.of(
                 request.planName(),
                 request.description(),
                 request.planStart(),

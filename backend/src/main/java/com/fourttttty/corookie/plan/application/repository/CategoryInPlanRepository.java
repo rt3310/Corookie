@@ -11,7 +11,7 @@ public interface CategoryInPlanRepository {
 
     void delete(CategoryInPlan categoryInPlan);
 
-    List<CategoryInPlan> findAllbyPlan(Plan plan);
+    List<CategoryInPlan> findByPlanId(Long planId);
 
     Boolean exists(CategoryInPlanId categoryInPlanId);
 }
