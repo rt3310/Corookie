@@ -1,5 +1,4 @@
 import { create } from 'zustand'
-
 export const menuState = create(set => ({
     menu: '',
     openMenu: menu => set(state => ({ openedMenu: menu })),
@@ -64,6 +63,62 @@ export const taskState = create(set => ({
     showIssue: true,
     openIssue: () => set(state => ({ showIssue: true })),
     openKanban: () => set(state => ({ showIssue: false })),
+}))
+
+export const tasksState = create(set => ({
+    tasks: [
+        {
+            id: '1',
+            title: '사용자는 프로젝트를 생성한다. 1',
+            type: 'frontend',
+            manager: '황상미',
+            priority: 'Normal',
+            status: 'toDo',
+            content:
+                '사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.',
+        },
+        {
+            id: '2',
+            title: '사용자는 프로젝트를 생성한다. 2',
+            type: 'frontend',
+            manager: '황상미',
+            priority: 'Normal',
+            status: 'toDo',
+            content:
+                '사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.',
+        },
+        {
+            id: '3',
+            title: '사용자는 프로젝트를 생성한다. 3',
+            type: 'frontend',
+            manager: '황상미',
+            priority: 'Normal',
+            status: 'toDo',
+            content:
+                '사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.',
+        },
+        {
+            id: '4',
+            title: '사용자는 프로젝트를 생성한다. 4',
+            type: 'frontend',
+            manager: '황상미',
+            priority: 'Normal',
+            status: 'toDo',
+            content:
+                '사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.',
+        },
+        {
+            id: '5',
+            title: '사용자는 프로젝트를 생성한다. 5',
+            type: 'frontend',
+            manager: '황상미',
+            priority: 'Normal',
+            status: 'toDo',
+            content:
+                '사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.',
+        },
+    ],
+    setTasks: input => set(state => ({ tasks: input })),
 }))
 
 export const priorityState = create(set => ({

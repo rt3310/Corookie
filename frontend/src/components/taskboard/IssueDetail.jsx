@@ -8,16 +8,20 @@ import * as utils from 'utils'
 
 const IssueDetail = ({ id }) => {
     const { closeIssueDetail } = hooks.issueDetailState()
-    const [chosenState, setChosenState] = useState('todo')
+    const { tasks, setTasks } = hooks.tasksState()
+    const taskWithId = tasks.find(task => task.id === id)
+
     const managerList = ['황상미', '최효빈', '신승수', '박종서', '서원호', '권현수']
     const priorityList = ['Highest', 'High', 'Normal', 'Low', 'Lowest']
     const categoryList = ['frontend', 'backend', 'design', 'development', 'product', 'other']
-    const [title, setTitle] = useState('사용자는 프로젝트를 생성한다. ')
-    const [content, setContent] = useState(
-        '사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.',
-    )
+    const [title, setTitle] = useState(taskWithId.title)
+    const [content, setContent] = useState(taskWithId.content)
     const [editTitle, setEditTitle] = useState(false)
     const [editContent, setEditContent] = useState(false)
+
+    const statusOfTask = taskWithId ? taskWithId.status : 'Not found'
+
+    const [chosenState, setChosenState] = useState(statusOfTask)
 
     let titleRef = useRef()
     let contentRef = useRef()
@@ -36,16 +40,22 @@ const IssueDetail = ({ id }) => {
         }
     }, [editContent])
 
-    const handleTitleChange = e => setTitle(e.target.value)
+    const handleTitleChange = e => {
+        setTitle(e.target.value)
+    }
     const titleKeyDown = e => {
         if (e.key === 'Enter') {
             setEditTitle(false)
+            const updatedTasks = tasks.map(task => (task.id === id ? { ...task, title } : task))
+            setTasks(updatedTasks)
         }
     }
     const handleContentChange = e => setContent(e.target.value)
     const contentKeyDown = e => {
         if (e.key === 'Enter') {
             setEditContent(false)
+            const updatedTasks = tasks.map(task => (task.id === id ? { ...task, content } : task))
+            setTasks(updatedTasks)
         }
     }
 
@@ -55,6 +65,20 @@ const IssueDetail = ({ id }) => {
             closeIssueDetail()
         }
     }
+    const changeStatus = status => {
+        const updatedTasks = tasks.map(task => (task.id === id ? { ...task, status } : task))
+        setTasks(updatedTasks)
+    }
+
+    useEffect(() => {
+        const taskWithId = tasks.find(task => task.id === id)
+        const statusOfTask = taskWithId ? taskWithId.status : 'Not found'
+        setChosenState(statusOfTask)
+    }, [id, tasks])
+
+    useEffect(() => {
+        console.log(tasks)
+    }, [tasks])
     return (
         <S.Wrap>
             <S.Container>
@@ -69,7 +93,7 @@ const IssueDetail = ({ id }) => {
                                 onKeyDown={titleKeyDown}
                             />
                         ) : (
-                            <S.IssueTitleText>{title}</S.IssueTitleText>
+                            <S.IssueTitleText>{taskWithId.title}</S.IssueTitleText>
                         )}
                         {!editTitle && <IoPencil onClick={() => setEditTitle(true)} />}
                     </S.IssueTitle>
@@ -78,13 +102,13 @@ const IssueDetail = ({ id }) => {
                     </S.Close>
                 </S.Header>
                 <S.Status>
-                    <S.StatusBox onClick={() => setChosenState('todo')} status="todo" chosen={chosenState}>
+                    <S.StatusBox onClick={() => changeStatus('toDo')} status="toDo" chosen={chosenState}>
                         ToDo
                     </S.StatusBox>
-                    <S.StatusBox onClick={() => setChosenState('inprogress')} status="inprogress" chosen={chosenState}>
+                    <S.StatusBox onClick={() => changeStatus('inProgress')} status="inProgress" chosen={chosenState}>
                         InProgress
                     </S.StatusBox>
-                    <S.StatusBox onClick={() => setChosenState('warning')} status="warning" chosen={chosenState}>
+                    <S.StatusBox onClick={() => changeStatus('done')} status="done" chosen={chosenState}>
                         Done
                     </S.StatusBox>
                 </S.Status>
@@ -120,7 +144,7 @@ const IssueDetail = ({ id }) => {
                             onKeyDown={contentKeyDown}
                         />
                     ) : (
-                        <S.DescriptionBoxContent>{content}</S.DescriptionBoxContent>
+                        <S.DescriptionBoxContent>{taskWithId.content}</S.DescriptionBoxContent>
                     )}
                 </S.DescriptionBox>
                 <S.Delete>
@@ -235,18 +259,18 @@ const S = {
         background-color: ${({ status, chosen, theme }) =>
             chosen !== status
                 ? theme.color.gray
-                : chosen === 'todo'
+                : chosen === 'toDo'
                 ? theme.color.success
-                : chosen === 'inprogress'
+                : chosen === 'inProgress'
                 ? theme.color.pending
                 : theme.color.warning};
         border-radius: 8px;
         transition-duration: 0.2s;
         &:hover {
             background-color: ${({ status, theme }) =>
-                status === 'todo'
+                status === 'toDo'
                     ? theme.color.success
-                    : status === 'inprogress'
+                    : status === 'inProgress'
                     ? theme.color.pending
                     : theme.color.warning};
         }
