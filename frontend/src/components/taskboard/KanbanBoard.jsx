@@ -3,42 +3,31 @@ import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import styled from 'styled-components'
 import { IoReorderTwoSharp } from 'react-icons/io5'
 
+import * as hooks from 'hooks'
+
 const KanbanBoard = () => {
-    const tasks = [
-        {
-            id: '1',
-            content: '사용자는 프로젝트를 생성하고 생성하고 만들고 생성한다. ',
-            type: 'Frontend',
-            priority: 'high',
-        },
-        {
-            id: '2',
-            content: '사용자는 프로젝트를 생성하고 생성하고 만들고 생성한다. ',
-            type: 'Frontend',
-            priority: 'high',
-        },
-        {
-            id: '3',
-            content: '사용자는 프로젝트를 생성하고 생성하고 만들고 생성한다. ',
-            type: 'Frontend',
-            priority: 'high',
-        },
-        { id: '4', content: '사용자는 프로젝트를 생성하고 생성하고 만들고 생성한다. ' },
-        { id: '5', content: '사용자는 프로젝트를 생성하고 생성하고 만들고 생성한다. ' },
-    ]
+    const { tasks } = hooks.tasksState()
+
+    const tasksByStatus = tasks.reduce((acc, task) => {
+        if (!acc[task.status]) {
+            acc[task.status] = []
+        }
+        acc[task.status].push(task)
+        return acc
+    }, {})
 
     const taskStatus = {
         toDo: {
             name: 'To Do',
-            items: tasks,
+            items: tasksByStatus['toDo'] || [],
         },
         inProgress: {
             name: 'In Progress',
-            items: [],
+            items: tasksByStatus['inProgress'] || [],
         },
         done: {
             name: 'Done',
-            items: [],
+            items: tasksByStatus['done'] || [],
         },
     }
     const [columns, setColumns] = useState(taskStatus)
@@ -53,6 +42,9 @@ const KanbanBoard = () => {
             const sourceItems = [...sourceColumn.items]
             const destItems = [...destColumn.items]
             const [removed] = sourceItems.splice(source.index, 1)
+
+            removed.status = destination.droppableId
+
             destItems.splice(destination.index, 0, removed)
             setColumns({
                 ...columns,
@@ -103,16 +95,11 @@ const KanbanBoard = () => {
                                                                         ref={provided.innerRef}
                                                                         {...provided.draggableProps}
                                                                         {...provided.dragHandleProps}
+                                                                        isDragging={snapshot.isDragging}
                                                                         style={{
-                                                                            backgroundColor: snapshot.isDragging
-                                                                                ? 'lightgray'
-                                                                                : 'white',
-                                                                            borderColor: snapshot.isDragging
-                                                                                ? `${({ theme }) => theme.color.black}`
-                                                                                : 'white',
                                                                             ...provided.draggableProps.style,
                                                                         }}>
-                                                                        <S.IssueTopic>{item.content}</S.IssueTopic>
+                                                                        <S.IssueTopic>{item.title}</S.IssueTopic>
                                                                         <S.IssueInfo>
                                                                             <S.Type>{item.type}</S.Type>
                                                                             <S.Priority>
@@ -189,13 +176,17 @@ const S = {
         max-height: calc(100vh - 208px);
     `,
     IssueDrag: styled.div`
-        user-select: 'none';
+        user-select: none;
         padding: 16px;
         margin: 8px 0;
         min-height: 50px;
         border-radius: 8px;
         font-size: ${({ theme }) => theme.fontsize.content};
+        background-color: ${({ theme }) => theme.color.white};
+        box-shadow: ${props =>
+            props.isDragging ? `1px 1px 5px 1px ${props.theme.color.middlegray}` : `${props.theme.shadow.card}`};
     `,
+
     IssueTopic: styled.div`
         margin: 8px 0;
     `,

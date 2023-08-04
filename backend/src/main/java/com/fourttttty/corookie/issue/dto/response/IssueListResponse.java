@@ -10,20 +10,16 @@ public record IssueListResponse(String topic,
                                 String progress,
                                 String priority,
                                 List<IssueCategoryResponse> issueCategories,
-                                Long projectId,
-                                Long memberId) {
+                                String memberName) {
 
     public static IssueListResponse from(Issue issue,
-                                         List<IssueCategoryResponse> issueCategories,
-                                         Long projectId,
-                                         Long memberId) {
+                                         List<IssueCategoryResponse> issueCategories) {
         return IssueListResponse.builder()
                 .topic(issue.getTopic())
                 .progress(issue.getProgress().getValue())
                 .priority(issue.getPriority().getValue())
                 .issueCategories(issueCategories)
-                .projectId(projectId)
-                .memberId(memberId)
+                .memberName(issue.getManager().getName())
                 .build();
     }
 }

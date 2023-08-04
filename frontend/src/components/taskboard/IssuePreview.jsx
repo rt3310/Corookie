@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 
 import * as hooks from 'hooks'
 import { IoReorderTwoSharp } from 'react-icons/io5'
 
-const IssuePreview = ({ id, title, type, manager, priority }) => {
-    const { issueDetailOpened, openIssueDetail } = hooks.issueDetailState()
+const IssuePreview = ({ id, title, type, manager, priority, status }) => {
+    const { issueDetailOpened, openIssueDetail, closeIssueDetail } = hooks.issueDetailState()
     const { closeProfile } = hooks.profileState()
     const renderPriority = priority => {
         switch (priority) {
@@ -17,8 +17,12 @@ const IssuePreview = ({ id, title, type, manager, priority }) => {
     }
 
     const toggleIssueDetail = id => {
-        openIssueDetail(id)
-        closeProfile()
+        if (issueDetailOpened === id) {
+            closeIssueDetail()
+        } else {
+            openIssueDetail(id)
+            closeProfile()
+        }
     }
 
     const renderProfile = manager => {
@@ -33,6 +37,7 @@ const IssuePreview = ({ id, title, type, manager, priority }) => {
         <S.Wrap onClick={() => toggleIssueDetail(id)} id={id} issueDetailOpened={issueDetailOpened}>
             {title}
             <S.Description>
+                <S.Status status={status} />
                 <S.Type>{type}</S.Type>
                 <S.Profile>{renderProfile(manager)}</S.Profile>
                 <S.Priority>{renderPriority(priority)}</S.Priority>
@@ -50,17 +55,10 @@ const S = {
         min-height: 48px;
         margin: 8px 0;
         padding: 8px 16px;
-        /* box-shadow: 1px 1px 5px 1px
-            ${({ theme, id, issueDetailOpened }) =>
-            id === issueDetailOpened ? theme.color.middlegray : theme.color.lightgray}; */
         font-size: ${({ theme }) => theme.fontsize.sub1};
-        /* color: ${({ theme, id, issueDetailOpened }) =>
-            id === issueDetailOpened ? theme.color.white : theme.color.black}; */
         background-color: ${({ theme }) => theme.color.white};
         border: 2px solid
             ${({ theme, id, issueDetailOpened }) => (id === issueDetailOpened ? theme.color.main : theme.color.white)};
-        /* background-color: ${({ theme, id, issueDetailOpened }) =>
-            id === issueDetailOpened ? theme.color.main : theme.color.white}; */
         border-radius: 8px;
         &:first-child {
             margin-top: 0;
@@ -75,12 +73,25 @@ const S = {
         transition-duration: 0.2s;
         cursor: pointer;
         &:hover {
-            /* border: solid 1px ${({ theme }) => theme.color.main}; */
-            /* background-color: ${({ theme }) => theme.color.lightgray}; */
-            /* color: ${({ theme }) => theme.color.white}; */
             transform: translateY(-3px);
             box-shadow: 1px 1px 5px 1px ${({ theme }) => theme.color.middlegray};
         }
+    `,
+    Status: styled.div`
+        padding: 4px;
+        width: 2px;
+        height: 2px;
+        border-radius: 100%;
+        background-color: ${({ theme, status }) => {
+            switch (status) {
+                case 'toDo':
+                    return theme.color.success
+                case 'inProgress':
+                    return theme.color.pending
+                default:
+                    return theme.color.warning
+            }
+        }};
     `,
     Description: styled.div`
         display: flex;

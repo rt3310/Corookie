@@ -1,5 +1,6 @@
 package com.fourttttty.corookie.plan.application.repository;
 
+import com.fourttttty.corookie.plan.domain.CategoryInPlan;
 import com.fourttttty.corookie.plan.domain.PlanCategory;
 import com.fourttttty.corookie.plan.infrastructure.PlanCategoryJpaRepository;
 import java.util.Optional;

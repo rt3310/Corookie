@@ -19,6 +19,7 @@ export const URL = {
 }
 
 export const ISSUE_OPTIONS = {
+    title: 'title',
     priority: 'priority',
     manager: 'manager',
     category: 'category',
@@ -42,6 +43,12 @@ export const PLAN_OPTIONS = {
         placeholder: '분류 선택',
         options: ['분류 선택', '일반', '일반'],
     },
+}
+
+export const IMOTICON_OPTIONS = {
+    thumb: 'thumb',
+    happy: 'happy',
+    sad: 'sad',
 }
 
 export const MAX_WIDTH = '1920px'
