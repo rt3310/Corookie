@@ -7,14 +7,14 @@ import lombok.Builder;
 import java.time.LocalDateTime;
 
 @Builder
-public record PlanResponse(@NotNull Long planId,
-                           @NotNull String planName,
-                           @NotNull String description,
-                           @NotNull LocalDateTime planStart,
-                           @NotNull LocalDateTime planEnd,
-                           @NotNull List<PlanCategoryResponse> categories,
-                           @NotNull List<PlanMemberResponse> members,
-                           @NotNull Boolean enabled) {
+public record PlanResponse(Long planId,
+                           String planName,
+                           String description,
+                           LocalDateTime planStart,
+                           LocalDateTime planEnd,
+                           List<PlanCategoryResponse> categories,
+                           List<PlanMemberResponse> members,
+                           Boolean enabled) {
     public static PlanResponse from(Plan plan, List<PlanCategoryResponse> categories, List<PlanMemberResponse> members) {
         return PlanResponse.builder()
             .planId(plan.getId())

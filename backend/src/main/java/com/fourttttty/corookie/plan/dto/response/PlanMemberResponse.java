@@ -5,10 +5,10 @@ import com.fourttttty.corookie.plan.domain.PlanMember;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record PlanMemberResponse(@NotNull Long id,
-                                 @NotBlank String name) {
+public record PlanMemberResponse(Long id,
+                                 String name) {
     public static PlanMemberResponse from(PlanMember planMember){
         Member member = planMember.getId().getMember();
-        return new PlanMemberResponse(member.getId(),member.getName());
+        return new PlanMemberResponse(member.getId(), member.getName());
     }
 }

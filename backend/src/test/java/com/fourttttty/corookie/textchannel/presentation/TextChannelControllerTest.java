@@ -1,6 +1,8 @@
 package com.fourttttty.corookie.textchannel.presentation;
 
+import com.fourttttty.corookie.member.domain.AuthProvider;
 import com.fourttttty.corookie.member.domain.Member;
+import com.fourttttty.corookie.member.domain.Oauth2;
 import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.support.RestDocsTest;
 import com.fourttttty.corookie.textchannel.application.service.TextChannelService;
@@ -43,7 +45,7 @@ class TextChannelControllerTest extends RestDocsTest {
 
     @BeforeEach
     void initTexture() {
-        Member member = new Member("name");
+        Member member = Member.of("name", "email", Oauth2.of(AuthProvider.KAKAO, "account"));
         project = Project.of("project",
                 "description",
                 true,

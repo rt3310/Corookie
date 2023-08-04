@@ -11,6 +11,7 @@ import com.fourttttty.corookie.plan.domain.Plan;
 import com.fourttttty.corookie.plan.domain.PlanCategory;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -23,8 +24,7 @@ import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -36,11 +36,14 @@ import com.fourttttty.corookie.plan.dto.request.PlanCreateRequest;
 import com.fourttttty.corookie.plan.dto.request.PlanMemberCreateRequest;
 import com.fourttttty.corookie.plan.dto.request.PlanMemberDeleteRequest;
 import com.fourttttty.corookie.plan.dto.request.PlanUpdateRequest;
+import com.fourttttty.corookie.plan.dto.response.CalendarPlanResponse;
 import com.fourttttty.corookie.plan.dto.response.PlanCategoryResponse;
 import com.fourttttty.corookie.plan.dto.response.PlanMemberResponse;
 import com.fourttttty.corookie.plan.dto.response.PlanResponse;
 import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.support.RestDocsTest;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +57,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
 @WebMvcTest(PlanController.class)
-class planControllerTest extends RestDocsTest {
+class PlanControllerTest extends RestDocsTest {
 
     @MockBean
     private PlanService planService;
@@ -99,10 +102,41 @@ class planControllerTest extends RestDocsTest {
     }
 
     @Test
+    @DisplayName("년 월로 일정을 조회한다")
+    void planCalendarList() throws Exception {
+        CalendarPlanResponse response = CalendarPlanResponse.from(plan);
+        given(planService.findByDate(any(LocalDate.class))).willReturn(List.of(response));
+        //when
+        ResultActions perform = mockMvc.perform(get("/api/v1/projects/{projectId}/plans", 1L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .queryParam("date", String.valueOf(LocalDate.of(2023, 7, 2))));
+
+        //then
+        perform.andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].planName").value(response.planName()))
+                .andExpect(jsonPath("$[0].planStart").value(toJson(response.planStart()).replace("\"", "")))
+                .andExpect(jsonPath("$[0].planEnd").value(toJson(response.planEnd()).replace("\"", "")));
+
+        perform.andDo(print())
+                .andDo(document("plan-list",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        pathParameters(
+                                parameterWithName("projectId").description("프로젝트 키")),
+                        queryParameters(
+                                parameterWithName("date").description("캘린더 월")),
+                        responseFields(
+                                fieldWithPath("[].id").type(NUMBER).description("일정 키"),
+                                fieldWithPath("[].planName").type(STRING).description("일정 이름"),
+                                fieldWithPath("[].planStart").type(STRING).description("일정 시작일"),
+                                fieldWithPath("[].planEnd").type(STRING).description("일정 종료일"))));
+    }
+
+    @Test
     @DisplayName("일정 생성")
     void planCreate() throws Exception {
         //given
-        BDDMockito.given(planService.createPlan(any(PlanCreateRequest.class), any(Long.class)))
+        given(planService.createPlan(any(PlanCreateRequest.class), any(Long.class)))
             .willReturn(PlanResponse.from(plan,
                 planCategories.stream()
                     .map(PlanCategoryResponse::from)
@@ -138,7 +172,7 @@ class planControllerTest extends RestDocsTest {
             .andExpect(jsonPath("$.members[0].id").value(request.members().get(0).id()));
 
         perform.andDo(print())
-            .andDo(document("post-create",
+            .andDo(document("plan-create",
                 getDocumentRequest(),
                 getDocumentResponse(),
                 pathParameters(
@@ -180,7 +214,7 @@ class planControllerTest extends RestDocsTest {
                 .toList()
         );
 
-        BDDMockito.given(planService.findById(any(Long.class)))
+        given(planService.findById(any(Long.class)))
             .willReturn(planResponse);
 
         //when
@@ -200,7 +234,7 @@ class planControllerTest extends RestDocsTest {
                 planResponse.members().get(0).name()));
 
         perform.andDo(print())
-            .andDo(document("get-find",
+            .andDo(document("plan-Detail",
                 getDocumentResponse(),
                 pathParameters(
                     parameterWithName("projectId").description("프로젝트 id"),
@@ -251,7 +285,7 @@ class planControllerTest extends RestDocsTest {
                 .map(member -> PlanMemberResponse.from(PlanMember.of(member, plan)))
                 .toList());
 
-        BDDMockito.given(
+        given(
                 planService.modifyPlan(any(PlanUpdateRequest.class), any(Long.class), any(Long.class)))
             .willReturn(planResponse);
 
@@ -274,7 +308,7 @@ class planControllerTest extends RestDocsTest {
                 planResponse.members().get(0).name()));
 
         perform.andDo(print())
-            .andDo(document("put-modify",
+            .andDo(document("plan-update",
                 getDocumentRequest(),
                 getDocumentResponse(),
                 pathParameters(
@@ -317,7 +351,7 @@ class planControllerTest extends RestDocsTest {
         perform.andExpect(status().isNoContent());
 
         perform.andDo(print())
-            .andDo(document("delete-plan",
+            .andDo(document("plan-delete",
                 pathParameters(
                     parameterWithName("projectId").description("프로젝트 키"),
                     parameterWithName("planId").description("일정 키"))));
@@ -329,7 +363,7 @@ class planControllerTest extends RestDocsTest {
     void categoryCreate() throws Exception {
         //given
         PlanCategoryResponse response = PlanCategoryResponse.from(planCategories.get(0));
-        BDDMockito.given(
+        given(
                 planService.createPlanCategory(any(Long.class), any(PlanCategoryCreateRequest.class)))
             .willReturn(response);
 
@@ -348,7 +382,7 @@ class planControllerTest extends RestDocsTest {
             .andExpect(jsonPath("$.id").value(response.id()));
 
         perform.andDo(print())
-            .andDo(document("post-categoryCreate",
+            .andDo(document("planCategory-create",
                 getDocumentRequest(),
                 getDocumentResponse(),
                 pathParameters(
@@ -379,7 +413,7 @@ class planControllerTest extends RestDocsTest {
         perform.andExpect(status().isNoContent());
 
         perform.andDo(print())
-            .andDo(document("delete-categoryDelete",
+            .andDo(document("planCategory-delete",
                 getDocumentRequest(),
                 getDocumentResponse(),
                 pathParameters(
@@ -395,7 +429,7 @@ class planControllerTest extends RestDocsTest {
         //given
         PlanMemberResponse response = PlanMemberResponse.from(
             PlanMember.of(planMembers.get(0), plan));
-        BDDMockito.given(
+        given(
                 planService.createPlanMember(any(Long.class), any(PlanMemberCreateRequest.class)))
             .willReturn(response);
 
@@ -413,7 +447,7 @@ class planControllerTest extends RestDocsTest {
             .andExpect(jsonPath("$.name").value(planMembers.get(0).getName()));
 
         perform.andDo(print())
-            .andDo(document("post-memberCreate",
+            .andDo(document("planMember-create",
                 getDocumentRequest(),
                 getDocumentResponse(),
                 pathParameters(
@@ -443,7 +477,7 @@ class planControllerTest extends RestDocsTest {
         perform.andExpect(status().isNoContent());
 
         perform.andDo(print())
-            .andDo(document("delete-memberDelete",
+            .andDo(document("planMember-delete",
                 getDocumentRequest(),
                 getDocumentResponse(),
                 pathParameters(

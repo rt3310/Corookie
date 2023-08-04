@@ -13,6 +13,7 @@ import com.fourttttty.corookie.plan.dto.request.PlanCreateRequest;
 import com.fourttttty.corookie.plan.dto.request.PlanMemberCreateRequest;
 import com.fourttttty.corookie.plan.dto.request.PlanMemberDeleteRequest;
 import com.fourttttty.corookie.plan.dto.request.PlanUpdateRequest;
+import com.fourttttty.corookie.plan.dto.response.CalendarPlanResponse;
 import com.fourttttty.corookie.plan.dto.response.PlanCategoryResponse;
 import com.fourttttty.corookie.plan.dto.response.PlanMemberResponse;
 import com.fourttttty.corookie.plan.dto.response.PlanResponse;
@@ -25,6 +26,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -32,11 +36,17 @@ import org.springframework.transaction.annotation.Transactional;
 public class PlanService {
 
     private final PlanRepository planRepository;
-    private final CategoryInPlanService categoryInPlanService;
     private final ProjectRepository projectRepository;
     private final PlanCategoryRepository planCategoryRepository;
-    private final PlanMemberService planMemberService;
     private final MemberRepository memberRepository;
+    private final CategoryInPlanService categoryInPlanService;
+    private final PlanMemberService planMemberService;
+
+    public List<CalendarPlanResponse> findByDate(LocalDate date) {
+        return planRepository.findByDate(date).stream()
+                .map(CalendarPlanResponse::from)
+                .toList();
+    }
 
     public PlanResponse findById(Long id) {
         Plan plan = planRepository.findById(id).orElseThrow(PlanNotFoundException::new);
@@ -47,10 +57,6 @@ public class PlanService {
                         .orElseThrow(EntityNotFoundException::new)))
                 .toList(),
             planMemberService.findAllByPlanId(id));
-    }
-
-    public Plan findEntityById(Long id) {
-        return planRepository.findById(id).orElseThrow(PlanNotFoundException::new);
     }
 
     @Transactional
@@ -117,5 +123,9 @@ public class PlanService {
         planMemberService.deletePlanMember(PlanMember.of(
             memberRepository.findById(request.id()).orElseThrow(EntityNotFoundException::new),
             findEntityById(id)));
+    }
+
+    private Plan findEntityById(Long id) {
+        return planRepository.findById(id).orElseThrow(PlanNotFoundException::new);
     }
 }
