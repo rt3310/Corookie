@@ -52,6 +52,7 @@ const S = {
     Container: styled.div`
         display: flex;
         width: 100%;
+        height: 100%;
         max-height: calc(100vh - 56px);
     `,
     UserAccess: styled.div`

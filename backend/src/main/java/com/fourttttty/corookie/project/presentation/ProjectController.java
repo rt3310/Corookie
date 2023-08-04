@@ -1,11 +1,13 @@
 package com.fourttttty.corookie.project.presentation;
 
+import com.fourttttty.corookie.config.security.LoginUser;
 import com.fourttttty.corookie.project.application.service.ProjectService;
 import com.fourttttty.corookie.project.dto.request.ProjectCreateRequest;
 import com.fourttttty.corookie.project.dto.request.ProjectUpdateRequest;
 import com.fourttttty.corookie.project.dto.response.ProjectResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,15 +30,16 @@ public class ProjectController {
     }
 
     @PostMapping
-    public ResponseEntity<ProjectResponse> projectCreate(@RequestBody @Validated ProjectCreateRequest projectCreateRequest,
-                                                         @RequestParam Long memberId) {
-        return ResponseEntity.ok(projectService.create(projectCreateRequest, memberId));
+    public ResponseEntity<ProjectResponse> projectCreate(@RequestBody @Validated ProjectCreateRequest request,
+                                                         @AuthenticationPrincipal LoginUser loginUser) {
+        return ResponseEntity.ok(projectService.create(request, loginUser.getMemberId()));
     }
 
     @PutMapping("/{projectId}")
     public ResponseEntity<ProjectResponse> projectModify(@PathVariable Long projectId,
-                                                         @RequestBody @Validated ProjectUpdateRequest projectUpdateRequest){
-        return ResponseEntity.ok(projectService.modify(projectUpdateRequest, projectId));
+                                                         @RequestBody
+                                                         @Validated ProjectUpdateRequest request) {
+        return ResponseEntity.ok(projectService.modify(request, projectId));
     }
 
     @DeleteMapping("/{projectId}")
