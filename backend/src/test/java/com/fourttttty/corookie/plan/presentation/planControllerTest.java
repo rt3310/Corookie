@@ -42,7 +42,6 @@ import com.fourttttty.corookie.plan.dto.response.PlanResponse;
 import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.support.RestDocsTest;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -72,7 +71,7 @@ class planControllerTest extends RestDocsTest {
         project = Project.of("name", "description", true,
             "http://test.com", false, member);
 
-        plan = Plan.of(
+        plan = Plan.of(1L,
             "name",
             "testDescription",
             LocalDateTime.now(),
@@ -82,18 +81,18 @@ class planControllerTest extends RestDocsTest {
 
         planCategories = new ArrayList<>() {
             {
-                add(PlanCategory.of( "testCategory1"));
-                add(PlanCategory.of( "testCategory2"));
+                add(PlanCategory.of(1L, "testCategory1"));
+                add(PlanCategory.of(2L, "testCategory2"));
             }
         };
 
         planMembers = new ArrayList<>() {
             {
-                add(Member.of( "name1", "test@gmail.com",
+                add(Member.of(1L, "name1", "test@gmail.com",
                     Oauth2.of(AuthProvider.KAKAO, "account")));
-                add(Member.of( "name2", "test@gmail.com",
+                add(Member.of(2L, "name2", "test@gmail.com",
                     Oauth2.of(AuthProvider.KAKAO, "account")));
-                add(Member.of( "name3", "test@gmail.com",
+                add(Member.of(4L, "name3", "test@gmail.com",
                     Oauth2.of(AuthProvider.KAKAO, "account")));
             }
         };
@@ -238,7 +237,7 @@ class planControllerTest extends RestDocsTest {
                 .toList()
         );
 
-        PlanResponse planResponse = PlanResponse.from(Plan.of(
+        PlanResponse planResponse = PlanResponse.from(Plan.of(1L,
                 request.planName(),
                 request.description(),
                 request.planStart(),
