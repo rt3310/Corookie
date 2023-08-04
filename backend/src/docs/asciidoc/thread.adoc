@@ -1,0 +1,27 @@
+= Thread API
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+== 스레드 생성
+
+=== Request
+
+include::{snippets}/text-channel-create/http-request.adoc[]
+
+include::{snippets}/text-channel-create/path-parameters.adoc[]
+
+include::{snippets}/text-channel-create/request-fields.adoc[]
+
+=== Response
+
+include::{snippets}/text-channel-create/http-response.adoc[]
+
+include::{snippets}/text-channel-create/request-fields.adoc[]

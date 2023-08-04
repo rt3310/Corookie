@@ -1,15 +1,32 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
 import * as utils from 'utils'
+import * as hooks from 'hooks'
 
 const TopTab = () => {
+    const { profileOpened, openProfile, closeProfile } = hooks.profileState()
+    const { closeComment } = hooks.commentState()
+    const { closeIssueDetail } = hooks.issueDetailState()
     const navigate = useNavigate()
 
+    const toggleProfile = () => {
+        if (profileOpened) {
+            closeProfile()
+        } else {
+            openProfile()
+            closeComment()
+            closeIssueDetail()
+        }
+    }
+
     return (
-        <S.Wrap>
+        <S.Wrap style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <S.Title onClick={() => navigate(utils.URL.HOME.MAIN)}>CoRookie</S.Title>
+            <S.Profile onClick={() => toggleProfile()}>
+                <img src={require('images/thread_profile.png').default} alt="스레드 이미지" />
+            </S.Profile>
         </S.Wrap>
     )
 }
@@ -25,11 +42,21 @@ const S = {
     Title: styled.div`
         height: 100%;
         width: 167px;
+        font-family: 'Futura PT';
         font-size: ${({ theme }) => theme.fontsize.logo};
         font-weight: 700;
         color: ${({ theme }) => theme.color.main};
         padding: 24px 8px 8px 32px;
         cursor: pointer;
+    `,
+    Profile: styled.div`
+        width: 40px;
+        margin: 16px 16px 0 0;
+        cursor: pointer;
+        & img {
+            width: 40px;
+            height: 40px;
+        }
     `,
 }
 

@@ -1,12 +1,13 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 import * as components from 'components'
+import * as hooks from 'hooks'
 
 import { IoExitOutline } from 'react-icons/io5'
 
 const TextChat = () => {
-    const [openComment, setOpenComment] = useState(false)
+    const { commentOpened } = hooks.commentState()
 
     return (
         <S.Wrap>
@@ -19,7 +20,7 @@ const TextChat = () => {
             <S.Container>
                 <S.ChatBox>
                     <S.ThreadBox>
-                        <components.Thread openComment={openComment} setOpenComment={setOpenComment} />
+                        <components.Thread />
                         <components.Thread />
                         <components.Thread />
                         <components.Thread />
@@ -35,7 +36,7 @@ const TextChat = () => {
                     </S.ThreadBox>
                     <components.EditBox />
                 </S.ChatBox>
-                {openComment && <components.CommentBox />}
+                {commentOpened && <components.CommentBox />}
             </S.Container>
         </S.Wrap>
     )
