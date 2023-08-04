@@ -38,6 +38,17 @@ public class Member {
         this.oauth2 = oauth2;
     }
 
+    public static Member of(Long id, String name, String email, Oauth2 oauth2) {
+        return new Member(id, name, email, oauth2);
+    }
+
+    private Member(Long id, String name, String email, Oauth2 oauth2) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.oauth2 = oauth2;
+    }
+
     public static Member of(String name, String email, Oauth2 oauth2) {
         return new Member(name, email, oauth2);
     }

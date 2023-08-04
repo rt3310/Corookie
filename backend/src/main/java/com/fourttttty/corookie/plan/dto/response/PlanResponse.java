@@ -12,8 +12,10 @@ public record PlanResponse(@NotNull Long planId,
                            @NotNull String description,
                            @NotNull LocalDateTime planStart,
                            @NotNull LocalDateTime planEnd,
-                           @NotNull List<PlanCategoryResponse> categories) {
-    public static PlanResponse from(Plan plan, List<PlanCategoryResponse> categories) {
+                           @NotNull List<PlanCategoryResponse> categories,
+                           @NotNull List<PlanMemberResponse> members,
+                           @NotNull Boolean enabled) {
+    public static PlanResponse from(Plan plan, List<PlanCategoryResponse> categories, List<PlanMemberResponse> members) {
         return PlanResponse.builder()
             .planId(plan.getId())
             .planName(plan.getPlanName())
@@ -21,7 +23,8 @@ public record PlanResponse(@NotNull Long planId,
             .planStart(plan.getPlanStart())
             .planEnd(plan.getPlanEnd())
             .categories(categories)
+            .members(members)
+            .enabled(plan.getEnabled())
             .build();
     }
 }
-

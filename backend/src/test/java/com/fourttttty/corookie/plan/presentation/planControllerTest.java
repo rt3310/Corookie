@@ -1,0 +1,455 @@
+package com.fourttttty.corookie.plan.presentation;
+
+import static com.fourttttty.corookie.support.ApiDocumentUtils.getDocumentRequest;
+import static com.fourttttty.corookie.support.ApiDocumentUtils.getDocumentResponse;
+
+import com.fourttttty.corookie.member.domain.AuthProvider;
+import com.fourttttty.corookie.member.domain.Member;
+import com.fourttttty.corookie.member.domain.Oauth2;
+import com.fourttttty.corookie.plan.application.service.PlanService;
+import com.fourttttty.corookie.plan.domain.Plan;
+import com.fourttttty.corookie.plan.domain.PlanCategory;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
+import static org.springframework.restdocs.payload.JsonFieldType.ARRAY;
+import static org.springframework.restdocs.payload.JsonFieldType.BOOLEAN;
+import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
+import static org.springframework.restdocs.payload.JsonFieldType.STRING;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import com.fourttttty.corookie.plan.domain.PlanMember;
+import com.fourttttty.corookie.plan.dto.request.PlanCategoryCreateRequest;
+import com.fourttttty.corookie.plan.dto.request.PlanCategoryDeleteRequest;
+import com.fourttttty.corookie.plan.dto.request.PlanCreateRequest;
+import com.fourttttty.corookie.plan.dto.request.PlanMemberCreateRequest;
+import com.fourttttty.corookie.plan.dto.request.PlanMemberDeleteRequest;
+import com.fourttttty.corookie.plan.dto.request.PlanUpdateRequest;
+import com.fourttttty.corookie.plan.dto.response.PlanCategoryResponse;
+import com.fourttttty.corookie.plan.dto.response.PlanMemberResponse;
+import com.fourttttty.corookie.plan.dto.response.PlanResponse;
+import com.fourttttty.corookie.project.domain.Project;
+import com.fourttttty.corookie.support.RestDocsTest;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.mockito.BDDMockito;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.ResultActions;
+
+@WebMvcTest(PlanController.class)
+class planControllerTest extends RestDocsTest {
+
+    @MockBean
+    private PlanService planService;
+
+    private Member member;
+    private Project project;
+    private Plan plan;
+    private List<PlanCategory> planCategories;
+    private List<Member> planMembers;
+
+    @BeforeEach
+    void initTexture() {
+        member = Member.of("name", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
+        project = Project.of("name", "description", true,
+            "http://test.com", false, member);
+
+        plan = Plan.of(1L,
+            "name",
+            "testDescription",
+            LocalDateTime.now(),
+            LocalDateTime.now().minusDays(2),
+            true,
+            project);
+
+        planCategories = new ArrayList<>() {
+            {
+                add(PlanCategory.of(1L, "testCategory1"));
+                add(PlanCategory.of(2L, "testCategory2"));
+            }
+        };
+
+        planMembers = new ArrayList<>() {
+            {
+                add(Member.of(1L, "name1", "test@gmail.com",
+                    Oauth2.of(AuthProvider.KAKAO, "account")));
+                add(Member.of(2L, "name2", "test@gmail.com",
+                    Oauth2.of(AuthProvider.KAKAO, "account")));
+                add(Member.of(4L, "name3", "test@gmail.com",
+                    Oauth2.of(AuthProvider.KAKAO, "account")));
+            }
+        };
+    }
+
+    @Test
+    @DisplayName("일정 생성")
+    void planCreate() throws Exception {
+        //given
+        BDDMockito.given(planService.createPlan(any(PlanCreateRequest.class), any(Long.class)))
+            .willReturn(PlanResponse.from(plan,
+                planCategories.stream()
+                    .map(PlanCategoryResponse::from)
+                    .toList(),
+                planMembers.stream()
+                    .map(member -> PlanMemberResponse.from(PlanMember.of(member, plan)))
+                    .toList()
+            ));
+
+        PlanCreateRequest request = new PlanCreateRequest(
+            plan.getPlanName(),
+            plan.getDescription(),
+            plan.getPlanStart(),
+            plan.getPlanEnd(),
+            planCategories.stream()
+                .map(planCategory -> new PlanCategoryCreateRequest(planCategory.getContent()))
+                .toList(),
+            planMembers.stream()
+                .map(member -> new PlanMemberCreateRequest(member.getId()))
+                .toList()
+        );
+        //when
+        ResultActions perform = mockMvc.perform(post("/api/v1/projects/{projectId}/plans", 1L)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(toJson(request)));
+
+        //then
+        perform.andExpect(status().isOk())
+            .andExpect(jsonPath("$.planName").value(request.planName()))
+            .andExpect(jsonPath("$.description").value(request.description()))
+            .andExpect(
+                jsonPath("$.categories[0].content").value(request.categories().get(0).content()))
+            .andExpect(jsonPath("$.members[0].id").value(request.members().get(0).id()));
+
+        perform.andDo(print())
+            .andDo(document("post-create",
+                getDocumentRequest(),
+                getDocumentResponse(),
+                pathParameters(
+                    parameterWithName("projectId").description("프로젝트 키")),
+                requestFields(
+                    fieldWithPath("planName").type(STRING).description("일정 이름"),
+                    fieldWithPath("description").type(STRING).description("일정 설명"),
+                    fieldWithPath("planStart").type(STRING).description("일정 시작일"),
+                    fieldWithPath("planEnd").type(STRING).description("일정 종료일"),
+                    fieldWithPath("categories").type(ARRAY).description("일정 카테고리"),
+                    fieldWithPath("members").type(ARRAY).description("일정 멤버"),
+                    fieldWithPath("categories.[].content").type(STRING).description("일정 카테고리 내용"),
+                    fieldWithPath("members.[].id").type(NUMBER).description("일정 멤버 id")),
+                responseFields(
+                    fieldWithPath("planName").type(STRING).description("일정 이름"),
+                    fieldWithPath("description").type(STRING).description("일정 설명"),
+                    fieldWithPath("planStart").type(STRING).description("일정 시작일"),
+                    fieldWithPath("planEnd").type(STRING).description("일정 종료일"),
+                    fieldWithPath("enabled").type(BOOLEAN).description("활성화"),
+                    fieldWithPath("categories").type(ARRAY).description("일정 카테고리"),
+                    fieldWithPath("categories.[].id").type(NUMBER).description("일정 카테고리 id"),
+                    fieldWithPath("categories.[].content").type(STRING).description("일정 카테고리 내용"),
+                    fieldWithPath("members").type(ARRAY).description("일정 카테고리"),
+                    fieldWithPath("members.[].id").type(NUMBER).description("일정 멤버 id"),
+                    fieldWithPath("members.[].name").type(STRING).description("일정 멤버 내용"),
+                    fieldWithPath("planId").type(NUMBER).description("일정 id"))));
+    }
+
+    @Test
+    @DisplayName("일정 호출")
+    void planDetail() throws Exception {
+        //given
+        PlanResponse planResponse = PlanResponse.from(plan,
+            planCategories.stream()
+                .map(PlanCategoryResponse::from)
+                .toList(),
+            planMembers.stream()
+                .map(member -> PlanMemberResponse.from(PlanMember.of(member, plan)))
+                .toList()
+        );
+
+        BDDMockito.given(planService.findById(any(Long.class)))
+            .willReturn(planResponse);
+
+        //when
+        ResultActions perform = mockMvc.perform(
+            get("/api/v1/projects/{projectId}/plans/{planId}", 1L, 1L));
+
+        //then
+        perform.andExpect(status().isOk())
+            .andExpect(jsonPath("$.planId").value(planResponse.planId()))
+            .andExpect(jsonPath("$.planName").value(planResponse.planName()))
+            .andExpect(jsonPath("$.description").value(planResponse.description()))
+            .andExpect(jsonPath("$.categories[0].content").value(
+                planResponse.categories().get(0).content()))
+            .andExpect(jsonPath("$.members[0].id").value(
+                planResponse.members().get(0).id()))
+            .andExpect(jsonPath("$.members[0].name").value(
+                planResponse.members().get(0).name()));
+
+        perform.andDo(print())
+            .andDo(document("get-find",
+                getDocumentResponse(),
+                pathParameters(
+                    parameterWithName("projectId").description("프로젝트 id"),
+                    parameterWithName("planId").description("플랜 id")),
+                responseFields(
+                    fieldWithPath("planName").type(STRING).description("일정 이름"),
+                    fieldWithPath("description").type(STRING).description("일정 설명"),
+                    fieldWithPath("planStart").type(STRING).description("일정 시작일"),
+                    fieldWithPath("planEnd").type(STRING).description("일정 종료일"),
+                    fieldWithPath("enabled").type(BOOLEAN).description("활성화"),
+                    fieldWithPath("categories").type(ARRAY).description("일정 카테고리"),
+                    fieldWithPath("categories.[].id").type(NUMBER).description("일정 카테고리 id"),
+                    fieldWithPath("categories.[].content").type(STRING).description("일정 카테고리 내용"),
+                    fieldWithPath("members").type(ARRAY).description("일정 카테고리"),
+                    fieldWithPath("members.[].id").type(NUMBER).description("일정 멤버 id"),
+                    fieldWithPath("members.[].name").type(STRING).description("일정 멤버 내용"),
+                    fieldWithPath("planId").type(NUMBER).description("일정 id"))));
+    }
+
+    @Test
+    @DisplayName("일정 수정")
+    void planModify() throws Exception {
+        //given
+        PlanUpdateRequest request = new PlanUpdateRequest(
+            plan.getPlanName(),
+            plan.getDescription(),
+            plan.getPlanStart().minusDays(2),
+            plan.getPlanEnd().minusDays(2),
+            planCategories.stream()
+                .map(planCategory -> new PlanCategoryDeleteRequest(planCategory.getContent()))
+                .toList(),
+            planMembers.stream()
+                .map(member -> new PlanMemberDeleteRequest(member.getId()))
+                .toList()
+        );
+
+        PlanResponse planResponse = PlanResponse.from(Plan.of(1L,
+                request.planName(),
+                request.description(),
+                request.planStart(),
+                request.planEnd(),
+                true,
+                project),
+            planCategories.stream()
+                .map(PlanCategoryResponse::from)
+                .toList(),
+            planMembers.stream()
+                .map(member -> PlanMemberResponse.from(PlanMember.of(member, plan)))
+                .toList());
+
+        BDDMockito.given(
+                planService.modifyPlan(any(PlanUpdateRequest.class), any(Long.class), any(Long.class)))
+            .willReturn(planResponse);
+
+        //when
+        ResultActions perform = mockMvc.perform(
+            put("/api/v1/projects/{projectId}/plans/{planId}", 1L, 1L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(request)));
+
+        //then
+        perform.andExpect(status().isOk())
+            .andExpect(jsonPath("$.planId").value(planResponse.planId()))
+            .andExpect(jsonPath("$.planName").value(planResponse.planName()))
+            .andExpect(jsonPath("$.description").value(planResponse.description()))
+            .andExpect(jsonPath("$.categories[0].content").value(
+                planResponse.categories().get(0).content()))
+            .andExpect(jsonPath("$.members[0].id").value(
+                planResponse.members().get(0).id()))
+            .andExpect(jsonPath("$.members[0].name").value(
+                planResponse.members().get(0).name()));
+
+        perform.andDo(print())
+            .andDo(document("put-modify",
+                getDocumentRequest(),
+                getDocumentResponse(),
+                pathParameters(
+                    parameterWithName("projectId").description("프로젝트 키"),
+                    parameterWithName("planId").description("일정 키")),
+                requestFields(
+                    fieldWithPath("planName").type(STRING).description("일정 이름"),
+                    fieldWithPath("description").type(STRING).description("일정 설명"),
+                    fieldWithPath("planStart").type(STRING).description("일정 시작일"),
+                    fieldWithPath("planEnd").type(STRING).description("일정 종료일"),
+                    fieldWithPath("categories").type(ARRAY).description("일정 카테고리"),
+                    fieldWithPath("members").type(ARRAY).description("일정 멤버"),
+                    fieldWithPath("categories.[].content").type(STRING).description("일정 카테고리 내용"),
+                    fieldWithPath("members.[].id").type(NUMBER).description("일정 멤버 id")),
+                responseFields(
+                    fieldWithPath("planName").type(STRING).description("일정 이름"),
+                    fieldWithPath("description").type(STRING).description("일정 설명"),
+                    fieldWithPath("planStart").type(STRING).description("일정 시작일"),
+                    fieldWithPath("planEnd").type(STRING).description("일정 종료일"),
+                    fieldWithPath("enabled").type(BOOLEAN).description("활성화"),
+                    fieldWithPath("categories").type(ARRAY).description("일정 카테고리"),
+                    fieldWithPath("categories.[].id").type(NUMBER).description("일정 카테고리 id"),
+                    fieldWithPath("categories.[].content").type(STRING).description("일정 카테고리 내용"),
+                    fieldWithPath("members").type(ARRAY).description("일정 카테고리"),
+                    fieldWithPath("members.[].id").type(NUMBER).description("일정 멤버 id"),
+                    fieldWithPath("members.[].name").type(STRING).description("일정 멤버 내용"),
+                    fieldWithPath("planId").type(NUMBER).description("일정 id"))));
+    }
+
+    @Test
+    @DisplayName("일정 삭제")
+    void planDelete() throws Exception {
+        //given
+
+        //when
+        ResultActions perform = mockMvc.perform(
+            delete("/api/v1/projects/{projectId}/plans/{planId}", 1L, 1L));
+
+        //then
+        perform.andExpect(status().isNoContent());
+
+        perform.andDo(print())
+            .andDo(document("delete-plan",
+                pathParameters(
+                    parameterWithName("projectId").description("프로젝트 키"),
+                    parameterWithName("planId").description("일정 키"))));
+
+    }
+
+    @Test
+    @DisplayName("카테고리 추가")
+    void categoryCreate() throws Exception {
+        //given
+        PlanCategoryResponse response = PlanCategoryResponse.from(planCategories.get(0));
+        BDDMockito.given(
+                planService.createPlanCategory(any(Long.class), any(PlanCategoryCreateRequest.class)))
+            .willReturn(response);
+
+        PlanCategoryCreateRequest request = new PlanCategoryCreateRequest(
+            planCategories.get(0).getContent());
+
+        //when
+        ResultActions perform = mockMvc.perform(
+            post("/api/v1/projects/{projectId}/plans/{planId}/categories", 1L, 1L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(request)));
+
+        //then
+        perform.andExpect(status().isOk())
+            .andExpect(jsonPath("$.content").value(response.content()))
+            .andExpect(jsonPath("$.id").value(response.id()));
+
+        perform.andDo(print())
+            .andDo(document("post-categoryCreate",
+                getDocumentRequest(),
+                getDocumentResponse(),
+                pathParameters(
+                    parameterWithName("projectId").description("프로젝트 키"),
+                    parameterWithName("planId").description("일정 키")),
+                requestFields(
+                    fieldWithPath("content").type(STRING).description("카테고리 내용")),
+                responseFields(
+                    fieldWithPath("content").type(STRING).description("카테고리 내용"),
+                    fieldWithPath("id").type(NUMBER).description("카테고리 id"))));
+    }
+
+    @Test
+    @DisplayName("카테고리 삭제")
+    void categoryDelete() throws Exception {
+        //given
+        PlanCategoryDeleteRequest request = new PlanCategoryDeleteRequest(
+            planCategories.get(0).getContent());
+
+        //when
+        ResultActions perform = mockMvc.perform(delete(
+            "/api/v1/projects/{projectId}/plans/{planId}/categories",
+            1L, 1L)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(toJson(request)));
+
+        //then
+        perform.andExpect(status().isNoContent());
+
+        perform.andDo(print())
+            .andDo(document("delete-categoryDelete",
+                getDocumentRequest(),
+                getDocumentResponse(),
+                pathParameters(
+                    parameterWithName("projectId").description("프로젝트 키"),
+                    parameterWithName("planId").description("일정 키")),
+                requestFields(
+                    fieldWithPath("content").type(STRING).description("카테고리 내용"))));
+    }
+
+    @Test
+    @DisplayName("멤버 추가")
+    void memberCreate() throws Exception {
+        //given
+        PlanMemberResponse response = PlanMemberResponse.from(
+            PlanMember.of(planMembers.get(0), plan));
+        BDDMockito.given(
+                planService.createPlanMember(any(Long.class), any(PlanMemberCreateRequest.class)))
+            .willReturn(response);
+
+        PlanMemberCreateRequest request = new PlanMemberCreateRequest(planMembers.get(0).getId());
+
+        //when
+        ResultActions perform = mockMvc.perform(
+            post("/api/v1/projects/{projectId}/plans/{planId}/members", 1L, 1L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(request)));
+
+        //then
+        perform.andExpect(status().isOk())
+            .andExpect(jsonPath("$.id").value(planMembers.get(0).getId()))
+            .andExpect(jsonPath("$.name").value(planMembers.get(0).getName()));
+
+        perform.andDo(print())
+            .andDo(document("post-memberCreate",
+                getDocumentRequest(),
+                getDocumentResponse(),
+                pathParameters(
+                    parameterWithName("projectId").description("프로젝트 키"),
+                    parameterWithName("planId").description("일정 키")),
+                requestFields(
+                    fieldWithPath("id").type(NUMBER).description("멤버 키")),
+                responseFields(
+                    fieldWithPath("name").type(STRING).description("멤버 이름"),
+                    fieldWithPath("id").type(NUMBER).description("멤버 id"))));
+    }
+
+    @Test
+    @DisplayName("멤버 삭제")
+    void memberDelete() throws Exception {
+        //given
+        PlanMemberDeleteRequest request = new PlanMemberDeleteRequest(planMembers.get(0).getId());
+
+        //when
+        ResultActions perform = mockMvc.perform(delete(
+            "/api/v1/projects/{projectId}/plans/{planId}/members",
+            1L, 1L)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(toJson(request)));
+
+        //then
+        perform.andExpect(status().isNoContent());
+
+        perform.andDo(print())
+            .andDo(document("delete-memberDelete",
+                getDocumentRequest(),
+                getDocumentResponse(),
+                pathParameters(
+                    parameterWithName("projectId").description("프로젝트 키"),
+                    parameterWithName("planId").description("일정 키")),
+                requestFields(
+                    fieldWithPath("id").type(NUMBER).description("멤버 키"))));
+    }
+}
