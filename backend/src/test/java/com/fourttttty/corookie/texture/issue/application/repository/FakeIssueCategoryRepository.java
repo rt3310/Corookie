@@ -1,7 +1,10 @@
 package com.fourttttty.corookie.texture.issue.application.repository;
 
+import com.fourttttty.corookie.global.exception.IssueNotFoundException;
 import com.fourttttty.corookie.issue.application.repository.IssueCategoryRepository;
+import com.fourttttty.corookie.issue.application.repository.IssueRepository;
 import com.fourttttty.corookie.issue.domain.Category;
+import com.fourttttty.corookie.issue.domain.Issue;
 import com.fourttttty.corookie.issue.domain.IssueCategory;
 
 import java.util.HashMap;
@@ -29,10 +32,9 @@ public class FakeIssueCategoryRepository implements IssueCategoryRepository {
     }
 
     @Override
-    public List<IssueCategory> findByIssueId(Long issueId) {
-        return store.entrySet().stream()
-                .filter(entry -> entry.getValue().getIssue().getId().equals(issueId))
-                .map(entry -> store.get(entry.getKey()))
+    public List<IssueCategory> findByIssue(Issue issue) {
+        return store.values().stream()
+                .filter(issueCategory -> issueCategory.getIssue().equals(issue))
                 .toList();
     }
 }

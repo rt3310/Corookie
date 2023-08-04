@@ -9,10 +9,11 @@ import { BsPlus } from 'react-icons/bs'
 import { IoIosArrowForward, IoIosArrowBack } from 'react-icons/io'
 
 import * as components from 'components'
+import * as hooks from 'hooks'
 
 const Plan = () => {
     const [currentMonth, setCurrentMonth] = useState(new Date())
-    const [openRegister, setOpenRegister] = useState(false)
+    const { planRegisterOpened, openPlanRegister } = hooks.planRegisterState()
 
     const prevMonth = () => {
         setCurrentMonth(subMonths(currentMonth, 1))
@@ -34,7 +35,7 @@ const Plan = () => {
                             </div>
                             <IoIosArrowForward onClick={() => nextMonth()} />
                         </S.MonthBox>
-                        <S.CreateButton onClick={() => setOpenRegister(true)}>
+                        <S.CreateButton onClick={() => openPlanRegister()}>
                             <BsPlus /> 생성
                         </S.CreateButton>
                     </S.CalendarAccess>
@@ -52,7 +53,7 @@ const Plan = () => {
                     <components.Calendar currentMonth={currentMonth} />
                 </DndProvider>
             </S.Container>
-            {openRegister && <components.PlanRegister setOpenRegister={setOpenRegister} />}
+            {planRegisterOpened && <components.PlanRegister />}
         </S.Wrap>
     )
 }
