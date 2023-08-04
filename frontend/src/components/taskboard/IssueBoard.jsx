@@ -5,83 +5,26 @@ import * as components from 'components'
 import * as hooks from 'hooks'
 
 const IssueBoard = () => {
-    const { issueCreateOpened, closeIssueCreate } = hooks.issueCreateState()
+    const { issueCreateOpened } = hooks.issueCreateState()
+    const { tasks } = hooks.tasksState()
 
     return (
         <S.Container>
             <S.Wrap>
                 {issueCreateOpened && <components.IssueCreate />}
-                <components.IssuePreview
-                    id="1"
-                    title="사용자는 프로젝트를 생성한다. "
-                    type="frontend"
-                    manager="황상미"
-                    priority="Normal"
-                />
-                <components.IssuePreview
-                    id="2"
-                    title="사용자는 프로젝트를 생성한다. "
-                    type="frontend"
-                    manager="황상미"
-                    priority="Normal"
-                />
-                <components.IssuePreview
-                    id="3"
-                    title="사용자는 프로젝트를 생성한다. "
-                    type="frontend"
-                    manager="황상미"
-                    priority="Normal"
-                />
-                <components.IssuePreview
-                    id="4"
-                    title="사용자는 프로젝트를 생성한다. "
-                    type="frontend"
-                    manager="황상미"
-                    priority="Normal"
-                />
-                <components.IssuePreview
-                    id="5"
-                    title="사용자는 프로젝트를 생성한다. "
-                    type="frontend"
-                    manager="황상미"
-                    priority="Normal"
-                />
-                <components.IssuePreview
-                    title="사용자는 프로젝트를 생성한다. "
-                    type="frontend"
-                    manager="황상미"
-                    priority="Normal"
-                />
-                <components.IssuePreview
-                    title="사용자는 프로젝트를 생성한다. "
-                    type="frontend"
-                    manager="황상미"
-                    priority="Normal"
-                />
-                <components.IssuePreview
-                    title="사용자는 프로젝트를 생성한다. "
-                    type="frontend"
-                    manager="황상미"
-                    priority="Normal"
-                />
-                <components.IssuePreview
-                    title="사용자는 프로젝트를 생성한다. "
-                    type="frontend"
-                    manager="황상미"
-                    priority="Normal"
-                />
-                <components.IssuePreview
-                    title="사용자는 프로젝트를 생성한다. "
-                    type="frontend"
-                    manager="황상미"
-                    priority="Normal"
-                />
-                <components.IssuePreview
-                    title="사용자는 프로젝트를 생성한다. "
-                    type="frontend"
-                    manager="황상미"
-                    priority="Normal"
-                />
+                {tasks.map((task, idx) => {
+                    return (
+                        <components.IssuePreview
+                            key={idx}
+                            id={task.id}
+                            title={task.title}
+                            type={task.type}
+                            manager={task.manager}
+                            priority={task.priority}
+                            status={task.status}
+                        />
+                    )
+                })}
             </S.Wrap>
         </S.Container>
     )

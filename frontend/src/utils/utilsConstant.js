@@ -1,12 +1,15 @@
 export const URL = {
     LOGIN: {
         LOGIN: '/login',
+        SUCCESS: '/success',
     },
     HOME: {
         MAIN: '/',
     },
     CHAT: {
         TEXT: '/chat/text',
+        VIDEO: '/chat/video',
+        DIRECT: '/chat/direct',
     },
     TASK: {
         BOARD: '/task/board',
@@ -17,6 +20,7 @@ export const URL = {
 }
 
 export const ISSUE_OPTIONS = {
+    title: 'title',
     priority: 'priority',
     manager: 'manager',
     category: 'category',

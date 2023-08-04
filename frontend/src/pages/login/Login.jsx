@@ -1,11 +1,28 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import * as utils from 'utils'
+
 const Login = () => {
     const loginButton = [
-        { type: 'Google', name: 'Google', img: require('images/google_logo.png').default },
-        { type: 'Github', name: 'GitHub', img: require('images/github_logo.png').default },
-        { type: 'Kakao', name: '카카오', img: require('images/kakao_logo.svg').default },
+        {
+            type: 'Google',
+            name: 'Google',
+            img: require('images/google_logo.png').default,
+            url: utils.API_BASE_URL + '/oauth2/authorization/google',
+        },
+        {
+            type: 'Github',
+            name: 'GitHub',
+            img: require('images/github_logo.png').default,
+            url: utils.API_BASE_URL + '/oauth2/authorization/github',
+        },
+        {
+            type: 'Kakao',
+            name: '카카오',
+            img: require('images/kakao_logo.svg').default,
+            url: utils.API_BASE_URL + '/oauth2/authorization/kakao',
+        },
     ]
     return (
         <S.Wrap>
@@ -13,7 +30,7 @@ const Login = () => {
                 <S.Logo>CoRookie</S.Logo>
                 {loginButton.map((item, idx) => {
                     return (
-                        <S.SocialLogin key={idx} type={item.type}>
+                        <S.SocialLogin href={item.url} key={idx} type={item.type}>
                             <img src={item.img} alt={item.type} />
                             <S.Text>{item.name}로 로그인하기</S.Text>
                         </S.SocialLogin>
@@ -52,7 +69,7 @@ const S = {
         color: ${({ theme }) => theme.color.main};
         margin: 130px 0 70px;
     `,
-    SocialLogin: styled.div`
+    SocialLogin: styled.a`
         display: flex;
         align-items: center;
         justify-content: center;

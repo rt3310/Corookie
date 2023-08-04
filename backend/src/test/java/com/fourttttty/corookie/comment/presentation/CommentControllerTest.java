@@ -136,7 +136,7 @@ class CommentControllerTest extends RestDocsTest {
                 .andExpect(jsonPath("$.writer.name").value(commentDetailResponse.writer().name()));
 
         perform.andDo(print())
-                .andDo(document("thread-modify",
+                .andDo(document("comment-modify",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         pathParameters(

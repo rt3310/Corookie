@@ -87,7 +87,7 @@ const MemberSetting = ({ memberTextRef }) => {
                     {linkActivated && (
                         <S.CreateLink>
                             <S.Text>초대링크 복사</S.Text>
-                            <IoLink onClick={() => copyLink('복사')} />
+                            <IoLink onClick={() => copyLink('복사!')} />
                         </S.CreateLink>
                     )}
                 </S.Container>
