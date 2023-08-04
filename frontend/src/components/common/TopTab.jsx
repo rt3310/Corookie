@@ -10,6 +10,7 @@ const TopTab = () => {
     const { closeComment } = hooks.commentState()
     const { closeChatbox } = hooks.chatBoxState()
     const { closeIssueDetail } = hooks.issueDetailState()
+    const { closeDmComment } = hooks.dmcommentState()
     const navigate = useNavigate()
 
     const toggleProfile = () => {
@@ -20,6 +21,7 @@ const TopTab = () => {
             closeComment()
             closeIssueDetail()
             closeChatbox()
+            closeDmComment()
         }
     }
 

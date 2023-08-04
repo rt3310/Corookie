@@ -2,9 +2,8 @@ import React, { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 
 import { IoMdSend } from 'react-icons/io'
-import { AiOutlinePaperClip } from 'react-icons/ai'
 
-const EditBox = () => {
+const DMCommentEditBox = () => {
     const [chat, setChat] = useState('')
     const text = useRef(null)
 
@@ -22,9 +21,6 @@ const EditBox = () => {
             <S.SendButton>
                 <IoMdSend />
             </S.SendButton>
-            <S.FileButton>
-                <AiOutlinePaperClip />
-            </S.FileButton>
         </S.Wrap>
     )
 }
@@ -38,11 +34,11 @@ const S = {
         box-shadow: ${({ theme }) => theme.shadow.card};
         margin: 16px;
         padding: 23px 26px;
+        border: solid;
+        border-color: ${({ theme }) => theme.color.gray};
+        border-width: 1px;
     `,
     Edit: styled.textarea`
-        display: flex;
-        justify-content: center;
-        align-items: center;
         flex-grow: 1;
         bottom: 16px;
         height: 30px;
@@ -56,31 +52,9 @@ const S = {
     `,
     SendButton: styled.div`
         color: ${({ theme }) => theme.color.main};
-        margin: auto 4px;
+        margin: auto;
         transition-duration: 0.2s;
         cursor: pointer;
-
-        & svg {
-            width: 20px;
-            height: 20px;
-        }
-    `,
-    FileButton: styled.div`
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: auto 4px;
-        width: 30px;
-        height: 30px;
-        border-radius: 8px;
-        background-color: ${({ theme }) => theme.color.lightgray};
-        transition-duration: 0.2s;
-        cursor: pointer;
-
-        &:hover {
-            background-color: ${({ theme }) => theme.color.main};
-            color: ${({ theme }) => theme.color.white};
-        }
 
         & svg {
             width: 20px;
@@ -89,4 +63,4 @@ const S = {
     `,
 }
 
-export default EditBox
+export default DMCommentEditBox

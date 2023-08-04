@@ -17,6 +17,12 @@ export const commentState = create(set => ({
     closeComment: () => set(state => ({ commentOpened: false })),
 }))
 
+export const dmcommentState = create(set => ({
+    dmcommentOpened: false,
+    openDmComment: () => set(state => ({ dmcommentOpened: true })),
+    closeDmComment: () => set(state => ({ dmcommentOpened: false })),
+}))
+
 export const taskState = create(set => ({
     showIssue: true,
     openIssue: () => set(state => ({ showIssue: true })),

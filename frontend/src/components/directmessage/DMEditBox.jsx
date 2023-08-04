@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { IoMdSend } from 'react-icons/io'
 import { AiOutlinePaperClip } from 'react-icons/ai'
 
-const EditBox = () => {
+const DMEditBox = () => {
     const [chat, setChat] = useState('')
     const text = useRef(null)
 
@@ -61,8 +61,8 @@ const S = {
         cursor: pointer;
 
         & svg {
-            width: 20px;
-            height: 20px;
+            width: 24px;
+            height: 24px;
         }
     `,
     FileButton: styled.div`
@@ -83,10 +83,10 @@ const S = {
         }
 
         & svg {
-            width: 20px;
-            height: 20px;
+            width: 24px;
+            height: 24px;
         }
     `,
 }
 
-export default EditBox
+export default DMEditBox

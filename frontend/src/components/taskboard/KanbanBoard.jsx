@@ -105,7 +105,10 @@ const KanbanBoard = () => {
                                                                         {...provided.dragHandleProps}
                                                                         style={{
                                                                             backgroundColor: snapshot.isDragging
-                                                                                ? '#286EF0'
+                                                                                ? 'lightgray'
+                                                                                : 'white',
+                                                                            borderColor: snapshot.isDragging
+                                                                                ? `${({ theme }) => theme.color.black}`
                                                                                 : 'white',
                                                                             ...provided.draggableProps.style,
                                                                         }}>
