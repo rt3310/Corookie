@@ -75,6 +75,8 @@ class ProjectRepositoryTest {
         assertThat(foundProject.get().getMember()).isEqualTo(project.getMember());
     }
 
+// To-Do : findByInvitaion Link 테스트 짜기    findByInvitationLink
+
     @Test
     @DisplayName("프로젝트 목록 조회")
     void findAll() {

@@ -17,6 +17,11 @@ public class ProjectMemberRepositoryImpl implements ProjectMemberRepository {
     private final ProjectMemberJpaRepository projectMemberJpaRepository;
 
     @Override
+    public List<ProjectMember> findByMember(Member member) {
+        return projectMemberJpaRepository.findByIdMember(member);
+    }
+
+    @Override
     public List<ProjectMember> findByProject(Project project) {
         return projectMemberJpaRepository.findByIdProject(project);
     }

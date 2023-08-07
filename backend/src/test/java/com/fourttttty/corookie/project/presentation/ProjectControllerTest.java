@@ -12,6 +12,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.lang.reflect.Member;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -40,6 +41,7 @@ public class ProjectControllerTest extends RestDocsTest {
     void projectList() throws Exception {
         // given
         LocalDateTime now = LocalDateTime.now();
+        //Member member = new Member();
         ProjectResponse response  = new ProjectResponse("Project",
                 "Description",
                 now,
@@ -47,7 +49,7 @@ public class ProjectControllerTest extends RestDocsTest {
                 false,
                 "http://test.com",
                 false);
-        given(projectService.findAll()).willReturn(List.of(response));
+        //given(projectService.findAll()).willReturn(List.of(response));
 
         //when
         ResultActions perform = mockMvc.perform(get("/api/v1/projects"));

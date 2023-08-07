@@ -1,7 +1,6 @@
-package com.fourttttty.corookie.project.application.service;
+package com.fourttttty.corookie.texture.project.application.service;
 
 import com.fourttttty.corookie.member.application.repository.MemberRepository;
-import com.fourttttty.corookie.member.application.service.MemberService;
 import com.fourttttty.corookie.member.domain.Member;
 import com.fourttttty.corookie.project.application.repository.ProjectMemberRepository;
 import com.fourttttty.corookie.project.application.repository.ProjectRepository;
@@ -10,21 +9,13 @@ import com.fourttttty.corookie.project.dto.request.ProjectCreateRequest;
 import com.fourttttty.corookie.project.dto.request.ProjectUpdateRequest;
 import com.fourttttty.corookie.project.dto.response.ProjectResponse;
 import com.fourttttty.corookie.textchannel.application.repository.TextChannelRepository;
-import com.fourttttty.corookie.textchannel.application.service.TextChannelService;
-import com.fourttttty.corookie.textchannel.domain.DefaultChannel;
-import com.fourttttty.corookie.textchannel.domain.TextChannel;
 import jakarta.persistence.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
-@Service
-@RequiredArgsConstructor
-@Transactional(readOnly = true)
-public class ProjectService {
+public class FakeProjectService {
+    /*
     private final ProjectRepository projectRepository;
     private final TextChannelRepository textChannelRepository;
     private final MemberRepository memberRepository;
@@ -66,6 +57,5 @@ public class ProjectService {
     @Transactional
     public void deleteById(Long projectId) {
         projectRepository.findById(projectId).orElseThrow(EntityNotFoundException::new).delete();
-    }
-
+    }*/
 }

@@ -1,6 +1,8 @@
 package com.fourttttty.corookie.project.dto.response;
 
+import com.fourttttty.corookie.member.domain.Member;
 import com.fourttttty.corookie.project.domain.Project;
+import com.fourttttty.corookie.project.domain.ProjectMember;
 import lombok.Builder;
 import java.time.LocalDateTime;
 
@@ -24,4 +26,17 @@ public record ProjectResponse(String name,
                 .invitationStatus(project.getInvitationStatus())
                 .build();
          }
+
+    public static ProjectResponse from(ProjectMember projectMember) {
+        Project project = projectMember.getId().getProject();
+        return ProjectResponse.builder()
+                .name(project.getName())
+                .description(project.getDescription())
+                .createdAt(project.getCreatedAt())
+                .updatedAt(project.getUpdatedAt())
+                .enabled(project.getEnabled())
+                .invitationLink(project.getInvitationLink())
+                .invitationStatus(project.getInvitationStatus())
+                .build();
+    }
 }
