@@ -33,7 +33,7 @@ public class Issue extends BaseTime {
     private IssueProgress progress;
 
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = IssuePriorityConverter.class, attributeName = "priority")
     private IssuePriority priority;
 
     @Column(nullable = false)

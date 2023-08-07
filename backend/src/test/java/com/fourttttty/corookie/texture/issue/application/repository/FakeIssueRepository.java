@@ -3,6 +3,7 @@ package com.fourttttty.corookie.texture.issue.application.repository;
 import com.fourttttty.corookie.global.exception.ProjectNotFoundException;
 import com.fourttttty.corookie.issue.application.repository.IssueRepository;
 import com.fourttttty.corookie.issue.domain.Issue;
+import com.fourttttty.corookie.issue.domain.IssueProgress;
 import com.fourttttty.corookie.project.application.repository.ProjectRepository;
 
 import java.util.HashMap;
@@ -42,5 +43,33 @@ public class FakeIssueRepository implements IssueRepository {
     @Override
     public void deleteById(Long issueId) {
         store.remove(issueId);
+    }
+
+    @Override
+    public List<Issue> findByManager(Long projectId, String managerName) {
+        return store.values().stream()
+                .filter(issue -> issue.getProject().equals(projectRepository.findById(projectId).orElseThrow(ProjectNotFoundException::new)))
+                .filter(issue -> issue.getManager().getName().equals(managerName))
+                .toList();
+    }
+
+    @Override
+    public List<Issue> findLikeTopic(Long projectId, String topic) {
+        return null;
+    }
+
+    @Override
+    public List<Issue> findAllPriorityAsc(Long projectId) {
+        return null;
+    }
+
+    @Override
+    public List<Issue> findAllPriorityDesc(Long projectId) {
+        return null;
+    }
+
+    @Override
+    public List<Issue> findByProgress(Long projectId, IssueProgress progress) {
+        return null;
     }
 }

@@ -4,6 +4,9 @@ import com.fourttttty.corookie.global.exception.IssueNotFoundException;
 import com.fourttttty.corookie.issue.application.repository.IssueRepository;
 import com.fourttttty.corookie.issue.domain.Issue;
 import com.fourttttty.corookie.issue.dto.request.IssueCreateRequest;
+import com.fourttttty.corookie.issue.dto.request.IssueManagerRequest;
+import com.fourttttty.corookie.issue.dto.request.IssueProgressFilteringRequest;
+import com.fourttttty.corookie.issue.dto.request.IssueTopicFilteringRequest;
 import com.fourttttty.corookie.issue.dto.response.IssueDetailResponse;
 import com.fourttttty.corookie.issue.dto.response.IssueListResponse;
 import com.fourttttty.corookie.member.application.repository.MemberRepository;
@@ -51,6 +54,26 @@ public class IssueService {
     @Transactional
     public void deleteById(Long issueId) {
         findEntityById(issueId).delete();
+    }
+
+    public List<Issue> findByManager(Long projectId, IssueManagerRequest request) {
+        return issueRepository.findByManager(projectId, request.memberName());
+    }
+
+    public List<Issue> findAllByTopicFiltering(Long projectId, IssueTopicFilteringRequest request) {
+        return issueRepository.findLikeTopic(projectId, request.topic());
+    }
+
+    public List<Issue> findOrderByPriorityAsc(Long projectId) {
+        return issueRepository.findAllPriorityAsc(projectId);
+    }
+
+    public List<Issue> findOrderByPriorityDesc(Long projectId) {
+        return issueRepository.findAllPriorityDesc(projectId);
+    }
+
+    public List<Issue> findAllByProgressFiltering(Long projectId, IssueProgressFilteringRequest request) {
+        return issueRepository.findByProgress(projectId, request.progress());
     }
 
     private Issue findEntityById(Long issueId) {

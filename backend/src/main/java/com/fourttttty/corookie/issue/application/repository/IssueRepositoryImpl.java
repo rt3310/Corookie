@@ -1,7 +1,10 @@
 package com.fourttttty.corookie.issue.application.repository;
 
 import com.fourttttty.corookie.issue.domain.Issue;
+import com.fourttttty.corookie.issue.domain.IssueProgress;
 import com.fourttttty.corookie.issue.infrastructure.IssueJpaRepository;
+import com.fourttttty.corookie.member.domain.Member;
+import com.fourttttty.corookie.project.domain.Project;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,5 +33,30 @@ public class IssueRepositoryImpl implements IssueRepository {
     @Override
     public void deleteById(Long issueId) {
         issueJpaRepository.deleteById(issueId);
+    }
+
+    @Override
+    public List<Issue> findByManager(Long projectId, String managerName) {
+        return issueJpaRepository.findByProjectIdAndManagerName(projectId, managerName);
+    }
+
+    @Override
+    public List<Issue> findLikeTopic(Long projectId, String topic) {
+        return issueJpaRepository.findByProjectIdAndTopicContaining(projectId, topic);
+    }
+
+    @Override
+    public List<Issue> findAllPriorityAsc(Long projectId) {
+        return issueJpaRepository.findAllOrderByPriorityAsc(projectId);
+    }
+
+    @Override
+    public List<Issue> findAllPriorityDesc(Long projectId) {
+        return issueJpaRepository.findAllOrderByPriorityDesc(projectId);
+    }
+
+    @Override
+    public List<Issue> findByProgress(Long projectId, IssueProgress progress) {
+        return issueJpaRepository.findByProjectIdAndProgress(projectId, progress);
     }
 }
