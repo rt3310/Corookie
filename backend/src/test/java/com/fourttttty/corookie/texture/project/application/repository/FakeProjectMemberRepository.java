@@ -8,6 +8,7 @@ import com.fourttttty.corookie.project.application.repository.ProjectRepository;
 import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.project.domain.ProjectMember;
 import com.fourttttty.corookie.project.domain.ProjectMemberId;
+import com.fourttttty.corookie.texture.member.application.repository.FakeMemberRepository;
 import jakarta.persistence.EntityNotFoundException;
 
 import java.util.*;
@@ -30,6 +31,7 @@ public class FakeProjectMemberRepository implements ProjectMemberRepository {
         private Long memberId;
 
         private Id(ProjectMember projectMember) {
+
             this.projectId = projectMember.getId().getProject().getId();
             this.memberId = projectMember.getId().getMember().getId();
         }
@@ -43,18 +45,28 @@ public class FakeProjectMemberRepository implements ProjectMemberRepository {
     @Override
     public List<ProjectMember> findByMember(Member member) {
 
+        Id id = store.entrySet().stream()
+                .filter(entry -> member.equals(entry.getValue().getId().getMember()))
+                .findFirst().map(Map.Entry::getKey)
+                .orElse(null);
+
         return store.entrySet().stream()
                 .filter(entry -> entry.getValue().getId().getMember()
-                .equals(memberRepository.findById(1L).orElseThrow(EntityNotFoundException::new)))
+                .equals(memberRepository.findById(id.memberId).orElseThrow(EntityNotFoundException::new)))
                 .map(entry -> store.get(entry.getKey()))
                 .toList();
     }
 
     @Override
     public List<ProjectMember> findByProject(Project project) {
+        Id id = store.entrySet().stream()
+                .filter(entry -> project.equals(entry.getValue().getId().getProject()))
+                .findFirst().map(Map.Entry::getKey)
+                .orElse(null);
+
         return store.entrySet().stream()
                 .filter(entry -> entry.getValue().getId().getProject()
-                        .equals(projectRepository.findById(1L).orElseThrow(ProjectNotFoundException::new)))
+                        .equals(projectRepository.findById(id.projectId).orElseThrow(ProjectNotFoundException::new)))
                 .map(entry -> store.get(entry.getKey()))
                 .toList();
     }

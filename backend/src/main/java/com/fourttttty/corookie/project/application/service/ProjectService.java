@@ -30,7 +30,7 @@ public class ProjectService {
     private final MemberRepository memberRepository;
     private final ProjectMemberRepository projectMemberRepository;
 
-    public List<ProjectResponse> findAll(Long memberId) {
+    public List<ProjectResponse> findByMemberId(Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(EntityNotFoundException::new);
         return projectMemberRepository.findByMember(member)
                 .stream()

@@ -21,7 +21,7 @@ public class ProjectController {
 
     @GetMapping
     public ResponseEntity<List<ProjectResponse>> projectList(@AuthenticationPrincipal LoginUser loginUser) {
-        return ResponseEntity.ok(projectService.findAll(loginUser.getMemberId()));
+        return ResponseEntity.ok(projectService.findByMemberId(loginUser.getMemberId()));
     }
 
     @GetMapping("/{projectId}")

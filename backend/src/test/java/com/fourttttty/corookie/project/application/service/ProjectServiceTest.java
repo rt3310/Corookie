@@ -2,10 +2,7 @@ package com.fourttttty.corookie.project.application.service;
 
 import com.fourttttty.corookie.global.exception.ProjectNotFoundException;
 import com.fourttttty.corookie.member.application.repository.MemberRepository;
-import com.fourttttty.corookie.member.application.service.MemberService;
-import com.fourttttty.corookie.member.domain.AuthProvider;
 import com.fourttttty.corookie.member.domain.Member;
-import com.fourttttty.corookie.member.domain.Oauth2;
 import com.fourttttty.corookie.project.application.repository.ProjectMemberRepository;
 import com.fourttttty.corookie.project.application.repository.ProjectRepository;
 import com.fourttttty.corookie.project.dto.request.ProjectCreateRequest;
@@ -13,7 +10,6 @@ import com.fourttttty.corookie.project.dto.request.ProjectUpdateRequest;
 import com.fourttttty.corookie.project.dto.response.ProjectResponse;
 import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.textchannel.application.repository.TextChannelRepository;
-import com.fourttttty.corookie.textchannel.application.service.TextChannelService;
 import com.fourttttty.corookie.texture.member.application.repository.FakeMemberRepository;
 import com.fourttttty.corookie.texture.project.application.repository.FakeProjectMemberRepository;
 import com.fourttttty.corookie.texture.project.application.repository.FakeProjectRepository;
@@ -21,7 +17,7 @@ import com.fourttttty.corookie.texture.textchannel.application.repository.FakeTe
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import java.util.ArrayList;
+
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -114,7 +110,7 @@ public class ProjectServiceTest {
         projectMemberRepository.save(project, member);
 
         // when
-        List<ProjectResponse> response = projectService.findAll(1L);
+        List<ProjectResponse> response = projectService.findByMemberId(1L);
 
         // then
         assertThat(response.size()).isEqualTo(1);

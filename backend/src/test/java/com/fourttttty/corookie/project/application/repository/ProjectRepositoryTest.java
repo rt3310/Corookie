@@ -9,8 +9,6 @@ import com.fourttttty.corookie.texture.project.application.repository.FakeProjec
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class ProjectRepositoryTest {
     ProjectRepository projectRepository;
-    Member member;
+    private Member member;
 
     @BeforeEach
     void initObjects() {
@@ -40,7 +38,7 @@ class ProjectRepositoryTest {
         // when
         Project savedProject = projectRepository.save(project);
 
-        //then
+        // then
         assertThat(savedProject.getName()).isEqualTo(project.getName());
         assertThat(savedProject.getDescription()).isEqualTo(project.getDescription());
         assertThat(savedProject.getEnabled()).isEqualTo(project.getEnabled());
