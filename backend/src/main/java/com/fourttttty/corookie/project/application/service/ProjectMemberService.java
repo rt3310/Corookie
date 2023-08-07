@@ -5,6 +5,7 @@ import com.fourttttty.corookie.member.domain.Member;
 import com.fourttttty.corookie.project.application.repository.ProjectMemberRepository;
 import com.fourttttty.corookie.project.application.repository.ProjectRepository;
 import com.fourttttty.corookie.project.domain.Project;
+import com.fourttttty.corookie.project.domain.ProjectMember;
 import com.fourttttty.corookie.project.domain.ProjectMemberId;
 import com.fourttttty.corookie.project.dto.request.ProjectMemberCreateRequest;
 import jakarta.persistence.EntityNotFoundException;
@@ -24,10 +25,11 @@ public class ProjectMemberService {
 
     @Transactional
     public void create(ProjectMemberCreateRequest request) {
-        projectMemberRepository.save(projectRepository
-                        .findById(request.projectId())
-                        .orElseThrow(EntityNotFoundException::new),
-                memberRepository.findById(request.memberId()).orElseThrow(EntityNotFoundException::new));
+        Project project = projectRepository
+                .findById(request.projectId())
+                .orElseThrow(EntityNotFoundException::new);
+        Member member = memberRepository.findById(request.memberId()).orElseThrow(EntityNotFoundException::new);
+        projectMemberRepository.save(ProjectMember.of(project, member));
     }
 
     @Transactional
@@ -37,16 +39,16 @@ public class ProjectMemberService {
 
         projectMemberRepository.deleteByProjectAndMember(new ProjectMemberId(project, member));
 
-        deleteIfNotExistsMember(project);
+        deleteIfNotExistsMember(projectId);
     }
 
-    private void deleteIfNotExistsMember(Project project) {
-        if (notExistsProjectMember(project)) {
-            projectService.deleteById(project.getId());
+    private void deleteIfNotExistsMember(Long projectId) {
+        if (notExistsProjectMember(projectId)) {
+            projectService.deleteById(projectId);
         }
     }
 
-    private boolean notExistsProjectMember(Project project) {
-        return projectMemberRepository.countByProject(project) <= 0;
+    private boolean notExistsProjectMember(Long projectId) {
+        return projectMemberRepository.countByProjectId(projectId) <= 0;
     }
 }

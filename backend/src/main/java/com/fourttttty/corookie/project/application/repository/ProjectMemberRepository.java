@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ProjectMemberRepository {
-    List<ProjectMember> findByMember(Member member);
-    List<ProjectMember> findByProject(Project project);
+    List<ProjectMember> findByMemberId(Long memberId);
+    List<ProjectMember> findByProjectId(Long projectId);
     Optional<ProjectMember> findById(ProjectMemberId id);
     void deleteByProjectAndMember(ProjectMemberId id);
-    long countByProject(Project project);
-    void save(Project project, Member member);
+    long countByProjectId(Long projectId);
+    void save(ProjectMember projectMember);
 }

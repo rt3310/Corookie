@@ -17,13 +17,13 @@ public class ProjectMemberRepositoryImpl implements ProjectMemberRepository {
     private final ProjectMemberJpaRepository projectMemberJpaRepository;
 
     @Override
-    public List<ProjectMember> findByMember(Member member) {
-        return projectMemberJpaRepository.findByIdMember(member);
+    public List<ProjectMember> findByMemberId(Long memberId) {
+        return projectMemberJpaRepository.findAllById_MemberId(memberId);
     }
 
     @Override
-    public List<ProjectMember> findByProject(Project project) {
-        return projectMemberJpaRepository.findByIdProject(project);
+    public List<ProjectMember> findByProjectId(Long projectId) {
+        return projectMemberJpaRepository.findAllById_ProjectId(projectId);
     }
 
     @Override
@@ -37,13 +37,13 @@ public class ProjectMemberRepositoryImpl implements ProjectMemberRepository {
     }
 
     @Override
-    public long countByProject(Project project) {
-        return projectMemberJpaRepository.countByIdProject(project);
+    public long countByProjectId(Long projectId) {
+        return projectMemberJpaRepository.countById_ProjectId(projectId);
     }
 
     @Override
-    public void save(Project project, Member member) {
-        projectMemberJpaRepository.save(new ProjectMember(project, member));
+    public void save(ProjectMember projectMember) {
+        projectMemberJpaRepository.save(projectMember);
     }
 }
 

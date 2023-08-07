@@ -31,8 +31,7 @@ public class ProjectService {
     private final ProjectMemberRepository projectMemberRepository;
 
     public List<ProjectResponse> findByMemberId(Long memberId) {
-        Member member = memberRepository.findById(memberId).orElseThrow(EntityNotFoundException::new);
-        return projectMemberRepository.findByMember(member)
+        return projectMemberRepository.findByMemberId(memberId)
                 .stream()
                 .map(ProjectResponse::from)
                 .toList();

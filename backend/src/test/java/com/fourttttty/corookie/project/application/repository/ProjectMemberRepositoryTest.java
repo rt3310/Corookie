@@ -46,10 +46,12 @@ public class ProjectMemberRepositoryTest {
     @DisplayName("회원으로 프로젝트 목록 조회")
     void findByMember() {
         // given
+        memberRepository.save(member);
         projectMemberRepository.save(project, member);
+        Long memberId = 1L;
 
         // when
-        List<ProjectMember> list = projectMemberRepository.findByMember(member);
+        List<ProjectMember> list = projectMemberRepository.findByMemberId(memberId);
         Project foundProject = list.get(0).getId().getProject();
 
         // then

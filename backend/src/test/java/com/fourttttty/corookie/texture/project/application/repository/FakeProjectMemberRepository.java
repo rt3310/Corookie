@@ -1,6 +1,5 @@
 package com.fourttttty.corookie.texture.project.application.repository;
 
-import com.fourttttty.corookie.global.exception.ProjectNotFoundException;
 import com.fourttttty.corookie.member.application.repository.MemberRepository;
 import com.fourttttty.corookie.member.domain.Member;
 import com.fourttttty.corookie.project.application.repository.ProjectMemberRepository;
@@ -8,7 +7,6 @@ import com.fourttttty.corookie.project.application.repository.ProjectRepository;
 import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.project.domain.ProjectMember;
 import com.fourttttty.corookie.project.domain.ProjectMemberId;
-import com.fourttttty.corookie.texture.member.application.repository.FakeMemberRepository;
 import jakarta.persistence.EntityNotFoundException;
 
 import java.util.*;
@@ -30,10 +28,9 @@ public class FakeProjectMemberRepository implements ProjectMemberRepository {
         private Long projectId;
         private Long memberId;
 
-        private Id(ProjectMember projectMember) {
-
-            this.projectId = projectMember.getId().getProject().getId();
-            this.memberId = projectMember.getId().getMember().getId();
+        private Id(Long projectId, Long memberId) {
+            this.projectId = projectId;
+            this.memberId = memberId;
         }
 
         @Override
@@ -43,30 +40,20 @@ public class FakeProjectMemberRepository implements ProjectMemberRepository {
     }
 
     @Override
-    public List<ProjectMember> findByMember(Member member) {
-
-        Id id = store.entrySet().stream()
-                .filter(entry -> member.equals(entry.getValue().getId().getMember()))
-                .findFirst().map(Map.Entry::getKey)
-                .orElse(null);
+    public List<ProjectMember> findByMemberId(Long memberId) {
 
         return store.entrySet().stream()
-                .filter(entry -> entry.getValue().getId().getMember()
-                .equals(memberRepository.findById(id.memberId).orElseThrow(EntityNotFoundException::new)))
+                .filter(entry -> entry.getKey().memberId
+                .equals(memberId))
                 .map(entry -> store.get(entry.getKey()))
                 .toList();
     }
 
     @Override
-    public List<ProjectMember> findByProject(Project project) {
-        Id id = store.entrySet().stream()
-                .filter(entry -> project.equals(entry.getValue().getId().getProject()))
-                .findFirst().map(Map.Entry::getKey)
-                .orElse(null);
+    public List<ProjectMember> findByProjectId(Long projectId) {
 
         return store.entrySet().stream()
-                .filter(entry -> entry.getValue().getId().getProject()
-                        .equals(projectRepository.findById(id.projectId).orElseThrow(ProjectNotFoundException::new)))
+                .filter(entry -> entry.getKey().projectId.equals(projectId))
                 .map(entry -> store.get(entry.getKey()))
                 .toList();
     }
@@ -82,20 +69,19 @@ public class FakeProjectMemberRepository implements ProjectMemberRepository {
     }
 
     @Override
-    public long countByProject(Project project) {
+    public long countByProjectId(Long projectId) {
         return store.entrySet().stream()
-                .filter(entry -> entry.getValue().getId().getProject().equals(project))
+                .filter(entry -> entry.getKey().projectId.equals(projectId))
                 .count();
     }
 
     @Override
-    public void save(Project project, Member member) {
-        ProjectMember projectMember = new ProjectMember(project, member);
+    public void save(ProjectMember projectMember) {
         Optional<Entry<Id, ProjectMember>> first = store.entrySet().stream()
                 .filter(entry -> entry.getKey().equals(projectMember.getId()))
                 .findFirst();
         if (first.isEmpty()) {
-            store.put(new Id(projectMember), projectMember);
+            store.put(new Id(projectId, memberId), projectMember);
         }
     }
 }
