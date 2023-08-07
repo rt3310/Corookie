@@ -2,7 +2,9 @@ package com.fourttttty.corookie.project.application.service;
 
 import com.fourttttty.corookie.member.application.repository.MemberRepository;
 import com.fourttttty.corookie.member.application.service.MemberService;
+import com.fourttttty.corookie.member.domain.AuthProvider;
 import com.fourttttty.corookie.member.domain.Member;
+import com.fourttttty.corookie.member.domain.Oauth2;
 import com.fourttttty.corookie.project.application.repository.ProjectRepository;
 import com.fourttttty.corookie.project.dto.request.ProjectCreateRequest;
 import com.fourttttty.corookie.project.dto.response.ProjectResponse;
@@ -27,39 +29,32 @@ public class ProjectServiceTest {
     MemberRepository memberRepository;
     TextChannelRepository textChannelRepository;
     ProjectService projectService;
-    MemberService memberService;
     private Member member;
-    private Project project;
 
     @BeforeEach
     void initObjects() {
         projectRepository = new FakeProjectRepository();
         memberRepository = new FakeMemberRepository();
         textChannelRepository = new FakeTextChannelRepository();
-        member = new Member("name");
-        project = Project.of("name", "description", true,
-                "http://test.com", false, member);
-        memberService = new MemberService(memberRepository);
-        projectService = new ProjectService(projectRepository, new TextChannelService(textChannelRepository, projectRepository), memberService);
+        member = Member.of("이름", "test@test.com", null);
+        projectService = new ProjectService(projectRepository, textChannelRepository, memberRepository);
     }
 
-    //To-Do : FakeRepository 이용할 때 Project Entity에 id값 생성해서, TextChannelService 정상 동작하게 하기
     @Test
     @DisplayName("프로젝트 생성")
     void createProject() {
         // given
-        ProjectCreateRequest request = new ProjectCreateRequest("name", "description", "http://test.com", Boolean.FALSE);
+        ProjectCreateRequest request = new ProjectCreateRequest("name", "description", Boolean.FALSE);
         memberRepository.save(member);
 
         // when
         ProjectResponse response = projectService.create(request, 1L);
 
         // then
-        assertThat(response.name()).isEqualTo(project.getName());
-        assertThat(response.description()).isEqualTo(project.getDescription());
-        assertThat(response.enabled()).isEqualTo(project.getEnabled());
-        assertThat(response.invitationLink()).isEqualTo(project.getInvitationLink());
-        assertThat(response.invitationStatus()).isEqualTo(project.getInvitationStatus());
+        assertThat(response.name()).isEqualTo(request.name());
+        assertThat(response.description()).isEqualTo(request.description());
+        assertThat(response.enabled()).isEqualTo(true);
+        assertThat(response.invitationStatus()).isEqualTo(request.invitationStatus());
     }
 
     @Test
@@ -67,7 +62,12 @@ public class ProjectServiceTest {
     void findById() {
         // given
         Long projectId = 1L;
-        Project project = Project.of("New Project", "Project Description", Boolean.FALSE, "corookie.com/testlink", Boolean.FALSE, member);
+        Project project = Project.of("name",
+                "description",
+                true,
+                "http://test.com",
+                false,
+                member);
         projectRepository.save(project);
 
         // when
@@ -77,7 +77,6 @@ public class ProjectServiceTest {
         assertThat(response.name()).isEqualTo(project.getName());
         assertThat(response.description()).isEqualTo(project.getDescription());
         assertThat(response.enabled()).isEqualTo(project.getEnabled());
-        assertThat(response.invitationLink()).isEqualTo(project.getInvitationLink());
         assertThat(response.invitationStatus()).isEqualTo(project.getInvitationStatus());
     }
 
@@ -85,27 +84,23 @@ public class ProjectServiceTest {
     @DisplayName("프로젝트 목록 조회")
     void findAll() {
         // given
-        member = new Member("Test Member");
-        List<Project> projectList = new ArrayList<>();
-        Project project1 = Project.of("Project 1", "Project 1 Description", Boolean.FALSE, "corookie.com/testlink1", Boolean.FALSE, member);
-        Project project2 = Project.of("Project 2", "Project 2 Description", Boolean.TRUE, "corookie.com/testlink2", Boolean.FALSE, member);
-
-        projectList.add(project1);
-        projectList.add(project2);
-
-        projectRepository.save(project1);
-        projectRepository.save(project2);
+        Project project = Project.of("name",
+                "description",
+                true,
+                "http://test.com",
+                false,
+                member);
+        projectRepository.save(project);
 
         // when
         List<ProjectResponse> response = projectService.findAll();
 
         // then
-        for (int i = 0; i < projectList.size(); i++) {
-            assertThat(response.get(i).name()).isEqualTo(projectList.get(i).getName());
-            assertThat(response.get(i).description()).isEqualTo(projectList.get(i).getDescription());
-            assertThat(response.get(i).enabled()).isEqualTo(projectList.get(i).getEnabled());
-            assertThat(response.get(i).invitationLink()).isEqualTo(projectList.get(i).getInvitationLink());
-            assertThat(response.get(i).invitationStatus()).isEqualTo(projectList.get(i).getInvitationStatus());
-        }
+        assertThat(response.size()).isEqualTo(1);
+        assertThat(response.get(0).name()).isEqualTo(project.getName());
+        assertThat(response.get(0).description()).isEqualTo(project.getDescription());
+        assertThat(response.get(0).enabled()).isEqualTo(project.getEnabled());
+        assertThat(response.get(0).invitationLink()).isEqualTo(project.getInvitationLink());
+        assertThat(response.get(0).invitationStatus()).isEqualTo(project.getInvitationStatus());
     }
 }

@@ -19,6 +19,11 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     }
 
     @Override
+    public Optional<Project> findByInvitationLink(String invitationLink) {
+        return projectJpaRepository.findByInvitationLink(invitationLink);
+    }
+
+    @Override
     public List<Project> findAll() {
         return projectJpaRepository.findAll();
     }

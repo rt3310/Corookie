@@ -1,7 +1,9 @@
 package com.fourttttty.corookie.project.application.repository;
 
 
+import com.fourttttty.corookie.member.domain.AuthProvider;
 import com.fourttttty.corookie.member.domain.Member;
+import com.fourttttty.corookie.member.domain.Oauth2;
 import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.texture.project.application.repository.FakeProjectRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,26 +19,23 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ProjectRepositoryTest {
     ProjectRepository projectRepository;
     Member member;
-    Project project;
 
     @BeforeEach
     void initObjects() {
         projectRepository = new FakeProjectRepository();
-        member = new Member("name");
-        project = Project.of("name",
-                "description",
-                true,
-                "http://test.com",
-                false,
-                member);
+        member = Member.of("name", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
     }
 
     @Test
     @DisplayName("프로젝트 저장 테스트")
     void saveProject() {
         // given
-        Member member = new Member("Member");
-        Project project = Project.of("New Project", "Project Description", Boolean.FALSE, "corookie.com/testlink", Boolean.FALSE, member);
+        Project project = Project.of("name",
+                "description",
+                Boolean.FALSE,
+                "http://test.com",
+                Boolean.FALSE,
+                member);
 
         // when
         Project savedProject = projectRepository.save(project);
@@ -55,7 +54,12 @@ class ProjectRepositoryTest {
     void findById() {
         // given
         Long projectId = 1L;
-        Project project = Project.of("New Project", "Project Description", Boolean.FALSE, "corookie.com/testlink", Boolean.FALSE, member);
+        Project project = Project.of("name",
+                "description",
+                Boolean.FALSE,
+                "http://test.com",
+                Boolean.FALSE,
+                member);
         projectRepository.save(project);
 
         // when
@@ -75,28 +79,25 @@ class ProjectRepositoryTest {
     @DisplayName("프로젝트 목록 조회")
     void findAll() {
         // given
-        member = new Member("Test Member");
-        List<Project> projectList = new ArrayList<>();
-        Project project1 = Project.of("Project 1", "Project 1 Description", Boolean.FALSE, "corookie.com/testlink1", Boolean.FALSE, member);
-        Project project2 = Project.of("Project 2", "Project 2 Description", Boolean.TRUE, "corookie.com/testlink2", Boolean.FALSE, member);
-
-        projectList.add(project1);
-        projectList.add(project2);
-
-        projectRepository.save(project1);
-        projectRepository.save(project2);
+        Project project = Project.of("name",
+                "description",
+                Boolean.FALSE,
+                "http://test.com",
+                Boolean.FALSE,
+                member);
+        projectRepository.save(project);
 
         // when
         List<Project> projects = projectRepository.findAll();
 
         // then
-        for (int i = 0; i < projectList.size(); i++) {
-            assertThat(projects.get(i).getName()).isEqualTo(projectList.get(i).getName());
-            assertThat(projects.get(i).getDescription()).isEqualTo(projectList.get(i).getDescription());
-            assertThat(projects.get(i).getEnabled()).isEqualTo(projectList.get(i).getEnabled());
-            assertThat(projects.get(i).getInvitationLink()).isEqualTo(projectList.get(i).getInvitationLink());
-            assertThat(projects.get(i).getInvitationStatus()).isEqualTo(projectList.get(i).getInvitationStatus());
-        }
+        assertThat(projects.size()).isEqualTo(1);
+        assertThat(projects.get(0).getName()).isEqualTo(project.getName());
+        assertThat(projects.get(0).getDescription()).isEqualTo(project.getDescription());
+        assertThat(projects.get(0).getEnabled()).isEqualTo(project.getEnabled());
+        assertThat(projects.get(0).getInvitationLink()).isEqualTo(project.getInvitationLink());
+        assertThat(projects.get(0).getInvitationStatus()).isEqualTo(project.getInvitationStatus());
+        assertThat(projects.get(0).getMember()).isEqualTo(project.getMember());
     }
 }
 

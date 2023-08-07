@@ -2,6 +2,7 @@ package com.fourttttty.corookie.textchannel.presentation;
 
 import com.fourttttty.corookie.textchannel.application.service.TextChannelService;
 import com.fourttttty.corookie.textchannel.dto.request.TextChannelCreateRequest;
+import com.fourttttty.corookie.textchannel.dto.request.TextChannelModifyRequest;
 import com.fourttttty.corookie.textchannel.dto.response.TextChannelResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +35,7 @@ public class TextChannelController {
     // text channel 등록
     @PostMapping
     public ResponseEntity<TextChannelResponse> textChannelCreate(@PathVariable Long projectId,
-                                                                 @RequestBody TextChannelCreateRequest request) {
+                                                                 TextChannelCreateRequest request) {
         return ResponseEntity.ok(textChannelService.create(request, projectId));
     }
 
@@ -42,8 +43,8 @@ public class TextChannelController {
     @PutMapping("/{textChannelId}")
     public ResponseEntity<TextChannelResponse> textChannelModify(@PathVariable Long projectId,
                                                                  @PathVariable Long textChannelId,
-                                                                 @RequestBody String name) {
-        return ResponseEntity.ok(textChannelService.modify(textChannelId, name));
+                                                                 TextChannelModifyRequest request) {
+        return ResponseEntity.ok(textChannelService.modify(textChannelId, request));
     }
 
     @DeleteMapping("/{textChannelId}")

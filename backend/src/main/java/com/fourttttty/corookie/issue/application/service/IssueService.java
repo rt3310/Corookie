@@ -4,13 +4,10 @@ import com.fourttttty.corookie.global.exception.IssueNotFoundException;
 import com.fourttttty.corookie.issue.application.repository.IssueRepository;
 import com.fourttttty.corookie.issue.domain.Issue;
 import com.fourttttty.corookie.issue.dto.request.IssueCreateRequest;
-import com.fourttttty.corookie.issue.dto.response.IssueCategoryResponse;
 import com.fourttttty.corookie.issue.dto.response.IssueDetailResponse;
 import com.fourttttty.corookie.issue.dto.response.IssueListResponse;
 import com.fourttttty.corookie.member.application.repository.MemberRepository;
-import com.fourttttty.corookie.member.application.service.MemberService;
 import com.fourttttty.corookie.project.application.repository.ProjectRepository;
-import com.fourttttty.corookie.project.application.service.ProjectService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,28 +34,26 @@ public class IssueService {
         return IssueDetailResponse.from(issue,
                 issueCreateRequest.issueCategories().stream()
                         .map(request -> issueCategoryService.createIfNone(request, issue))
-                        .toList(),
-                memberId);
+                        .toList());
     }
 
     public IssueDetailResponse findById(Long issueId) {
         Issue issue = findEntityById(issueId);
-        return IssueDetailResponse.from(issue, issueCategoryService.findByIssueId(issueId), issue.getManager().getId());
+        return IssueDetailResponse.from(issue, issueCategoryService.findByIssue(issue));
     }
 
-    public Issue findEntityById(Long issueId) {
-        return issueRepository.findById(issueId).orElseThrow(IssueNotFoundException::new);
-    }
-
-    public List<IssueListResponse> findByProjectId(Long projectId, Long memberId) {
+    public List<IssueListResponse> findByProjectId(Long projectId) {
         return issueRepository.findByProjectId(projectId).stream()
-                .map(issue -> IssueListResponse
-                        .from(issue, issueCategoryService.findByIssueId(issue.getId()), projectId, memberId))
+                .map(issue -> IssueListResponse.from(issue, issueCategoryService.findByIssue(issue)))
                 .toList();
     }
 
     @Transactional
     public void deleteById(Long issueId) {
         findEntityById(issueId).delete();
+    }
+
+    private Issue findEntityById(Long issueId) {
+        return issueRepository.findById(issueId).orElseThrow(IssueNotFoundException::new);
     }
 }

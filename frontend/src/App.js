@@ -16,9 +16,13 @@ const App = () => {
                     <Route path={utils.URL.HOME.MAIN} element={<components.Layout />}>
                         <Route path={utils.URL.HOME.MAIN} element={<pages.Main />} />
                         <Route path={utils.URL.CHAT.TEXT} element={<pages.TextChat />} />
+                        <Route path={utils.URL.CHAT.VIDEO} element={<pages.VideoChat />} />
+                        <Route path={utils.URL.CHAT.DIRECT} element={<pages.DirectMessage />} />
                         <Route path={utils.URL.TASK.BOARD} element={<pages.TaskBoard />} />
                         <Route path={utils.URL.PLAN.CALENDER} element={<pages.Plan />} />
                     </Route>
+                    <Route path={utils.URL.LOGIN.LOGIN} element={<pages.Login />} />
+                    <Route path={utils.URL.LOGIN.SUCCESS} element={<pages.LoginSuccess />} />
                 </Routes>
             </Router>
         </ThemeProvider>

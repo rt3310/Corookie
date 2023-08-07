@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import * as utils from 'utils'
 
-const PlanOptionToggle = ({ state }) => {
+const PlanOptionToggle = ({ state, selected, setSelected }) => {
     const [isActive, setIsActive] = useState(false)
     const optionRef = useRef(null)
 
@@ -23,10 +23,18 @@ const PlanOptionToggle = ({ state }) => {
         <S.PlanOptionBox>
             <S.PlanOptionLabel>{utils.PLAN_OPTIONS[state].label}</S.PlanOptionLabel>
             <S.Selector className={isActive ? 'active' : null}>
-                <S.Label onClick={() => setIsActive(!isActive)}>{utils.PLAN_OPTIONS[state].placeholder}</S.Label>
+                <S.Label onClick={() => setIsActive(!isActive)}>{selected.name}</S.Label>
                 <S.Options ref={optionRef}>
                     {utils.PLAN_OPTIONS[state].options.map((option, index) => (
-                        <S.Option key={index} onClick={() => setIsActive(false)}>
+                        <S.Option
+                            key={index}
+                            onClick={() => {
+                                setIsActive(false)
+                                setSelected({
+                                    ...selected,
+                                    name: option,
+                                })
+                            }}>
                             {option}
                         </S.Option>
                     ))}
@@ -67,6 +75,7 @@ const S = {
         flex-grow: 1;
         padding: 0 16px;
         border-radius: 8px;
+        font-family: ${({ theme }) => theme.font.main};
         font-size: ${({ theme }) => theme.fontsize.sub1};
     `,
     Options: styled.ul`

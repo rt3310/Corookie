@@ -5,6 +5,8 @@ import com.fourttttty.corookie.plan.infrastructure.PlanJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -12,6 +14,11 @@ import java.util.Optional;
 public class PlanRepositoryImpl implements PlanRepository {
 
     private final PlanJpaRepository planJpaRepository;
+
+    @Override
+    public List<Plan> findByDate(LocalDate date) {
+        return planJpaRepository.findAllByDate(date.getYear(), date.getMonth().getValue());
+    }
 
     @Override
     public Optional<Plan> findById(Long id) {
@@ -22,6 +29,4 @@ public class PlanRepositoryImpl implements PlanRepository {
     public Plan save(Plan plan) {
         return planJpaRepository.save(plan);
     }
-
-
 }

@@ -40,6 +40,9 @@ const S = {
         padding: 23px 26px;
     `,
     Edit: styled.textarea`
+        display: flex;
+        justify-content: center;
+        align-items: center;
         flex-grow: 1;
         bottom: 16px;
         height: 30px;
@@ -53,7 +56,7 @@ const S = {
     `,
     SendButton: styled.div`
         color: ${({ theme }) => theme.color.main};
-        margin: 0 16px 4px 0;
+        margin: auto 4px;
         transition-duration: 0.2s;
         cursor: pointer;
 
@@ -66,6 +69,7 @@ const S = {
         display: flex;
         justify-content: center;
         align-items: center;
+        margin: auto 4px;
         width: 30px;
         height: 30px;
         border-radius: 8px;
