@@ -45,17 +45,17 @@ const TaskHeader = () => {
                         </S.SearchButton>
                     </S.TopicFilter>
                     <S.ToggleFilter>
-                        <components.ToggleButton defaultVal={utils.ISSUE_OPTIONS.priority} list={priorityList} />
+                        <components.ToggleButton btnType={utils.ISSUE_OPTIONS.priority} list={priorityList} />
                     </S.ToggleFilter>
                     <S.ToggleFilter>
-                        <components.ToggleButton defaultVal={utils.ISSUE_OPTIONS.manager} list={managerList} />
+                        <components.ToggleButton btnType={utils.ISSUE_OPTIONS.manager} list={managerList} />
                     </S.ToggleFilter>
                     <S.CategoryToggleFilter>
-                        <components.ToggleButton defaultVal={utils.ISSUE_OPTIONS.category} list={categoryList} />
+                        <components.ToggleButton btnType={utils.ISSUE_OPTIONS.category} list={categoryList} />
                     </S.CategoryToggleFilter>
                     {showIssue && (
                         <S.StatusToggleFilter>
-                            <components.ToggleButton defaultVal={utils.ISSUE_OPTIONS.status} list={statusList} />
+                            <components.ToggleButton btnType={utils.ISSUE_OPTIONS.status} list={statusList} />
                         </S.StatusToggleFilter>
                     )}
                 </S.Filters>

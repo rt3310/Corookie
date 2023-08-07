@@ -10,6 +10,7 @@ const IssueCreate = () => {
     const { value: manager, setValue: setManager } = hooks.createManagerState()
     const { value: category, setValue: setCategory } = hooks.createCategoryState()
     const { closeIssueDetail } = hooks.issueDetailState()
+    const { tasks, setTasks } = hooks.tasksState()
     const [title, setTitle] = useState('')
     let createRef = useRef(null)
     let titleInput = useRef(null)
@@ -35,11 +36,29 @@ const IssueCreate = () => {
 
     const saveIssue = () => {
         if (title !== '' && priority !== '중요도' && manager !== '책임자' && category !== '분류') {
+            const newId = tasks.length > 0 ? Number(tasks[tasks.length - 1].id) + 1 : 1
+
+            const newTask = {
+                id: newId + '',
+                title: title,
+                type: category,
+                manager: manager,
+                priority: priority,
+                status: 'toDo',
+                content: '',
+            }
+
+            setTasks([...tasks, newTask])
+
             closeIssueCreate()
         } else {
             alert('정보를 입력해주세요. ')
         }
     }
+
+    useEffect(() => {
+        console.log('변화', tasks)
+    }, [tasks])
 
     const managerList = ['황상미', '최효빈', '신승수', '박종서', '서원호', '권현수']
     const priorityList = ['Highest', 'High', 'Normal', 'Low', 'Lowest']
@@ -50,13 +69,13 @@ const IssueCreate = () => {
             <S.Values>
                 <S.Properties>
                     <S.ButtonContainer>
-                        <components.ToggleButton defaultVal={utils.ISSUE_OPTIONS.createManager} list={managerList} />
+                        <components.ToggleButton btnType={utils.ISSUE_OPTIONS.createManager} list={managerList} />
                     </S.ButtonContainer>
                     <S.ButtonContainer>
-                        <components.ToggleButton defaultVal={utils.ISSUE_OPTIONS.createPriority} list={priorityList} />
+                        <components.ToggleButton btnType={utils.ISSUE_OPTIONS.createPriority} list={priorityList} />
                     </S.ButtonContainer>
                     <S.ButtonContainer>
-                        <components.ToggleButton defaultVal={utils.ISSUE_OPTIONS.createCategory} list={categoryList} />
+                        <components.ToggleButton btnType={utils.ISSUE_OPTIONS.createCategory} list={categoryList} />
                     </S.ButtonContainer>
                 </S.Properties>
                 <S.Save onClick={() => saveIssue()}>저장</S.Save>
