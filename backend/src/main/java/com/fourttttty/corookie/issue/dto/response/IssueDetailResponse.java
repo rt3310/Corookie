@@ -18,7 +18,7 @@ public record IssueDetailResponse(String topic,
                 .topic(issue.getTopic())
                 .description(issue.getDescription())
                 .progress(issue.getProgress().getValue())
-                .priority(issue.getPriority().getValue())
+                .priority(issue.getPriority().getName())
                 .issueCategories(issueCategories)
                 .build();
     }

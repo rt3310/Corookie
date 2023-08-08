@@ -1,11 +1,11 @@
 package com.fourttttty.corookie.issue.domain;
 
 import com.fourttttty.corookie.global.audit.BaseTime;
+import com.fourttttty.corookie.issue.util.IssuePriorityConverter;
 import com.fourttttty.corookie.member.domain.Member;
 import com.fourttttty.corookie.project.domain.Project;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -33,7 +33,7 @@ public class Issue extends BaseTime {
     private IssueProgress progress;
 
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = IssuePriorityConverter.class, attributeName = "priority")
     private IssuePriority priority;
 
     @Column(nullable = false)

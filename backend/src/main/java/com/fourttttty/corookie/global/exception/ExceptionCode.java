@@ -14,6 +14,7 @@ public enum ExceptionCode {
     ISSUE_PROGRESS_INVALID(BAD_REQUEST, "ISSUE_002", "유효하지 않은 이슈 진행입니다."),
     ISSUE_PRIORITY_INVALID(BAD_REQUEST, "ISSUE_003", "유효하지 않은 이슈 중요도입니다."),
     ISSUE_CATEGORY_INVALID(BAD_REQUEST, "ISSUE_004", "유효하지 않은 이슈 분류입니다."),
+    ISSUE_FILTER_TYPE_INVALID(BAD_REQUEST, "ISSUE_005", "유효하지 않은 이슈 필터 타입입니다."),
 
     PROJECT_NOT_FOUND(BAD_REQUEST, "PROJECT_001", "프로젝트를 찾을 수 없습니다."),
     PROJECT_NOT_ENABLED(BAD_REQUEST, "PROJECT_002", "더 이상 사용되지 않는 프로젝트입니다."),
