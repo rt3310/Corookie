@@ -13,7 +13,7 @@ public interface ProjectMemberJpaRepository extends JpaRepository<ProjectMember,
     List<ProjectMember> findAllById_MemberId(long memberId);
     List<ProjectMember> findAllById_ProjectId(long projectId);
     Optional<ProjectMember> findById(ProjectMemberId id);
-    long countById_ProjectId(long projectId);
+    long countByIdProjectId(long projectId);
     void deleteById(ProjectMemberId id);
 
     Optional<Project> findProjectById(ProjectMemberId id);
