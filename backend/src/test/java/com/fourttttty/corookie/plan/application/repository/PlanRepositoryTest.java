@@ -11,11 +11,9 @@ import com.fourttttty.corookie.plan.domain.Plan;
 import com.fourttttty.corookie.project.application.repository.ProjectRepository;
 import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.support.TestConfig;
-import jakarta.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,7 +21,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.cglib.core.Local;
 import org.springframework.context.annotation.Import;
 
 @DataJpaTest
