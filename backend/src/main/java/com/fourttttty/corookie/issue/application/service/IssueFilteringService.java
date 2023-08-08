@@ -16,7 +16,6 @@ import java.util.List;
 public class IssueFilteringService {
     public static final String DESC = "desc";
     private final IssueRepository issueRepository;
-    private final IssueCategoryService issueCategoryService;
 
     public List<IssueListResponse> findByFiltering(Long projectId, IssueFilterType type, String condition) {
         if (IssueFilterType.MANAGER.equals(type)) {
@@ -43,31 +42,31 @@ public class IssueFilteringService {
 
     public List<IssueListResponse> findByManager(Long projectId, Long managerId) {
         return issueRepository.findByManager(projectId, managerId).stream()
-                .map(issue -> IssueListResponse.from(issue, issueCategoryService.findByIssue(issue)))
+                .map(IssueListResponse::from)
                 .toList();
     }
 
     public List<IssueListResponse> findByFilteringWithTopic(Long projectId, String topic) {
         return issueRepository.findLikeTopic(projectId, topic).stream()
-                .map(issue -> IssueListResponse.from(issue, issueCategoryService.findByIssue(issue)))
+                .map(IssueListResponse::from)
                 .toList();
     }
 
     public List<IssueListResponse> findByFilteringWithProgress(Long projectId, IssueProgress progress) {
         return issueRepository.findByProgress(projectId, progress).stream()
-                .map(issue -> IssueListResponse.from(issue, issueCategoryService.findByIssue(issue)))
+                .map(IssueListResponse::from)
                 .toList();
     }
 
     public List<IssueListResponse> findOrderByPriorityAsc(Long projectId) {
         return issueRepository.findOrderByPriorityAsc(projectId).stream()
-                .map(issue -> IssueListResponse.from(issue, issueCategoryService.findByIssue(issue)))
+                .map(IssueListResponse::from)
                 .toList();
     }
 
     public List<IssueListResponse> findOrderByPriorityDesc(Long projectId) {
         return issueRepository.findOrderByPriorityDesc(projectId).stream()
-                .map(issue -> IssueListResponse.from(issue, issueCategoryService.findByIssue(issue)))
+                .map(IssueListResponse::from)
                 .toList();
     }
 }

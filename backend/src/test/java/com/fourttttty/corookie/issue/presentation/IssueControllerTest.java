@@ -4,9 +4,7 @@ import com.fourttttty.corookie.config.web.WebConfig;
 import com.fourttttty.corookie.issue.application.service.IssueFilteringService;
 import com.fourttttty.corookie.issue.application.service.IssueService;
 import com.fourttttty.corookie.issue.domain.*;
-import com.fourttttty.corookie.issue.dto.request.IssueCategoryCreateRequest;
 import com.fourttttty.corookie.issue.dto.request.IssueCreateRequest;
-import com.fourttttty.corookie.issue.dto.response.IssueCategoryResponse;
 import com.fourttttty.corookie.issue.dto.response.IssueDetailResponse;
 import com.fourttttty.corookie.issue.dto.response.IssueListResponse;
 import com.fourttttty.corookie.issue.util.IssueFilterType;
@@ -57,6 +55,7 @@ class IssueControllerTest extends RestDocsTest {
                 "description",
                 IssueProgress.TODO,
                 IssuePriority.HIGH,
+                IssueCategory.BACKEND,
                 true,
                 Project.of("project",
                         "description",
@@ -72,13 +71,13 @@ class IssueControllerTest extends RestDocsTest {
     void createIssue() throws Exception {
         // given
         given(issueService.create(any(IssueCreateRequest.class), any(Long.class), any(Long.class)))
-                .willReturn(IssueDetailResponse.from(issue, List.of(IssueCategoryResponse.from(Category.BACKEND))));
+                .willReturn(IssueDetailResponse.from(issue));
 
         IssueCreateRequest request = new IssueCreateRequest("topic",
                 "description",
                 IssueProgress.TODO,
                 IssuePriority.HIGH,
-                List.of(new IssueCategoryCreateRequest(Category.BACKEND)));
+                IssueCategory.BACKEND);
 
         // when
         ResultActions perform = mockMvc.perform(post("/api/v1/projects/{projectId}/issues", 1L)
@@ -91,8 +90,7 @@ class IssueControllerTest extends RestDocsTest {
                 .andExpect(jsonPath("$.description").value(request.description()))
                 .andExpect(jsonPath("$.progress").value(request.progress().getValue()))
                 .andExpect(jsonPath("$.priority").value(request.priority().getName()))
-                .andExpect(jsonPath("$.issueCategories[0].category")
-                        .value(request.issueCategories().get(0).category().getValue()));
+                .andExpect(jsonPath("$.category").value(request.category().getValue()));
 
         perform.andDo(print())
                 .andDo(document("issue-create",
@@ -105,23 +103,20 @@ class IssueControllerTest extends RestDocsTest {
                                 fieldWithPath("description").type(STRING).description("설명"),
                                 fieldWithPath("progress").type(STRING).description("이슈 진행도"),
                                 fieldWithPath("priority").type(STRING).description("이슈 중요도"),
-                                fieldWithPath("issueCategories").type(ARRAY).description("이슈 카테고리"),
-                                fieldWithPath("issueCategories.[].category").type(STRING).description("이슈 카테고리 내용")),
+                                fieldWithPath("category").type(STRING).description("이슈 카테고리")),
                         responseFields(
                                 fieldWithPath("topic").type(STRING).description("제목"),
                                 fieldWithPath("description").type(STRING).description("설명"),
                                 fieldWithPath("progress").type(STRING).description("이슈 진행도"),
                                 fieldWithPath("priority").type(STRING).description("이슈 중요도"),
-                                fieldWithPath("issueCategories").type(ARRAY).description("이슈 카테고리"),
-                                fieldWithPath("issueCategories.[].category").type(STRING).description("이슈 카테고리 내용"))));
+                                fieldWithPath("category").type(STRING).description("이슈 카테고리"))));
     }
 
     @Test
     @DisplayName("이슈 목록을 조회한다")
     void issueList() throws Exception {
         // given
-        List<IssueListResponse> responses = List.of(IssueListResponse.from(issue,
-                List.of(IssueCategoryResponse.from(Category.BACKEND))));
+        List<IssueListResponse> responses = List.of(IssueListResponse.from(issue));
         given(issueService.findByProjectId(any(Long.class)))
                 .willReturn(responses);
 
@@ -134,8 +129,7 @@ class IssueControllerTest extends RestDocsTest {
                 .andExpect(jsonPath("$[0].topic").value(responses.get(0).topic()))
                 .andExpect(jsonPath("$[0].progress").value(responses.get(0).progress().getValue()))
                 .andExpect(jsonPath("$[0].priority").value(responses.get(0).priority().getName()))
-                .andExpect(jsonPath("$[0].issueCategories[0].category")
-                        .value(responses.get(0).issueCategories().get(0).category().getValue()))
+                .andExpect(jsonPath("$[0].category").value(responses.get(0).category().getValue()))
                 .andExpect(jsonPath("$[0].memberName").value(member.getName()));
 
         perform.andDo(print())
@@ -148,15 +142,14 @@ class IssueControllerTest extends RestDocsTest {
                                 fieldWithPath("[].topic").type(STRING).description("제목"),
                                 fieldWithPath("[].progress").type(STRING).description("이슈 진행도"),
                                 fieldWithPath("[].priority").type(STRING).description("이슈 중요도"),
-                                fieldWithPath("[].issueCategories").type(ARRAY).description("이슈 카테고리"),
-                                fieldWithPath("[].issueCategories.[].category").type(STRING).description("이슈 카테고리 내용"),
+                                fieldWithPath("[].category").type(STRING).description("이슈 카테고리"),
                                 fieldWithPath("[].memberName").type(STRING).description("멤버 이름"))));
     }
 
     @Test
     @DisplayName("이슈 상세 정보를 조회한다")
     void issueDetail() throws Exception {
-        IssueDetailResponse response = IssueDetailResponse.from(issue, List.of(IssueCategoryResponse.from(Category.BACKEND)));
+        IssueDetailResponse response = IssueDetailResponse.from(issue);
         given(issueService.findById(any(Long.class)))
                 .willReturn(response);
 
@@ -171,8 +164,7 @@ class IssueControllerTest extends RestDocsTest {
                 .andExpect(jsonPath("$.description").value(response.description()))
                 .andExpect(jsonPath("$.progress").value(response.progress().getValue()))
                 .andExpect(jsonPath("$.priority").value(response.priority().getName()))
-                .andExpect(jsonPath("$.issueCategories[0].category")
-                        .value(response.issueCategories().get(0).category().getValue()));
+                .andExpect(jsonPath("$.category").value(response.category().getValue()));
 
         perform.andDo(print())
                 .andDo(document("issue-detail",
@@ -186,8 +178,7 @@ class IssueControllerTest extends RestDocsTest {
                                 fieldWithPath("description").type(STRING).description("설명"),
                                 fieldWithPath("progress").type(STRING).description("이슈 진행도"),
                                 fieldWithPath("priority").type(STRING).description("이슈 중요도"),
-                                fieldWithPath("issueCategories").type(ARRAY).description("이슈 카테고리"),
-                                fieldWithPath("issueCategories.[].category").type(STRING).description("이슈 카테고리 내용"))));
+                                fieldWithPath("category").type(STRING).description("이슈 카테고리"))));
     }
 
     @Test
@@ -212,8 +203,7 @@ class IssueControllerTest extends RestDocsTest {
     @DisplayName("특정 조건으로 필터링하여 이슈들를 조회한다")
     void issueListByFiltering() throws Exception {
         // given
-        List<IssueListResponse> responses = List.of(IssueListResponse.from(issue,
-                List.of(IssueCategoryResponse.from(Category.BACKEND))));
+        List<IssueListResponse> responses = List.of(IssueListResponse.from(issue));
         given(issueFilteringService.findByFiltering(any(Long.class), any(IssueFilterType.class), any(String.class)))
                 .willReturn(responses);
 
@@ -228,12 +218,11 @@ class IssueControllerTest extends RestDocsTest {
                 .andExpect(jsonPath("$[0].topic").value(responses.get(0).topic()))
                 .andExpect(jsonPath("$[0].progress").value(responses.get(0).progress().getValue()))
                 .andExpect(jsonPath("$[0].priority").value(responses.get(0).priority().getName()))
-                .andExpect(jsonPath("$[0].issueCategories[0].category")
-                        .value(responses.get(0).issueCategories().get(0).category().getValue()))
+                .andExpect(jsonPath("$[0].category").value(responses.get(0).category().getValue()))
                 .andExpect(jsonPath("$[0].memberName").value(member.getName()));
 
         perform.andDo(print())
-                .andDo(document("issue-list-filter-manager",
+                .andDo(document("issue-list-filter",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         pathParameters(
@@ -245,8 +234,7 @@ class IssueControllerTest extends RestDocsTest {
                                 fieldWithPath("[].topic").type(STRING).description("제목"),
                                 fieldWithPath("[].progress").type(STRING).description("이슈 진행도"),
                                 fieldWithPath("[].priority").type(STRING).description("이슈 중요도"),
-                                fieldWithPath("[].issueCategories").type(ARRAY).description("이슈 카테고리"),
-                                fieldWithPath("[].issueCategories.[].category").type(STRING).description("이슈 카테고리 내용"),
+                                fieldWithPath("[].category").type(STRING).description("이슈 카테고리"),
                                 fieldWithPath("[].memberName").type(STRING).description("멤버 이름"))));
     }
 }
