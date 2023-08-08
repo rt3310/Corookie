@@ -6,6 +6,9 @@ import com.fourttttty.corookie.issue.infrastructure.IssueJpaRepository;
 import com.fourttttty.corookie.member.application.repository.MemberRepository;
 import com.fourttttty.corookie.member.application.repository.MemberRepositoryImpl;
 import com.fourttttty.corookie.member.infrastructure.MemberJpaRepository;
+import com.fourttttty.corookie.plan.application.repository.PlanRepository;
+import com.fourttttty.corookie.plan.application.repository.PlanRepositoryImpl;
+import com.fourttttty.corookie.plan.infrastructure.PlanJpaRepository;
 import com.fourttttty.corookie.project.application.repository.ProjectRepository;
 import com.fourttttty.corookie.project.application.repository.ProjectRepositoryImpl;
 import com.fourttttty.corookie.project.infrastructure.ProjectJpaRepository;
@@ -27,6 +30,8 @@ public class TestConfig {
     private ProjectJpaRepository projectJpaRepository;
     @Autowired
     private MemberJpaRepository memberJpaRepository;
+    @Autowired
+    private PlanJpaRepository planJpaRepository;
 
     @Bean
     public IssueRepository issueRepository() {
@@ -42,4 +47,10 @@ public class TestConfig {
     public MemberRepository memberRepository() {
         return new MemberRepositoryImpl(memberJpaRepository);
     }
+
+    @Bean
+    public PlanRepository planRepository(){
+        return new PlanRepositoryImpl(planJpaRepository);
+    }
+
 }
