@@ -57,6 +57,22 @@ include::{snippets}/issue-detail/http-response.adoc[]
 
 include::{snippets}/issue-detail/response-fields.adoc[]
 
+== 이슈 필터링 조회
+
+=== Request
+
+include::{snippets}/issue-list-filter-manager/http-request.adoc[]
+
+include::{snippets}/issue-list-filter-manager/path-parameters.adoc[]
+
+include::{snippets}/issue-list-filter-manager/query-parameters.adoc[]
+
+=== Response
+
+include::{snippets}/issue-list-filter-manager/http-response.adoc[]
+
+include::{snippets}/issue-list-filter-manager/response-fields.adoc[]
+
 == 이슈 삭제
 
 === Request
