@@ -5,6 +5,7 @@ import com.fourttttty.corookie.member.application.repository.MemberRepository;
 import com.fourttttty.corookie.member.domain.Member;
 import com.fourttttty.corookie.project.application.repository.ProjectMemberRepository;
 import com.fourttttty.corookie.project.application.repository.ProjectRepository;
+import com.fourttttty.corookie.project.domain.ProjectMember;
 import com.fourttttty.corookie.project.dto.request.ProjectCreateRequest;
 import com.fourttttty.corookie.project.dto.request.ProjectUpdateRequest;
 import com.fourttttty.corookie.project.dto.response.ProjectResponse;
@@ -107,7 +108,7 @@ public class ProjectServiceTest {
         // given
         memberRepository.save(member);
         projectRepository.save(project);
-        projectMemberRepository.save(project, member);
+        projectMemberRepository.save(ProjectMember.of(project, member));
 
         // when
         List<ProjectResponse> response = projectService.findByMemberId(1L);
@@ -128,7 +129,7 @@ public class ProjectServiceTest {
         Long projectId = 1L;
         memberRepository.save(member);
         projectRepository.save(project);
-        projectMemberRepository.save(project, member);
+        projectMemberRepository.save(ProjectMember.of(project, member));
 
         ProjectUpdateRequest request = new ProjectUpdateRequest("modifiedName", "modifiedDesc",  "http://modified.com", true);
 

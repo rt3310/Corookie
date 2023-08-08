@@ -1,7 +1,5 @@
 package com.fourttttty.corookie.project.application.repository;
 
-import com.fourttttty.corookie.member.domain.Member;
-import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.project.domain.ProjectMember;
 import com.fourttttty.corookie.project.domain.ProjectMemberId;
 import com.fourttttty.corookie.project.infrastructure.ProjectMemberJpaRepository;
@@ -17,6 +15,11 @@ public class ProjectMemberRepositoryImpl implements ProjectMemberRepository {
     private final ProjectMemberJpaRepository projectMemberJpaRepository;
 
     @Override
+    public Optional<ProjectMember> findById(ProjectMemberId id) {
+        return projectMemberJpaRepository.findById(id);
+    }
+
+    @Override
     public List<ProjectMember> findByMemberId(Long memberId) {
         return projectMemberJpaRepository.findAllById_MemberId(memberId);
     }
@@ -27,23 +30,18 @@ public class ProjectMemberRepositoryImpl implements ProjectMemberRepository {
     }
 
     @Override
-    public Optional<ProjectMember> findById(ProjectMemberId id) {
-        return projectMemberJpaRepository.findById(id);
-    }
-
-    @Override
-    public void deleteByProjectAndMember(ProjectMemberId id) {
+    public void deleteById(ProjectMemberId id) {
         projectMemberJpaRepository.deleteById(id);
     }
 
     @Override
-    public long countByProjectId(Long projectId) {
+    public Long countByProjectId(Long projectId) {
         return projectMemberJpaRepository.countById_ProjectId(projectId);
     }
 
     @Override
-    public void save(ProjectMember projectMember) {
-        projectMemberJpaRepository.save(projectMember);
+    public ProjectMember save(ProjectMember projectMember) {
+        return projectMemberJpaRepository.save(projectMember);
     }
 }
 

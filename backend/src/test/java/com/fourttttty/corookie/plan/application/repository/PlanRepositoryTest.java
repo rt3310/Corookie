@@ -21,7 +21,6 @@ class PlanRepositoryTest {
     Member member;
     Plan plan;
 
-
     @BeforeEach
     void initObjects() {
         planRepository = new FakePlanRepository();

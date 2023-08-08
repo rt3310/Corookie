@@ -1,6 +1,5 @@
 package com.fourttttty.corookie.project.application.repository;
 
-
 import com.fourttttty.corookie.member.domain.AuthProvider;
 import com.fourttttty.corookie.member.domain.Member;
 import com.fourttttty.corookie.member.domain.Oauth2;
