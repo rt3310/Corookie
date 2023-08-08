@@ -8,7 +8,6 @@ import com.fourttttty.corookie.member.domain.AuthProvider;
 import com.fourttttty.corookie.member.domain.Member;
 import com.fourttttty.corookie.member.domain.Oauth2;
 import com.fourttttty.corookie.plan.domain.CategoryInPlan;
-import com.fourttttty.corookie.plan.domain.CategoryInPlanId;
 import com.fourttttty.corookie.plan.domain.Plan;
 import com.fourttttty.corookie.plan.domain.PlanCategory;
 import com.fourttttty.corookie.project.application.repository.ProjectRepository;
@@ -27,7 +26,7 @@ import org.springframework.context.annotation.Import;
 
 @DataJpaTest
 @Import({JpaAuditingConfig.class, TestConfig.class})
-public class CategoryInMemberRepositoryTest {
+public class CategoryInPlanRepositoryTest {
 
     @Autowired
     private TestEntityManager em;
