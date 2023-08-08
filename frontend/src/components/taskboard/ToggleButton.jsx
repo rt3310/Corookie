@@ -4,7 +4,7 @@ import * as hooks from 'hooks'
 
 import { IoChevronUp, IoChevronDown } from 'react-icons/io5'
 
-const ToggleButton = ({ defaultVal, list }) => {
+const ToggleButton = ({ btnType, list }) => {
     const [isActive, setIsActive] = useState(false)
     let searchRef = useRef(null)
 
@@ -38,7 +38,7 @@ const ToggleButton = ({ defaultVal, list }) => {
         createCategory: hooks.createCategoryState(),
     }
 
-    const { value, setValue } = type[defaultVal]
+    const { value, setValue } = type[btnType]
 
     useEffect(() => {
         console.log(value)

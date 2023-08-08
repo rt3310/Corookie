@@ -9,18 +9,28 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum IssuePriority {
-    HIGHEST("Highest"),
-    HIGH("High"),
-    NORMAL("Normal"),
-    LOW("Low"),
-    LOWEST("Lowest");
+    HIGHEST(5, "Highest"),
+    HIGH(4, "High"),
+    NORMAL(3, "Normal"),
+    LOW(2, "Low"),
+    LOWEST(1, "Lowest");
 
-    private final String value;
+    private final int value;
+    private final String name;
 
     @JsonCreator
-    public static IssuePriority from(String value) {
+    public static IssuePriority from(String name) {
         for (IssuePriority issuePriority : IssuePriority.values()) {
-            if (issuePriority.getValue().equals(value)) {
+            if (issuePriority.getName().equals(name)) {
+                return issuePriority;
+            }
+        }
+        throw new InvalidIssuePriorityException();
+    }
+
+    public static IssuePriority from(int value) {
+        for (IssuePriority issuePriority : IssuePriority.values()) {
+            if (issuePriority.getValue() == value) {
                 return issuePriority;
             }
         }
@@ -28,7 +38,11 @@ public enum IssuePriority {
     }
 
     @JsonValue
-    public String getValue() {
+    public String getName() {
+        return this.name;
+    }
+
+    public int getValue() {
         return this.value;
     }
 }

@@ -1,16 +1,25 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 import * as hooks from 'hooks'
 import { IoReorderTwoSharp } from 'react-icons/io5'
+import { BiChevronsUp, BiChevronUp, BiChevronDown, BiChevronsDown } from 'react-icons/bi'
 
 const IssuePreview = ({ id, title, type, manager, priority, status }) => {
     const { issueDetailOpened, openIssueDetail, closeIssueDetail } = hooks.issueDetailState()
     const { closeProfile } = hooks.profileState()
     const renderPriority = priority => {
         switch (priority) {
+            case 'Highest':
+                return <BiChevronsUp />
+            case 'High':
+                return <BiChevronUp />
             case 'Normal':
                 return <IoReorderTwoSharp />
+            case 'Low':
+                return <BiChevronDown />
+            case 'Lowest':
+                return <BiChevronsDown />
             default:
                 return null
         }
@@ -40,7 +49,7 @@ const IssuePreview = ({ id, title, type, manager, priority, status }) => {
                 <S.Status status={status} />
                 <S.Type>{type}</S.Type>
                 <S.Profile>{renderProfile(manager)}</S.Profile>
-                <S.Priority>{renderPriority(priority)}</S.Priority>
+                <S.Priority priority={priority}>{renderPriority(priority)}</S.Priority>
             </S.Description>
         </S.Wrap>
     )
@@ -117,10 +126,26 @@ const S = {
         display: flex;
         width: 20px;
         margin: 0 8px;
+        justify-content: center;
         & svg {
-            width: 20px;
+            width: 100%;
             height: 20px;
-            color: ${({ theme }) => theme.color.pending};
+            color: ${({ theme, priority }) => {
+                switch (priority) {
+                    case 'Highest':
+                        return theme.color.warning
+                    case 'High':
+                        return theme.color.warning
+                    case 'Normal':
+                        return theme.color.pending
+                    case 'Low':
+                        return theme.color.success
+                    case 'Lowest':
+                        return theme.color.success
+                    default:
+                        return theme.color.main
+                }
+            }};
         }
     `,
 }

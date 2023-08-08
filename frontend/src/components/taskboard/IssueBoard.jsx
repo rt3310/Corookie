@@ -12,19 +12,20 @@ const IssueBoard = () => {
         <S.Container>
             <S.Wrap>
                 {issueCreateOpened && <components.IssueCreate />}
-                {tasks.map((task, idx) => {
-                    return (
-                        <components.IssuePreview
-                            key={idx}
-                            id={task.id}
-                            title={task.title}
-                            type={task.type}
-                            manager={task.manager}
-                            priority={task.priority}
-                            status={task.status}
-                        />
-                    )
-                })}
+                {Array.isArray(tasks) &&
+                    tasks.map((task, idx) => {
+                        return (
+                            <components.IssuePreview
+                                key={idx}
+                                id={task.id}
+                                title={task.title}
+                                type={task.type}
+                                manager={task.manager}
+                                priority={task.priority}
+                                status={task.status}
+                            />
+                        )
+                    })}
             </S.Wrap>
         </S.Container>
     )
