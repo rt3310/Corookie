@@ -132,7 +132,7 @@ const S = {
         cursor: pointer;
         & svg {
             width: 18px;
-            height: 19px;
+            height: 18px;
         }
     `,
 }

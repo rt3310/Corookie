@@ -11,7 +11,7 @@ const ChannelNav = () => {
     const [openText, setOpenText] = useState(true)
     const [openDm, setOpenDm] = useState(true)
     const [openVideo, setOpenVideo] = useState(true)
-
+    const [pinOn, setPinOn] = useState(true)
     return (
         <S.Wrap>
             <S.Container>
@@ -21,10 +21,7 @@ const ChannelNav = () => {
                     </S.ChannelHead>
                     <S.Channel onClick={() => navigate(utils.URL.CHAT.TEXT)}>
                         1. 공지
-                        <S.PinButton>
-                            <AiFillPushpin />
-                            {/* <AiOutlinePushpin /> */}
-                        </S.PinButton>
+                        <S.PinButton> {pinOn && <AiFillPushpin />}</S.PinButton>
                     </S.Channel>
                     <S.Channel>2. 자유</S.Channel>
                     <S.Channel>3. Backend</S.Channel>

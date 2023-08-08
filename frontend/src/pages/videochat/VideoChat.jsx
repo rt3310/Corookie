@@ -19,10 +19,8 @@ const VideoChat = () => {
             </S.Header>
             <S.Container>
                 <S.ChatBox>
-                    <S.ThreadBox>
-                        <components.VideoBoard />
-                        <components.VideoControl />
-                    </S.ThreadBox>
+                    <components.VideoBoard />
+                    <components.VideoControl />
                 </S.ChatBox>
                 {chatboxOpened && <components.TextChatBox />}
             </S.Container>
@@ -73,16 +71,20 @@ const S = {
     ChatBox: styled.div`
         display: flex;
         flex-direction: column;
+        margin-right: 32px;
         width: 100%;
         height: 100%;
         transition: width 0.2s;
     `,
     ThreadBox: styled.div`
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         width: 100%;
         flex-grow: 1;
         overflow-y: auto;
         padding: 0 0 16px;
-        margin: 0 0 auto 0;
+        margin: 0 8px auto 0;
     `,
 }
 
