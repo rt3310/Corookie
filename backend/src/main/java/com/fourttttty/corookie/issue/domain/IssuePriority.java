@@ -9,11 +9,11 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum IssuePriority {
-    HIGHEST(1, "Highest"),
-    HIGH(2, "High"),
+    HIGHEST(5, "Highest"),
+    HIGH(4, "High"),
     NORMAL(3, "Normal"),
-    LOW(4, "Low"),
-    LOWEST(5, "Lowest");
+    LOW(2, "Low"),
+    LOWEST(1, "Lowest");
 
     private final int value;
     private final String name;

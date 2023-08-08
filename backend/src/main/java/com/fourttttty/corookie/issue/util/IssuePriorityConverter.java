@@ -1,5 +1,6 @@
-package com.fourttttty.corookie.issue.domain;
+package com.fourttttty.corookie.issue.util;
 
+import com.fourttttty.corookie.issue.domain.IssuePriority;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 

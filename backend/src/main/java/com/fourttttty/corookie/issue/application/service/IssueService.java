@@ -56,26 +56,6 @@ public class IssueService {
         findEntityById(issueId).delete();
     }
 
-    public List<Issue> findByManager(Long projectId, IssueManagerRequest request) {
-        return issueRepository.findByManager(projectId, request.memberName());
-    }
-
-    public List<Issue> findAllByTopicFiltering(Long projectId, IssueTopicFilteringRequest request) {
-        return issueRepository.findLikeTopic(projectId, request.topic());
-    }
-
-    public List<Issue> findOrderByPriorityAsc(Long projectId) {
-        return issueRepository.findAllPriorityAsc(projectId);
-    }
-
-    public List<Issue> findOrderByPriorityDesc(Long projectId) {
-        return issueRepository.findAllPriorityDesc(projectId);
-    }
-
-    public List<Issue> findAllByProgressFiltering(Long projectId, IssueProgressFilteringRequest request) {
-        return issueRepository.findByProgress(projectId, request.progress());
-    }
-
     private Issue findEntityById(Long issueId) {
         return issueRepository.findById(issueId).orElseThrow(IssueNotFoundException::new);
     }

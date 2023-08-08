@@ -1,14 +1,16 @@
 package com.fourttttty.corookie.issue.dto.response;
 
 import com.fourttttty.corookie.issue.domain.Issue;
+import com.fourttttty.corookie.issue.domain.IssuePriority;
+import com.fourttttty.corookie.issue.domain.IssueProgress;
 import lombok.Builder;
 
 import java.util.List;
 
 @Builder
 public record IssueListResponse(String topic,
-                                String progress,
-                                String priority,
+                                IssueProgress progress,
+                                IssuePriority priority,
                                 List<IssueCategoryResponse> issueCategories,
                                 String memberName) {
 
@@ -16,8 +18,8 @@ public record IssueListResponse(String topic,
                                          List<IssueCategoryResponse> issueCategories) {
         return IssueListResponse.builder()
                 .topic(issue.getTopic())
-                .progress(issue.getProgress().getValue())
-                .priority(issue.getPriority().getName())
+                .progress(issue.getProgress())
+                .priority(issue.getPriority())
                 .issueCategories(issueCategories)
                 .memberName(issue.getManager().getName())
                 .build();

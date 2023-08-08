@@ -166,7 +166,7 @@ class IssueRepositoryTest {
         issueRepository.save(issue);
 
         // when
-        List<Issue> issues = issueRepository.findByManager(1L, "name");
+        List<Issue> issues = issueRepository.findByManager(project.getId(), member.getId());
 
         // then
         assertThat(issues).hasSize(1);
@@ -187,7 +187,7 @@ class IssueRepositoryTest {
         issueRepository.save(issue);
 
         // when
-        List<Issue> issues = issueRepository.findLikeTopic(1L, "op");
+        List<Issue> issues = issueRepository.findLikeTopic(project.getId(), "op");
 
         // then
         assertThat(issues).hasSize(1);
@@ -216,7 +216,7 @@ class IssueRepositoryTest {
         issueRepository.save(issue2);
 
         // when
-        List<Issue> issues = issueRepository.findAllPriorityAsc(1L);
+        List<Issue> issues = issueRepository.findOrderByPriorityAsc(project.getId());
 
         // then
         assertThat(issues).hasSize(2);
@@ -246,7 +246,7 @@ class IssueRepositoryTest {
         issueRepository.save(issue2);
 
         // when
-        List<Issue> issues = issueRepository.findAllPriorityDesc(1L);
+        List<Issue> issues = issueRepository.findOrderByPriorityDesc(project.getId());
 
         // then
         assertThat(issues).hasSize(2);
@@ -268,7 +268,7 @@ class IssueRepositoryTest {
         issueRepository.save(issue);
 
         // when
-        List<Issue> issues = issueRepository.findByProgress(1L, IssueProgress.TODO);
+        List<Issue> issues = issueRepository.findByProgress(project.getId(), IssueProgress.TODO);
 
         assertThat(issues).hasSize(1);
         assertThat(issues.get(0)).isEqualTo(issue);

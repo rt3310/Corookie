@@ -1,5 +1,7 @@
 package com.fourttttty.corookie.issue.presentation;
 
+import com.fourttttty.corookie.config.web.WebConfig;
+import com.fourttttty.corookie.issue.application.service.IssueFilteringService;
 import com.fourttttty.corookie.issue.application.service.IssueService;
 import com.fourttttty.corookie.issue.domain.*;
 import com.fourttttty.corookie.issue.dto.request.IssueCategoryCreateRequest;
@@ -7,6 +9,7 @@ import com.fourttttty.corookie.issue.dto.request.IssueCreateRequest;
 import com.fourttttty.corookie.issue.dto.response.IssueCategoryResponse;
 import com.fourttttty.corookie.issue.dto.response.IssueDetailResponse;
 import com.fourttttty.corookie.issue.dto.response.IssueListResponse;
+import com.fourttttty.corookie.issue.util.IssueFilterType;
 import com.fourttttty.corookie.member.domain.AuthProvider;
 import com.fourttttty.corookie.member.domain.Member;
 import com.fourttttty.corookie.member.domain.Oauth2;
@@ -17,6 +20,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -35,10 +39,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Import(WebConfig.class)
 @WebMvcTest(IssueController.class)
 class IssueControllerTest extends RestDocsTest {
     @MockBean
     private IssueService issueService;
+    @MockBean
+    private IssueFilteringService issueFilteringService;
 
     private Issue issue;
     private Member member;
@@ -113,15 +120,10 @@ class IssueControllerTest extends RestDocsTest {
     @DisplayName("이슈 목록을 조회한다")
     void issueList() throws Exception {
         // given
+        List<IssueListResponse> responses = List.of(IssueListResponse.from(issue,
+                List.of(IssueCategoryResponse.from(Category.BACKEND))));
         given(issueService.findByProjectId(any(Long.class)))
-                .willReturn(List.of(
-                        IssueListResponse.from(issue, List.of(IssueCategoryResponse.from(Category.BACKEND)))));
-
-        IssueCreateRequest request = new IssueCreateRequest("topic",
-                "description",
-                IssueProgress.TODO,
-                IssuePriority.HIGH,
-                List.of(new IssueCategoryCreateRequest(Category.BACKEND)));
+                .willReturn(responses);
 
         // when
         ResultActions perform = mockMvc.perform(get("/api/v1/projects/{projectId}/issues", 1L)
@@ -129,11 +131,11 @@ class IssueControllerTest extends RestDocsTest {
 
         // then
         perform.andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].topic").value(request.topic()))
-                .andExpect(jsonPath("$[0].progress").value(request.progress().getValue()))
-                .andExpect(jsonPath("$[0].priority").value(request.priority().getName()))
+                .andExpect(jsonPath("$[0].topic").value(responses.get(0).topic()))
+                .andExpect(jsonPath("$[0].progress").value(responses.get(0).progress().getValue()))
+                .andExpect(jsonPath("$[0].priority").value(responses.get(0).priority().getName()))
                 .andExpect(jsonPath("$[0].issueCategories[0].category")
-                        .value(request.issueCategories().get(0).category().getValue()))
+                        .value(responses.get(0).issueCategories().get(0).category().getValue()))
                 .andExpect(jsonPath("$[0].memberName").value(member.getName()));
 
         perform.andDo(print())
@@ -203,5 +205,47 @@ class IssueControllerTest extends RestDocsTest {
                         pathParameters(
                                 parameterWithName("projectId").description("프로젝트 키"),
                                 parameterWithName("issueId").description("이슈 키"))));
+    }
+
+    @Test
+    @DisplayName("특정 조건으로 필터링하여 이슈들를 조회한다")
+    void issueListByFiltering() throws Exception {
+        // given
+        List<IssueListResponse> responses = List.of(IssueListResponse.from(issue,
+                List.of(IssueCategoryResponse.from(Category.BACKEND))));
+        given(issueFilteringService.findByFiltering(any(Long.class), any(IssueFilterType.class), any(String.class)))
+                .willReturn(responses);
+
+        // when
+        ResultActions perform = mockMvc.perform(get("/api/v1/projects/{projectId}/issues/filter", 1L)
+                .queryParam("type", "manager")
+                .queryParam("condition", "1")
+                .contentType(MediaType.APPLICATION_JSON));
+
+        // then
+        perform.andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].topic").value(responses.get(0).topic()))
+                .andExpect(jsonPath("$[0].progress").value(responses.get(0).progress().getValue()))
+                .andExpect(jsonPath("$[0].priority").value(responses.get(0).priority().getName()))
+                .andExpect(jsonPath("$[0].issueCategories[0].category")
+                        .value(responses.get(0).issueCategories().get(0).category().getValue()))
+                .andExpect(jsonPath("$[0].memberName").value(member.getName()));
+
+        perform.andDo(print())
+                .andDo(document("issue-list-filter-manager",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        pathParameters(
+                                parameterWithName("projectId").description("프로젝트 키")),
+                        queryParameters(
+                                parameterWithName("type").description("필터 타입"),
+                                parameterWithName("condition").description("필터 조건")),
+                        responseFields(
+                                fieldWithPath("[].topic").type(STRING).description("제목"),
+                                fieldWithPath("[].progress").type(STRING).description("이슈 진행도"),
+                                fieldWithPath("[].priority").type(STRING).description("이슈 중요도"),
+                                fieldWithPath("[].issueCategories").type(ARRAY).description("이슈 카테고리"),
+                                fieldWithPath("[].issueCategories.[].category").type(STRING).description("이슈 카테고리 내용"),
+                                fieldWithPath("[].memberName").type(STRING).description("멤버 이름"))));
     }
 }

@@ -36,8 +36,8 @@ public class IssueRepositoryImpl implements IssueRepository {
     }
 
     @Override
-    public List<Issue> findByManager(Long projectId, String managerName) {
-        return issueJpaRepository.findByProjectIdAndManagerName(projectId, managerName);
+    public List<Issue> findByManager(Long projectId, Long managerId) {
+        return issueJpaRepository.findByProjectIdAndManagerId(projectId, managerId);
     }
 
     @Override
@@ -46,12 +46,12 @@ public class IssueRepositoryImpl implements IssueRepository {
     }
 
     @Override
-    public List<Issue> findAllPriorityAsc(Long projectId) {
+    public List<Issue> findOrderByPriorityAsc(Long projectId) {
         return issueJpaRepository.findAllOrderByPriorityAsc(projectId);
     }
 
     @Override
-    public List<Issue> findAllPriorityDesc(Long projectId) {
+    public List<Issue> findOrderByPriorityDesc(Long projectId) {
         return issueJpaRepository.findAllOrderByPriorityDesc(projectId);
     }
 
