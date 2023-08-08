@@ -51,14 +51,14 @@ class ProjectMemberServiceTest {
         member = Member.of("name", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
         project = Project.of("name", "description", true,
                 "http://test.com", false, member);
+        projectRepository.save(project);
+        memberRepository.save(member);
     }
 
     @Test
     @DisplayName("프로젝트-회원 관계 추가")
     void createIfNone() {
         // given
-        projectRepository.save(project);
-        memberRepository.save(member);
         ProjectMemberCreateRequest request = new ProjectMemberCreateRequest(1L, 1L);
 
         // when
@@ -75,8 +75,6 @@ class ProjectMemberServiceTest {
         // given
         Long projectId = 1L;
         Long memberId = 1L;
-        projectRepository.save(project);
-        memberRepository.save(member);
         ProjectMemberId id = new ProjectMemberId(project, member);
 
 
@@ -105,8 +103,6 @@ class ProjectMemberServiceTest {
     @DisplayName("프로젝트에 참여 중인 모든 회원 조회")
     void findByProjectId() {
         // given
-        projectRepository.save(project);
-        memberRepository.save(member);
         projectMemberRepository.save(ProjectMember.of(project, member));
         Long projectId = 1L;
 
@@ -123,8 +119,6 @@ class ProjectMemberServiceTest {
     @DisplayName("회원이 참여 중인 모든 프로젝트 조회")
     void findByMemberId() {
         // given
-        projectRepository.save(project);
-        memberRepository.save(member);
         projectMemberRepository.save(ProjectMember.of(project, member));
         Long memberId = 1L;
 

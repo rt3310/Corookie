@@ -48,8 +48,6 @@ class PlanServiceTest {
 
     private Member member;
     private Project project;
-    private PlanCreateRequest planCreateRequest;
-    private Plan plan;
 
 
     @BeforeEach
@@ -69,30 +67,22 @@ class PlanServiceTest {
         member = Member.of( "name", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
         project = Project.of("name", "description", true,
             "http://test.com", false, member);
-
-        plan = Plan.of("name",
-            "testDescription",
-            LocalDateTime.now(),
-            LocalDateTime.now().minusDays(2),
-            true,
-            project);
-
-        planCreateRequest = new PlanCreateRequest("createPlan",
-            "createPlanDescription",
-            LocalDateTime.now().minusDays(2),
-            LocalDateTime.now(),
-            List.of(new PlanCategoryCreateRequest("CreateCategory")),
-            List.of(new PlanMemberCreateRequest(1L)));
+        memberRepository.save(member);
+        projectRepository.save(project);
     }
 
     @Test
     @DisplayName("일정 생성")
     void createPlan() {
         // given
+        PlanCreateRequest planCreateRequest = new PlanCreateRequest("createPlan",
+                "createPlanDescription",
+                LocalDateTime.now().minusDays(2),
+                LocalDateTime.now(),
+                List.of(new PlanCategoryCreateRequest("CreateCategory")),
+                List.of(new PlanMemberCreateRequest(1L)));
 
         // when
-        memberRepository.save(member);
-        projectRepository.save(project);
         PlanResponse response = planService.createPlan(planCreateRequest, 1L);
 
         // then
@@ -106,9 +96,13 @@ class PlanServiceTest {
     @DisplayName("일정 조회")
     void findById() {
         // given
-        memberRepository.save(member);
-        projectRepository.save(project);
-        PlanResponse response = planService.createPlan(planCreateRequest, 1L);
+        PlanCreateRequest planCreateRequest = new PlanCreateRequest("createPlan",
+                "createPlanDescription",
+                LocalDateTime.now().minusDays(2),
+                LocalDateTime.now(),
+                List.of(new PlanCategoryCreateRequest("CreateCategory")),
+                List.of(new PlanMemberCreateRequest(1L)));
+        planService.createPlan(planCreateRequest, 1L);
 
         // when
         PlanResponse foundResponse = planService.findById(1L);
@@ -124,8 +118,12 @@ class PlanServiceTest {
     @DisplayName("일정 수정")
     void modifyPlan() {
         // given
-        memberRepository.save(member);
-        projectRepository.save(project);
+        PlanCreateRequest planCreateRequest = new PlanCreateRequest("createPlan",
+                "createPlanDescription",
+                LocalDateTime.now().minusDays(2),
+                LocalDateTime.now(),
+                List.of(new PlanCategoryCreateRequest("CreateCategory")),
+                List.of(new PlanMemberCreateRequest(1L)));
         PlanResponse savedResponse = planService.createPlan(planCreateRequest, 1L);
 
         PlanUpdateRequest updateRequest = new PlanUpdateRequest("modifyPlan",
@@ -147,8 +145,12 @@ class PlanServiceTest {
     @DisplayName("일정 삭제")
     void deletePlan() {
         // given
-        memberRepository.save(member);
-        projectRepository.save(project);
+        PlanCreateRequest planCreateRequest = new PlanCreateRequest("createPlan",
+                "createPlanDescription",
+                LocalDateTime.now().minusDays(2),
+                LocalDateTime.now(),
+                List.of(new PlanCategoryCreateRequest("CreateCategory")),
+                List.of(new PlanMemberCreateRequest(1L)));
         planService.createPlan(planCreateRequest, 1L);
 
         //when

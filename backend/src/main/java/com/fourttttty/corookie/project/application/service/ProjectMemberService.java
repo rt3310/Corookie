@@ -31,15 +31,10 @@ public class ProjectMemberService {
 
     @Transactional
     public ProjectMemberResponse createIfNone(ProjectMemberCreateRequest request) {
-        Project project = projectRepository
-                .findById(request.projectId())
-                .orElseThrow(EntityNotFoundException::new);
-        Member member = memberRepository
-                .findById(request.memberId())
-                .orElseThrow(EntityNotFoundException::new);
+        Project project = projectRepository.findById(request.projectId()).orElseThrow(EntityNotFoundException::new);
+        Member member = memberRepository.findById(request.memberId()).orElseThrow(EntityNotFoundException::new);
 
-        ProjectMember projectMember = projectMemberRepository
-                .findById(new ProjectMemberId(project, member))
+        ProjectMember projectMember = projectMemberRepository.findById(new ProjectMemberId(project, member))
                 .orElse(projectMemberRepository.save(ProjectMember.of(project, member)));
 
         return ProjectMemberResponse.from(projectMember);
@@ -47,10 +42,9 @@ public class ProjectMemberService {
 
     @Transactional
     public void delete(Long projectId, Long memberId) {
-        Member member = memberRepository.findById(memberId).orElseThrow(EntityNotFoundException::new);
-        Project project = projectRepository.findById(projectId).orElseThrow(EntityNotFoundException::new);
-        ProjectMemberId id = new ProjectMemberId(project, member);
-        projectMemberRepository.deleteById(id);
+        projectMemberRepository.deleteById(new ProjectMemberId(
+                projectRepository.findById(projectId).orElseThrow(EntityNotFoundException::new),
+                memberRepository.findById(memberId).orElseThrow(EntityNotFoundException::new)));
 
         deleteIfNotExistsMember(projectId);
     }
@@ -67,13 +61,15 @@ public class ProjectMemberService {
 
     public List<ProjectMemberResponse> findByProjectId(Long projectId) {
         return projectMemberRepository.findByProjectId(projectId).stream()
-                .map(entry -> ProjectMemberResponse.from(ProjectMember.of(entry.getId().getProject(), entry.getId().getMember())))
+                .map(projectMember -> ProjectMemberResponse.from(
+                        ProjectMember.of(projectMember.getId().getProject(), projectMember.getId().getMember())))
                 .toList();
     }
 
     public List<MemberProjectResponse> findByMemberId(Long memberId) {
         return projectMemberRepository.findByMemberId(memberId).stream()
-                .map(entry -> MemberProjectResponse.from(ProjectMember.of(entry.getId().getProject(), entry.getId().getMember())))
+                .map(projectMember -> MemberProjectResponse.from(
+                        ProjectMember.of(projectMember.getId().getProject(), projectMember.getId().getMember())))
                 .toList();
     }
 }

@@ -1,26 +1,38 @@
 package com.fourttttty.corookie.project.application.repository;
 
+import com.fourttttty.corookie.config.audit.JpaAuditingConfig;
+import com.fourttttty.corookie.member.application.repository.MemberRepository;
 import com.fourttttty.corookie.member.domain.AuthProvider;
 import com.fourttttty.corookie.member.domain.Member;
 import com.fourttttty.corookie.member.domain.Oauth2;
 import com.fourttttty.corookie.project.domain.Project;
+import com.fourttttty.corookie.support.TestConfig;
 import com.fourttttty.corookie.texture.project.application.repository.FakeProjectRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
+
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@DataJpaTest
+@Import({JpaAuditingConfig.class, TestConfig.class})
 class ProjectRepositoryTest {
+    @Autowired
     ProjectRepository projectRepository;
+    @Autowired
+    MemberRepository memberRepository;
     private Member member;
 
     @BeforeEach
     void initObjects() {
-        projectRepository = new FakeProjectRepository();
         member = Member.of("name", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
+        memberRepository.save(member);
     }
 
     @Test
@@ -50,7 +62,6 @@ class ProjectRepositoryTest {
     @DisplayName("프로젝트 상세 조회")
     void findById() {
         // given
-        Long projectId = 1L;
         Project project = Project.of("name",
                 "description",
                 Boolean.FALSE,
@@ -60,7 +71,7 @@ class ProjectRepositoryTest {
         projectRepository.save(project);
 
         // when
-        Optional<Project> foundProject = projectRepository.findById(projectId);
+        Optional<Project> foundProject = projectRepository.findById(project.getId());
 
         // then
         assertThat(foundProject).isPresent();

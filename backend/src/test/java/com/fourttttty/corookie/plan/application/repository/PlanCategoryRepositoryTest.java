@@ -16,59 +16,47 @@ import org.springframework.context.annotation.Import;
 
 @DataJpaTest
 @Import({JpaAuditingConfig.class, TestConfig.class})
-public class PlanCategoryRepositorytest {
+public class PlanCategoryRepositoryTest {
+
     @Autowired
     private TestEntityManager em;
 
     @Autowired
     private PlanCategoryRepository planCategoryRepository;
 
-    @BeforeEach
-    void setUp(){
-
-    }
-
     @Test
     @DisplayName("일정 카테고리를 저장한다.")
-    void save(){
+    void save() {
         // given
-        PlanCategory planCategory = PlanCategory.of(
-            "testCategory1"
-        );
+        PlanCategory planCategory = PlanCategory.of("testCategory1");
 
         // when
         PlanCategory savedCategory = planCategoryRepository.save(planCategory);
 
         //then
-        assertThat(savedCategory).isNotNull();
-        assertThat(savedCategory.getContent()).isEqualTo(planCategory.getContent());
+        assertThat(savedCategory).isEqualTo(planCategory);
     }
 
     @Test
     @DisplayName("일정 카테고리Id를 통해 조회한다.")
-    void findById(){
+    void findById() {
         // given
-        PlanCategory planCategory = PlanCategory.of(
-            "testCategory1"
-        );
+        PlanCategory planCategory = PlanCategory.of("testCategory1");
         planCategoryRepository.save(planCategory);
 
         // when
-        Optional<PlanCategory> foundCategory = planCategoryRepository.findById(1L);
+        Optional<PlanCategory> foundCategory = planCategoryRepository.findById(planCategory.getId());
 
         //then
         assertThat(foundCategory).isNotEmpty();
-        assertThat(foundCategory.get().getContent()).isEqualTo(planCategory.getContent());
-        assertThat(foundCategory.get().getId()).isEqualTo(1L);
+        assertThat(foundCategory).get().isEqualTo(planCategory);
     }
 
     @Test
     @DisplayName("일정 카테고리 내용을 통해 조회한다.")
-    void findByContent(){
+    void findByContent() {
         // given
-        PlanCategory planCategory = PlanCategory.of(
-            "testCategory1"
-        );
+        PlanCategory planCategory = PlanCategory.of("testCategory1");
         planCategoryRepository.save(planCategory);
 
         // when
@@ -76,6 +64,7 @@ public class PlanCategoryRepositorytest {
 
         //then
         assertThat(foundCategory).isNotEmpty();
+        assertThat(foundCategory).get().isEqualTo(planCategory);
         assertThat(foundCategory.get().getContent()).isEqualTo(planCategory.getContent());
     }
 }

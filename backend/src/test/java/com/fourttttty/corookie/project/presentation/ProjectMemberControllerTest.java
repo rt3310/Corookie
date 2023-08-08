@@ -43,6 +43,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(ProjectMemberController.class)
 public class ProjectMemberControllerTest extends RestDocsTest {
+
     @MockBean
     private ProjectMemberService projectMemberService;
 
@@ -60,25 +61,21 @@ public class ProjectMemberControllerTest extends RestDocsTest {
     @DisplayName("프로젝트에 회원을 등록한다")
     void projectMemberCreate() throws Exception {
         // given
-        given(projectMemberService.createIfNone(any(ProjectMemberCreateRequest.class)))
-                .willReturn(ProjectMemberResponse.from(ProjectMember.of(project, member)));
-
-        MemberResponse memberResponse = MemberResponse.of(member);
-        ProjectMemberResponse response = ProjectMemberResponse.from(ProjectMember.of(project, member));
-
         Long projectId = 1L;
         Long memberId = 1L;
-        ProjectMemberCreateRequest request = new ProjectMemberCreateRequest(projectId, memberId);
+        ProjectMemberResponse response = ProjectMemberResponse.from(ProjectMember.of(project, member));
+        given(projectMemberService.createIfNone(any(ProjectMemberCreateRequest.class)))
+                .willReturn(response);
 
         // when
         ResultActions perform = mockMvc.perform(post("/api/v1/projects/{projectId}/projectmembers", projectId)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(request)));
+                .content(toJson(new ProjectMemberCreateRequest(projectId, memberId))));
 
         // then
         perform.andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value(member.getName()))
-                .andExpect(jsonPath("$.email").value(member.getEmail()));
+                .andExpect(jsonPath("$.name").value(response.name()))
+                .andExpect(jsonPath("$.email").value(response.email()));
 
         perform.andDo(print())
                 .andDo(document("projectmember-create",
@@ -95,8 +92,8 @@ public class ProjectMemberControllerTest extends RestDocsTest {
     @Test
     @DisplayName("프로젝트-회원 관계를 삭제한다")
     void projectMemberDelete() throws Exception {
-        ResultActions perform = mockMvc.perform(delete("/api/v1/projects/{projectId}/projectmembers/{memberId}",
-                1L, 1L)
+        ResultActions perform = mockMvc.perform(
+                delete("/api/v1/projects/{projectId}/projectmembers/{memberId}", 1L, 1L)
                 .contentType(MediaType.APPLICATION_JSON));
 
         perform.andExpect(status().isNoContent());
@@ -115,11 +112,11 @@ public class ProjectMemberControllerTest extends RestDocsTest {
     void projectMemberList() throws Exception {
         // given
         ProjectMemberResponse response = new ProjectMemberResponse("name", "test@corookie.com");
-
         given(projectMemberService.findByProjectId(any(Long.class))).willReturn(List.of(response));
 
         // when
-        ResultActions perform = mockMvc.perform(get("/api/v1/projects/{projectId}/projectmembers", 1L));
+        ResultActions perform = mockMvc.perform(get("/api/v1/projects/{projectId}/projectmembers",
+                1L));
 
         // then
         perform.andExpect(status().isOk())

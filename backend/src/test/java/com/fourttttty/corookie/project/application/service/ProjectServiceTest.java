@@ -40,8 +40,8 @@ public class ProjectServiceTest {
         memberRepository = new FakeMemberRepository();
         textChannelRepository = new FakeTextChannelRepository();
         projectMemberRepository = new FakeProjectMemberRepository(projectRepository, memberRepository);
+        projectService = new ProjectService(projectRepository, textChannelRepository, memberRepository, projectMemberRepository);
         member = Member.of("이름", "test@test.com", null);
-
         project = Project.of("name",
                 "description",
                 true,
@@ -49,8 +49,7 @@ public class ProjectServiceTest {
                 false,
                 member);
         projectRepository.save(project);
-
-        projectService = new ProjectService(projectRepository, textChannelRepository, memberRepository, projectMemberRepository);
+        memberRepository.save(member);
     }
 
     @Test
@@ -58,7 +57,6 @@ public class ProjectServiceTest {
     void createProject() {
         // given
         ProjectCreateRequest request = new ProjectCreateRequest("name", "description", Boolean.FALSE);
-        memberRepository.save(member);
 
         // when
         ProjectResponse response = projectService.create(request, 1L);
@@ -106,8 +104,6 @@ public class ProjectServiceTest {
     @DisplayName("프로젝트 목록 조회")
     void findAll() {
         // given
-        memberRepository.save(member);
-        projectRepository.save(project);
         projectMemberRepository.save(ProjectMember.of(project, member));
 
         // when
@@ -127,8 +123,6 @@ public class ProjectServiceTest {
     void modify() {
         // given
         Long projectId = 1L;
-        memberRepository.save(member);
-        projectRepository.save(project);
         projectMemberRepository.save(ProjectMember.of(project, member));
 
         ProjectUpdateRequest request = new ProjectUpdateRequest("modifiedName", "modifiedDesc",  "http://modified.com", true);
@@ -148,12 +142,11 @@ public class ProjectServiceTest {
     void delete() {
         // given
         Long projectId = 1L;
-        projectRepository.save(project);
 
         //when
-        projectService.deleteById(1L);
+        projectService.deleteById(projectId);
 
         //then
-        assertThat(projectService.findById(1L).enabled()).isEqualTo(false);
+        assertThat(projectService.findById(projectId).enabled()).isEqualTo(false);
     }
 }

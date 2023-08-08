@@ -86,10 +86,11 @@ class PlanRepositoryTest {
         planRepository.save(plan);
 
         // when
-        Optional<Plan> foundPlan = planRepository.findById(1L);
+        Optional<Plan> foundPlan = planRepository.findById(plan.getId());
 
         // then
         assertThat(foundPlan).isNotEmpty();
+        assertThat(foundPlan).get().isEqualTo(plan);
         assertThat(foundPlan.get().getPlanName()).isEqualTo(plan.getPlanName());
         assertThat(foundPlan.get().getDescription()).isEqualTo(plan.getDescription());
         assertThat(foundPlan.get().getPlanStart()).isEqualTo(plan.getPlanStart());
@@ -114,7 +115,7 @@ class PlanRepositoryTest {
         List<Plan> foundPlans = planRepository.findByDate(date);
 
         // then
-        assertThat(foundPlans.get(0)).isNotNull();
+        assertThat(foundPlans).hasSize(1);
         assertThat(foundPlans.get(0).getPlanName()).isEqualTo(plan.getPlanName());
         assertThat(foundPlans.get(0).getDescription()).isEqualTo(plan.getDescription());
         assertThat(foundPlans.get(0).getPlanStart()).isEqualTo(plan.getPlanStart());

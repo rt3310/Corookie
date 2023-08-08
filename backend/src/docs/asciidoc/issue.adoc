@@ -1,4 +1,4 @@
-= Comment API
+= Issue API
 :doctype: book
 :icons: font
 :source-highlighter: highlightjs
@@ -18,8 +18,6 @@ endif::[]
 include::{snippets}/issue-create/http-request.adoc[]
 
 include::{snippets}/issue-create/path-parameters.adoc[]
-
-include::{snippets}/issue-create/query-parameters.adoc[]
 
 include::{snippets}/issue-create/request-fields.adoc[]
 
@@ -61,17 +59,17 @@ include::{snippets}/issue-detail/response-fields.adoc[]
 
 === Request
 
-include::{snippets}/issue-list-filter-manager/http-request.adoc[]
+include::{snippets}/issue-list-filter/http-request.adoc[]
 
-include::{snippets}/issue-list-filter-manager/path-parameters.adoc[]
+include::{snippets}/issue-list-filter/path-parameters.adoc[]
 
-include::{snippets}/issue-list-filter-manager/query-parameters.adoc[]
+include::{snippets}/issue-list-filter/query-parameters.adoc[]
 
 === Response
 
-include::{snippets}/issue-list-filter-manager/http-response.adoc[]
+include::{snippets}/issue-list-filter/http-response.adoc[]
 
-include::{snippets}/issue-list-filter-manager/response-fields.adoc[]
+include::{snippets}/issue-list-filter/response-fields.adoc[]
 
 == 이슈 진행도 수정
 

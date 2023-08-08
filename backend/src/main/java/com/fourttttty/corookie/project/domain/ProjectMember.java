@@ -10,7 +10,7 @@ import org.springframework.security.core.parameters.P;
 @Entity
 @Table(name = "project_member")
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class ProjectMember {
     @EmbeddedId
     private ProjectMemberId id;

@@ -21,12 +21,12 @@ public class ProjectMemberRepositoryImpl implements ProjectMemberRepository {
 
     @Override
     public List<ProjectMember> findByMemberId(Long memberId) {
-        return projectMemberJpaRepository.findAllById_MemberId(memberId);
+        return projectMemberJpaRepository.findAllByIdMemberId(memberId);
     }
 
     @Override
     public List<ProjectMember> findByProjectId(Long projectId) {
-        return projectMemberJpaRepository.findAllById_ProjectId(projectId);
+        return projectMemberJpaRepository.findAllByIdProjectId(projectId);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class ProjectMemberRepositoryImpl implements ProjectMemberRepository {
 
     @Override
     public Long countByProjectId(Long projectId) {
-        return projectMemberJpaRepository.countById_ProjectId(projectId);
+        return projectMemberJpaRepository.countByIdProjectId(projectId);
     }
 
     @Override

@@ -18,9 +18,12 @@ import com.fourttttty.corookie.plan.infrastructure.CategoryInPlanJpaRepository;
 import com.fourttttty.corookie.plan.infrastructure.PlanCategoryJpaRepository;
 import com.fourttttty.corookie.plan.infrastructure.PlanJpaRepository;
 import com.fourttttty.corookie.plan.infrastructure.PlanMemberJpaRepository;
+import com.fourttttty.corookie.project.application.repository.ProjectMemberRepository;
+import com.fourttttty.corookie.project.application.repository.ProjectMemberRepositoryImpl;
 import com.fourttttty.corookie.project.application.repository.ProjectRepository;
 import com.fourttttty.corookie.project.application.repository.ProjectRepositoryImpl;
 import com.fourttttty.corookie.project.infrastructure.ProjectJpaRepository;
+import com.fourttttty.corookie.project.infrastructure.ProjectMemberJpaRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +43,8 @@ public class TestConfig {
     @Autowired
     private MemberJpaRepository memberJpaRepository;
     @Autowired
+    private ProjectMemberJpaRepository projectMemberJpaRepository;
+    @Autowired
     private PlanJpaRepository planJpaRepository;
     @Autowired
     private PlanCategoryJpaRepository planCategoryJpaRepository;
@@ -49,8 +54,8 @@ public class TestConfig {
     private PlanMemberJpaRepository planMemberJpaRepository;
 
     @Bean
-    public IssueRepository issueRepository() {
-        return new IssueRepositoryImpl(issueJpaRepository);
+    public MemberRepository memberRepository() {
+        return new MemberRepositoryImpl(memberJpaRepository);
     }
 
     @Bean
@@ -59,27 +64,32 @@ public class TestConfig {
     }
 
     @Bean
-    public MemberRepository memberRepository() {
-        return new MemberRepositoryImpl(memberJpaRepository);
+    public ProjectMemberRepository projectMemberRepository() {
+        return new ProjectMemberRepositoryImpl(projectMemberJpaRepository);
     }
 
     @Bean
-    public PlanRepository planRepository(){
+    public IssueRepository issueRepository() {
+        return new IssueRepositoryImpl(issueJpaRepository);
+    }
+
+    @Bean
+    public PlanRepository planRepository() {
         return new PlanRepositoryImpl(planJpaRepository);
     }
 
     @Bean
-    public PlanCategoryRepository planCategoryRepository(){
+    public PlanCategoryRepository planCategoryRepository() {
         return new PlanCategoryRepositoryImpl(planCategoryJpaRepository);
     }
 
     @Bean
-    public CategoryInPlanRepository categoryInPlanRepository(){
+    public CategoryInPlanRepository categoryInPlanRepository() {
         return new CategoryInPlanRepositoryImpl(categoryInPlanJpaRepository);
     }
 
     @Bean
-    public PlanMemberRepository planMemberRepository(){
+    public PlanMemberRepository planMemberRepository() {
         return new PlanMemberRepositoryImpl(planMemberJpaRepository);
     }
 

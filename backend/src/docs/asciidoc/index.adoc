@@ -6,9 +6,21 @@
 :toclevels: 2
 :sectlinks:
 
+= 프로젝트
+
+include::{docdir}/src/docs/asciidoc/project.adoc[]
+
+= 프로젝트 멤버
+
+include::{docdir}/src/docs/asciidoc/project-member.adoc[]
+
 = 이슈
 
 include::{docdir}/src/docs/asciidoc/issue.adoc[]
+
+= 일정
+
+include::{docdir}/src/docs/asciidoc/plan.adoc[]
 
 = 텍스트 채널
 

@@ -41,13 +41,10 @@ public class PlanMemberRepositoryTest {
     private PlanMemberRepository planMemberRepository;
 
     Member member = Member.of("name", "email", Oauth2.of(AuthProvider.KAKAO, "account"));
-    List<Member> members = new ArrayList<>() {
-        {
-            Member.of("testMember1", "email", Oauth2.of(AuthProvider.KAKAO, "account"));
-            Member.of("testMember2", "email", Oauth2.of(AuthProvider.KAKAO, "account"));
-            Member.of("testMember3", "email", Oauth2.of(AuthProvider.KAKAO, "account"));
-        }
-    };
+    List<Member> members = List.of(
+            Member.of("testMember1", "email", Oauth2.of(AuthProvider.KAKAO, "account")),
+            Member.of("testMember2", "email", Oauth2.of(AuthProvider.KAKAO, "account")),
+            Member.of("testMember3", "email", Oauth2.of(AuthProvider.KAKAO, "account")));
     Project project = Project.of("name",
         "description",
         true,
@@ -59,15 +56,13 @@ public class PlanMemberRepositoryTest {
         LocalDateTime.now().minusDays(2),
         LocalDateTime.now(),
         true,
-        project
-    );
+        project);
 
     @BeforeEach
     void setUp() {
         memberRepository.save(member);
         projectRepository.save(project);
-        members.stream()
-            .forEach(memberRepository::save);
+        members.forEach(memberRepository::save);
         planRepository.save(plan);
     }
 
@@ -75,37 +70,32 @@ public class PlanMemberRepositoryTest {
     @DisplayName("멤버_일정을 저장한다.")
     void save() {
         // given
-        PlanMember planMember = PlanMember.of(members.get(0), plan);
+        PlanMember planMember = PlanMember.of(member, plan);
 
         // when
-        PlanMember foundPlanMember = planMemberRepository.save(planMember);
+        PlanMember savedPlanMember = planMemberRepository.save(planMember);
 
         // then
-        assertThat(foundPlanMember).isNotNull();
-        assertThat(foundPlanMember.getId().getPlan()).isEqualTo(plan);
-        assertThat(foundPlanMember.getId().getMember()).isEqualTo(members.get(0));
+        assertThat(savedPlanMember.getId()).isEqualTo(planMember.getId());
     }
 
     @Test
     @DisplayName("일정id에 따른 멤버_일정 조회")
     void findByPlanId() {
         // given
-        members.stream()
-            .map(member->PlanMember.of(member,plan))
-            .forEach(planMemberRepository::save);
+        List<PlanMember> savedPlanMembers = members.stream()
+                .map(member -> PlanMember.of(member, plan))
+                .map(planMemberRepository::save)
+                .toList();
 
         // when
-        List<PlanMember> foundPlanMembers = planMemberRepository.findByPlanId(1L);
+        List<PlanMember> foundPlanMembers = planMemberRepository.findByPlanId(plan.getId());
 
 
         // then
-        assertThat(foundPlanMembers).isNotNull();
-        foundPlanMembers.stream()
-            .map(planMember -> planMember.getId().getPlan())
-            .forEach(planMemberPlan -> assertThat(planMemberPlan).isEqualTo(plan));
-        assertThat(foundPlanMembers.stream()
-            .map(planMember -> planMember.getId().getMember())
-            .toList()).isEqualTo(members);
+        assertThat(foundPlanMembers).hasSize(3);
+        assertThat(foundPlanMembers)
+                .containsExactly(savedPlanMembers.get(0), savedPlanMembers.get(1), savedPlanMembers.get(2));
     }
 
     @Test

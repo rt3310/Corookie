@@ -57,13 +57,10 @@ public class CategoryInPlanRepositoryTest {
         true,
         project
     );
-    List<PlanCategory> categories = new ArrayList<>() {
-        {
-            add(PlanCategory.of("testCategory1"));
-            add(PlanCategory.of("testCategory2"));
-            add(PlanCategory.of("testCategory3"));
-        }
-    };
+    List<PlanCategory> categories = List.of(
+            PlanCategory.of("testCategory1"),
+            PlanCategory.of("testCategory2"),
+            PlanCategory.of("testCategory3"));
 
     @BeforeEach
     void setUp() {
@@ -92,21 +89,16 @@ public class CategoryInPlanRepositoryTest {
     @DisplayName("일정Id에 따른 카테고리 목록을 조회한다.")
     void findByPlan() {
         // given
-        categories.stream()
-            .forEach(category -> categoryInPlanRepository.save(
-                CategoryInPlan.of(plan, category)
-            ));
+        categories.forEach(category -> categoryInPlanRepository.save(CategoryInPlan.of(plan, category)));
 
         // when
-        List<CategoryInPlan> foundCategoryInPlans = categoryInPlanRepository.findByPlanId(1L);
+        List<CategoryInPlan> foundCategoryInPlans = categoryInPlanRepository.findByPlanId(plan.getId());
 
         // then
         assertThat(foundCategoryInPlans.stream()
             .map(categoryInPlan -> categoryInPlan.getId().getPlanCategory())
             .toList()).isEqualTo(categories);
-        foundCategoryInPlans.stream()
-            .forEach(
-                categoryInPlan -> assertThat(categoryInPlan.getId().getPlan()).isEqualTo(plan));
+        foundCategoryInPlans.forEach(categoryInPlan -> assertThat(categoryInPlan.getId().getPlan()).isEqualTo(plan));
     }
 
     @Test
