@@ -41,9 +41,9 @@ class IssueServiceTest {
     @BeforeEach
     void initObjects() {
         projectRepository = new FakeProjectRepository();
-        issueRepository = new FakeIssueRepository(projectRepository);
-        issueCategoryRepository = new FakeIssueCategoryRepository();
         memberRepository = new FakeMemberRepository();
+        issueCategoryRepository = new FakeIssueCategoryRepository();
+        issueRepository = new FakeIssueRepository(projectRepository, memberRepository);
         issueService = new IssueService(issueRepository, projectRepository, memberRepository,
                 new IssueCategoryService(issueCategoryRepository));
         member = Member.of("name", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));

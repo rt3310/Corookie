@@ -9,6 +9,10 @@ import * as utils from 'utils'
 const IssueDetail = ({ id }) => {
     const { closeIssueDetail } = hooks.issueDetailState()
     const { tasks, setTasks } = hooks.tasksState()
+    const { value: priorityValue, setValue: setPriorityValue } = hooks.detailPriorityState()
+    const { value: managerValue, setValue: setManagerValue } = hooks.detailManagerState()
+    const { value: categoryValue, setValue: setCategoryValue } = hooks.detailCategoryState()
+
     const taskWithId = tasks.find(task => task.id === id)
 
     const managerList = ['황상미', '최효빈', '신승수', '박종서', '서원호', '권현수']
@@ -16,6 +20,9 @@ const IssueDetail = ({ id }) => {
     const categoryList = ['frontend', 'backend', 'design', 'development', 'product', 'other']
     const [title, setTitle] = useState(taskWithId.title)
     const [content, setContent] = useState(taskWithId.content)
+    const [priority, setPriority] = useState(taskWithId.priority)
+    const [manager, setManager] = useState(taskWithId.manager)
+    const [category, setCategory] = useState(taskWithId.type)
     const [editTitle, setEditTitle] = useState(false)
     const [editContent, setEditContent] = useState(false)
 
@@ -61,6 +68,8 @@ const IssueDetail = ({ id }) => {
 
     const onRemove = () => {
         if (window.confirm('정말 삭제하시겠습니까?')) {
+            const updatedTasks = tasks.filter(task => task.id !== id)
+            setTasks(updatedTasks)
             alert('삭제되었습니다. ')
             closeIssueDetail()
         }
@@ -77,8 +86,27 @@ const IssueDetail = ({ id }) => {
     }, [id, tasks])
 
     useEffect(() => {
-        console.log(tasks)
-    }, [tasks])
+        const taskWithId = tasks.find(task => task.id === id)
+        setPriorityValue(taskWithId.priority)
+        setManagerValue(taskWithId.manager)
+        setCategoryValue(taskWithId.type)
+    }, [id])
+
+    useEffect(() => {
+        const updatedTasks = tasks.map(task => (task.id === id ? { ...task, priority: `${priorityValue}` } : task))
+        setTasks(updatedTasks)
+    }, [priorityValue])
+
+    useEffect(() => {
+        const updatedTasks = tasks.map(task => (task.id === id ? { ...task, manager: `${managerValue}` } : task))
+        setTasks(updatedTasks)
+    }, [managerValue])
+
+    useEffect(() => {
+        const updatedTasks = tasks.map(task => (task.id === id ? { ...task, type: `${categoryValue}` } : task))
+        setTasks(updatedTasks)
+    }, [categoryValue])
+
     return (
         <S.Wrap>
             <S.Container>
@@ -115,19 +143,19 @@ const IssueDetail = ({ id }) => {
                 <S.Manager>
                     <S.Text>담당자</S.Text>
                     <S.ButtonContainer>
-                        <components.ToggleButton defaultVal={utils.ISSUE_OPTIONS.detailManager} list={managerList} />
+                        <components.ToggleButton btnType={utils.ISSUE_OPTIONS.detailManager} list={managerList} />
                     </S.ButtonContainer>
                 </S.Manager>
                 <S.Priority>
                     <S.Text>중요도</S.Text>
                     <S.ButtonContainer>
-                        <components.ToggleButton defaultVal={utils.ISSUE_OPTIONS.detailPriority} list={priorityList} />
+                        <components.ToggleButton btnType={utils.ISSUE_OPTIONS.detailPriority} list={priorityList} />
                     </S.ButtonContainer>
                 </S.Priority>
                 <S.Category>
                     <S.Text>분류</S.Text>
                     <S.ButtonContainer>
-                        <components.ToggleButton defaultVal={utils.ISSUE_OPTIONS.detailCategory} list={categoryList} />
+                        <components.ToggleButton btnType={utils.ISSUE_OPTIONS.detailCategory} list={categoryList} />
                     </S.ButtonContainer>
                 </S.Category>
                 <S.DescriptionBox>
