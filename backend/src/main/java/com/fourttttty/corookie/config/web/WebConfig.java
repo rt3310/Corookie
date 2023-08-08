@@ -1,6 +1,7 @@
 package com.fourttttty.corookie.config.web;
 
 import com.fourttttty.corookie.issue.util.IssueFilterTypeConverter;
+import com.fourttttty.corookie.issue.util.IssueProgressConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
@@ -24,5 +25,6 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addFormatters(FormatterRegistry registry) {
         registry.addConverter(new IssueFilterTypeConverter());
+        registry.addConverter(new IssueProgressConverter());
     }
 }
