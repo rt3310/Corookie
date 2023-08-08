@@ -1,37 +1,33 @@
 package com.fourttttty.corookie.issue.domain;
 
-import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fourttttty.corookie.global.exception.InvalidIssueCategoryException;
+import lombok.AllArgsConstructor;
 
-@Entity
-@Table(name = "issue_category")
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class IssueCategory {
+@AllArgsConstructor
+public enum IssueCategory {
+    ALL("all"),
+    BACKEND("backend"),
+    FRONTEND("frontend"),
+    DESIGN("design"),
+    PLAN("plan"),
+    ETC("etc");
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "issue_category_id", nullable = false)
-    private Long id;
+    private final String value;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Category category;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "issue_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Issue issue;
-
-    private IssueCategory(Category category, Issue issue) {
-        this.category = category;
-        this.issue = issue;
+    @JsonCreator
+    public static IssueCategory from(String value) {
+        for (IssueCategory issueCategory : IssueCategory.values()) {
+            if (issueCategory.getValue().equals(value)) {
+                return issueCategory;
+            }
+        }
+        throw new InvalidIssueCategoryException();
     }
 
-    public static IssueCategory of(Category category, Issue issue) {
-        return new IssueCategory(category, issue);
+    @JsonValue
+    public String getValue() {
+        return this.value;
     }
 }

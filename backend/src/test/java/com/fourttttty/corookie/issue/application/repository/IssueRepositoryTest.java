@@ -1,6 +1,7 @@
 package com.fourttttty.corookie.issue.application.repository;
 
 import com.fourttttty.corookie.config.audit.JpaAuditingConfig;
+import com.fourttttty.corookie.issue.domain.IssueCategory;
 import com.fourttttty.corookie.issue.domain.Issue;
 import com.fourttttty.corookie.issue.domain.IssuePriority;
 import com.fourttttty.corookie.issue.domain.IssueProgress;
@@ -58,6 +59,7 @@ class IssueRepositoryTest {
                 "description",
                 IssueProgress.TODO,
                 IssuePriority.HIGH,
+                IssueCategory.BACKEND,
                 true,
                 project,
                 member);
@@ -84,6 +86,7 @@ class IssueRepositoryTest {
                 "description",
                 IssueProgress.TODO,
                 IssuePriority.HIGH,
+                IssueCategory.BACKEND,
                 true,
                 project,
                 member);
@@ -112,6 +115,7 @@ class IssueRepositoryTest {
                 "description",
                 IssueProgress.TODO,
                 IssuePriority.HIGH,
+                IssueCategory.BACKEND,
                 true,
                 project,
                 member);
@@ -140,6 +144,7 @@ class IssueRepositoryTest {
                 "description",
                 IssueProgress.TODO,
                 IssuePriority.HIGH,
+                IssueCategory.BACKEND,
                 true,
                 project,
                 member);
@@ -160,6 +165,7 @@ class IssueRepositoryTest {
                 "description",
                 IssueProgress.TODO,
                 IssuePriority.HIGH,
+                IssueCategory.BACKEND,
                 true,
                 project,
                 member);
@@ -181,6 +187,7 @@ class IssueRepositoryTest {
                 "description",
                 IssueProgress.TODO,
                 IssuePriority.HIGH,
+                IssueCategory.BACKEND,
                 true,
                 project,
                 member);
@@ -202,6 +209,7 @@ class IssueRepositoryTest {
                 "description",
                 IssueProgress.TODO,
                 IssuePriority.HIGH,
+                IssueCategory.BACKEND,
                 true,
                 project,
                 member);
@@ -209,6 +217,7 @@ class IssueRepositoryTest {
                 "description",
                 IssueProgress.TODO,
                 IssuePriority.NORMAL,
+                IssueCategory.BACKEND,
                 true,
                 project,
                 member);
@@ -232,6 +241,7 @@ class IssueRepositoryTest {
                 "description",
                 IssueProgress.TODO,
                 IssuePriority.HIGH,
+                IssueCategory.BACKEND,
                 true,
                 project,
                 member);
@@ -239,6 +249,7 @@ class IssueRepositoryTest {
                 "description",
                 IssueProgress.TODO,
                 IssuePriority.NORMAL,
+                IssueCategory.BACKEND,
                 true,
                 project,
                 member);
@@ -262,6 +273,7 @@ class IssueRepositoryTest {
                 "description",
                 IssueProgress.TODO,
                 IssuePriority.HIGH,
+                IssueCategory.BACKEND,
                 true,
                 project,
                 member);
