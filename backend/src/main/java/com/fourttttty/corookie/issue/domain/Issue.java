@@ -37,6 +37,10 @@ public class Issue extends BaseTime {
     private IssuePriority priority;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private IssueCategory issueCategory;
+
+    @Column(nullable = false)
     private Boolean enabled;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -51,6 +55,7 @@ public class Issue extends BaseTime {
                  String description,
                  IssueProgress progress,
                  IssuePriority priority,
+                 IssueCategory issueCategory,
                  Boolean enabled,
                  Project project,
                  Member manager) {
@@ -58,6 +63,7 @@ public class Issue extends BaseTime {
         this.description = description;
         this.progress = progress;
         this.priority = priority;
+        this.issueCategory = issueCategory;
         this.enabled = enabled;
         this.project = project;
         this.manager = manager;
@@ -67,6 +73,7 @@ public class Issue extends BaseTime {
                            String description,
                            IssueProgress progress,
                            IssuePriority priority,
+                           IssueCategory issueCategory,
                            Boolean enabled,
                            Project project,
                            Member manager) {
@@ -74,12 +81,33 @@ public class Issue extends BaseTime {
                 description,
                 progress,
                 priority,
+                issueCategory,
                 enabled,
                 project,
                 manager);
     }
 
-    public void changeIssueProgress(IssueProgress progress) {
+    public void changeTopic(String topic) {
+        this.topic = topic;
+    }
+
+    public void changeDescription(String description) {
+        this.description = description;
+    }
+
+    public void changeManager(Member manager) {
+        this.manager = manager;
+    }
+
+    public void changePriority(IssuePriority priority) {
+        this.priority = priority;
+    }
+
+    public void changeCategory(IssueCategory issueCategory) {
+        this.issueCategory = issueCategory;
+    }
+
+    public void changeProgress(IssueProgress progress) {
         this.progress = progress;
     }
 

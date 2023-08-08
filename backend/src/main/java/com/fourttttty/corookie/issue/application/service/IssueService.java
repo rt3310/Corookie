@@ -24,37 +24,21 @@ public class IssueService {
     private final ProjectRepository projectRepository;
     private final MemberRepository memberRepository;
 
-    private final IssueCategoryService issueCategoryService;
-
     @Transactional
     public IssueDetailResponse create(IssueCreateRequest issueCreateRequest, Long projectId, Long memberId) {
-        Issue issue = issueRepository.save(issueCreateRequest.toEntity(
+        return IssueDetailResponse.from(issueRepository.save(issueCreateRequest.toEntity(
                 projectRepository.findById(projectId).orElseThrow(EntityNotFoundException::new),
-                memberRepository.findById(memberId).orElseThrow(EntityNotFoundException::new)));
-
-        return IssueDetailResponse.from(issue,
-                issueCreateRequest.issueCategories().stream()
-                        .map(request -> issueCategoryService.createIfNone(request, issue))
-                        .toList());
+                memberRepository.findById(memberId).orElseThrow(EntityNotFoundException::new))));
     }
 
     public IssueDetailResponse findById(Long issueId) {
-        Issue issue = findEntityById(issueId);
-        return IssueDetailResponse.from(issue, issueCategoryService.findByIssue(issue));
+        return IssueDetailResponse.from(findEntityById(issueId));
     }
 
     public List<IssueListResponse> findByProjectId(Long projectId) {
         return issueRepository.findByProjectId(projectId).stream()
-                .map(issue -> IssueListResponse.from(issue, issueCategoryService.findByIssue(issue)))
+                .map(IssueListResponse::from)
                 .toList();
-    }
-
-    @Transactional
-    public IssueDetailResponse changeIssueProgress(Long issueId, IssueProgressUpdateRequest request) {
-        Issue issue = findEntityById(issueId);
-        issue.changeIssueProgress(request.progress());
-
-        return IssueDetailResponse.from(issue, issueCategoryService.findByIssue(issue));
     }
 
     @Transactional
