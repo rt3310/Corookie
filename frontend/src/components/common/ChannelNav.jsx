@@ -18,6 +18,7 @@ const ChannelNav = () => {
     const [openText, setOpenText] = useState(true)
     const [openDm, setOpenDm] = useState(true)
     const [openVideo, setOpenVideo] = useState(true)
+    const [pinOn, setPinOn] = useState(true)
 
     useEffect(() => {
         const initProjectMembers = async () => {
@@ -38,7 +39,7 @@ const ChannelNav = () => {
                     {textChannels.map((textChannel, index) => (
                         <S.Channel onClick={() => navigate(utils.URL.CHAT.TEXT)}>
                             {index + 1}. {textChannel.name}
-                            {/* <AiOutlinePushpin /> */}
+                            {pinOn && <AiFillPushpin />}
                         </S.Channel>
                     ))}
                     <S.AddChannelButton>
