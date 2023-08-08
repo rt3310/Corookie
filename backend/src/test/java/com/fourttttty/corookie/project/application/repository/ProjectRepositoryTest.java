@@ -1,6 +1,5 @@
 package com.fourttttty.corookie.project.application.repository;
 
-
 import com.fourttttty.corookie.member.domain.AuthProvider;
 import com.fourttttty.corookie.member.domain.Member;
 import com.fourttttty.corookie.member.domain.Oauth2;
@@ -9,8 +8,6 @@ import com.fourttttty.corookie.texture.project.application.repository.FakeProjec
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class ProjectRepositoryTest {
     ProjectRepository projectRepository;
-    Member member;
+    private Member member;
 
     @BeforeEach
     void initObjects() {
@@ -40,7 +37,7 @@ class ProjectRepositoryTest {
         // when
         Project savedProject = projectRepository.save(project);
 
-        //then
+        // then
         assertThat(savedProject.getName()).isEqualTo(project.getName());
         assertThat(savedProject.getDescription()).isEqualTo(project.getDescription());
         assertThat(savedProject.getEnabled()).isEqualTo(project.getEnabled());
@@ -74,6 +71,8 @@ class ProjectRepositoryTest {
         assertThat(foundProject.get().getInvitationStatus()).isEqualTo(project.getInvitationStatus());
         assertThat(foundProject.get().getMember()).isEqualTo(project.getMember());
     }
+
+// To-Do : findByInvitaion Link 테스트 짜기    findByInvitationLink
 
     @Test
     @DisplayName("프로젝트 목록 조회")

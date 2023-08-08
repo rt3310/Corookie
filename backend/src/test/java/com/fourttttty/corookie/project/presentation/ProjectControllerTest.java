@@ -11,7 +11,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -47,7 +46,7 @@ public class ProjectControllerTest extends RestDocsTest {
                 false,
                 "http://test.com",
                 false);
-        given(projectService.findAll()).willReturn(List.of(response));
+        given(projectService.findByMemberId(any(Long.class))).willReturn(List.of(response));
 
         //when
         ResultActions perform = mockMvc.perform(get("/api/v1/projects"));

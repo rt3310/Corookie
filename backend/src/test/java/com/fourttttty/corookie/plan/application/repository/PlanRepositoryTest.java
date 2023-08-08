@@ -44,7 +44,6 @@ class PlanRepositoryTest {
         false,
     member);
 
-
     @BeforeEach
     void setUp() {
         memberRepository.save(member);

@@ -1,0 +1,28 @@
+= Project API
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+
+
+== 프로젝트 등록
+
+=== Request
+
+include::{snippets}/projectmember-create/http-request.adoc[]
+include::{snippets}/projectmember-create/request-fields.adoc[]
+
+=== Response
+
+include::{snippets}/projectmember-create/http-response.adoc[]
+include::{snippets}/projectmember-create/response-fields.adoc[]
+
+
+include::{snippets}/projectmember-delete/
