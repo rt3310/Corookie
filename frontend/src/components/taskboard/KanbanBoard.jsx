@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import styled from 'styled-components'
+
 import { IoReorderTwoSharp } from 'react-icons/io5'
+import { BiChevronsUp, BiChevronUp, BiChevronDown, BiChevronsDown } from 'react-icons/bi'
 
 import * as hooks from 'hooks'
 
@@ -30,6 +32,24 @@ const KanbanBoard = () => {
             items: tasksByStatus['done'] || [],
         },
     }
+
+    const renderPriority = priority => {
+        switch (priority) {
+            case 'Highest':
+                return <BiChevronsUp />
+            case 'High':
+                return <BiChevronUp />
+            case 'Normal':
+                return <IoReorderTwoSharp />
+            case 'Low':
+                return <BiChevronDown />
+            case 'Lowest':
+                return <BiChevronsDown />
+            default:
+                return null
+        }
+    }
+
     const [columns, setColumns] = useState(taskStatus)
 
     const onDragEnd = (result, columns, setColumns) => {
@@ -102,8 +122,8 @@ const KanbanBoard = () => {
                                                                         <S.IssueTopic>{item.title}</S.IssueTopic>
                                                                         <S.IssueInfo>
                                                                             <S.Type>{item.type}</S.Type>
-                                                                            <S.Priority>
-                                                                                <IoReorderTwoSharp />
+                                                                            <S.Priority priority={item.priority}>
+                                                                                {renderPriority(item.priority)}
                                                                             </S.Priority>
                                                                             <S.ProfileImg
                                                                                 src={
@@ -244,7 +264,22 @@ const S = {
         & svg {
             width: 20px;
             height: 20px;
-            color: ${({ theme }) => theme.color.pending};
+            color: ${({ theme, priority }) => {
+                switch (priority) {
+                    case 'Highest':
+                        return theme.color.warning
+                    case 'High':
+                        return theme.color.warning
+                    case 'Normal':
+                        return theme.color.pending
+                    case 'Low':
+                        return theme.color.success
+                    case 'Lowest':
+                        return theme.color.success
+                    default:
+                        return theme.color.main
+                }
+            }};
         }
     `,
 }
