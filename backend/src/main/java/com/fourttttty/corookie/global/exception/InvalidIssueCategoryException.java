@@ -4,6 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class InvalidIssueCategoryException extends RuntimeException {
+
     private final ExceptionCode exceptionCode;
 
     public InvalidIssueCategoryException() {
