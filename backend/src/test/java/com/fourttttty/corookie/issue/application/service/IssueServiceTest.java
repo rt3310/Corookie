@@ -69,10 +69,10 @@ class IssueServiceTest {
         // then
         assertThat(response.topic()).isEqualTo(request.topic());
         assertThat(response.description()).isEqualTo(request.description());
-        assertThat(response.progress()).isEqualTo(request.progress().getValue());
-        assertThat(response.priority()).isEqualTo(request.priority().getValue());
+        assertThat(response.progress()).isEqualTo(request.progress());
+        assertThat(response.priority()).isEqualTo(request.priority());
         assertThat(response.issueCategories().get(0).category())
-                .isEqualTo(request.issueCategories().get(0).category().getValue());
+                .isEqualTo(request.issueCategories().get(0).category());
     }
 
     @Test
@@ -96,10 +96,10 @@ class IssueServiceTest {
 
         assertThat(response.topic()).isEqualTo(request.topic());
         assertThat(response.description()).isEqualTo(request.description());
-        assertThat(response.progress()).isEqualTo(request.progress().getValue());
-        assertThat(response.priority()).isEqualTo(request.priority().getValue());
+        assertThat(response.progress()).isEqualTo(request.progress());
+        assertThat(response.priority()).isEqualTo(request.priority());
         assertThat(response.issueCategories().get(0).category())
-                .isEqualTo(request.issueCategories().get(0).category().getValue());
+                .isEqualTo(request.issueCategories().get(0).category());
     }
 
     @Test
@@ -123,9 +123,9 @@ class IssueServiceTest {
         // then
         assertThat(findResponses.size()).isEqualTo(1L);
         assertThat(findResponses.get(0).topic()).isEqualTo(request.topic());
-        assertThat(findResponses.get(0).progress()).isEqualTo(request.progress().getValue());
-        assertThat(findResponses.get(0).priority()).isEqualTo(request.priority().getValue());
+        assertThat(findResponses.get(0).progress()).isEqualTo(request.progress());
+        assertThat(findResponses.get(0).priority()).isEqualTo(request.priority());
         assertThat(findResponses.get(0).issueCategories().get(0).category())
-                .isEqualTo(request.issueCategories().get(0).category().getValue());
+                .isEqualTo(request.issueCategories().get(0).category());
     }
 }

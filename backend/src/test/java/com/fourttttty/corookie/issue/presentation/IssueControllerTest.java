@@ -169,9 +169,10 @@ class IssueControllerTest extends RestDocsTest {
         perform.andExpect(status().isOk())
                 .andExpect(jsonPath("$.topic").value(response.topic()))
                 .andExpect(jsonPath("$.description").value(response.description()))
-                .andExpect(jsonPath("$.progress").value(response.progress()))
-                .andExpect(jsonPath("$.priority").value(response.priority()))
-                .andExpect(jsonPath("$.issueCategories[0].category").value(response.issueCategories().get(0).category()));
+                .andExpect(jsonPath("$.progress").value(response.progress().getValue()))
+                .andExpect(jsonPath("$.priority").value(response.priority().getName()))
+                .andExpect(jsonPath("$.issueCategories[0].category")
+                        .value(response.issueCategories().get(0).category().getValue()));
 
         perform.andDo(print())
                 .andDo(document("issue-detail",

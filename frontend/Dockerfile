@@ -1,4 +1,4 @@
-FROM nginx
+FROM node
 
 RUN mkdir /app
 WORKDIR /app
@@ -6,6 +6,10 @@ WORKDIR /app
 RUN mkdir ./dist
 
 ADD ./dist ./dist
+
+RUN npm install yarn
+RUN yarn install
+RUN yarn add serve
 
 # RUN rm /etc/nginx/conf.d/default.conf
 
