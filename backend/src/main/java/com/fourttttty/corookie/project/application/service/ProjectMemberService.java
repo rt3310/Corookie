@@ -1,7 +1,6 @@
 package com.fourttttty.corookie.project.application.service;
 
 import com.fourttttty.corookie.issue.domain.Issue;
-import com.fourttttty.corookie.issue.dto.response.IssueCategoryResponse;
 import com.fourttttty.corookie.member.application.repository.MemberRepository;
 import com.fourttttty.corookie.member.domain.Member;
 import com.fourttttty.corookie.project.application.repository.ProjectMemberRepository;
@@ -14,7 +13,6 @@ import com.fourttttty.corookie.project.dto.response.MemberProjectResponse;
 import com.fourttttty.corookie.project.dto.response.ProjectMemberResponse;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -65,10 +63,6 @@ public class ProjectMemberService {
 
     private boolean notExistsProjectMember(Long projectId) {
         return projectMemberRepository.countByProjectId(projectId) <= 0;
-    }
-
-    public Long countProjectMember(Long projectId) {
-        return projectMemberRepository.countByProjectId(projectId);
     }
 
     public List<ProjectMemberResponse> findByProjectId(Long projectId) {

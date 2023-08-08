@@ -3,6 +3,7 @@ package com.fourttttty.corookie.project.presentation;
 import com.fourttttty.corookie.member.domain.AuthProvider;
 import com.fourttttty.corookie.member.domain.Member;
 import com.fourttttty.corookie.member.domain.Oauth2;
+import com.fourttttty.corookie.member.dto.response.MemberResponse;
 import com.fourttttty.corookie.project.application.service.ProjectMemberService;
 import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.project.domain.ProjectMember;
@@ -23,14 +24,18 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
+import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 
 @WebMvcTest(ProjectMemberController.class)
 public class ProjectMemberControllerTest extends RestDocsTest {
@@ -51,12 +56,15 @@ public class ProjectMemberControllerTest extends RestDocsTest {
     @DisplayName("프로젝트에 회원을 등록한다")
     void projectMemberCreate() throws Exception {
         // given
-        
         given(projectMemberService.createIfNone(any(ProjectMemberCreateRequest.class)))
                 .willReturn(ProjectMemberResponse.from(ProjectMember.of(project, member)));
 
-        ProjectMemberCreateRequest request = new ProjectMemberCreateRequest(1L, 1L);
+        MemberResponse memberResponse = MemberResponse.of(member);
         ProjectMemberResponse response = ProjectMemberResponse.from(ProjectMember.of(project, member));
+
+        Long projectId = 1L;
+        Long memberId = 1L;
+        ProjectMemberCreateRequest request = new ProjectMemberCreateRequest(projectId, memberId);
 
         // when
         ResultActions perform = mockMvc.perform(post("/api/v1/projects/{projectId}/projectmembers", projectId)
@@ -64,19 +72,17 @@ public class ProjectMemberControllerTest extends RestDocsTest {
                 .content(toJson(request)));
 
         // then
-        perform.andExpect(status().isCreated())
-                .andExpect(jsonPath("$.name").value(.getName()))
+        perform.andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value(member.getName()))
                 .andExpect(jsonPath("$.email").value(member.getEmail()));
 
         perform.andDo(print())
                 .andDo(document("projectmember-create",
                         getDocumentRequest(),
                         getDocumentResponse(),
-                        pathParameters(
-                                parameterWithName("projectId").description("프로젝트 키")),
                         requestFields(
-                                fieldWithPath("name").type(STRING).description("이름"),
-                                fieldWithPath("email").type(STRING).description("이메일")),
+                                fieldWithPath("projectId").type(NUMBER).description("프로젝트 키"),
+                                fieldWithPath("memberId").type(NUMBER).description("회원 키")),
                         responseFields(
                                 fieldWithPath("name").type(STRING).description("이름"),
                                 fieldWithPath("email").type(STRING).description("이메일"))));
@@ -100,11 +106,6 @@ public class ProjectMemberControllerTest extends RestDocsTest {
                                 parameterWithName("memberId").description("멤버 키"))));
     }
 
-    @Test
-    @DisplayName("프로젝트에 참여 중인 회원 수를 구한다")
-    void projectMemberCount() throws Exception{
-
-    }
 
     void projectMemberList() {
 

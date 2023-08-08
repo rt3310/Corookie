@@ -7,6 +7,7 @@ import com.fourttttty.corookie.project.dto.response.ProjectMemberResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,9 +19,8 @@ public class ProjectMemberController {
     private final ProjectMemberService projectMemberService;
 
     @PostMapping
-    public ResponseEntity<Object> projectMemberCreate(ProjectMemberCreateRequest request) {
-        projectMemberService.createIfNone(request);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<ProjectMemberResponse> projectMemberCreate(@RequestBody @Validated ProjectMemberCreateRequest request) {
+        return ResponseEntity.ok(projectMemberService.createIfNone(request));
     }
 
     @DeleteMapping("/{memberId}")
@@ -28,12 +28,6 @@ public class ProjectMemberController {
                                                       @PathVariable Long projectId) {
         projectMemberService.delete(memberId, projectId);
         return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping("/count")
-    public ResponseEntity<Long> projectMemberCount(@PathVariable Long projectId) {
-        Long count = projectMemberService.countProjectMember(projectId);
-        return ResponseEntity.ok(count);
     }
 
     @GetMapping

@@ -102,25 +102,6 @@ class ProjectMemberServiceTest {
     }
 
     @Test
-    @DisplayName("프로젝트 참여 회원 수 세기")
-    void countProjectMember() {
-        // given
-        Member member2 = Member.of("name2", "http://test.com", Oauth2.of(AuthProvider.KAKAO, "account"));
-        projectRepository.save(project);
-        memberRepository.save(member);
-        memberRepository.save(member2);
-        projectMemberRepository.save(ProjectMember.of(project, member));
-        projectMemberRepository.save(ProjectMember.of(project, member2));
-        Long projectId = 1L;
-
-        // when
-        Long count = projectMemberRepository.countByProjectId(projectId);
-
-        // then
-        assertThat(count).isEqualTo(2);
-    }
-
-    @Test
     @DisplayName("프로젝트에 참여 중인 모든 회원 조회")
     void findByProjectId() {
         // given
