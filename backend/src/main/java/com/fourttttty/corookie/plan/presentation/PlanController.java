@@ -50,7 +50,7 @@ public class PlanController {
     }
 
     @DeleteMapping("/{planId}")
-    public ResponseEntity<Object> planDelete(@PathVariable Long planId) {
+    public ResponseEntity<Object> planDelee(@PathVariable Long planId) {
         planService.deletePlan(planId);
         return ResponseEntity.noContent().build();
     }

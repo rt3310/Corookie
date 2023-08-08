@@ -18,6 +18,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
+import javax.xml.transform.Result;
+
+import java.util.List;
+
 import static com.fourttttty.corookie.support.ApiDocumentUtils.getDocumentRequest;
 import static com.fourttttty.corookie.support.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.BDDMockito.given;
@@ -106,8 +110,30 @@ public class ProjectMemberControllerTest extends RestDocsTest {
                                 parameterWithName("memberId").description("멤버 키"))));
     }
 
+    @Test
+    @DisplayName("프로젝트에 등록된 회원 목록을 조회한다")
+    void projectMemberList() throws Exception {
+        // given
+        ProjectMemberResponse response = new ProjectMemberResponse("name", "test@corookie.com");
 
-    void projectMemberList() {
+        given(projectMemberService.findByProjectId(any(Long.class))).willReturn(List.of(response));
 
+        // when
+        ResultActions perform = mockMvc.perform(get("/api/v1/projects/{projectId}/projectmembers", 1L));
+
+        // then
+        perform.andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].name").value(response.name()))
+                .andExpect(jsonPath("$[0].email").value(response.email()));
+
+        perform.andDo(print())
+                .andDo(document("projectmember-list",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        pathParameters(
+                                parameterWithName("projectId").description("프로젝트 키")),
+                        responseFields(
+                                fieldWithPath("[].name").type(STRING).description("이름"),
+                                fieldWithPath("[].email").type(STRING).description("이메일"))));
     }
 }
