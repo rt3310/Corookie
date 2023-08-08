@@ -57,6 +57,118 @@ include::{snippets}/issue-detail/http-response.adoc[]
 
 include::{snippets}/issue-detail/response-fields.adoc[]
 
+== 이슈 필터링 조회
+
+=== Request
+
+include::{snippets}/issue-list-filter-manager/http-request.adoc[]
+
+include::{snippets}/issue-list-filter-manager/path-parameters.adoc[]
+
+include::{snippets}/issue-list-filter-manager/query-parameters.adoc[]
+
+=== Response
+
+include::{snippets}/issue-list-filter-manager/http-response.adoc[]
+
+include::{snippets}/issue-list-filter-manager/response-fields.adoc[]
+
+== 이슈 진행도 수정
+
+=== Request
+
+include::{snippets}/issue-progress-modify/http-request.adoc[]
+
+include::{snippets}/issue-progress-modify/path-parameters.adoc[]
+
+include::{snippets}/issue-progress-modify/request-fields.adoc[]
+
+=== Response
+
+include::{snippets}/issue-progress-modify/http-response.adoc[]
+
+include::{snippets}/issue-progress-modify/response-fields.adoc[]
+
+== 이슈 제목 수정
+
+=== Request
+
+include::{snippets}/issue-topic-modify/http-request.adoc[]
+
+include::{snippets}/issue-topic-modify/path-parameters.adoc[]
+
+include::{snippets}/issue-topic-modify/request-fields.adoc[]
+
+=== Response
+
+include::{snippets}/issue-topic-modify/http-response.adoc[]
+
+include::{snippets}/issue-topic-modify/response-fields.adoc[]
+
+== 이슈 설명 수정
+
+=== Request
+
+include::{snippets}/issue-description-modify/http-request.adoc[]
+
+include::{snippets}/issue-description-modify/path-parameters.adoc[]
+
+include::{snippets}/issue-description-modify/request-fields.adoc[]
+
+=== Response
+
+include::{snippets}/issue-description-modify/http-response.adoc[]
+
+include::{snippets}/issue-description-modify/response-fields.adoc[]
+
+== 이슈 담당자 수정
+
+=== Request
+
+include::{snippets}/issue-manager-modify/http-request.adoc[]
+
+include::{snippets}/issue-manager-modify/path-parameters.adoc[]
+
+include::{snippets}/issue-manager-modify/request-fields.adoc[]
+
+=== Response
+
+include::{snippets}/issue-manager-modify/http-response.adoc[]
+
+include::{snippets}/issue-manager-modify/response-fields.adoc[]
+
+== 이슈 중요도 수정
+
+=== Request
+
+include::{snippets}/issue-priority-modify/http-request.adoc[]
+
+include::{snippets}/issue-priority-modify/path-parameters.adoc[]
+
+include::{snippets}/issue-priority-modify/request-fields.adoc[]
+
+=== Response
+
+include::{snippets}/issue-priority-modify/http-response.adoc[]
+
+include::{snippets}/issue-priority-modify/response-fields.adoc[]
+
+== 이슈 카테고리 수정
+
+=== Request
+
+include::{snippets}/issue-category-modify/http-request.adoc[]
+
+include::{snippets}/issue-category-modify/path-parameters.adoc[]
+
+include::{snippets}/issue-category-modify/request-fields.adoc[]
+
+=== Response
+
+include::{snippets}/issue-category-modify/http-response.adoc[]
+
+include::{snippets}/issue-category-modify/response-fields.adoc[]
+
 == 이슈 삭제
 
 === Request
