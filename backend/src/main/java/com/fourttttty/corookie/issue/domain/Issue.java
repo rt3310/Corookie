@@ -79,6 +79,10 @@ public class Issue extends BaseTime {
                 manager);
     }
 
+    public void changeIssueProgress(IssueProgress progress) {
+        this.progress = progress;
+    }
+
     public void delete() {
         this.enabled = false;
     }

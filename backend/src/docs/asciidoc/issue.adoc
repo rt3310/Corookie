@@ -73,6 +73,22 @@ include::{snippets}/issue-list-filter-manager/http-response.adoc[]
 
 include::{snippets}/issue-list-filter-manager/response-fields.adoc[]
 
+== 이슈 진행도 수정
+
+=== Request
+
+include::{snippets}/issue-progress-modify/http-request.adoc[]
+
+include::{snippets}/issue-progress-modify/path-parameters.adoc[]
+
+include::{snippets}/issue-progress-modify/request-fields.adoc[]
+
+=== Response
+
+include::{snippets}/issue-progress-modify/http-response.adoc[]
+
+include::{snippets}/issue-progress-modify/response-fields.adoc[]
+
 == 이슈 삭제
 
 === Request

@@ -4,9 +4,7 @@ import com.fourttttty.corookie.global.exception.IssueNotFoundException;
 import com.fourttttty.corookie.issue.application.repository.IssueRepository;
 import com.fourttttty.corookie.issue.domain.Issue;
 import com.fourttttty.corookie.issue.dto.request.IssueCreateRequest;
-import com.fourttttty.corookie.issue.dto.request.IssueManagerRequest;
-import com.fourttttty.corookie.issue.dto.request.IssueProgressFilteringRequest;
-import com.fourttttty.corookie.issue.dto.request.IssueTopicFilteringRequest;
+import com.fourttttty.corookie.issue.dto.request.IssueProgressUpdateRequest;
 import com.fourttttty.corookie.issue.dto.response.IssueDetailResponse;
 import com.fourttttty.corookie.issue.dto.response.IssueListResponse;
 import com.fourttttty.corookie.member.application.repository.MemberRepository;
@@ -49,6 +47,14 @@ public class IssueService {
         return issueRepository.findByProjectId(projectId).stream()
                 .map(issue -> IssueListResponse.from(issue, issueCategoryService.findByIssue(issue)))
                 .toList();
+    }
+
+    @Transactional
+    public IssueDetailResponse changeIssueProgress(Long issueId, IssueProgressUpdateRequest request) {
+        Issue issue = findEntityById(issueId);
+        issue.changeIssueProgress(request.progress());
+
+        return IssueDetailResponse.from(issue, issueCategoryService.findByIssue(issue));
     }
 
     @Transactional

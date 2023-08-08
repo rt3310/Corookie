@@ -6,6 +6,7 @@ import com.fourttttty.corookie.issue.application.service.IssueService;
 import com.fourttttty.corookie.issue.domain.*;
 import com.fourttttty.corookie.issue.dto.request.IssueCategoryCreateRequest;
 import com.fourttttty.corookie.issue.dto.request.IssueCreateRequest;
+import com.fourttttty.corookie.issue.dto.request.IssueProgressUpdateRequest;
 import com.fourttttty.corookie.issue.dto.response.IssueCategoryResponse;
 import com.fourttttty.corookie.issue.dto.response.IssueDetailResponse;
 import com.fourttttty.corookie.issue.dto.response.IssueListResponse;
@@ -191,6 +192,46 @@ class IssueControllerTest extends RestDocsTest {
     }
 
     @Test
+    @DisplayName("이슈 진행도를 수정한다")
+    void issueProgressModify() throws Exception {
+        IssueDetailResponse response = IssueDetailResponse.from(issue, List.of(IssueCategoryResponse.from(Category.BACKEND)));
+        given(issueService.changeIssueProgress(any(Long.class), any(IssueProgressUpdateRequest.class)))
+                .willReturn(response);
+
+        // when
+        ResultActions perform = mockMvc.perform(put("/api/v1/projects/{projectId}/issues/{issueId}/progress",
+                1L, 1L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(new IssueProgressUpdateRequest(IssueProgress.TODO))));
+
+        // then
+        perform.andExpect(status().isOk())
+                .andExpect(jsonPath("$.topic").value(response.topic()))
+                .andExpect(jsonPath("$.description").value(response.description()))
+                .andExpect(jsonPath("$.progress").value(response.progress().getValue()))
+                .andExpect(jsonPath("$.priority").value(response.priority().getName()))
+                .andExpect(jsonPath("$.issueCategories[0].category")
+                        .value(response.issueCategories().get(0).category().getValue()));
+
+        perform.andDo(print())
+                .andDo(document("issue-progress-modify",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        pathParameters(
+                                parameterWithName("projectId").description("프로젝트 키"),
+                                parameterWithName("issueId").description("이슈 키")),
+                        requestFields(
+                                fieldWithPath("progress").type(STRING).description("이슈 진행도")),
+                        responseFields(
+                                fieldWithPath("topic").type(STRING).description("제목"),
+                                fieldWithPath("description").type(STRING).description("설명"),
+                                fieldWithPath("progress").type(STRING).description("이슈 진행도"),
+                                fieldWithPath("priority").type(STRING).description("이슈 중요도"),
+                                fieldWithPath("issueCategories").type(ARRAY).description("이슈 카테고리"),
+                                fieldWithPath("issueCategories.[].category").type(STRING).description("이슈 카테고리 내용"))));
+    }
+
+    @Test
     @DisplayName("이슈를 삭제한다")
     void issueDelete() throws Exception {
         ResultActions perform = mockMvc.perform(delete("/api/v1/projects/{projectId}/issues/{issueId}",
@@ -233,7 +274,7 @@ class IssueControllerTest extends RestDocsTest {
                 .andExpect(jsonPath("$[0].memberName").value(member.getName()));
 
         perform.andDo(print())
-                .andDo(document("issue-list-filter-manager",
+                .andDo(document("issue-list-filter",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         pathParameters(

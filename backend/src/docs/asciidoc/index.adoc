@@ -1,0 +1,23 @@
+= Corookie API
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+= 이슈
+
+include::{docdir}/src/docs/asciidoc/issue.adoc[]
+
+= 텍스트 채널
+
+include::{docdir}/src/docs/asciidoc/text-channel.adoc[]
+
+= 스레드
+
+include::{docdir}/src/docs/asciidoc/thread.adoc[]
+
+= 댓글
+
+include::{docdir}/src/docs/asciidoc/comment.adoc[]
