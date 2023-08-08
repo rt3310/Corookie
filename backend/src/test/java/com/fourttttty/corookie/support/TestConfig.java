@@ -6,10 +6,13 @@ import com.fourttttty.corookie.issue.infrastructure.IssueJpaRepository;
 import com.fourttttty.corookie.member.application.repository.MemberRepository;
 import com.fourttttty.corookie.member.application.repository.MemberRepositoryImpl;
 import com.fourttttty.corookie.member.infrastructure.MemberJpaRepository;
+import com.fourttttty.corookie.plan.application.repository.CategoryInPlanRepository;
+import com.fourttttty.corookie.plan.application.repository.CategoryInPlanRepositoryImpl;
 import com.fourttttty.corookie.plan.application.repository.PlanCategoryRepository;
 import com.fourttttty.corookie.plan.application.repository.PlanCategoryRepositoryImpl;
 import com.fourttttty.corookie.plan.application.repository.PlanRepository;
 import com.fourttttty.corookie.plan.application.repository.PlanRepositoryImpl;
+import com.fourttttty.corookie.plan.infrastructure.CategoryInPlanJpaRepository;
 import com.fourttttty.corookie.plan.infrastructure.PlanCategoryJpaRepository;
 import com.fourttttty.corookie.plan.infrastructure.PlanJpaRepository;
 import com.fourttttty.corookie.project.application.repository.ProjectRepository;
@@ -35,9 +38,10 @@ public class TestConfig {
     private MemberJpaRepository memberJpaRepository;
     @Autowired
     private PlanJpaRepository planJpaRepository;
-
     @Autowired
     private PlanCategoryJpaRepository planCategoryJpaRepository;
+    @Autowired
+    private CategoryInPlanJpaRepository categoryInPlanJpaRepository;
 
     @Bean
     public IssueRepository issueRepository() {
@@ -62,6 +66,11 @@ public class TestConfig {
     @Bean
     public PlanCategoryRepository planCategoryRepository(){
         return new PlanCategoryRepositoryImpl(planCategoryJpaRepository);
+    }
+
+    @Bean
+    public CategoryInPlanRepository categoryInPlanRepository(){
+        return new CategoryInPlanRepositoryImpl(categoryInPlanJpaRepository);
     }
 
 }
