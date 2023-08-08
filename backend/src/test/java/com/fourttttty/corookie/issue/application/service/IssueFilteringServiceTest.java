@@ -1,7 +1,7 @@
 package com.fourttttty.corookie.issue.application.service;
 
-import com.fourttttty.corookie.issue.application.repository.IssueCategoryRepository;
 import com.fourttttty.corookie.issue.application.repository.IssueRepository;
+import com.fourttttty.corookie.issue.domain.IssueCategory;
 import com.fourttttty.corookie.issue.domain.Issue;
 import com.fourttttty.corookie.issue.domain.IssuePriority;
 import com.fourttttty.corookie.issue.domain.IssueProgress;
@@ -12,7 +12,6 @@ import com.fourttttty.corookie.member.domain.Member;
 import com.fourttttty.corookie.member.domain.Oauth2;
 import com.fourttttty.corookie.project.application.repository.ProjectRepository;
 import com.fourttttty.corookie.project.domain.Project;
-import com.fourttttty.corookie.texture.issue.application.repository.FakeIssueCategoryRepository;
 import com.fourttttty.corookie.texture.issue.application.repository.FakeIssueRepository;
 import com.fourttttty.corookie.texture.member.application.repository.FakeMemberRepository;
 import com.fourttttty.corookie.texture.project.application.repository.FakeProjectRepository;
@@ -29,7 +28,6 @@ class IssueFilteringServiceTest {
     IssueRepository issueRepository;
     ProjectRepository projectRepository;
     MemberRepository memberRepository;
-    IssueCategoryRepository issueCategoryRepository;
     IssueFilteringService issueFilteringService;
 
     private Member member;
@@ -40,8 +38,7 @@ class IssueFilteringServiceTest {
         projectRepository = new FakeProjectRepository();
         memberRepository = new FakeMemberRepository();
         issueRepository = new FakeIssueRepository(projectRepository, memberRepository);
-        issueCategoryRepository = new FakeIssueCategoryRepository();
-        issueFilteringService = new IssueFilteringService(issueRepository, new IssueCategoryService(issueCategoryRepository));
+        issueFilteringService = new IssueFilteringService(issueRepository);
         member = Member.of("name", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
         project = Project.of("name", "description", true,
                 "http://test.com", false, member);
@@ -57,6 +54,7 @@ class IssueFilteringServiceTest {
                 "description",
                 IssueProgress.TODO,
                 IssuePriority.HIGH,
+                IssueCategory.BACKEND,
                 true,
                 project,
                 member);
@@ -81,6 +79,7 @@ class IssueFilteringServiceTest {
                 "description",
                 IssueProgress.TODO,
                 IssuePriority.HIGH,
+                IssueCategory.BACKEND,
                 true,
                 project,
                 member);
@@ -105,6 +104,7 @@ class IssueFilteringServiceTest {
                 "description",
                 IssueProgress.TODO,
                 IssuePriority.HIGH,
+                IssueCategory.BACKEND,
                 true,
                 project,
                 member);
@@ -129,6 +129,7 @@ class IssueFilteringServiceTest {
                 "description",
                 IssueProgress.TODO,
                 IssuePriority.HIGH,
+                IssueCategory.BACKEND,
                 true,
                 project,
                 member);
@@ -136,6 +137,7 @@ class IssueFilteringServiceTest {
                 "description",
                 IssueProgress.TODO,
                 IssuePriority.NORMAL,
+                IssueCategory.BACKEND,
                 true,
                 project,
                 member);
@@ -159,6 +161,7 @@ class IssueFilteringServiceTest {
                 "description",
                 IssueProgress.TODO,
                 IssuePriority.HIGH,
+                IssueCategory.BACKEND,
                 true,
                 project,
                 member);
@@ -166,6 +169,7 @@ class IssueFilteringServiceTest {
                 "description",
                 IssueProgress.TODO,
                 IssuePriority.NORMAL,
+                IssueCategory.BACKEND,
                 true,
                 project,
                 member);

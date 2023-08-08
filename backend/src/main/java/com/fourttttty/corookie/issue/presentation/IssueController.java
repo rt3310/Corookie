@@ -3,7 +3,7 @@ package com.fourttttty.corookie.issue.presentation;
 import com.fourttttty.corookie.config.security.LoginUser;
 import com.fourttttty.corookie.issue.application.service.IssueFilteringService;
 import com.fourttttty.corookie.issue.application.service.IssueService;
-import com.fourttttty.corookie.issue.dto.request.IssueCreateRequest;
+import com.fourttttty.corookie.issue.dto.request.*;
 import com.fourttttty.corookie.issue.dto.response.IssueDetailResponse;
 import com.fourttttty.corookie.issue.dto.response.IssueListResponse;
 import com.fourttttty.corookie.issue.util.IssueFilterType;
