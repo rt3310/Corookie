@@ -1,7 +1,6 @@
 package com.fourttttty.corookie.plan.application.repository;
 
 
-import com.fourttttty.corookie.plan.domain.Plan;
 import com.fourttttty.corookie.plan.domain.PlanMember;
 import com.fourttttty.corookie.plan.domain.PlanMemberId;
 import com.fourttttty.corookie.plan.infrastructure.PlanMemberJpaRepository;
@@ -17,7 +16,7 @@ public class PlanMemberRepositoryImpl implements PlanMemberRepository{
 
     @Override
     public List<PlanMember> findByPlanId(Long planId) {
-        return planMemberJpaRepository.findAllById_PlanId(planId);
+        return planMemberJpaRepository.findAllByIdPlanId(planId);
     }
 
     @Override
