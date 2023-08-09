@@ -47,7 +47,7 @@ public class ProjectControllerTest extends RestDocsTest {
                 .updatedAt(now)
                 .enabled(true)
                 .build();
-        given(projectService.findByMemberId(any(Long.class))).willReturn(List.of(response));
+        given(projectService.findByManagerId(any(Long.class))).willReturn(List.of(response));
 
         //when
         ResultActions perform = mockMvc.perform(get("/api/v1/projects"));

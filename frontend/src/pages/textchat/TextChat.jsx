@@ -1,13 +1,99 @@
-import React from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 
 import * as components from 'components'
 import * as hooks from 'hooks'
+import * as utils from 'utils'
+import * as api from 'api'
+
+import * as StompJs from '@stomp/stompjs'
+import * as SockJs from 'sockjs-client'
 
 import { IoExitOutline } from 'react-icons/io5'
 
 const TextChat = () => {
     const { commentOpened } = hooks.commentState()
+    const [me, setMe] = useState()
+    const [chat, setChat] = useState({
+        textChannelId: 1,
+        writerId: null,
+        content: '',
+    })
+    const [chats, setChats] = useState([])
+    const client = useRef({})
+
+    const connectThread = () => {
+        client.current = new StompJs.Client({
+            brokerURL: utils.WEBSOCKET_BASE_URL + '/ws/chat',
+            connectHeaders: {
+                Authorization: hooks.getCookie('Authorization'),
+            },
+            debug: function (message) {
+                console.log(message)
+            },
+            reconnectDelay: 5000,
+            heartbeatIncoming: 4000,
+            heartbeatOutgoing: 4000,
+            onConnect: () => {
+                console.log('Connected')
+                client.current.subscribe('/topic/thread/' + 1, message => {
+                    const jsonBody = JSON.parse(message.body)
+                    setChats(chats => [...chats, jsonBody])
+                })
+                client.current.publish({
+                    destination: '/app/thread/',
+                    body: JSON.stringify(chats),
+                })
+            },
+            onStompError: frame => {
+                console.error(frame)
+            },
+        })
+
+        client.current.activate()
+    }
+
+    const disconnect = () => {
+        client.current.deactivate()
+    }
+
+    const send = () => {
+        if (!client.current.connected) {
+            return
+        }
+
+        if (chat.content.replace(/\s+/gi, '') === '') {
+            return
+        }
+
+        client.current.publish({
+            destination: '/app/thread/',
+            body: JSON.stringify(chat),
+        })
+
+        setChat({
+            ...chat,
+            writerId: me.id,
+            content: '',
+        })
+    }
+
+    useEffect(() => {
+        api.apis
+            .getMe()
+            .then(response => {
+                console.log(response.data)
+                setMe(response.data)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+        connectThread()
+
+        return () => {
+            disconnect()
+        }
+    }, [])
 
     return (
         <S.Wrap>
