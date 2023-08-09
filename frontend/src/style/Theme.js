@@ -44,6 +44,7 @@ const fontsize = {
     title2: '18px',
     title3: '16px',
     sub1: '14px',
+    landingtitle: '64px',
 }
 
 const lineheight = {

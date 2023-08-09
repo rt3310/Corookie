@@ -3,8 +3,8 @@ import styled from 'styled-components'
 
 const VideoBoard = () => {
     // const videoBoxes = ['권현수', '박종서', '서원호', '신승수', '최효빈', '황상미']
-    // const videoBoxes = ['권현수', '박종서', '서원호', '신승수', '최효빈']
-    const videoBoxes = ['권현수', '박종서', '서원호', '신승수', '', '', '', '', '', '']
+    const videoBoxes = ['권현수', '박종서', '서원호', '신승수', '최효빈']
+    // const videoBoxes = ['권현수', '박종서', '서원호', '신승수', '', '', '', '', '', '']
     const { Wrap, ProfileName, VideoBox } = S
 
     return (
