@@ -6,5 +6,5 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CategoryInPlanJpaRepository extends JpaRepository<CategoryInPlan, CategoryInPlanId> {
-    List<CategoryInPlan> findAllById_PlanId(Long planId);
+    List<CategoryInPlan> findAllByIdPlanId(Long planId);
 }

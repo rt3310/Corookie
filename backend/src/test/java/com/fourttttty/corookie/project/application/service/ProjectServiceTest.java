@@ -10,6 +10,7 @@ import com.fourttttty.corookie.project.dto.request.ProjectCreateRequest;
 import com.fourttttty.corookie.project.dto.request.ProjectUpdateRequest;
 import com.fourttttty.corookie.project.dto.response.ProjectResponse;
 import com.fourttttty.corookie.project.domain.Project;
+import com.fourttttty.corookie.project.util.Base62Encoder;
 import com.fourttttty.corookie.textchannel.application.repository.TextChannelRepository;
 import com.fourttttty.corookie.texture.member.application.repository.FakeMemberRepository;
 import com.fourttttty.corookie.texture.project.application.repository.FakeProjectMemberRepository;
@@ -40,7 +41,8 @@ public class ProjectServiceTest {
         memberRepository = new FakeMemberRepository();
         textChannelRepository = new FakeTextChannelRepository();
         projectMemberRepository = new FakeProjectMemberRepository(projectRepository, memberRepository);
-        projectService = new ProjectService(projectRepository, textChannelRepository, memberRepository, projectMemberRepository);
+        projectService = new ProjectService(projectRepository, textChannelRepository, memberRepository, projectMemberRepository,
+                new InvitationLinkGenerateService(new Base62Encoder()));
         member = Member.of("이름", "test@test.com", null);
         project = Project.of("name",
                 "description",
@@ -56,7 +58,7 @@ public class ProjectServiceTest {
     @DisplayName("프로젝트 생성")
     void createProject() {
         // given
-        ProjectCreateRequest request = new ProjectCreateRequest("name", "description", Boolean.FALSE);
+        ProjectCreateRequest request = new ProjectCreateRequest("name", "description");
 
         // when
         ProjectResponse response = projectService.create(request, 1L);
@@ -65,7 +67,7 @@ public class ProjectServiceTest {
         assertThat(response.name()).isEqualTo(request.name());
         assertThat(response.description()).isEqualTo(request.description());
         assertThat(response.enabled()).isEqualTo(true);
-        assertThat(response.invitationStatus()).isEqualTo(request.invitationStatus());
+        assertThat(response.invitationStatus()).isEqualTo(false);
     }
 
     @Test

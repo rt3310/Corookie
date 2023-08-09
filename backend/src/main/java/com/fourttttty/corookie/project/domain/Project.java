@@ -84,6 +84,10 @@ public class Project extends BaseTime {
         this.invitationStatus = invitationStatus;
     }
 
+    public void changeInvitationLink(String invitationLink) {
+        this.invitationLink = invitationLink;
+    }
+
     public void delete() {
         this.enabled = false;
     }

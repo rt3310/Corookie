@@ -29,10 +29,10 @@ public class ProjectService {
     private final TextChannelRepository textChannelRepository;
     private final MemberRepository memberRepository;
     private final ProjectMemberRepository projectMemberRepository;
+    private final InvitationLinkGenerateService invitationLinkGenerateService;
 
     public List<ProjectResponse> findByMemberId(Long memberId) {
-        return projectMemberRepository.findByMemberId(memberId)
-                .stream()
+        return projectMemberRepository.findByMemberId(memberId).stream()
                 .map(ProjectResponse::from)
                 .toList();
     }
@@ -47,10 +47,10 @@ public class ProjectService {
 
     @Transactional
     public ProjectResponse create(ProjectCreateRequest projectCreateRequest, Long memberId) {
-        Member member = memberRepository.findById(memberId).orElseThrow(EntityNotFoundException::new);
-        String invitationLink = null;
-        //To-Do : invitationLink 실제 링크 생성해서 넣기
-        Project project = projectRepository.save(projectCreateRequest.toEntity(invitationLink, member));
+        Project project = projectRepository.save(projectCreateRequest.toEntity(
+                memberRepository.findById(memberId).orElseThrow(EntityNotFoundException::new)));
+
+        project.changeInvitationLink(invitationLinkGenerateService.generateInvitationLink(project.getId()));
         project.createDefaultTextChannels().forEach(textChannelRepository::save);
         return ProjectResponse.from(project);
     }

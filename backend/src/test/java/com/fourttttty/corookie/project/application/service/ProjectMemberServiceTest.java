@@ -14,6 +14,7 @@ import com.fourttttty.corookie.project.domain.ProjectMemberId;
 import com.fourttttty.corookie.project.dto.request.ProjectMemberCreateRequest;
 import com.fourttttty.corookie.project.dto.response.MemberProjectResponse;
 import com.fourttttty.corookie.project.dto.response.ProjectMemberResponse;
+import com.fourttttty.corookie.project.util.Base62Encoder;
 import com.fourttttty.corookie.textchannel.application.repository.TextChannelRepository;
 import com.fourttttty.corookie.texture.member.application.repository.FakeMemberRepository;
 import com.fourttttty.corookie.texture.project.application.repository.FakeProjectMemberRepository;
@@ -47,7 +48,8 @@ class ProjectMemberServiceTest {
         projectMemberRepository = new FakeProjectMemberRepository(projectRepository, memberRepository);
         textChannelRepository = new FakeTextChannelRepository();
         projectMemberService = new ProjectMemberService(projectMemberRepository, memberRepository, projectRepository,
-                new ProjectService(projectRepository, textChannelRepository, memberRepository, projectMemberRepository));
+                new ProjectService(projectRepository, textChannelRepository, memberRepository, projectMemberRepository,
+                        new InvitationLinkGenerateService(new Base62Encoder())));
         member = Member.of("name", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
         project = Project.of("name", "description", true,
                 "http://test.com", false, member);
