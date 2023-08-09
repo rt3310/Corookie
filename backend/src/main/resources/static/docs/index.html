@@ -744,16 +744,14 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 242
+Content-Length: 157
 
 [ {
-  "name" : "Project",
-  "description" : "Description",
-  "createdAt" : "2023-08-09T01:52:03.10141",
-  "updatedAt" : "2023-08-09T01:52:03.10141",
-  "enabled" : false,
-  "invitationLink" : "http://test.com",
-  "invitationStatus" : false
+  "id" : 1,
+  "name" : "name",
+  "createdAt" : "2023-08-09T13:18:22.4200621",
+  "updatedAt" : "2023-08-09T13:18:22.4200621",
+  "enabled" : true
 } ]</code></pre>
 </div>
 </div>
@@ -772,14 +770,14 @@ Content-Length: 242
 </thead>
 <tbody>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">프로젝트 키</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].name</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">제목</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].description</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">내용</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].enabled</code></p></td>
@@ -795,16 +793,6 @@ Content-Length: 242
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].createdAt</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">생성 날짜</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].invitationLink</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">초대 링크</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].invitationStatus</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">초대 상태</p></td>
 </tr>
 </tbody>
 </table>
@@ -851,15 +839,16 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 243
+Content-Length: 259
 
 {
-  "name" : "Project1",
-  "description" : "Description1",
-  "createdAt" : "2023-08-09T01:52:02.957912",
-  "updatedAt" : "2023-08-09T01:52:02.957912",
-  "enabled" : false,
-  "invitationLink" : "http://test1.com",
+  "id" : 1,
+  "name" : "name",
+  "description" : "description",
+  "createdAt" : "2023-08-09T13:18:22.2990621",
+  "updatedAt" : "2023-08-09T13:18:22.2990621",
+  "enabled" : true,
+  "invitationLink" : "http://test.com",
   "invitationStatus" : false
 }</code></pre>
 </div>
@@ -878,6 +867,11 @@ Content-Length: 243
 </tr>
 </thead>
 <tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">프로젝트 키</p></td>
+</tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
@@ -927,13 +921,12 @@ Content-Length: 243
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/projects HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 84
+Content-Length: 57
 Host: localhost:8080
 
 {
   "name" : "name",
-  "description" : "description",
-  "invitationStatus" : false
+  "description" : "description"
 }</code></pre>
 </div>
 </div>
@@ -961,11 +954,6 @@ Host: localhost:8080
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">내용</p></td>
 </tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>invitationStatus</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">초대 상태</p></td>
-</tr>
 </tbody>
 </table>
 </div>
@@ -978,16 +966,17 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 233
+Content-Length: 259
 
 {
+  "id" : 1,
   "name" : "name",
   "description" : "description",
-  "createdAt" : "2023-08-09T01:52:03.15398",
-  "updatedAt" : "2023-08-09T01:52:03.15398",
+  "createdAt" : "2023-08-09T13:18:22.4640623",
+  "updatedAt" : "2023-08-09T13:18:22.4640623",
   "enabled" : true,
   "invitationLink" : "http://test.com",
-  "invitationStatus" : true
+  "invitationStatus" : false
 }</code></pre>
 </div>
 </div>
@@ -1005,6 +994,11 @@ Content-Length: 233
 </tr>
 </thead>
 <tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">프로젝트 키</p></td>
+</tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
@@ -1054,7 +1048,7 @@ Content-Length: 233
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/projects/1 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 123
+Content-Length: 128
 Host: localhost:8080
 
 {
@@ -1130,16 +1124,17 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 235
+Content-Length: 259
 
 {
+  "id" : 1,
   "name" : "name",
   "description" : "description",
-  "createdAt" : "2023-08-09T01:52:03.027843",
-  "updatedAt" : "2023-08-09T01:52:03.027843",
+  "createdAt" : "2023-08-09T13:18:22.3510624",
+  "updatedAt" : "2023-08-09T13:18:22.3510624",
   "enabled" : true,
   "invitationLink" : "http://test.com",
-  "invitationStatus" : true
+  "invitationStatus" : false
 }</code></pre>
 </div>
 </div>
@@ -1157,6 +1152,11 @@ Content-Length: 235
 </tr>
 </thead>
 <tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">프로젝트 키</p></td>
+</tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
@@ -1253,7 +1253,7 @@ Vary: Access-Control-Request-Headers</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/projects/1/projectmembers HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 39
+Content-Length: 42
 Host: localhost:8080
 
 {
@@ -1298,7 +1298,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 51
+Content-Length: 54
 
 {
   "name" : "name",
@@ -1375,7 +1375,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 58
+Content-Length: 61
 
 [ {
   "name" : "name",
@@ -1473,7 +1473,7 @@ Vary: Access-Control-Request-Headers</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/projects/1/issues HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 128
+Content-Length: 134
 Host: localhost:8080
 
 {
@@ -1555,7 +1555,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 128
+Content-Length: 134
 
 {
   "topic" : "topic",
@@ -1651,7 +1651,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 124
+Content-Length: 130
 
 [ {
   "topic" : "topic",
@@ -1751,7 +1751,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 128
+Content-Length: 134
 
 {
   "topic" : "topic",
@@ -1869,7 +1869,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 124
+Content-Length: 130
 
 [ {
   "topic" : "topic",
@@ -1933,7 +1933,7 @@ Content-Length: 124
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/projects/1/issues/1/progress HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 25
+Content-Length: 27
 Host: localhost:8080
 
 {
@@ -1995,7 +1995,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 128
+Content-Length: 134
 
 {
   "topic" : "topic",
@@ -2059,7 +2059,7 @@ Content-Length: 128
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/projects/1/issues/1/topic HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 23
+Content-Length: 25
 Host: localhost:8080
 
 {
@@ -2121,7 +2121,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 128
+Content-Length: 134
 
 {
   "topic" : "topic",
@@ -2185,7 +2185,7 @@ Content-Length: 128
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/projects/1/issues/1/description HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 35
+Content-Length: 37
 Host: localhost:8080
 
 {
@@ -2247,7 +2247,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 128
+Content-Length: 134
 
 {
   "topic" : "topic",
@@ -2311,7 +2311,7 @@ Content-Length: 128
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/projects/1/issues/1/manager HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 21
+Content-Length: 23
 Host: localhost:8080
 
 {
@@ -2373,7 +2373,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 128
+Content-Length: 134
 
 {
   "topic" : "topic",
@@ -2437,7 +2437,7 @@ Content-Length: 128
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/projects/1/issues/1/priority HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 25
+Content-Length: 27
 Host: localhost:8080
 
 {
@@ -2499,7 +2499,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 128
+Content-Length: 134
 
 {
   "topic" : "topic",
@@ -2563,7 +2563,7 @@ Content-Length: 128
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/projects/1/issues/1/category HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 28
+Content-Length: 30
 Host: localhost:8080
 
 {
@@ -2625,7 +2625,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 128
+Content-Length: 134
 
 {
   "topic" : "topic",
@@ -2791,13 +2791,13 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 130
+Content-Length: 138
 
 [ {
   "id" : 1,
   "planName" : "name",
-  "planStart" : "2023-08-09T01:52:00.862585",
-  "planEnd" : "2023-08-07T01:52:00.86259"
+  "planStart" : "2023-08-09T13:18:21.0130666",
+  "planEnd" : "2023-08-07T13:18:21.0130666"
 } ]</code></pre>
 </div>
 </div>
@@ -2849,14 +2849,14 @@ Content-Length: 130
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/projects/1/plans HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 329
+Content-Length: 348
 Host: localhost:8080
 
 {
   "planName" : "name",
   "description" : "testDescription",
-  "planStart" : "2023-08-09T01:52:00.945596",
-  "planEnd" : "2023-08-07T01:52:00.945601",
+  "planStart" : "2023-08-09T13:18:21.0760675",
+  "planEnd" : "2023-08-07T13:18:21.0760675",
   "categories" : [ {
     "content" : "testCategory1"
   }, {
@@ -2957,14 +2957,14 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 459
+Content-Length: 485
 
 {
   "planId" : 1,
   "planName" : "name",
   "description" : "testDescription",
-  "planStart" : "2023-08-09T01:52:00.945596",
-  "planEnd" : "2023-08-07T01:52:00.945601",
+  "planStart" : "2023-08-09T13:18:21.0760675",
+  "planEnd" : "2023-08-07T13:18:21.0760675",
   "categories" : [ {
     "id" : 1,
     "content" : "testCategory1"
@@ -3109,14 +3109,14 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 459
+Content-Length: 485
 
 {
   "planId" : 1,
   "planName" : "name",
   "description" : "testDescription",
-  "planStart" : "2023-08-09T01:52:01.182717",
-  "planEnd" : "2023-08-07T01:52:01.182722",
+  "planStart" : "2023-08-09T13:18:21.2150676",
+  "planEnd" : "2023-08-07T13:18:21.2150676",
   "categories" : [ {
     "id" : 1,
     "content" : "testCategory1"
@@ -3226,14 +3226,14 @@ Content-Length: 459
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/projects/1/plans/1 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 328
+Content-Length: 346
 Host: localhost:8080
 
 {
   "planName" : "name",
   "description" : "testDescription",
-  "planStart" : "2023-08-07T01:52:01.25894",
-  "planEnd" : "2023-08-05T01:52:01.258945",
+  "planStart" : "2023-08-07T13:18:21.268068",
+  "planEnd" : "2023-08-05T13:18:21.268068",
   "categories" : [ {
     "content" : "testCategory1"
   }, {
@@ -3338,14 +3338,14 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 458
+Content-Length: 483
 
 {
   "planId" : 1,
   "planName" : "name",
   "description" : "testDescription",
-  "planStart" : "2023-08-07T01:52:01.25894",
-  "planEnd" : "2023-08-05T01:52:01.258945",
+  "planStart" : "2023-08-07T13:18:21.268068",
+  "planEnd" : "2023-08-05T13:18:21.268068",
   "categories" : [ {
     "id" : 1,
     "content" : "testCategory1"
@@ -3503,7 +3503,7 @@ Vary: Access-Control-Request-Headers</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/projects/1/plans/1/categories HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 33
+Content-Length: 35
 Host: localhost:8080
 
 {
@@ -3565,7 +3565,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 45
+Content-Length: 48
 
 {
   "id" : 1,
@@ -3611,7 +3611,7 @@ Content-Length: 45
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /api/v1/projects/1/plans/1/categories HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 33
+Content-Length: 35
 Host: localhost:8080
 
 {
@@ -3686,7 +3686,7 @@ Vary: Access-Control-Request-Headers</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/projects/1/plans/1/members HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 14
+Content-Length: 16
 Host: localhost:8080
 
 {
@@ -3748,7 +3748,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 34
+Content-Length: 37
 
 {
   "id" : 1,
@@ -3797,7 +3797,7 @@ Content-Length: 34
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/projects/1/text-channels HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 21
+Content-Length: 23
 Host: localhost:8080
 
 {
@@ -3855,7 +3855,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 21
+Content-Length: 23
 
 {
   "name" : "name"
@@ -3926,7 +3926,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 48
+Content-Length: 52
 
 [ {
   "name" : "name"
@@ -4003,7 +4003,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 21
+Content-Length: 23
 
 {
   "name" : "name"
@@ -4043,7 +4043,7 @@ Content-Length: 21
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/projects/1/text-channels/1 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 21
+Content-Length: 23
 Host: localhost:8080
 
 {
@@ -4084,7 +4084,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 21
+Content-Length: 23
 
 {
   "name" : "name"
@@ -4246,13 +4246,13 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 139
+Content-Length: 146
 
 [ {
   "writer" : {
     "name" : "name"
   },
-  "createdAt" : "2023-08-09T01:52:06.188102",
+  "createdAt" : "2023-08-09T13:18:24.607062",
   "content" : "content",
   "commentCount" : 0
 } ]</code></pre>
@@ -4345,13 +4345,13 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 135
+Content-Length: 143
 
 {
   "writer" : {
     "name" : "name"
   },
-  "createdAt" : "2023-08-09T01:52:06.232066",
+  "createdAt" : "2023-08-09T13:18:24.6530622",
   "content" : "content",
   "commentCount" : 0
 }</code></pre>
@@ -4405,7 +4405,7 @@ Content-Length: 135
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/projects/1/text-channels/1/threads/1 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 27
+Content-Length: 29
 Host: localhost:8080
 
 {
@@ -4450,13 +4450,13 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 135
+Content-Length: 143
 
 {
   "writer" : {
     "name" : "name"
   },
-  "createdAt" : "2023-08-09T01:52:06.145018",
+  "createdAt" : "2023-08-09T13:18:24.5560623",
   "content" : "content",
   "commentCount" : 0
 }</code></pre>
@@ -4604,14 +4604,14 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 117
+Content-Length: 124
 
 [ {
   "content" : "content",
   "writer" : {
     "name" : "name"
   },
-  "createdAt" : "2023-08-09T01:51:45.350848"
+  "createdAt" : "2023-08-09T13:18:14.3880669"
 } ]</code></pre>
 </div>
 </div>
@@ -4658,7 +4658,7 @@ Content-Length: 117
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/projects/1/text-channels/1/threads/1/comments/1 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 27
+Content-Length: 29
 Host: localhost:8080
 
 {
@@ -4707,14 +4707,14 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 113
+Content-Length: 120
 
 {
   "content" : "content",
   "writer" : {
     "name" : "name"
   },
-  "createdAt" : "2023-08-09T01:51:43.165853"
+  "createdAt" : "2023-08-09T13:18:13.5440637"
 }</code></pre>
 </div>
 </div>
@@ -4812,7 +4812,7 @@ Vary: Access-Control-Request-Headers</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-08-09 01:51:14 +0900
+Last updated 2023-08-09 08:37:27 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>

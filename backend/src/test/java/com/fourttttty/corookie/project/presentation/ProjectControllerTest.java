@@ -3,7 +3,8 @@ package com.fourttttty.corookie.project.presentation;
 import com.fourttttty.corookie.project.application.service.ProjectService;
 import com.fourttttty.corookie.project.dto.request.ProjectUpdateRequest;
 import com.fourttttty.corookie.project.dto.request.ProjectCreateRequest;
-import com.fourttttty.corookie.project.dto.response.ProjectResponse;
+import com.fourttttty.corookie.project.dto.response.ProjectDetailResponse;
+import com.fourttttty.corookie.project.dto.response.ProjectListResponse;
 import com.fourttttty.corookie.support.RestDocsTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,13 +40,13 @@ public class ProjectControllerTest extends RestDocsTest {
     void projectList() throws Exception {
         // given
         LocalDateTime now = LocalDateTime.now();
-        ProjectResponse response  = new ProjectResponse("Project",
-                "Description",
-                now,
-                now,
-                false,
-                "http://test.com",
-                false);
+        ProjectListResponse response = ProjectListResponse.builder()
+                .id(1L)
+                .name("name")
+                .createdAt(now)
+                .updatedAt(now)
+                .enabled(true)
+                .build();
         given(projectService.findByMemberId(any(Long.class))).willReturn(List.of(response));
 
         //when
@@ -54,25 +55,20 @@ public class ProjectControllerTest extends RestDocsTest {
         // then
         perform.andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].name").value(response.name()))
-                .andExpect(jsonPath("$[0].description").value(response.description()))
                 .andExpect(jsonPath("$[0].createdAt").value(toJson(now).replace("\"", "")))
                 .andExpect(jsonPath("$[0].updatedAt").value(toJson(now).replace("\"", "")))
-                .andExpect(jsonPath("$[0].enabled").value(response.enabled()))
-                .andExpect(jsonPath("$[0].invitationLink").value(response.invitationLink()))
-                .andExpect(jsonPath("$[0].invitationStatus").value(response.invitationStatus()));
+                .andExpect(jsonPath("$[0].enabled").value(response.enabled()));
 
         perform.andDo(print())
                 .andDo(document("project-list",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         responseFields(
+                                fieldWithPath("[].id").type(NUMBER).description("프로젝트 키"),
                                 fieldWithPath("[].name").type(STRING).description("제목"),
-                                fieldWithPath("[].description").type(STRING).description("내용"),
                                 fieldWithPath("[].enabled").type(BOOLEAN).description("활성화 여부"),
                                 fieldWithPath("[].updatedAt").type(STRING).description("수정 날짜"),
-                                fieldWithPath("[].createdAt").type(STRING).description("생성 날짜"),
-                                fieldWithPath("[].invitationLink").type(STRING).description("초대 링크"),
-                                fieldWithPath("[].invitationStatus").type(BOOLEAN).description("초대 상태"))));
+                                fieldWithPath("[].createdAt").type(STRING).description("생성 날짜"))));
     }
 
     @Test
@@ -80,13 +76,16 @@ public class ProjectControllerTest extends RestDocsTest {
     void projectDetail() throws Exception {
         // given
         LocalDateTime now = LocalDateTime.now();
-        ProjectResponse response = new ProjectResponse("Project1",
-                "Description1",
-                now,
-                now,
-                false,
-                "http://test1.com",
-                false);
+        ProjectDetailResponse response = ProjectDetailResponse.builder()
+                .id(1L)
+                .name("name")
+                .description("description")
+                .createdAt(now)
+                .updatedAt(now)
+                .enabled(true)
+                .invitationLink("http://test.com")
+                .invitationStatus(false)
+                .build();
         given(projectService.findById(1L)).willReturn(response);
 
         //when
@@ -109,6 +108,7 @@ public class ProjectControllerTest extends RestDocsTest {
                         pathParameters(
                                 parameterWithName("projectId").description("프로젝트 키")),
                         responseFields(
+                                fieldWithPath("id").type(NUMBER).description("프로젝트 키"),
                                 fieldWithPath("name").type(STRING).description("제목"),
                                 fieldWithPath("description").type(STRING).description("내용"),
                                 fieldWithPath("enabled").type(BOOLEAN).description("활성화 여부"),
@@ -124,7 +124,8 @@ public class ProjectControllerTest extends RestDocsTest {
     void createProject() throws Exception {
         //given
         LocalDateTime now = LocalDateTime.now();
-        ProjectResponse response = ProjectResponse.builder()
+        ProjectDetailResponse response = ProjectDetailResponse.builder()
+                .id(1L)
                 .name("name")
                 .description("description")
                 .createdAt(now)
@@ -159,6 +160,7 @@ public class ProjectControllerTest extends RestDocsTest {
                                 fieldWithPath("name").type(STRING).description("제목"),
                                 fieldWithPath("description").type(STRING).description("내용")),
                         responseFields(
+                                fieldWithPath("id").type(NUMBER).description("프로젝트 키"),
                                 fieldWithPath("name").type(STRING).description("제목"),
                                 fieldWithPath("description").type(STRING).description("내용"),
                                 fieldWithPath("enabled").type(BOOLEAN).description("활성화 여부"),
@@ -173,14 +175,15 @@ public class ProjectControllerTest extends RestDocsTest {
     void projectModify() throws Exception {
         // given
         LocalDateTime now = LocalDateTime.now();
-        ProjectResponse response = ProjectResponse.builder()
+        ProjectDetailResponse response = ProjectDetailResponse.builder()
+                .id(1L)
                 .name("name")
                 .description("description")
                 .createdAt(now)
                 .updatedAt(now)
                 .enabled(true)
                 .invitationLink("http://test.com")
-                .invitationStatus(true)
+                .invitationStatus(false)
                 .build();
         given(projectService.modify(any(ProjectUpdateRequest.class), any(Long.class)))
                 .willReturn(response);
@@ -215,6 +218,7 @@ public class ProjectControllerTest extends RestDocsTest {
                                 fieldWithPath("invitationLink").type(STRING).description("초대 링크"),
                                 fieldWithPath("invitationStatus").type(BOOLEAN).description("초대 상태")),
                         responseFields(
+                                fieldWithPath("id").type(NUMBER).description("프로젝트 키"),
                                 fieldWithPath("name").type(STRING).description("제목"),
                                 fieldWithPath("description").type(STRING).description("내용"),
                                 fieldWithPath("enabled").type(BOOLEAN).description("활성화 여부"),

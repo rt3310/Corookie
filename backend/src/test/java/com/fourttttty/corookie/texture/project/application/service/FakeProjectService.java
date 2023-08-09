@@ -1,19 +1,5 @@
 package com.fourttttty.corookie.texture.project.application.service;
 
-import com.fourttttty.corookie.member.application.repository.MemberRepository;
-import com.fourttttty.corookie.member.domain.Member;
-import com.fourttttty.corookie.project.application.repository.ProjectMemberRepository;
-import com.fourttttty.corookie.project.application.repository.ProjectRepository;
-import com.fourttttty.corookie.project.domain.Project;
-import com.fourttttty.corookie.project.dto.request.ProjectCreateRequest;
-import com.fourttttty.corookie.project.dto.request.ProjectUpdateRequest;
-import com.fourttttty.corookie.project.dto.response.ProjectResponse;
-import com.fourttttty.corookie.textchannel.application.repository.TextChannelRepository;
-import jakarta.persistence.EntityNotFoundException;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-
 public class FakeProjectService {
     /*
     private final ProjectRepository projectRepository;
