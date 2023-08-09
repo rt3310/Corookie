@@ -5,6 +5,7 @@ export const URL = {
     },
     HOME: {
         MAIN: '/',
+        LANDING: '/landing',
     },
     CHAT: {
         TEXT: '/chat/text',
