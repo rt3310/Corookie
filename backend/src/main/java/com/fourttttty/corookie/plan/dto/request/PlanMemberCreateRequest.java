@@ -2,5 +2,5 @@ package com.fourttttty.corookie.plan.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 
-public record PlanMemberCreateRequest(@NotNull Long id) {
+public record PlanMemberCreateRequest(@NotNull Long memberId) {
 }

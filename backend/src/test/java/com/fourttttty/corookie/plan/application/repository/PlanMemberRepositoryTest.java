@@ -40,12 +40,12 @@ public class PlanMemberRepositoryTest {
     @Autowired
     private PlanMemberRepository planMemberRepository;
 
-    Member member = Member.of("name", "email", Oauth2.of(AuthProvider.KAKAO, "account"));
+    Member member = Member.of("memberName", "memberEmail", Oauth2.of(AuthProvider.KAKAO, "account"));
     List<Member> members = List.of(
-            Member.of("testMember1", "email", Oauth2.of(AuthProvider.KAKAO, "account")),
-            Member.of("testMember2", "email", Oauth2.of(AuthProvider.KAKAO, "account")),
-            Member.of("testMember3", "email", Oauth2.of(AuthProvider.KAKAO, "account")));
-    Project project = Project.of("name",
+            Member.of("testMember1", "memberEmail", Oauth2.of(AuthProvider.KAKAO, "account")),
+            Member.of("testMember2", "memberEmail", Oauth2.of(AuthProvider.KAKAO, "account")),
+            Member.of("testMember3", "memberEmail", Oauth2.of(AuthProvider.KAKAO, "account")));
+    Project project = Project.of("memberName",
         "description",
         true,
         "http://test.com",

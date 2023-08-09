@@ -4,6 +4,7 @@ import com.fourttttty.corookie.project.application.repository.ProjectRepository;
 import com.fourttttty.corookie.project.domain.Project;
 import jakarta.persistence.EntityNotFoundException;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,8 +17,23 @@ public class FakeProjectRepository implements ProjectRepository {
 
     @Override
     public Project save(Project project) {
-        store.put(autoIncrementId++, project);
+        if (project.getId() == null) {
+            setIdInEntity(project);
+        }
+        store.put(autoIncrementId, project);
+        autoIncrementId++;
         return project;
+    }
+
+    private void setIdInEntity(Project project) {
+        try {
+            Class<Project> projectClass = Project.class;
+            Field id = projectClass.getDeclaredField("id");
+            id.setAccessible(true);
+            id.set(project, autoIncrementId);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

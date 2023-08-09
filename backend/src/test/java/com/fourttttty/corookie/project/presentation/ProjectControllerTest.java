@@ -85,8 +85,10 @@ public class ProjectControllerTest extends RestDocsTest {
                 .enabled(true)
                 .invitationLink("http://test.com")
                 .invitationStatus(false)
+                .managerName("member")
+                .isManager(true)
                 .build();
-        given(projectService.findById(1L)).willReturn(response);
+        given(projectService.findById(1L, 1L)).willReturn(response);
 
         //when
         ResultActions perform = mockMvc.perform(get("/api/v1/projects/{projectId}", 1L));
@@ -99,7 +101,9 @@ public class ProjectControllerTest extends RestDocsTest {
                 .andExpect(jsonPath("$.updatedAt").value(toJson(now).replace("\"", "")))
                 .andExpect(jsonPath("$.enabled").value(response.enabled()))
                 .andExpect(jsonPath("$.invitationLink").value(response.invitationLink()))
-                .andExpect(jsonPath("$.invitationStatus").value(response.invitationStatus()));
+                .andExpect(jsonPath("$.invitationStatus").value(response.invitationStatus()))
+                .andExpect(jsonPath("$.managerName").value(response.managerName()))
+                .andExpect(jsonPath("$.isManager").value(response.isManager()));
 
         perform.andDo(print())
                 .andDo(document("project-detail",
@@ -115,7 +119,9 @@ public class ProjectControllerTest extends RestDocsTest {
                                 fieldWithPath("updatedAt").type(STRING).description("수정 날짜"),
                                 fieldWithPath("createdAt").type(STRING).description("생성 날짜"),
                                 fieldWithPath("invitationLink").type(STRING).description("초대 링크"),
-                                fieldWithPath("invitationStatus").type(BOOLEAN).description("초대 상태"))));
+                                fieldWithPath("invitationStatus").type(BOOLEAN).description("초대 상태"),
+                                fieldWithPath("managerName").type(STRING).description("관리자 이름"),
+                                fieldWithPath("isManager").type(BOOLEAN).description("관리자 여부"))));
     }
 
 
@@ -133,6 +139,8 @@ public class ProjectControllerTest extends RestDocsTest {
                 .enabled(true)
                 .invitationLink("http://test.com")
                 .invitationStatus(false)
+                .managerName("member")
+                .isManager(true)
                 .build();
         given(projectService.create(any(ProjectCreateRequest.class), any(Long.class)))
                 .willReturn(response);
@@ -150,7 +158,9 @@ public class ProjectControllerTest extends RestDocsTest {
                 .andExpect(jsonPath("$.description").value(response.description()))
                 .andExpect(jsonPath("$.enabled").value(response.enabled()))
                 .andExpect(jsonPath("$.invitationLink").value(response.invitationLink()))
-                .andExpect(jsonPath("$.invitationStatus").value(false));
+                .andExpect(jsonPath("$.invitationStatus").value(false))
+                .andExpect(jsonPath("$.managerName").value(response.managerName()))
+                .andExpect(jsonPath("$.isManager").value(response.isManager()));
 
         perform.andDo(print())
                 .andDo(document("project-create",
@@ -167,7 +177,9 @@ public class ProjectControllerTest extends RestDocsTest {
                                 fieldWithPath("invitationLink").type(STRING).description("초대 링크"),
                                 fieldWithPath("createdAt").type(STRING).description("생성 날짜"),
                                 fieldWithPath("updatedAt").type(STRING).description("수정 날짜"),
-                                fieldWithPath("invitationStatus").type(BOOLEAN).description("초대 상태"))));
+                                fieldWithPath("invitationStatus").type(BOOLEAN).description("초대 상태"),
+                                fieldWithPath("managerName").type(STRING).description("관리자 이름"),
+                                fieldWithPath("isManager").type(BOOLEAN).description("관리자 여부"))));
     }
 
     @Test
@@ -177,21 +189,23 @@ public class ProjectControllerTest extends RestDocsTest {
         LocalDateTime now = LocalDateTime.now();
         ProjectDetailResponse response = ProjectDetailResponse.builder()
                 .id(1L)
-                .name("name")
+                .name("memberName")
                 .description("description")
                 .createdAt(now)
                 .updatedAt(now)
                 .enabled(true)
                 .invitationLink("http://test.com")
                 .invitationStatus(false)
+                .managerName("member")
+                .isManager(true)
                 .build();
-        given(projectService.modify(any(ProjectUpdateRequest.class), any(Long.class)))
+        given(projectService.modify(any(ProjectUpdateRequest.class), any(Long.class), any(Long.class)))
                 .willReturn(response);
 
         // when
         ResultActions perform = mockMvc.perform(put("/api/v1/projects/{projectId}", 1L)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(new ProjectUpdateRequest("name",
+                .content(toJson(new ProjectUpdateRequest("memberName",
                         "description",
                         "http://test.com",
                         true))));
@@ -204,7 +218,9 @@ public class ProjectControllerTest extends RestDocsTest {
                 .andExpect(jsonPath("$.description").value(response.description()))
                 .andExpect(jsonPath("$.enabled").value(response.enabled()))
                 .andExpect(jsonPath("$.invitationLink").value(response.invitationLink()))
-                .andExpect(jsonPath("$.invitationStatus").value(response.invitationStatus()));
+                .andExpect(jsonPath("$.invitationStatus").value(response.invitationStatus()))
+                .andExpect(jsonPath("$.managerName").value(response.managerName()))
+                .andExpect(jsonPath("$.isManager").value(response.isManager()));
 
         perform.andDo(print())
                 .andDo(document("project-update",
@@ -225,7 +241,9 @@ public class ProjectControllerTest extends RestDocsTest {
                                 fieldWithPath("invitationLink").type(STRING).description("초대 링크"),
                                 fieldWithPath("createdAt").type(STRING).description("생성 날짜"),
                                 fieldWithPath("updatedAt").type(STRING).description("수정 날짜"),
-                                fieldWithPath("invitationStatus").type(BOOLEAN).description("초대 상태") )));
+                                fieldWithPath("invitationStatus").type(BOOLEAN).description("초대 상태"),
+                                fieldWithPath("managerName").type(STRING).description("관리자 이름"),
+                                fieldWithPath("isManager").type(BOOLEAN).description("관리자 여부"))));
     }
 
     @Test

@@ -13,9 +13,11 @@ public record ProjectDetailResponse(Long id,
                                     LocalDateTime updatedAt,
                                     Boolean enabled,
                                     String invitationLink,
-                                    Boolean invitationStatus) {
+                                    Boolean invitationStatus,
+                                    String managerName,
+                                    Boolean isManager) {
 
-    public static ProjectDetailResponse from(Project project) {
+    public static ProjectDetailResponse from(Project project, Boolean isManager) {
         return ProjectDetailResponse.builder()
                 .id(project.getId())
                 .name(project.getName())
@@ -25,8 +27,10 @@ public record ProjectDetailResponse(Long id,
                 .enabled(project.getEnabled())
                 .invitationLink(project.getInvitationLink())
                 .invitationStatus(project.getInvitationStatus())
+                .managerName(project.getManager().getName())
+                .isManager(isManager)
                 .build();
-         }
+    }
 
     public static ProjectDetailResponse from(ProjectMember projectMember) {
         Project project = projectMember.getId().getProject();

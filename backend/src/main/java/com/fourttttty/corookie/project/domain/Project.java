@@ -43,21 +43,21 @@ public class Project extends BaseTime {
     private Boolean invitationStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
-    private Member member;
+    @JoinColumn(name = "manager_id", nullable = false)
+    private Member manager;
 
     private Project(String name,
                    String description,
                    Boolean enabled,
                    String invitationLink,
                    Boolean invitationStatus,
-                   Member member) {
+                   Member manager) {
         this.name = name;
         this.description = description;
         this.enabled = enabled;
         this.invitationLink = invitationLink;
         this.invitationStatus = invitationStatus;
-        this.member = member;
+        this.manager = manager;
     }
 
     public static Project of(String name,
@@ -65,13 +65,13 @@ public class Project extends BaseTime {
                              Boolean enabled,
                              String invitationLink,
                              Boolean invitationStatus,
-                             Member member) {
+                             Member manager) {
         return new Project(name,
                 description,
                 enabled,
                 invitationLink,
                 invitationStatus,
-                member);
+                manager);
     }
 
     public void update(String name,
@@ -86,6 +86,10 @@ public class Project extends BaseTime {
 
     public void changeInvitationLink(String invitationLink) {
         this.invitationLink = invitationLink;
+    }
+
+    public boolean isManager(Long memberId) {
+        return this.manager.equalsId(memberId);
     }
 
     public void delete() {
