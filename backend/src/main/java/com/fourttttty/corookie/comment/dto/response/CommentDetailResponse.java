@@ -12,7 +12,7 @@ public record CommentDetailResponse(String content,
     public static CommentDetailResponse from(Comment comment) {
         return new CommentDetailResponse(
                 comment.getContent(),
-                new MemberResponse(comment.getWriter().getName()),
+                MemberResponse.from(comment.getWriter()),
                 comment.getCreatedAt());
     }
 }
