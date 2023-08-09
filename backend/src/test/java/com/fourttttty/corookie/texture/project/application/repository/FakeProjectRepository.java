@@ -42,6 +42,13 @@ public class FakeProjectRepository implements ProjectRepository {
     }
 
     @Override
+    public List<Project> findByManagerId(Long managerId) {
+        return store.values().stream()
+                .filter(project -> project.isManager(managerId))
+                .toList();
+    }
+
+    @Override
     public Optional<Project> findByInvitationLink(String invitationLink) {
         for (Map.Entry<Long, Project> item : store.entrySet()) {
             Project project = item.getValue();

@@ -28,4 +28,5 @@ export const apis = {
     createIssue: (projectId, data) => instance.post(`/api/v1/projects/${projectId}/issues`, data),
 
     getMember: memberId => instance.get(`/api/v1/members/${memberId}`),
+    getMe: () => instance.get(`api/v1/members/me`),
 }

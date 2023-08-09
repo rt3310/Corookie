@@ -22,7 +22,7 @@ public class ProjectController {
 
     @GetMapping
     public ResponseEntity<List<ProjectListResponse>> projectList(@AuthenticationPrincipal LoginUser loginUser) {
-        return ResponseEntity.ok(projectService.findByMemberId(loginUser.getMemberId()));
+        return ResponseEntity.ok(projectService.findByManagerId(loginUser.getMemberId()));
     }
 
     @GetMapping("/{projectId}")
