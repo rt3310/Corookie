@@ -7,19 +7,20 @@ import * as api from 'api'
 
 const IssueBoard = () => {
     const { issueCreateOpened } = hooks.issueCreateState()
-    const { tasks } = hooks.tasksState()
+    const { project } = hooks.projectState()
+    const { tasks, setTasks } = hooks.tasksState()
 
     useEffect(() => {
-        const projectId = 1
         api.apis
-            .getIssueList(1)
+            .getIssueList(project.id)
             .then(response => {
                 console.log(response.data)
+                setTasks(response.data)
             })
             .catch(error => {
-                console.log(error)
+                console.log('태스크 불러오기 실패', error)
             })
-    }, [])
+    }, [setTasks])
 
     return (
         <S.Container>
@@ -30,12 +31,11 @@ const IssueBoard = () => {
                         return (
                             <components.IssuePreview
                                 key={idx}
-                                id={task.id}
-                                title={task.title}
-                                type={task.type}
-                                manager={task.manager}
+                                title={task.topic}
+                                type={task.category}
+                                manager={task.memberName}
                                 priority={task.priority}
-                                status={task.status}
+                                status={task.progress}
                             />
                         )
                     })}

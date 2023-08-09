@@ -11,7 +11,7 @@ const TaskHeader = () => {
     const { issueCreateOpened, openIssueCreate } = hooks.issueCreateState()
     const { closeIssueDetail } = hooks.issueDetailState()
 
-    const priorityList = ['Highest', 'High', 'Normal', 'Low', 'Lowest']
+    const priorityList = ['내림차순', '오름차순']
     const managerList = ['황상미', '최효빈', '신승수', '박종서', '서원호', '권현수']
     const categoryList = ['frontend', 'backend', 'design', 'development', 'product', 'other']
     const statusList = ['To Do', 'In Progress', 'Done']

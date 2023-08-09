@@ -6,10 +6,12 @@ import { AiOutlineCheckSquare } from 'react-icons/ai'
 
 import * as hooks from 'hooks'
 import * as components from 'components'
+import * as api from 'api'
 
 const ProjectIntro = () => {
     const { manager, managerOpened, openManager, closeManager } = hooks.setManagerState()
-    const { members, memberOpened, openMember, closeMember } = hooks.memberState()
+    const { members, setMembers, memberOpened, openMember, closeMember } = hooks.memberState()
+    const { project, setProject } = hooks.projectState()
     const [flip, setFlip] = useState(false)
     const managerTextRef = useRef(null)
     const memberTextRef = useRef(null)
@@ -65,22 +67,35 @@ const ProjectIntro = () => {
         }
     }, [flippedRef])
 
+    useEffect(() => {
+        api.apis
+            .getProjectMembers(project.id)
+            .then(response => {
+                console.log(project.id)
+                console.log('멤버 불러오기 성공', response.data)
+                setMembers(response.data)
+            })
+            .catch(error => {
+                console.log('멤버 불러오기 실패', error)
+            })
+    }, [project])
+
     return (
         <S.Wrap>
             <S.RotateContainer className={flip ? 'card' : null} ref={flippedRef}>
                 <S.Container className="cards">
                     <S.Title>
-                        Co - 공통 프로젝트
+                        {project.name}
                         <IoChevronForward onClick={() => setFlip(!flip)} />
                     </S.Title>
-                    <S.Description>웹 개발 초보자들을 위한 프로젝트 협업 툴</S.Description>
+                    <S.Description>{project.description}</S.Description>
                     <S.Line />
                     <S.MemberInfo>
                         <S.Manager>
                             <S.ManagerText ref={managerTextRef} onClick={e => clickManager(e)}>
                                 관리자
                             </S.ManagerText>
-                            <S.ManagerName>{manager}</S.ManagerName>
+                            <S.ManagerName>{project.managerName}</S.ManagerName>
                         </S.Manager>
                         <S.Members ref={memberTextRef} onClick={() => clickMember()}>
                             <IoPeople />
@@ -116,6 +131,7 @@ const S = {
         transition: transform 0.3s;
         transform: perspective(800px) rotateY(0deg);
         position: relative;
+        z-index: 1;
         & > .card {
             transform: rotateY(180deg);
         }

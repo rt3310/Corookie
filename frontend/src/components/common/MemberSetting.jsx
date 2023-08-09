@@ -101,7 +101,7 @@ const S = {
         display: flex;
         position: absolute;
         top: 116px;
-        left: 216px;
+        left: 217px;
         z-index: 999;
         background-color: ${({ theme }) => theme.color.white};
         width: 180px;
