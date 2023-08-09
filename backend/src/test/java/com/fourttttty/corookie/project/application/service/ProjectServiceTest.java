@@ -8,8 +8,9 @@ import com.fourttttty.corookie.project.application.repository.ProjectRepository;
 import com.fourttttty.corookie.project.domain.ProjectMember;
 import com.fourttttty.corookie.project.dto.request.ProjectCreateRequest;
 import com.fourttttty.corookie.project.dto.request.ProjectUpdateRequest;
-import com.fourttttty.corookie.project.dto.response.ProjectResponse;
+import com.fourttttty.corookie.project.dto.response.ProjectDetailResponse;
 import com.fourttttty.corookie.project.domain.Project;
+import com.fourttttty.corookie.project.dto.response.ProjectListResponse;
 import com.fourttttty.corookie.project.util.Base62Encoder;
 import com.fourttttty.corookie.textchannel.application.repository.TextChannelRepository;
 import com.fourttttty.corookie.texture.member.application.repository.FakeMemberRepository;
@@ -61,7 +62,7 @@ public class ProjectServiceTest {
         ProjectCreateRequest request = new ProjectCreateRequest("name", "description");
 
         // when
-        ProjectResponse response = projectService.create(request, 1L);
+        ProjectDetailResponse response = projectService.create(request, 1L);
 
         // then
         assertThat(response.name()).isEqualTo(request.name());
@@ -77,7 +78,7 @@ public class ProjectServiceTest {
         Long projectId = 1L;
 
         // when
-        ProjectResponse response = projectService.findById(projectId);
+        ProjectDetailResponse response = projectService.findById(projectId);
 
         // then
         assertThat(response.name()).isEqualTo(project.getName());
@@ -109,15 +110,12 @@ public class ProjectServiceTest {
         projectMemberRepository.save(ProjectMember.of(project, member));
 
         // when
-        List<ProjectResponse> response = projectService.findByMemberId(1L);
+        List<ProjectListResponse> response = projectService.findByMemberId(1L);
 
         // then
         assertThat(response.size()).isEqualTo(1);
         assertThat(response.get(0).name()).isEqualTo(project.getName());
-        assertThat(response.get(0).description()).isEqualTo(project.getDescription());
         assertThat(response.get(0).enabled()).isEqualTo(project.getEnabled());
-        assertThat(response.get(0).invitationLink()).isEqualTo(project.getInvitationLink());
-        assertThat(response.get(0).invitationStatus()).isEqualTo(project.getInvitationStatus());
     }
 
     @Test
@@ -130,7 +128,7 @@ public class ProjectServiceTest {
         ProjectUpdateRequest request = new ProjectUpdateRequest("modifiedName", "modifiedDesc",  "http://modified.com", true);
 
         // when
-        ProjectResponse response = projectService.modify(request, projectId);
+        ProjectDetailResponse response = projectService.modify(request, projectId);
 
         // then
         assertThat(response.name()).isEqualTo("modifiedName");

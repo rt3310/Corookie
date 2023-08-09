@@ -4,7 +4,8 @@ import com.fourttttty.corookie.config.security.LoginUser;
 import com.fourttttty.corookie.project.application.service.ProjectService;
 import com.fourttttty.corookie.project.dto.request.ProjectCreateRequest;
 import com.fourttttty.corookie.project.dto.request.ProjectUpdateRequest;
-import com.fourttttty.corookie.project.dto.response.ProjectResponse;
+import com.fourttttty.corookie.project.dto.response.ProjectDetailResponse;
+import com.fourttttty.corookie.project.dto.response.ProjectListResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,24 +21,24 @@ public class ProjectController {
     private final ProjectService projectService;
 
     @GetMapping
-    public ResponseEntity<List<ProjectResponse>> projectList(@AuthenticationPrincipal LoginUser loginUser) {
+    public ResponseEntity<List<ProjectListResponse>> projectList(@AuthenticationPrincipal LoginUser loginUser) {
         return ResponseEntity.ok(projectService.findByMemberId(loginUser.getMemberId()));
     }
 
     @GetMapping("/{projectId}")
-    public ResponseEntity<ProjectResponse> projectDetail(@PathVariable Long projectId) {
+    public ResponseEntity<ProjectDetailResponse> projectDetail(@PathVariable Long projectId) {
         return ResponseEntity.ok(projectService.findById(projectId));
     }
 
     @PostMapping
-    public ResponseEntity<ProjectResponse> projectCreate(@RequestBody @Validated ProjectCreateRequest request,
-                                                         @AuthenticationPrincipal LoginUser loginUser) {
+    public ResponseEntity<ProjectDetailResponse> projectCreate(@RequestBody @Validated ProjectCreateRequest request,
+                                                               @AuthenticationPrincipal LoginUser loginUser) {
         return ResponseEntity.ok(projectService.create(request, loginUser.getMemberId()));
     }
 
     @PutMapping("/{projectId}")
-    public ResponseEntity<ProjectResponse> projectModify(@PathVariable Long projectId,
-                                                         @RequestBody
+    public ResponseEntity<ProjectDetailResponse> projectModify(@PathVariable Long projectId,
+                                                               @RequestBody
                                                          @Validated ProjectUpdateRequest request) {
         return ResponseEntity.ok(projectService.modify(request, projectId));
     }
