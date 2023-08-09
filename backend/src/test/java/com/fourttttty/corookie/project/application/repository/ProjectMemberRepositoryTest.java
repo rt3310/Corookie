@@ -41,9 +41,9 @@ public class ProjectMemberRepositoryTest {
 
     @BeforeEach
     void initObjects() {
-        member = Member.of("name", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
+        member = Member.of("memberName", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
         member2 = Member.of("name2", "test2@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
-        project = Project.of("name",
+        project = Project.of("memberName",
                 "description",
                 Boolean.TRUE,
                 "http://test.com",
@@ -81,7 +81,7 @@ public class ProjectMemberRepositoryTest {
             assertThat(foundProject.getEnabled()).isEqualTo(projects.get(i).getEnabled());
             assertThat(foundProject.getInvitationLink()).isEqualTo(projects.get(i).getInvitationLink());
             assertThat(foundProject.getInvitationStatus()).isEqualTo(projects.get(i).getInvitationStatus());
-            assertThat(foundProject.getMember()).isEqualTo(projects.get(i).getMember());
+            assertThat(foundProject.getManager()).isEqualTo(projects.get(i).getManager());
         }
     }
 

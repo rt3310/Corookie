@@ -45,7 +45,7 @@ public class ProjectServiceTest {
         projectService = new ProjectService(projectRepository, textChannelRepository, memberRepository, projectMemberRepository,
                 new InvitationLinkGenerateService(new Base62Encoder()));
         member = Member.of("이름", "test@test.com", null);
-        project = Project.of("name",
+        project = Project.of("memberName",
                 "description",
                 true,
                 "http://test.com",
@@ -59,10 +59,10 @@ public class ProjectServiceTest {
     @DisplayName("프로젝트 생성")
     void createProject() {
         // given
-        ProjectCreateRequest request = new ProjectCreateRequest("name", "description");
+        ProjectCreateRequest request = new ProjectCreateRequest("memberName", "description");
 
         // when
-        ProjectDetailResponse response = projectService.create(request, 1L);
+        ProjectDetailResponse response = projectService.create(request, member.getId());
 
         // then
         assertThat(response.name()).isEqualTo(request.name());
@@ -74,11 +74,8 @@ public class ProjectServiceTest {
     @Test
     @DisplayName("프로젝트 상세 조회")
     void findById() {
-        // given
-        Long projectId = 1L;
-
         // when
-        ProjectDetailResponse response = projectService.findById(projectId);
+        ProjectDetailResponse response = projectService.findById(project.getId(), member.getId());
 
         // then
         assertThat(response.name()).isEqualTo(project.getName());
@@ -90,11 +87,8 @@ public class ProjectServiceTest {
     @Test
     @DisplayName("프로젝트 엔티티 조회")
     void findEntityById() {
-        // given
-        Long projectId = 1L;
-
         // when
-        Project foundProject = projectRepository.findById(projectId).orElseThrow(ProjectNotFoundException::new);
+        Project foundProject = projectRepository.findById(project.getId()).orElseThrow(ProjectNotFoundException::new);
 
         //then
         assertThat(foundProject.getName()).isEqualTo(project.getName());
@@ -110,7 +104,7 @@ public class ProjectServiceTest {
         projectMemberRepository.save(ProjectMember.of(project, member));
 
         // when
-        List<ProjectListResponse> response = projectService.findByMemberId(1L);
+        List<ProjectListResponse> response = projectService.findByMemberId(member.getId());
 
         // then
         assertThat(response.size()).isEqualTo(1);
@@ -122,13 +116,12 @@ public class ProjectServiceTest {
     @DisplayName("프로젝트 수정")
     void modify() {
         // given
-        Long projectId = 1L;
         projectMemberRepository.save(ProjectMember.of(project, member));
 
         ProjectUpdateRequest request = new ProjectUpdateRequest("modifiedName", "modifiedDesc",  "http://modified.com", true);
 
         // when
-        ProjectDetailResponse response = projectService.modify(request, projectId);
+        ProjectDetailResponse response = projectService.modify(request, project.getId(), member.getId());
 
         // then
         assertThat(response.name()).isEqualTo("modifiedName");
@@ -140,13 +133,10 @@ public class ProjectServiceTest {
     @Test
     @DisplayName("프로젝트 삭제")
     void delete() {
-        // given
-        Long projectId = 1L;
-
         //when
-        projectService.deleteById(projectId);
+        projectService.deleteById(project.getId());
 
         //then
-        assertThat(projectService.findById(projectId).enabled()).isEqualTo(false);
+        assertThat(projectService.findById(project.getId(), member.getId()).enabled()).isEqualTo(false);
     }
 }

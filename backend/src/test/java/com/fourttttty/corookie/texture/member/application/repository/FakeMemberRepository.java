@@ -3,6 +3,7 @@ package com.fourttttty.corookie.texture.member.application.repository;
 import com.fourttttty.corookie.member.application.repository.MemberRepository;
 import com.fourttttty.corookie.member.domain.Member;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -23,7 +24,23 @@ public class FakeMemberRepository implements MemberRepository {
 
     @Override
     public Member save(Member member) {
-        store.put(autoIncrementId++, member);
+        if (member.getId() == null) {
+            setIdInEntity(member);
+        }
+        store.put(autoIncrementId, member);
+        autoIncrementId++;
         return member;
+    }
+
+    private void setIdInEntity(Member member) {
+        try {
+            Class<Member> memberClass = Member.class;
+            Field id;
+            id = memberClass.getDeclaredField("id");
+            id.setAccessible(true);
+            id.set(member, autoIncrementId);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

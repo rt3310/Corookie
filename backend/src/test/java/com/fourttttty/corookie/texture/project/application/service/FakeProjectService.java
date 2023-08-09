@@ -36,7 +36,7 @@ public class FakeProjectService {
     @Transactional
     public ProjectResponse modify(ProjectUpdateRequest request, Long projectId) {
         Project project = projectRepository.findById(projectId).orElseThrow(EntityNotFoundException::new);
-        project.update(request.name(), request.description(), request.invitationLink(), request.invitationStatus());
+        project.update(request.memberName(), request.description(), request.invitationLink(), request.invitationStatus());
         return ProjectResponse.from(project);
     }
 
