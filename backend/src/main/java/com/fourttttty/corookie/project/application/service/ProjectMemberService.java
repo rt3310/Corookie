@@ -69,4 +69,9 @@ public class ProjectMemberService {
                         ProjectMember.of(projectMember.getId().getProject(), projectMember.getId().getMember())))
                 .toList();
     }
+
+    public ProjectMemberResponse findById(ProjectMemberId projectMemberId) {
+        return ProjectMemberResponse.from(projectMemberRepository.findById(projectMemberId)
+                .orElseThrow(EntityNotFoundException::new));
+    }
 }

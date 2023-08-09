@@ -3,7 +3,6 @@ package com.fourttttty.corookie.project.presentation;
 import com.fourttttty.corookie.member.domain.AuthProvider;
 import com.fourttttty.corookie.member.domain.Member;
 import com.fourttttty.corookie.member.domain.Oauth2;
-import com.fourttttty.corookie.member.dto.response.MemberResponse;
 import com.fourttttty.corookie.project.application.service.ProjectMemberService;
 import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.project.domain.ProjectMember;
@@ -17,8 +16,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
-
-import javax.xml.transform.Result;
 
 import java.util.List;
 
@@ -35,7 +32,6 @@ import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -47,14 +43,11 @@ public class ProjectMemberControllerTest extends RestDocsTest {
     @MockBean
     private ProjectMemberService projectMemberService;
 
-    private Project project;
     private Member member;
 
     @BeforeEach
     void initTexture() {
-        project = Project.of("name", "description", true,
-                "http://test.com", false, member);
-        member = Member.of("name", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
+        member = Member.of("memberName", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
     }
 
     @Test
@@ -63,7 +56,7 @@ public class ProjectMemberControllerTest extends RestDocsTest {
         // given
         Long projectId = 1L;
         Long memberId = 1L;
-        ProjectMemberResponse response = ProjectMemberResponse.from(ProjectMember.of(project, member));
+        ProjectMemberResponse response = new ProjectMemberResponse(1L, member.getName(), member.getEmail());
         given(projectMemberService.createIfNone(any(ProjectMemberCreateRequest.class)))
                 .willReturn(response);
 
@@ -74,8 +67,9 @@ public class ProjectMemberControllerTest extends RestDocsTest {
 
         // then
         perform.andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value(response.name()))
-                .andExpect(jsonPath("$.email").value(response.email()));
+                .andExpect(jsonPath("$.memberId").value(response.memberId()))
+                .andExpect(jsonPath("$.memberName").value(response.memberName()))
+                .andExpect(jsonPath("$.memberEmail").value(response.memberEmail()));
 
         perform.andDo(print())
                 .andDo(document("projectmember-create",
@@ -85,8 +79,9 @@ public class ProjectMemberControllerTest extends RestDocsTest {
                                 fieldWithPath("projectId").type(NUMBER).description("프로젝트 키"),
                                 fieldWithPath("memberId").type(NUMBER).description("회원 키")),
                         responseFields(
-                                fieldWithPath("name").type(STRING).description("이름"),
-                                fieldWithPath("email").type(STRING).description("이메일"))));
+                                fieldWithPath("memberId").type(NUMBER).description("멤버 키"),
+                                fieldWithPath("memberName").type(STRING).description("멤버 이름"),
+                                fieldWithPath("memberEmail").type(STRING).description("멤버 이메일"))));
     }
 
     @Test
@@ -111,7 +106,7 @@ public class ProjectMemberControllerTest extends RestDocsTest {
     @DisplayName("프로젝트에 등록된 회원 목록을 조회한다")
     void projectMemberList() throws Exception {
         // given
-        ProjectMemberResponse response = new ProjectMemberResponse("name", "test@corookie.com");
+        ProjectMemberResponse response = new ProjectMemberResponse(1L, member.getName(), member.getEmail());
         given(projectMemberService.findByProjectId(any(Long.class))).willReturn(List.of(response));
 
         // when
@@ -120,8 +115,9 @@ public class ProjectMemberControllerTest extends RestDocsTest {
 
         // then
         perform.andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].name").value(response.name()))
-                .andExpect(jsonPath("$[0].email").value(response.email()));
+                .andExpect(jsonPath("$[0].memberId").value(response.memberId()))
+                .andExpect(jsonPath("$[0].memberName").value(response.memberName()))
+                .andExpect(jsonPath("$[0].memberEmail").value(response.memberEmail()));
 
         perform.andDo(print())
                 .andDo(document("projectmember-list",
@@ -130,7 +126,8 @@ public class ProjectMemberControllerTest extends RestDocsTest {
                         pathParameters(
                                 parameterWithName("projectId").description("프로젝트 키")),
                         responseFields(
-                                fieldWithPath("[].name").type(STRING).description("이름"),
-                                fieldWithPath("[].email").type(STRING).description("이메일"))));
+                                fieldWithPath("[].memberId").type(NUMBER).description("멤버 키"),
+                                fieldWithPath("[].memberName").type(STRING).description("멤버 이름"),
+                                fieldWithPath("[].memberEmail").type(STRING).description("멤버 이메일"))));
     }
 }

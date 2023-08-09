@@ -50,7 +50,7 @@ class IssueControllerTest extends RestDocsTest {
 
     @BeforeEach
     void initTexture() {
-        member = Member.of("name", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
+        member = Member.of("memberName", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
         issue = Issue.of("topic",
                 "description",
                 IssueProgress.TODO,

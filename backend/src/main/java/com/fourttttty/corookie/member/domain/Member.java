@@ -53,6 +53,10 @@ public class Member {
         return new Member(name, email, oauth2);
     }
 
+    public boolean equalsId(Long id) {
+        return this.id.equals(id);
+    }
+
     public List<SimpleGrantedAuthority> getRole() {
         return role.stream()
                 .map(Role::name)

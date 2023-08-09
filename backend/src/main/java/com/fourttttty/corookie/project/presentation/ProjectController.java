@@ -26,8 +26,9 @@ public class ProjectController {
     }
 
     @GetMapping("/{projectId}")
-    public ResponseEntity<ProjectDetailResponse> projectDetail(@PathVariable Long projectId) {
-        return ResponseEntity.ok(projectService.findById(projectId));
+    public ResponseEntity<ProjectDetailResponse> projectDetail(@PathVariable Long projectId,
+                                                               @AuthenticationPrincipal LoginUser loginUser) {
+        return ResponseEntity.ok(projectService.findById(projectId, loginUser.getMemberId()));
     }
 
     @PostMapping
@@ -38,9 +39,9 @@ public class ProjectController {
 
     @PutMapping("/{projectId}")
     public ResponseEntity<ProjectDetailResponse> projectModify(@PathVariable Long projectId,
-                                                               @RequestBody
-                                                         @Validated ProjectUpdateRequest request) {
-        return ResponseEntity.ok(projectService.modify(request, projectId));
+                                                               @RequestBody @Validated ProjectUpdateRequest request,
+                                                               @AuthenticationPrincipal LoginUser loginUser) {
+        return ResponseEntity.ok(projectService.modify(request, projectId, loginUser.getMemberId()));
     }
 
     @DeleteMapping("/{projectId}")

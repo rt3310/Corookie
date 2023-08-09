@@ -32,8 +32,9 @@ public class ProjectService {
                 .toList();
     }
 
-    public ProjectDetailResponse findById(Long projectId) {
-        return ProjectDetailResponse.from(findEntityById(projectId));
+    public ProjectDetailResponse findById(Long projectId, Long managerId) {
+        Project project = findEntityById(projectId);
+        return ProjectDetailResponse.from(project, project.isManager(managerId));
     }
 
     public Project findEntityById(Long projectId) {
@@ -41,20 +42,20 @@ public class ProjectService {
     }
 
     @Transactional
-    public ProjectDetailResponse create(ProjectCreateRequest projectCreateRequest, Long memberId) {
+    public ProjectDetailResponse create(ProjectCreateRequest projectCreateRequest, Long managerId) {
         Project project = projectRepository.save(projectCreateRequest.toEntity(
-                memberRepository.findById(memberId).orElseThrow(EntityNotFoundException::new)));
+                memberRepository.findById(managerId).orElseThrow(EntityNotFoundException::new)));
 
         project.changeInvitationLink(invitationLinkGenerateService.generateInvitationLink((long) project.hashCode()));
         project.createDefaultTextChannels().forEach(textChannelRepository::save);
-        return ProjectDetailResponse.from(project);
+        return ProjectDetailResponse.from(project, project.isManager(managerId));
     }
 
     @Transactional
-    public ProjectDetailResponse modify(ProjectUpdateRequest request, Long projectId) {
+    public ProjectDetailResponse modify(ProjectUpdateRequest request, Long projectId, Long managerId) {
         Project project = projectRepository.findById(projectId).orElseThrow(EntityNotFoundException::new);
         project.update(request.name(), request.description(), request.invitationLink(), request.invitationStatus());
-        return ProjectDetailResponse.from(project);
+        return ProjectDetailResponse.from(project, project.isManager(managerId));
     }
 
     @Transactional
