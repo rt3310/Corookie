@@ -22,7 +22,7 @@ async def summarize_text(request: SummarizeIn):
 
     text = request.text.replace("\n", " ")
     text = text.replace('"', "")
-    print(text)
+    
     raw_input_ids = tokenizer.encode(text)
     input_ids = [tokenizer.bos_token_id] + raw_input_ids + [tokenizer.eos_token_id]
     summary_ids = model.generate(
