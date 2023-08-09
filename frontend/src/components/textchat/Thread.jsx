@@ -7,7 +7,7 @@ import * as components from 'components'
 import * as hooks from 'hooks'
 import * as utils from 'utils'
 
-const Thread = () => {
+const Thread = ({ chat }) => {
     const text = useRef(null)
     const [overText, setOverText] = useState(false)
     const [closedText, setClosedText] = useState(false)
@@ -123,7 +123,7 @@ const Thread = () => {
                         </S.CommentButton>
                     </S.MemberInfoBox>
                     <S.Text ref={text}>
-                        <components.Message isCode={isCode} text={code} language={language} />
+                        <components.Message isCode={isCode} text={code} language={language} chat={chat} />
                     </S.Text>
                     {closedText && (
                         <S.MoreButton>

@@ -14,13 +14,17 @@ import { IoExitOutline } from 'react-icons/io5'
 const TextChat = () => {
     const { commentOpened } = hooks.commentState()
     const [me, setMe] = useState()
-    const [chat, setChat] = useState({
+    const [currentChat, setCurrentChat] = useState({
         textChannelId: 1,
         writerId: null,
         content: '',
     })
     const [chats, setChats] = useState([])
     const client = useRef({})
+
+    useEffect(() => {
+        console.log(chats)
+    }, [chats])
 
     const connectThread = () => {
         client.current = new StompJs.Client({
@@ -62,17 +66,17 @@ const TextChat = () => {
             return
         }
 
-        if (chat.content.replace(/\s+/gi, '') === '') {
+        if (currentChat.content.replace(/\s+/gi, '') === '') {
             return
         }
 
         client.current.publish({
-            destination: '/app/thread/',
-            body: JSON.stringify(chat),
+            destination: '/app/thread',
+            body: JSON.stringify(currentChat),
         })
 
-        setChat({
-            ...chat,
+        setCurrentChat({
+            ...currentChat,
             writerId: me.id,
             content: '',
         })
@@ -106,21 +110,11 @@ const TextChat = () => {
             <S.Container>
                 <S.ChatBox>
                     <S.ThreadBox>
-                        <components.Thread />
-                        <components.Thread />
-                        <components.Thread />
-                        <components.Thread />
-                        <components.Thread />
-                        <components.Thread />
-                        <components.Thread />
-                        <components.Thread />
-                        <components.Thread />
-                        <components.Thread />
-                        <components.Thread />
-                        <components.Thread />
-                        <components.Thread />
+                        {chats.map((c, idx) => (
+                            <components.Thread key={idx} chat={c} />
+                        ))}
                     </S.ThreadBox>
-                    <components.EditBox />
+                    <components.EditBox currentChat={currentChat} setCurrentChat={setCurrentChat} send={send} />
                 </S.ChatBox>
                 {commentOpened && <components.CommentBox />}
             </S.Container>
