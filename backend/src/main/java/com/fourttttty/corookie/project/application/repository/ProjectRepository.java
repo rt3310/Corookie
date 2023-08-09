@@ -8,6 +8,7 @@ import java.util.Optional;
 
 public interface ProjectRepository {
     Optional<Project> findById(Long id);
+    List<Project> findByManagerId(Long managerId);
     Optional<Project> findByInvitationLink(String invitationLink);
     List<Project> findAll();
     Project save(Project project);
