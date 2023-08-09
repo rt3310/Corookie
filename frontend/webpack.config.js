@@ -2,6 +2,7 @@ const path = require('path')
 const webpack = require('webpack')
 const Dotenv = require('dotenv-webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const fs = require('fs')
 
 module.exports = (env, options) => {
     return {
@@ -62,6 +63,11 @@ module.exports = (env, options) => {
             host: 'localhost',
             port: 3000,
             historyApiFallback: true,
+            // https: true,
+            // https: {
+            //     cert: fs.readFileSync('./.cert.pem'),
+            //     key: fs.readFileSync('./key.pem'),
+            // },
         },
     }
 }

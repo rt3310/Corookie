@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import * as components from 'components'
 import * as hooks from 'hooks'
 import * as utils from 'utils'
+import * as api from 'api'
 const IssueCreate = () => {
     const { closeIssueCreate } = hooks.issueCreateState()
     const { value: priority, setValue: setPriority } = hooks.createPriorityState()
@@ -14,6 +15,26 @@ const IssueCreate = () => {
     const [title, setTitle] = useState('')
     let createRef = useRef(null)
     let titleInput = useRef(null)
+
+    const postIssue = () => {
+        const data = {
+            topic: title,
+            description: '',
+            progress: 'todo',
+            priority: priority,
+            manager: manager,
+            category: category,
+        }
+
+        api.apis
+            .createIssue(1, data)
+            .then(response => {
+                console.log(response)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }
 
     useEffect(() => {
         setPriority('중요도')

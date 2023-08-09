@@ -100,8 +100,8 @@ const S = {
     Wrap: styled.div`
         display: flex;
         position: absolute;
-        top: 90px;
-        left: 193px;
+        top: 116px;
+        left: 216px;
         z-index: 999;
         background-color: ${({ theme }) => theme.color.white};
         width: 180px;
@@ -109,7 +109,7 @@ const S = {
         border-radius: 8px;
         /* border: 1px solid ${({ theme }) => theme.color.lightgray}; */
         z-index: 100;
-        box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2);
+        box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2);
         &.open div {
             height: auto;
         }
