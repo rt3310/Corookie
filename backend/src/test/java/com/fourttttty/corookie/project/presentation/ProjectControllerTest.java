@@ -47,13 +47,14 @@ public class ProjectControllerTest extends RestDocsTest {
                 .updatedAt(now)
                 .enabled(true)
                 .build();
-        given(projectService.findByManagerId(any(Long.class))).willReturn(List.of(response));
+        given(projectService.findByParticipantId(any(Long.class))).willReturn(List.of(response));
 
         //when
         ResultActions perform = mockMvc.perform(get("/api/v1/projects"));
 
         // then
         perform.andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value(response.id()))
                 .andExpect(jsonPath("$[0].name").value(response.name()))
                 .andExpect(jsonPath("$[0].createdAt").value(toJson(now).replace("\"", "")))
                 .andExpect(jsonPath("$[0].updatedAt").value(toJson(now).replace("\"", "")))
@@ -95,6 +96,7 @@ public class ProjectControllerTest extends RestDocsTest {
 
         //then
         perform.andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(response.id()))
                 .andExpect(jsonPath("$.name").value(response.name()))
                 .andExpect(jsonPath("$.description").value(response.description()))
                 .andExpect(jsonPath("$.createdAt").value(toJson(now).replace("\"", "")))
@@ -152,6 +154,7 @@ public class ProjectControllerTest extends RestDocsTest {
 
         //then
         perform.andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(response.id()))
                 .andExpect(jsonPath("$.name").value(response.name()))
                 .andExpect(jsonPath("$.createdAt").value(toJson(now).replace("\"", "")))
                 .andExpect(jsonPath("$.updatedAt").value(toJson(now).replace("\"", "")))
@@ -212,6 +215,7 @@ public class ProjectControllerTest extends RestDocsTest {
 
         // then
         perform.andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(response.id()))
                 .andExpect(jsonPath("$.name").value(response.name()))
                 .andExpect(jsonPath("$.createdAt").value(toJson(now).replace("\"", "")))
                 .andExpect(jsonPath("$.updatedAt").value(toJson(now).replace("\"", "")))
