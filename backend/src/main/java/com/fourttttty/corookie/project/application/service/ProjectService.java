@@ -26,9 +26,9 @@ public class ProjectService {
     private final ProjectMemberRepository projectMemberRepository;
     private final InvitationLinkGenerateService invitationLinkGenerateService;
 
-    public List<ProjectListResponse> findByMemberId(Long memberId) {
-        return projectMemberRepository.findByMemberId(memberId).stream()
-                .map(projectMember -> ProjectListResponse.from(projectMember.getId().getProject()))
+    public List<ProjectListResponse> findByManagerId(Long managerId) {
+        return projectRepository.findByManagerId(managerId).stream()
+                .map(ProjectListResponse::from)
                 .toList();
     }
 
