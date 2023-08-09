@@ -12,7 +12,6 @@ import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.project.domain.ProjectMember;
 import com.fourttttty.corookie.project.domain.ProjectMemberId;
 import com.fourttttty.corookie.project.dto.request.ProjectMemberCreateRequest;
-import com.fourttttty.corookie.project.dto.response.MemberProjectResponse;
 import com.fourttttty.corookie.project.dto.response.ProjectMemberResponse;
 import com.fourttttty.corookie.project.util.Base62Encoder;
 import com.fourttttty.corookie.textchannel.application.repository.TextChannelRepository;
@@ -125,13 +124,11 @@ class ProjectMemberServiceTest {
         Long memberId = 1L;
 
         // when
-        List<MemberProjectResponse> findResponses = projectMemberService.findByMemberId(memberId);
+        List<ProjectMemberResponse> findResponses = projectMemberService.findByMemberId(memberId);
 
         // then
         assertThat(findResponses.size()).isEqualTo(1);
         assertThat(findResponses.get(0).name()).isEqualTo("name");
-        assertThat(findResponses.get(0).description()).isEqualTo("description");
-        assertThat(findResponses.get(0).enabled()).isEqualTo(Boolean.TRUE);
-        assertThat(findResponses.get(0).invitationStatus()).isEqualTo(Boolean.FALSE);
+        assertThat(findResponses.get(0).email()).isEqualTo("test@gmail.com");
     }
 }
