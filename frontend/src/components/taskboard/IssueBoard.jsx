@@ -3,28 +3,42 @@ import styled from 'styled-components'
 import * as components from 'components'
 
 import * as hooks from 'hooks'
+import * as api from 'api'
 
 const IssueBoard = () => {
     const { issueCreateOpened } = hooks.issueCreateState()
     const { tasks } = hooks.tasksState()
 
+    useEffect(() => {
+        const projectId = 1
+        api.apis
+            .getIssueList(1)
+            .then(response => {
+                console.log(response.data)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }, [])
+
     return (
         <S.Container>
             <S.Wrap>
                 {issueCreateOpened && <components.IssueCreate />}
-                {tasks.map((task, idx) => {
-                    return (
-                        <components.IssuePreview
-                            key={idx}
-                            id={task.id}
-                            title={task.title}
-                            type={task.type}
-                            manager={task.manager}
-                            priority={task.priority}
-                            status={task.status}
-                        />
-                    )
-                })}
+                {Array.isArray(tasks) &&
+                    tasks.map((task, idx) => {
+                        return (
+                            <components.IssuePreview
+                                key={idx}
+                                id={task.id}
+                                title={task.title}
+                                type={task.type}
+                                manager={task.manager}
+                                priority={task.priority}
+                                status={task.status}
+                            />
+                        )
+                    })}
             </S.Wrap>
         </S.Container>
     )

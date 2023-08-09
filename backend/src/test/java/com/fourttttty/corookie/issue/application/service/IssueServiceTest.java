@@ -1,11 +1,9 @@
 package com.fourttttty.corookie.issue.application.service;
 
-import com.fourttttty.corookie.issue.application.repository.IssueCategoryRepository;
 import com.fourttttty.corookie.issue.application.repository.IssueRepository;
-import com.fourttttty.corookie.issue.domain.Category;
+import com.fourttttty.corookie.issue.domain.IssueCategory;
 import com.fourttttty.corookie.issue.domain.IssuePriority;
 import com.fourttttty.corookie.issue.domain.IssueProgress;
-import com.fourttttty.corookie.issue.dto.request.IssueCategoryCreateRequest;
 import com.fourttttty.corookie.issue.dto.response.IssueDetailResponse;
 import com.fourttttty.corookie.issue.dto.response.IssueListResponse;
 import com.fourttttty.corookie.member.application.repository.MemberRepository;
@@ -14,7 +12,6 @@ import com.fourttttty.corookie.member.domain.Member;
 import com.fourttttty.corookie.member.domain.Oauth2;
 import com.fourttttty.corookie.project.application.repository.ProjectRepository;
 import com.fourttttty.corookie.project.domain.Project;
-import com.fourttttty.corookie.texture.issue.application.repository.FakeIssueCategoryRepository;
 import com.fourttttty.corookie.texture.issue.application.repository.FakeIssueRepository;
 import com.fourttttty.corookie.issue.dto.request.IssueCreateRequest;
 import com.fourttttty.corookie.texture.member.application.repository.FakeMemberRepository;
@@ -32,7 +29,6 @@ class IssueServiceTest {
     IssueRepository issueRepository;
     ProjectRepository projectRepository;
     MemberRepository memberRepository;
-    IssueCategoryRepository issueCategoryRepository;
     IssueService issueService;
 
     private Member member;
@@ -41,11 +37,9 @@ class IssueServiceTest {
     @BeforeEach
     void initObjects() {
         projectRepository = new FakeProjectRepository();
-        issueRepository = new FakeIssueRepository(projectRepository);
-        issueCategoryRepository = new FakeIssueCategoryRepository();
         memberRepository = new FakeMemberRepository();
-        issueService = new IssueService(issueRepository, projectRepository, memberRepository,
-                new IssueCategoryService(issueCategoryRepository));
+        issueRepository = new FakeIssueRepository(projectRepository, memberRepository);
+        issueService = new IssueService(issueRepository, projectRepository, memberRepository);
         member = Member.of("name", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
         project = Project.of("name", "description", true,
                 "http://test.com", false, member);
@@ -59,7 +53,7 @@ class IssueServiceTest {
                 "description",
                 IssueProgress.TODO,
                 IssuePriority.HIGH,
-                List.of(new IssueCategoryCreateRequest(Category.BACKEND)));
+                IssueCategory.BACKEND);
 
         // when
         memberRepository.save(member);
@@ -69,10 +63,9 @@ class IssueServiceTest {
         // then
         assertThat(response.topic()).isEqualTo(request.topic());
         assertThat(response.description()).isEqualTo(request.description());
-        assertThat(response.progress()).isEqualTo(request.progress().getValue());
-        assertThat(response.priority()).isEqualTo(request.priority().getValue());
-        assertThat(response.issueCategories().get(0).category())
-                .isEqualTo(request.issueCategories().get(0).category().getValue());
+        assertThat(response.progress()).isEqualTo(request.progress());
+        assertThat(response.priority()).isEqualTo(request.priority());
+        assertThat(response.category()).isEqualTo(request.category());
     }
 
     @Test
@@ -86,7 +79,7 @@ class IssueServiceTest {
                 "description",
                 IssueProgress.TODO,
                 IssuePriority.HIGH,
-                List.of(new IssueCategoryCreateRequest(Category.BACKEND)));
+                IssueCategory.BACKEND);
         memberRepository.save(member);
         projectRepository.save(project);
         issueService.create(request, projectId, memberId);
@@ -96,10 +89,9 @@ class IssueServiceTest {
 
         assertThat(response.topic()).isEqualTo(request.topic());
         assertThat(response.description()).isEqualTo(request.description());
-        assertThat(response.progress()).isEqualTo(request.progress().getValue());
-        assertThat(response.priority()).isEqualTo(request.priority().getValue());
-        assertThat(response.issueCategories().get(0).category())
-                .isEqualTo(request.issueCategories().get(0).category().getValue());
+        assertThat(response.progress()).isEqualTo(request.progress());
+        assertThat(response.priority()).isEqualTo(request.priority());
+        assertThat(response.category()).isEqualTo(request.category());
     }
 
     @Test
@@ -112,7 +104,7 @@ class IssueServiceTest {
                 "description",
                 IssueProgress.TODO,
                 IssuePriority.HIGH,
-                List.of(new IssueCategoryCreateRequest(Category.BACKEND)));
+                IssueCategory.BACKEND);
         memberRepository.save(member);
         projectRepository.save(project);
         issueService.create(request, projectId, memberId);
@@ -123,9 +115,8 @@ class IssueServiceTest {
         // then
         assertThat(findResponses.size()).isEqualTo(1L);
         assertThat(findResponses.get(0).topic()).isEqualTo(request.topic());
-        assertThat(findResponses.get(0).progress()).isEqualTo(request.progress().getValue());
-        assertThat(findResponses.get(0).priority()).isEqualTo(request.priority().getValue());
-        assertThat(findResponses.get(0).issueCategories().get(0).category())
-                .isEqualTo(request.issueCategories().get(0).category().getValue());
+        assertThat(findResponses.get(0).progress()).isEqualTo(request.progress());
+        assertThat(findResponses.get(0).priority()).isEqualTo(request.priority());
+        assertThat(findResponses.get(0).category()).isEqualTo(request.category());
     }
 }

@@ -11,7 +11,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -47,7 +46,7 @@ public class ProjectControllerTest extends RestDocsTest {
                 false,
                 "http://test.com",
                 false);
-        given(projectService.findAll()).willReturn(List.of(response));
+        given(projectService.findByMemberId(any(Long.class))).willReturn(List.of(response));
 
         //when
         ResultActions perform = mockMvc.perform(get("/api/v1/projects"));
@@ -132,7 +131,7 @@ public class ProjectControllerTest extends RestDocsTest {
                 .updatedAt(now)
                 .enabled(true)
                 .invitationLink("http://test.com")
-                .invitationStatus(true)
+                .invitationStatus(false)
                 .build();
         given(projectService.create(any(ProjectCreateRequest.class), any(Long.class)))
                 .willReturn(response);
@@ -140,7 +139,7 @@ public class ProjectControllerTest extends RestDocsTest {
         //when
         ResultActions perform = mockMvc.perform(post("/api/v1/projects")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(new ProjectCreateRequest("name", "description", Boolean.FALSE))));
+                .content(toJson(new ProjectCreateRequest("name", "description"))));
 
         //then
         perform.andExpect(status().isOk())
@@ -150,7 +149,7 @@ public class ProjectControllerTest extends RestDocsTest {
                 .andExpect(jsonPath("$.description").value(response.description()))
                 .andExpect(jsonPath("$.enabled").value(response.enabled()))
                 .andExpect(jsonPath("$.invitationLink").value(response.invitationLink()))
-                .andExpect(jsonPath("$.invitationStatus").value(response.invitationStatus()));
+                .andExpect(jsonPath("$.invitationStatus").value(false));
 
         perform.andDo(print())
                 .andDo(document("project-create",
@@ -158,8 +157,7 @@ public class ProjectControllerTest extends RestDocsTest {
                         getDocumentResponse(),
                         requestFields(
                                 fieldWithPath("name").type(STRING).description("제목"),
-                                fieldWithPath("description").type(STRING).description("내용"),
-                                fieldWithPath("invitationStatus").type(BOOLEAN).description("초대 상태")),
+                                fieldWithPath("description").type(STRING).description("내용")),
                         responseFields(
                                 fieldWithPath("name").type(STRING).description("제목"),
                                 fieldWithPath("description").type(STRING).description("내용"),
@@ -167,7 +165,7 @@ public class ProjectControllerTest extends RestDocsTest {
                                 fieldWithPath("invitationLink").type(STRING).description("초대 링크"),
                                 fieldWithPath("createdAt").type(STRING).description("생성 날짜"),
                                 fieldWithPath("updatedAt").type(STRING).description("수정 날짜"),
-                                fieldWithPath("invitationStatus").type(BOOLEAN).description("초대 상태") )));
+                                fieldWithPath("invitationStatus").type(BOOLEAN).description("초대 상태"))));
     }
 
     @Test

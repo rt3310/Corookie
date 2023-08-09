@@ -3,6 +3,7 @@ package com.fourttttty.corookie.project.application.service;
 import com.fourttttty.corookie.member.application.repository.MemberRepository;
 import com.fourttttty.corookie.member.application.service.MemberService;
 import com.fourttttty.corookie.member.domain.Member;
+import com.fourttttty.corookie.project.application.repository.ProjectMemberRepository;
 import com.fourttttty.corookie.project.application.repository.ProjectRepository;
 import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.project.dto.request.ProjectCreateRequest;
@@ -27,9 +28,11 @@ public class ProjectService {
     private final ProjectRepository projectRepository;
     private final TextChannelRepository textChannelRepository;
     private final MemberRepository memberRepository;
+    private final ProjectMemberRepository projectMemberRepository;
+    private final InvitationLinkGenerateService invitationLinkGenerateService;
 
-    public List<ProjectResponse> findAll() {
-        return projectRepository.findAll().stream()
+    public List<ProjectResponse> findByMemberId(Long memberId) {
+        return projectMemberRepository.findByMemberId(memberId).stream()
                 .map(ProjectResponse::from)
                 .toList();
     }
@@ -44,10 +47,10 @@ public class ProjectService {
 
     @Transactional
     public ProjectResponse create(ProjectCreateRequest projectCreateRequest, Long memberId) {
-        Member member = memberRepository.findById(memberId).orElseThrow(EntityNotFoundException::new);
-        String invitationLink = null;
-        //To-Do : invitationLink 실제 링크 생성해서 넣기
-        Project project = projectRepository.save(projectCreateRequest.toEntity(invitationLink, member));
+        Project project = projectRepository.save(projectCreateRequest.toEntity(
+                memberRepository.findById(memberId).orElseThrow(EntityNotFoundException::new)));
+
+        project.changeInvitationLink(invitationLinkGenerateService.generateInvitationLink(project.getId()));
         project.createDefaultTextChannels().forEach(textChannelRepository::save);
         return ProjectResponse.from(project);
     }

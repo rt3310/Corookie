@@ -45,12 +45,10 @@ import com.fourttttty.corookie.support.RestDocsTest;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -82,23 +80,17 @@ class PlanControllerTest extends RestDocsTest {
             true,
             project);
 
-        planCategories = new ArrayList<>() {
-            {
-                add(PlanCategory.of(1L, "testCategory1"));
-                add(PlanCategory.of(2L, "testCategory2"));
-            }
-        };
+        planCategories = List.of(
+                PlanCategory.of(1L, "testCategory1"),
+                PlanCategory.of(2L, "testCategory2"));
 
-        planMembers = new ArrayList<>() {
-            {
-                add(Member.of(1L, "name1", "test@gmail.com",
-                    Oauth2.of(AuthProvider.KAKAO, "account")));
-                add(Member.of(2L, "name2", "test@gmail.com",
-                    Oauth2.of(AuthProvider.KAKAO, "account")));
-                add(Member.of(4L, "name3", "test@gmail.com",
-                    Oauth2.of(AuthProvider.KAKAO, "account")));
-            }
-        };
+        planMembers = List.of(
+                Member.of(1L, "name1", "test@gmail.com",
+                        Oauth2.of(AuthProvider.KAKAO, "account")),
+                Member.of(2L, "name2", "test@gmail.com",
+                        Oauth2.of(AuthProvider.KAKAO, "account")),
+                Member.of(4L, "name3", "test@gmail.com",
+                        Oauth2.of(AuthProvider.KAKAO, "account")));
     }
 
     @Test
@@ -143,8 +135,7 @@ class PlanControllerTest extends RestDocsTest {
                     .toList(),
                 planMembers.stream()
                     .map(member -> PlanMemberResponse.from(PlanMember.of(member, plan)))
-                    .toList()
-            ));
+                    .toList()));
 
         PlanCreateRequest request = new PlanCreateRequest(
             plan.getPlanName(),
@@ -202,7 +193,7 @@ class PlanControllerTest extends RestDocsTest {
     }
 
     @Test
-    @DisplayName("일정 호출")
+    @DisplayName("일정을 상세 조회 한다")
     void planDetail() throws Exception {
         //given
         PlanResponse planResponse = PlanResponse.from(plan,
@@ -234,7 +225,7 @@ class PlanControllerTest extends RestDocsTest {
                 planResponse.members().get(0).name()));
 
         perform.andDo(print())
-            .andDo(document("plan-Detail",
+            .andDo(document("plan-detail",
                 getDocumentResponse(),
                 pathParameters(
                     parameterWithName("projectId").description("프로젝트 id"),
@@ -424,8 +415,8 @@ class PlanControllerTest extends RestDocsTest {
     }
 
     @Test
-    @DisplayName("멤버 추가")
-    void memberCreate() throws Exception {
+    @DisplayName("일정 멤버 추가")
+    void planMemberCreate() throws Exception {
         //given
         PlanMemberResponse response = PlanMemberResponse.from(
             PlanMember.of(planMembers.get(0), plan));
@@ -461,8 +452,8 @@ class PlanControllerTest extends RestDocsTest {
     }
 
     @Test
-    @DisplayName("멤버 삭제")
-    void memberDelete() throws Exception {
+    @DisplayName("일정 멤버 삭제")
+    void planMemberDelete() throws Exception {
         //given
         PlanMemberDeleteRequest request = new PlanMemberDeleteRequest(planMembers.get(0).getId());
 

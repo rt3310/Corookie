@@ -62,16 +62,16 @@ const S = {
     Wrap: styled.div`
         display: flex;
         position: absolute;
-        top: 127px;
-        left: -10px;
+        top: 151px;
+        left: 8px;
         flex-direction: column;
         width: 180px;
         height: auto;
         background-color: ${({ theme }) => theme.color.white};
         border-radius: 8px;
         /* border: 1px solid ${({ theme }) => theme.color.lightgray}; */
-        z-index: 100;
-        box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2);
         &.open div {
             height: auto;
         }

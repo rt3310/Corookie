@@ -1,11 +1,11 @@
 package com.fourttttty.corookie.issue.domain;
 
 import com.fourttttty.corookie.global.audit.BaseTime;
+import com.fourttttty.corookie.issue.util.IssuePriorityConverter;
 import com.fourttttty.corookie.member.domain.Member;
 import com.fourttttty.corookie.project.domain.Project;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -33,8 +33,12 @@ public class Issue extends BaseTime {
     private IssueProgress progress;
 
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = IssuePriorityConverter.class, attributeName = "priority")
     private IssuePriority priority;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private IssueCategory issueCategory;
 
     @Column(nullable = false)
     private Boolean enabled;
@@ -51,6 +55,7 @@ public class Issue extends BaseTime {
                  String description,
                  IssueProgress progress,
                  IssuePriority priority,
+                 IssueCategory issueCategory,
                  Boolean enabled,
                  Project project,
                  Member manager) {
@@ -58,6 +63,7 @@ public class Issue extends BaseTime {
         this.description = description;
         this.progress = progress;
         this.priority = priority;
+        this.issueCategory = issueCategory;
         this.enabled = enabled;
         this.project = project;
         this.manager = manager;
@@ -67,6 +73,7 @@ public class Issue extends BaseTime {
                            String description,
                            IssueProgress progress,
                            IssuePriority priority,
+                           IssueCategory issueCategory,
                            Boolean enabled,
                            Project project,
                            Member manager) {
@@ -74,9 +81,34 @@ public class Issue extends BaseTime {
                 description,
                 progress,
                 priority,
+                issueCategory,
                 enabled,
                 project,
                 manager);
+    }
+
+    public void changeTopic(String topic) {
+        this.topic = topic;
+    }
+
+    public void changeDescription(String description) {
+        this.description = description;
+    }
+
+    public void changeManager(Member manager) {
+        this.manager = manager;
+    }
+
+    public void changePriority(IssuePriority priority) {
+        this.priority = priority;
+    }
+
+    public void changeCategory(IssueCategory issueCategory) {
+        this.issueCategory = issueCategory;
+    }
+
+    public void changeProgress(IssueProgress progress) {
+        this.progress = progress;
     }
 
     public void delete() {
