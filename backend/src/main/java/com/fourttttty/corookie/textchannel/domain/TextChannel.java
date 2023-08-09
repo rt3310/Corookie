@@ -56,6 +56,6 @@ public class TextChannel extends BaseTime {
     }
 
     public void deleteChannel() {
-        this.enabled = false;
+        if (this.deletable) this.enabled = false;
     }
 }
