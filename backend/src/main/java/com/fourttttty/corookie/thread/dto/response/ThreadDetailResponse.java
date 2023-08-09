@@ -12,7 +12,7 @@ public record ThreadDetailResponse(MemberResponse writer,
 
     public static ThreadDetailResponse from(Thread thread) {
         return new ThreadDetailResponse(
-                new MemberResponse(thread.getWriter().getName()),
+                MemberResponse.from(thread.getWriter()),
                 thread.getCreatedAt(),
                 thread.getContent(),
                 thread.getCommentCount());

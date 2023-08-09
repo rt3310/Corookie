@@ -80,7 +80,7 @@ class CommentControllerTest extends RestDocsTest {
         // given
         LocalDateTime now = LocalDateTime.now();
         CommentDetailResponse commentDetailResponse = new CommentDetailResponse(thread.getContent(),
-                new MemberResponse(thread.getWriter().getName()),
+                MemberResponse.from(thread.getWriter()),
                 now
                 );
 
@@ -106,7 +106,8 @@ class CommentControllerTest extends RestDocsTest {
                         responseFields(
                                 fieldWithPath("[].content").type(STRING).description("댓글 내용"),
                                 fieldWithPath("[].createdAt").type(STRING).description("생성 일자"),
-                                fieldWithPath("[].writer.name").type(STRING).description("작성자"))
+                                fieldWithPath("[].writer.name").type(STRING).description("작성자 이름"),
+                                fieldWithPath("[].writer.email").type(STRING).description("작성자 이메일"))
                 ));
     }
 
@@ -116,7 +117,7 @@ class CommentControllerTest extends RestDocsTest {
         // given
         LocalDateTime now = LocalDateTime.now();
         CommentDetailResponse commentDetailResponse = new CommentDetailResponse(thread.getContent(),
-                new MemberResponse(thread.getWriter().getName()),
+                MemberResponse.from(thread.getWriter()),
                 now
         );
 
@@ -147,7 +148,8 @@ class CommentControllerTest extends RestDocsTest {
                         responseFields(
                                 fieldWithPath("content").type(STRING).description("댓글 내용"),
                                 fieldWithPath("createdAt").type(STRING).description("생성 일자"),
-                                fieldWithPath("writer.name").type(STRING).description("작성자"))
+                                fieldWithPath("writer.name").type(STRING).description("작성자 이름"),
+                                fieldWithPath("writer.email").type(STRING).description("작성자 이메일"))
                 ));
     }
 
