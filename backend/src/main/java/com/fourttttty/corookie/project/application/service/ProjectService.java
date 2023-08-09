@@ -50,7 +50,7 @@ public class ProjectService {
         Project project = projectRepository.save(projectCreateRequest.toEntity(
                 memberRepository.findById(memberId).orElseThrow(EntityNotFoundException::new)));
 
-        project.changeInvitationLink(invitationLinkGenerateService.generateInvitationLink(project.getId()));
+        project.changeInvitationLink(invitationLinkGenerateService.generateInvitationLink((long) project.hashCode()));
         project.createDefaultTextChannels().forEach(textChannelRepository::save);
         return ProjectResponse.from(project);
     }
