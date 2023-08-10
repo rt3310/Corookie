@@ -20,7 +20,7 @@ public class TextChannel extends BaseTime {
     @Column(name = "channel_id", nullable = false)
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(nullable = false)
     private String channelName;
 
     @Column(nullable = false)
