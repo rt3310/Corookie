@@ -7,7 +7,7 @@ import * as hooks from 'hooks'
 
 const LandingHeader = () => {
     const { profileOpened, openProfile, closeProfile } = hooks.profileState()
-
+    const accessToken = hooks.getCookie('Authorization')
     const navigate = useNavigate()
 
     const toggleProfile = () => {
@@ -25,7 +25,16 @@ const LandingHeader = () => {
                 <img src={require('images/thread_profile.png').default} alt="스레드 이미지" />
             </S.Profile> */}
             <S.AboutUs>About Us</S.AboutUs>
-            <S.Login onClick={() => navigate(utils.URL.LOGIN.LOGIN)}>Login</S.Login>
+            {!accessToken && <S.Login onClick={() => navigate(utils.URL.LOGIN.LOGIN)}>Login</S.Login>}
+            {accessToken && (
+                <S.Login
+                    onClick={() => {
+                        hooks.deleteCookie('Authorization')
+                        hooks.deleteCookie('Refresh')
+                    }}>
+                    Logout
+                </S.Login>
+            )}
         </S.Wrap>
     )
 }
@@ -42,7 +51,6 @@ const S = {
         justify-content: space-between;
     `,
     Title: styled.div`
-        height: 100%;
         width: 167px;
         font-family: 'Futura PT';
         font-size: ${({ theme }) => theme.fontsize.logo};
@@ -63,12 +71,14 @@ const S = {
     `,
     AboutUs: styled.div`
         width: 100%;
+        height: 100%;
         margin-left: 24px;
         padding: 24px 8px 0;
         color: ${({ theme }) => theme.color.main};
         cursor: pointer;
     `,
     Login: styled.div`
+        height: 100%;
         width: 100%;
         text-align: right;
         margin-left: auto;

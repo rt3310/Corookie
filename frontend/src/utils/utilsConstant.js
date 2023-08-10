@@ -7,18 +7,18 @@ export const URL = {
         MAIN: '/',
     },
     PROJECT: {
-        MAIN: '/project',
+        MAIN: '/project/:projectId',
     },
     CHAT: {
-        TEXT: '/project/chat/text',
-        VIDEO: '/project/chat/video',
-        DIRECT: '/project/chat/direct',
+        TEXT: '/project/:projectId/chat/text',
+        VIDEO: '/project/:projectId/chat/video',
+        DIRECT: '/project/:projectId/chat/direct',
     },
     TASK: {
-        BOARD: '/project/task/board',
+        BOARD: '/project/:projectId/task/board',
     },
     PLAN: {
-        CALENDER: '/project/plan/calendar',
+        CALENDER: '/project/:projectId/plan/calendar',
     },
 }
 
