@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 
 @Builder
-public record TextChannelResponse(@NotBlank String name) {
+public record TextChannelResponse(String name) {
 
     public static TextChannelResponse from(TextChannel textChannel) {
         return TextChannelResponse.builder()
