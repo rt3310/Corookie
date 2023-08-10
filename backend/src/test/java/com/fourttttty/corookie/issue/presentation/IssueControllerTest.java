@@ -70,27 +70,32 @@ class IssueControllerTest extends RestDocsTest {
     @DisplayName("이슈를 생성한다")
     void createIssue() throws Exception {
         // given
-        given(issueService.create(any(IssueCreateRequest.class), any(Long.class), any(Long.class)))
-                .willReturn(IssueDetailResponse.from(issue));
-
-        IssueCreateRequest request = new IssueCreateRequest("topic",
+        IssueDetailResponse response = new IssueDetailResponse(1L,
+                "topic",
                 "description",
                 IssueProgress.TODO,
                 IssuePriority.HIGH,
                 IssueCategory.BACKEND);
+        given(issueService.create(any(IssueCreateRequest.class), any(Long.class), any(Long.class)))
+                .willReturn(response);
 
         // when
         ResultActions perform = mockMvc.perform(post("/api/v1/projects/{projectId}/issues", 1L)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(request)));
+                .content(toJson(new IssueCreateRequest("topic",
+                        "description",
+                        IssueProgress.TODO,
+                        IssuePriority.HIGH,
+                        IssueCategory.BACKEND))));
 
         // then
         perform.andExpect(status().isOk())
-                .andExpect(jsonPath("$.topic").value(request.topic()))
-                .andExpect(jsonPath("$.description").value(request.description()))
-                .andExpect(jsonPath("$.progress").value(request.progress().getValue()))
-                .andExpect(jsonPath("$.priority").value(request.priority().getName()))
-                .andExpect(jsonPath("$.category").value(request.category().getValue()));
+                .andExpect(jsonPath("$.id").value(response.id()))
+                .andExpect(jsonPath("$.topic").value(response.topic()))
+                .andExpect(jsonPath("$.description").value(response.description()))
+                .andExpect(jsonPath("$.progress").value(response.progress().getValue()))
+                .andExpect(jsonPath("$.priority").value(response.priority().getName()))
+                .andExpect(jsonPath("$.category").value(response.category().getValue()));
 
         perform.andDo(print())
                 .andDo(document("issue-create",
@@ -105,6 +110,7 @@ class IssueControllerTest extends RestDocsTest {
                                 fieldWithPath("priority").type(STRING).description("이슈 중요도"),
                                 fieldWithPath("category").type(STRING).description("이슈 카테고리")),
                         responseFields(
+                                fieldWithPath("id").type(NUMBER).description("이슈 키"),
                                 fieldWithPath("topic").type(STRING).description("제목"),
                                 fieldWithPath("description").type(STRING).description("설명"),
                                 fieldWithPath("progress").type(STRING).description("이슈 진행도"),
@@ -116,7 +122,12 @@ class IssueControllerTest extends RestDocsTest {
     @DisplayName("이슈 목록을 조회한다")
     void issueList() throws Exception {
         // given
-        List<IssueListResponse> responses = List.of(IssueListResponse.from(issue));
+        List<IssueListResponse> responses = List.of(new IssueListResponse(1L,
+                "topic",
+                IssueProgress.TODO,
+                IssuePriority.HIGH,
+                IssueCategory.BACKEND,
+                "memberName"));
         given(issueService.findByProjectId(any(Long.class)))
                 .willReturn(responses);
 
@@ -126,11 +137,12 @@ class IssueControllerTest extends RestDocsTest {
 
         // then
         perform.andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value(responses.get(0).id()))
                 .andExpect(jsonPath("$[0].topic").value(responses.get(0).topic()))
                 .andExpect(jsonPath("$[0].progress").value(responses.get(0).progress().getValue()))
                 .andExpect(jsonPath("$[0].priority").value(responses.get(0).priority().getName()))
                 .andExpect(jsonPath("$[0].category").value(responses.get(0).category().getValue()))
-                .andExpect(jsonPath("$[0].memberName").value(member.getName()));
+                .andExpect(jsonPath("$[0].memberName").value(responses.get(0).memberName()));
 
         perform.andDo(print())
                 .andDo(document("issue-list",
@@ -139,6 +151,7 @@ class IssueControllerTest extends RestDocsTest {
                         pathParameters(
                                 parameterWithName("projectId").description("프로젝트 키")),
                         responseFields(
+                                fieldWithPath("[].id").type(NUMBER).description("이슈 키"),
                                 fieldWithPath("[].topic").type(STRING).description("제목"),
                                 fieldWithPath("[].progress").type(STRING).description("이슈 진행도"),
                                 fieldWithPath("[].priority").type(STRING).description("이슈 중요도"),
@@ -149,7 +162,12 @@ class IssueControllerTest extends RestDocsTest {
     @Test
     @DisplayName("이슈 상세 정보를 조회한다")
     void issueDetail() throws Exception {
-        IssueDetailResponse response = IssueDetailResponse.from(issue);
+        IssueDetailResponse response = new IssueDetailResponse(1L,
+                "topic",
+                "description",
+                IssueProgress.TODO,
+                IssuePriority.HIGH,
+                IssueCategory.BACKEND);
         given(issueService.findById(any(Long.class)))
                 .willReturn(response);
 
@@ -160,6 +178,7 @@ class IssueControllerTest extends RestDocsTest {
 
         // then
         perform.andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(response.id()))
                 .andExpect(jsonPath("$.topic").value(response.topic()))
                 .andExpect(jsonPath("$.description").value(response.description()))
                 .andExpect(jsonPath("$.progress").value(response.progress().getValue()))
@@ -174,6 +193,7 @@ class IssueControllerTest extends RestDocsTest {
                                 parameterWithName("projectId").description("프로젝트 키"),
                                 parameterWithName("issueId").description("이슈 키")),
                         responseFields(
+                                fieldWithPath("id").type(NUMBER).description("이슈 키"),
                                 fieldWithPath("topic").type(STRING).description("제목"),
                                 fieldWithPath("description").type(STRING).description("설명"),
                                 fieldWithPath("progress").type(STRING).description("이슈 진행도"),
@@ -203,7 +223,12 @@ class IssueControllerTest extends RestDocsTest {
     @DisplayName("특정 조건으로 필터링하여 이슈들를 조회한다")
     void issueListByFiltering() throws Exception {
         // given
-        List<IssueListResponse> responses = List.of(IssueListResponse.from(issue));
+        List<IssueListResponse> responses = List.of(new IssueListResponse(1L,
+                "topic",
+                IssueProgress.TODO,
+                IssuePriority.HIGH,
+                IssueCategory.BACKEND,
+                "memberName"));
         given(issueFilteringService.findByFiltering(any(Long.class), any(IssueFilterType.class), any(String.class)))
                 .willReturn(responses);
 
@@ -215,6 +240,7 @@ class IssueControllerTest extends RestDocsTest {
 
         // then
         perform.andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value(responses.get(0).id()))
                 .andExpect(jsonPath("$[0].topic").value(responses.get(0).topic()))
                 .andExpect(jsonPath("$[0].progress").value(responses.get(0).progress().getValue()))
                 .andExpect(jsonPath("$[0].priority").value(responses.get(0).priority().getName()))
@@ -231,6 +257,7 @@ class IssueControllerTest extends RestDocsTest {
                                 parameterWithName("type").description("필터 타입"),
                                 parameterWithName("condition").description("필터 조건")),
                         responseFields(
+                                fieldWithPath("[].id").type(NUMBER).description("이슈 키"),
                                 fieldWithPath("[].topic").type(STRING).description("제목"),
                                 fieldWithPath("[].progress").type(STRING).description("이슈 진행도"),
                                 fieldWithPath("[].priority").type(STRING).description("이슈 중요도"),

@@ -27,8 +27,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.restdocs.payload.JsonFieldType.STRING;
-import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
+import static org.springframework.restdocs.payload.JsonFieldType.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
@@ -56,7 +55,7 @@ public class ProjectMemberControllerTest extends RestDocsTest {
         // given
         Long projectId = 1L;
         Long memberId = 1L;
-        ProjectMemberResponse response = new ProjectMemberResponse(1L, member.getName(), member.getEmail());
+        ProjectMemberResponse response = new ProjectMemberResponse(1L, member.getName(), member.getEmail(), false);
         given(projectMemberService.createIfNone(any(ProjectMemberCreateRequest.class)))
                 .willReturn(response);
 
@@ -69,7 +68,8 @@ public class ProjectMemberControllerTest extends RestDocsTest {
         perform.andExpect(status().isOk())
                 .andExpect(jsonPath("$.memberId").value(response.memberId()))
                 .andExpect(jsonPath("$.memberName").value(response.memberName()))
-                .andExpect(jsonPath("$.memberEmail").value(response.memberEmail()));
+                .andExpect(jsonPath("$.memberEmail").value(response.memberEmail()))
+                .andExpect(jsonPath("$.isManager").value(response.isManager()));
 
         perform.andDo(print())
                 .andDo(document("projectmember-create",
@@ -81,7 +81,8 @@ public class ProjectMemberControllerTest extends RestDocsTest {
                         responseFields(
                                 fieldWithPath("memberId").type(NUMBER).description("멤버 키"),
                                 fieldWithPath("memberName").type(STRING).description("멤버 이름"),
-                                fieldWithPath("memberEmail").type(STRING).description("멤버 이메일"))));
+                                fieldWithPath("memberEmail").type(STRING).description("멤버 이메일"),
+                                fieldWithPath("isManager").type(BOOLEAN).description("프로젝트 관리자 여부"))));
     }
 
     @Test
@@ -106,7 +107,7 @@ public class ProjectMemberControllerTest extends RestDocsTest {
     @DisplayName("프로젝트에 등록된 회원 목록을 조회한다")
     void projectMemberList() throws Exception {
         // given
-        ProjectMemberResponse response = new ProjectMemberResponse(1L, member.getName(), member.getEmail());
+        ProjectMemberResponse response = new ProjectMemberResponse(1L, member.getName(), member.getEmail(), true);
         given(projectMemberService.findByProjectId(any(Long.class))).willReturn(List.of(response));
 
         // when
@@ -117,7 +118,8 @@ public class ProjectMemberControllerTest extends RestDocsTest {
         perform.andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].memberId").value(response.memberId()))
                 .andExpect(jsonPath("$[0].memberName").value(response.memberName()))
-                .andExpect(jsonPath("$[0].memberEmail").value(response.memberEmail()));
+                .andExpect(jsonPath("$[0].memberEmail").value(response.memberEmail()))
+                .andExpect(jsonPath("$[0].isManager").value(response.isManager()));
 
         perform.andDo(print())
                 .andDo(document("projectmember-list",
@@ -128,6 +130,7 @@ public class ProjectMemberControllerTest extends RestDocsTest {
                         responseFields(
                                 fieldWithPath("[].memberId").type(NUMBER).description("멤버 키"),
                                 fieldWithPath("[].memberName").type(STRING).description("멤버 이름"),
-                                fieldWithPath("[].memberEmail").type(STRING).description("멤버 이메일"))));
+                                fieldWithPath("[].memberEmail").type(STRING).description("멤버 이메일"),
+                                fieldWithPath("[].isManager").type(BOOLEAN).description("프로젝트 관리자 여부"))));
     }
 }

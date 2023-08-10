@@ -38,7 +38,7 @@ public class Issue extends BaseTime {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private IssueCategory issueCategory;
+    private IssueCategory category;
 
     @Column(nullable = false)
     private Boolean enabled;
@@ -55,7 +55,7 @@ public class Issue extends BaseTime {
                  String description,
                  IssueProgress progress,
                  IssuePriority priority,
-                 IssueCategory issueCategory,
+                 IssueCategory category,
                  Boolean enabled,
                  Project project,
                  Member manager) {
@@ -63,7 +63,7 @@ public class Issue extends BaseTime {
         this.description = description;
         this.progress = progress;
         this.priority = priority;
-        this.issueCategory = issueCategory;
+        this.category = category;
         this.enabled = enabled;
         this.project = project;
         this.manager = manager;
@@ -73,7 +73,7 @@ public class Issue extends BaseTime {
                            String description,
                            IssueProgress progress,
                            IssuePriority priority,
-                           IssueCategory issueCategory,
+                           IssueCategory category,
                            Boolean enabled,
                            Project project,
                            Member manager) {
@@ -81,7 +81,7 @@ public class Issue extends BaseTime {
                 description,
                 progress,
                 priority,
-                issueCategory,
+                category,
                 enabled,
                 project,
                 manager);
@@ -103,8 +103,8 @@ public class Issue extends BaseTime {
         this.priority = priority;
     }
 
-    public void changeCategory(IssueCategory issueCategory) {
-        this.issueCategory = issueCategory;
+    public void changeCategory(IssueCategory category) {
+        this.category = category;
     }
 
     public void changeProgress(IssueProgress progress) {

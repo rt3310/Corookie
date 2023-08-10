@@ -7,7 +7,8 @@ import com.fourttttty.corookie.issue.domain.IssueProgress;
 import lombok.Builder;
 
 @Builder
-public record IssueListResponse(String topic,
+public record IssueListResponse(Long id,
+                                String topic,
                                 IssueProgress progress,
                                 IssuePriority priority,
                                 IssueCategory category,
@@ -15,10 +16,11 @@ public record IssueListResponse(String topic,
 
     public static IssueListResponse from(Issue issue) {
         return IssueListResponse.builder()
+                .id(issue.getId())
                 .topic(issue.getTopic())
                 .progress(issue.getProgress())
                 .priority(issue.getPriority())
-                .category(issue.getIssueCategory())
+                .category(issue.getCategory())
                 .memberName(issue.getManager().getName())
                 .build();
     }
