@@ -5,8 +5,4 @@ import com.fourttttty.corookie.videochannel.domain.VideoChannel;
 import jakarta.validation.constraints.NotBlank;
 
 public record VideoChannelModifyRequest(@NotBlank String name) {
-
-    public VideoChannel toEntity(Project project) {
-        return VideoChannel.of(name, true, true, project);
-    }
 }

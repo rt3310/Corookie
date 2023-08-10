@@ -15,7 +15,7 @@ import java.util.UUID;
 @Table(name = "video_channel")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EntityListeners((AuditingEntityListener.class))
+@EntityListeners(AuditingEntityListener.class)
 public class VideoChannel extends BaseTime {
 
     @Id
@@ -33,25 +33,26 @@ public class VideoChannel extends BaseTime {
     private Boolean deletable;
 
     @Column(nullable = false)
-    private UUID sessionId;
+    private String sessionId;
 
     @ManyToOne
     @JoinColumn(name = "project_id", nullable = false)
     private Project project;
 
-    private VideoChannel(String channelName, Boolean enabled, Boolean deletable, Project project) {
+    private VideoChannel(String channelName, Boolean enabled, Boolean deletable, Project project, String sessionId) {
         this.channelName = channelName;
         this.enabled = enabled;
         this.deletable = deletable;
         this.project = project;
-        this.sessionId = UUID.randomUUID();
+        this.sessionId = sessionId;
     }
 
     public static VideoChannel of(String channelName,
                                   Boolean enabled,
                                   Boolean deletable,
-                                  Project project) {
-        return new VideoChannel(channelName, enabled, deletable, project);
+                                  Project project,
+                                  String sessionId) {
+        return new VideoChannel(channelName, enabled, deletable, project, sessionId);
     }
 
     public void changeNotDeleableChannel() {
