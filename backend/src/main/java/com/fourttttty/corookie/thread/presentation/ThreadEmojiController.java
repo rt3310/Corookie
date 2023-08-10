@@ -2,7 +2,7 @@ package com.fourttttty.corookie.thread.presentation;
 
 import com.fourttttty.corookie.config.security.LoginUser;
 import com.fourttttty.corookie.thread.application.service.ThreadEmojiService;
-import com.fourttttty.corookie.thread.dto.request.ThreadEmojiRequest;
+import com.fourttttty.corookie.thread.dto.request.ThreadEmojiCreateRequest;
 import com.fourttttty.corookie.thread.dto.response.ThreadEmojiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,17 +27,17 @@ public class ThreadEmojiController {
     }
 
     @PostMapping
-    public ResponseEntity<ThreadEmojiResponse> threadEmojiCreate(ThreadEmojiRequest request,
-                                                                       @PathVariable Long threadId,
-                                                                       @AuthenticationPrincipal LoginUser loginUser) {
+    public ResponseEntity<ThreadEmojiResponse> threadEmojiCreate(ThreadEmojiCreateRequest request,
+                                                                 @PathVariable Long threadId,
+                                                                 @AuthenticationPrincipal LoginUser loginUser) {
         return ResponseEntity.ok(threadEmojiService.create(request, threadId, loginUser.getMemberId()));
     }
 
-    @DeleteMapping
-    public ResponseEntity<Void> threadEmojiDelete(ThreadEmojiRequest request,
+    @DeleteMapping("/{emojiId}")
+    public ResponseEntity<Void> threadEmojiDelete(@PathVariable Long emojiId,
                                                   @PathVariable Long threadId,
                                                   @AuthenticationPrincipal LoginUser loginUser){
-        threadEmojiService.delete(request, threadId, loginUser.getMemberId());
+        threadEmojiService.delete(emojiId, threadId, loginUser.getMemberId());
         return ResponseEntity.noContent().build();
     }
 }

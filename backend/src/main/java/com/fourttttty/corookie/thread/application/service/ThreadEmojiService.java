@@ -3,7 +3,7 @@ package com.fourttttty.corookie.thread.application.service;
 import com.fourttttty.corookie.thread.application.repository.ThreadEmojiRepository;
 import com.fourttttty.corookie.thread.domain.Emoji;
 import com.fourttttty.corookie.thread.domain.ThreadEmoji;
-import com.fourttttty.corookie.thread.dto.request.ThreadEmojiRequest;
+import com.fourttttty.corookie.thread.dto.request.ThreadEmojiCreateRequest;
 import com.fourttttty.corookie.thread.dto.response.ThreadEmojiResponse;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ public class ThreadEmojiService {
     private final ThreadEmojiRepository threadEmojiRepository;
 
     @Transactional
-    public ThreadEmojiResponse create(ThreadEmojiRequest request, Long threadId, Long memberId) {
+    public ThreadEmojiResponse create(ThreadEmojiCreateRequest request, Long threadId, Long memberId) {
         Long emojiId = request.emojiId();
 
         ThreadEmoji threadEmoji  = threadEmojiRepository.save(ThreadEmoji.of(memberId, emojiId, threadId));
@@ -28,8 +28,8 @@ public class ThreadEmojiService {
     }
 
     @Transactional
-    public void delete(ThreadEmojiRequest request, Long threadId, Long memberId) {
-        Long id = getThreadEmojiId(request.emojiId(), threadId, memberId);
+    public void delete(Long emojiId, Long threadId, Long memberId) {
+        Long id = getThreadEmojiId(emojiId, threadId, memberId);
         threadEmojiRepository.delete(id);
     }
 

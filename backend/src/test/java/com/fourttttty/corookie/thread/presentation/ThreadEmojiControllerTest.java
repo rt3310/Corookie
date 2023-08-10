@@ -4,12 +4,11 @@ import com.fourttttty.corookie.member.domain.AuthProvider;
 import com.fourttttty.corookie.member.domain.Member;
 import com.fourttttty.corookie.member.domain.Oauth2;
 import com.fourttttty.corookie.project.domain.Project;
-import com.fourttttty.corookie.project.dto.request.ProjectCreateRequest;
 import com.fourttttty.corookie.support.RestDocsTest;
 import com.fourttttty.corookie.textchannel.domain.TextChannel;
 import com.fourttttty.corookie.thread.application.service.ThreadEmojiService;
 import com.fourttttty.corookie.thread.domain.Thread;
-import com.fourttttty.corookie.thread.dto.request.ThreadEmojiRequest;
+import com.fourttttty.corookie.thread.dto.request.ThreadEmojiCreateRequest;
 import com.fourttttty.corookie.thread.dto.response.ThreadEmojiResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -44,7 +43,6 @@ public class ThreadEmojiControllerTest extends RestDocsTest {
 
     @MockBean
     private ThreadEmojiService threadEmojiService;
-
     private Member member;
     private Project project;
     private TextChannel textChannel;
@@ -101,9 +99,9 @@ public class ThreadEmojiControllerTest extends RestDocsTest {
     @DisplayName("쓰레드에 이모지 추가")
     void threadEmojiCreate() throws Exception {
         // given
-        ThreadEmojiRequest request = new ThreadEmojiRequest(1L);
+        ThreadEmojiCreateRequest request = new ThreadEmojiCreateRequest(1L);
         ThreadEmojiResponse response = ThreadEmojiResponse.from(1L, true, 1L);
-        given(threadEmojiService.create(any(ThreadEmojiRequest.class), any(Long.class), any(Long.class)))
+        given(threadEmojiService.create(any(ThreadEmojiCreateRequest.class), any(Long.class), any(Long.class)))
                 .willReturn(response);
 
         // when
@@ -132,10 +130,10 @@ public class ThreadEmojiControllerTest extends RestDocsTest {
     @DisplayName("쓰레드에 이모지 제거")
     void threadEmojiDelete() throws Exception {
         // given
-        ThreadEmojiRequest request = new ThreadEmojiRequest(1L);
+        ThreadEmojiCreateRequest request = new ThreadEmojiCreateRequest(1L);
 
         // when
-        ResultActions perform = mockMvc.perform(delete("/api/v1/projects/{projectId}/text-channels/{textChannelId}/threads/{threadId}/emojis", 1L, 1L, 1L)
+        ResultActions perform = mockMvc.perform(delete("/api/v1/projects/{projectId}/text-channels/{textChannelId}/threads/{threadId}/emojis/{emojiId}", 1L, 1L, 1L, 1L)
                 .contentType(MediaType.APPLICATION_JSON));
 
         perform.andExpect(status().isNoContent());
@@ -147,6 +145,8 @@ public class ThreadEmojiControllerTest extends RestDocsTest {
                         getDocumentResponse(),
                         pathParameters(
                                 parameterWithName("projectId").description("프로젝트 키"),
-                                parameterWithName("memberId").description("멤버 키"))));
+                                parameterWithName("threadId").description("쓰레드 키"),
+                                parameterWithName("emojiId").description("이모지 키"),
+                                parameterWithName("textChannelId").description("텍스트 채널 키"))));
     }
 }
