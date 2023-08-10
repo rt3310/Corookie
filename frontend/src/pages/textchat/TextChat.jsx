@@ -21,6 +21,7 @@ const TextChat = () => {
         content: '',
     })
     const [chats, setChats] = useState([])
+    const [pinOn, setPinOn] = useState(true)
     const client = useRef({})
 
     useEffect(() => {
@@ -100,12 +101,6 @@ const TextChat = () => {
         }
     }, [])
 
-    const [pinOn, setPinOn] = useState(true)
-    const togglePin = () => {
-        setPinOn(prevPinOn => !prevPinOn)
-    }
-
-    const [pinOn, setPinOn] = useState(true)
     const togglePin = () => {
         setPinOn(prevPinOn => !prevPinOn)
     }

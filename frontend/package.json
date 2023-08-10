@@ -18,10 +18,7 @@
         "react-landing-page": "^2.0.2",
         "react-responsive-carousel": "^3.2.23",
         "react-scripts": "5.0.1",
-<<<<<<< HEAD
         "serve": "^14.2.0",
-=======
->>>>>>> a750e6a575e0684ac9cba2d6e21e3020fa3977e6
         "react-transition-group": "^4.4.5",
         "rebass": "^4.0.7",
         "styled-components": "^6.0.4",

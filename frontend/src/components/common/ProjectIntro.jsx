@@ -11,6 +11,7 @@ const ProjectIntro = () => {
     const { manager, managerOpened, openManager, closeManager } = hooks.setManagerState()
     const { members, memberOpened, openMember, closeMember } = hooks.memberState()
     const { project } = hooks.projectState()
+    const { projectMembers } = hooks.projectMembersState()
     const [flip, setFlip] = useState(false)
     const managerTextRef = useRef(null)
     const memberTextRef = useRef(null)
@@ -85,7 +86,7 @@ const ProjectIntro = () => {
                         </S.Manager>
                         <S.Members ref={memberTextRef} onClick={() => clickMember()}>
                             <IoPeople />
-                            {members.length}
+                            {projectMembers.length}
                         </S.Members>
                         <components.MemberSetting memberTextRef={memberTextRef} />
                     </S.MemberInfo>

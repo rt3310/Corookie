@@ -10,15 +10,15 @@ export const URL = {
         MAIN: '/project/:projectId',
     },
     CHAT: {
-        TEXT: '/project/:projectId/chat/text',
-        VIDEO: '/project/:projectId/chat/video',
-        DIRECT: '/project/:projectId/chat/direct',
+        TEXT: '/project/:projectId/channel/text/:channelId',
+        VIDEO: '/project/:projectId/channel/video/:channelId',
+        DIRECT: '/project/:projectId/channel/direct',
     },
     TASK: {
-        BOARD: '/project/:projectId/task/board',
+        BOARD: '/project/:projectId/task',
     },
     PLAN: {
-        CALENDER: '/project/:projectId/plan/calendar',
+        PLAN: '/project/:projectId/plan',
     },
 }
 

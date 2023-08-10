@@ -7,6 +7,7 @@ import { IoClose, IoLink } from 'react-icons/io5'
 
 const MemberSetting = ({ memberTextRef }) => {
     const { members, memberOpened, closeMember, removeMember } = hooks.memberState()
+    const { projectMembers, setProjectMembers } = hooks.projectMembersState()
     const { manager } = hooks.setManagerState()
     const { linkActivated, activateLink, deactivateLink } = hooks.linkState()
 
