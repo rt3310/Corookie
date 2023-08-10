@@ -51,7 +51,7 @@ const S = {
     `,
     SubTitle1: styled.div`
         width: auto;
-        color: ${({ theme }) => theme.color.white};
+        color: ${({ theme }) => theme.color.main};
         margin: 8px;
         padding: 24px 8px;
         text-align: left;

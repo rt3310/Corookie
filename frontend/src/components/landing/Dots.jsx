@@ -7,7 +7,7 @@ const Dot = ({ index, currentIndex, onClick }) => {
             style={{
                 width: 15,
                 height: 15,
-                border: '1px solid' + (selected ? ' white' : ' rgba(0, 0, 0, 0)'),
+                border: '1px solid' + (selected ? 'gray' : ' rgba(0, 0, 0, 0)'),
                 borderRadius: 9999,
                 margin: '10px 0',
                 display: 'flex',
@@ -21,7 +21,7 @@ const Dot = ({ index, currentIndex, onClick }) => {
                     width: 11,
                     height: 11,
                     borderRadius: 9999,
-                    backgroundColor: 'white',
+                    backgroundColor: 'lightgray',
                     cursor: 'pointer',
                 }}></div>
         </div>
