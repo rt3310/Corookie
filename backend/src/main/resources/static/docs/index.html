@@ -749,8 +749,8 @@ Content-Length: 157
 [ {
   "id" : 1,
   "name" : "name",
-  "createdAt" : "2023-08-10T10:18:24.1855467",
-  "updatedAt" : "2023-08-10T10:18:24.1855467",
+  "createdAt" : "2023-08-10T14:22:29.5041888",
+  "updatedAt" : "2023-08-10T14:22:29.5041888",
   "enabled" : true
 } ]</code></pre>
 </div>
@@ -839,14 +839,14 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 309
+Content-Length: 311
 
 {
   "id" : 1,
   "name" : "name",
   "description" : "description",
-  "createdAt" : "2023-08-10T10:18:24.053545",
-  "updatedAt" : "2023-08-10T10:18:24.053545",
+  "createdAt" : "2023-08-10T14:22:29.3561908",
+  "updatedAt" : "2023-08-10T14:22:29.3561908",
   "enabled" : true,
   "invitationLink" : "http://test.com",
   "invitationStatus" : false,
@@ -984,8 +984,8 @@ Content-Length: 311
   "id" : 1,
   "name" : "name",
   "description" : "description",
-  "createdAt" : "2023-08-10T10:18:24.2395468",
-  "updatedAt" : "2023-08-10T10:18:24.2395468",
+  "createdAt" : "2023-08-10T14:22:29.5561871",
+  "updatedAt" : "2023-08-10T14:22:29.5561871",
   "enabled" : true,
   "invitationLink" : "http://test.com",
   "invitationStatus" : false,
@@ -1154,8 +1154,8 @@ Content-Length: 317
   "id" : 1,
   "name" : "memberName",
   "description" : "description",
-  "createdAt" : "2023-08-10T10:18:24.1125458",
-  "updatedAt" : "2023-08-10T10:18:24.1125458",
+  "createdAt" : "2023-08-10T14:22:29.4231885",
+  "updatedAt" : "2023-08-10T14:22:29.4231885",
   "enabled" : true,
   "invitationLink" : "http://test.com",
   "invitationStatus" : false,
@@ -1615,7 +1615,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 147
+Content-Length: 200
 
 {
   "id" : 1,
@@ -1623,7 +1623,9 @@ Content-Length: 147
   "description" : "description",
   "progress" : "todo",
   "priority" : "High",
-  "category" : "backend"
+  "category" : "backend",
+  "managerId" : 1,
+  "managerName" : "memberName"
 }</code></pre>
 </div>
 </div>
@@ -1670,6 +1672,16 @@ Content-Length: 147
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>category</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">이슈 카테고리</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>managerId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">이슈 담당자 키</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>managerName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">이슈 담당자 이름</p></td>
 </tr>
 </tbody>
 </table>
@@ -1823,7 +1835,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 147
+Content-Length: 200
 
 {
   "id" : 1,
@@ -1831,7 +1843,9 @@ Content-Length: 147
   "description" : "description",
   "progress" : "todo",
   "priority" : "High",
-  "category" : "backend"
+  "category" : "backend",
+  "managerId" : 1,
+  "managerName" : "memberName"
 }</code></pre>
 </div>
 </div>
@@ -1878,6 +1892,16 @@ Content-Length: 147
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>category</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">이슈 카테고리</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>managerId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">이슈 담당자 키</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>managerName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">이슈 담당자 이름</p></td>
 </tr>
 </tbody>
 </table>
@@ -2079,7 +2103,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 147
+Content-Length: 200
 
 {
   "id" : 1,
@@ -2087,7 +2111,9 @@ Content-Length: 147
   "description" : "description",
   "progress" : "todo",
   "priority" : "High",
-  "category" : "backend"
+  "category" : "backend",
+  "managerId" : 1,
+  "managerName" : "memberName"
 }</code></pre>
 </div>
 </div>
@@ -2134,6 +2160,16 @@ Content-Length: 147
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>category</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">이슈 카테고리</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>managerId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">이슈 담당자 키</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>managerName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">이슈 담당자 이름</p></td>
 </tr>
 </tbody>
 </table>
@@ -2211,7 +2247,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 147
+Content-Length: 200
 
 {
   "id" : 1,
@@ -2219,7 +2255,9 @@ Content-Length: 147
   "description" : "description",
   "progress" : "todo",
   "priority" : "High",
-  "category" : "backend"
+  "category" : "backend",
+  "managerId" : 1,
+  "managerName" : "memberName"
 }</code></pre>
 </div>
 </div>
@@ -2266,6 +2304,16 @@ Content-Length: 147
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>category</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">이슈 카테고리</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>managerId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">이슈 담당자 키</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>managerName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">이슈 담당자 이름</p></td>
 </tr>
 </tbody>
 </table>
@@ -2343,7 +2391,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 147
+Content-Length: 200
 
 {
   "id" : 1,
@@ -2351,7 +2399,9 @@ Content-Length: 147
   "description" : "description",
   "progress" : "todo",
   "priority" : "High",
-  "category" : "backend"
+  "category" : "backend",
+  "managerId" : 1,
+  "managerName" : "memberName"
 }</code></pre>
 </div>
 </div>
@@ -2398,6 +2448,16 @@ Content-Length: 147
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>category</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">이슈 카테고리</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>managerId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">이슈 담당자 키</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>managerName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">이슈 담당자 이름</p></td>
 </tr>
 </tbody>
 </table>
@@ -2475,7 +2535,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 147
+Content-Length: 200
 
 {
   "id" : 1,
@@ -2483,7 +2543,9 @@ Content-Length: 147
   "description" : "description",
   "progress" : "todo",
   "priority" : "High",
-  "category" : "backend"
+  "category" : "backend",
+  "managerId" : 1,
+  "managerName" : "memberName"
 }</code></pre>
 </div>
 </div>
@@ -2530,6 +2592,16 @@ Content-Length: 147
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>category</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">이슈 카테고리</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>managerId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">이슈 담당자 키</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>managerName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">이슈 담당자 이름</p></td>
 </tr>
 </tbody>
 </table>
@@ -2607,7 +2679,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 147
+Content-Length: 200
 
 {
   "id" : 1,
@@ -2615,7 +2687,9 @@ Content-Length: 147
   "description" : "description",
   "progress" : "todo",
   "priority" : "High",
-  "category" : "backend"
+  "category" : "backend",
+  "managerId" : 1,
+  "managerName" : "memberName"
 }</code></pre>
 </div>
 </div>
@@ -2662,6 +2736,16 @@ Content-Length: 147
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>category</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">이슈 카테고리</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>managerId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">이슈 담당자 키</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>managerName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">이슈 담당자 이름</p></td>
 </tr>
 </tbody>
 </table>
@@ -2739,7 +2823,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 147
+Content-Length: 200
 
 {
   "id" : 1,
@@ -2747,7 +2831,9 @@ Content-Length: 147
   "description" : "description",
   "progress" : "todo",
   "priority" : "High",
-  "category" : "backend"
+  "category" : "backend",
+  "managerId" : 1,
+  "managerName" : "memberName"
 }</code></pre>
 </div>
 </div>
@@ -2794,6 +2880,16 @@ Content-Length: 147
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>category</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">이슈 카테고리</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>managerId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">이슈 담당자 키</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>managerName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">이슈 담당자 이름</p></td>
 </tr>
 </tbody>
 </table>
@@ -2916,8 +3012,8 @@ Content-Length: 144
 [ {
   "id" : 1,
   "planName" : "memberName",
-  "planStart" : "2023-08-10T10:18:22.6415482",
-  "planEnd" : "2023-08-08T10:18:22.6415482"
+  "planStart" : "2023-08-10T14:22:27.7091894",
+  "planEnd" : "2023-08-08T14:22:27.7091894"
 } ]</code></pre>
 </div>
 </div>
@@ -2975,8 +3071,8 @@ Host: localhost:8080
 {
   "planName" : "memberName",
   "description" : "testDescription",
-  "planStart" : "2023-08-10T10:18:22.7085476",
-  "planEnd" : "2023-08-08T10:18:22.7085476",
+  "planStart" : "2023-08-10T14:22:27.7881896",
+  "planEnd" : "2023-08-08T14:22:27.7881896",
   "categories" : [ {
     "content" : "testCategory1"
   }, {
@@ -3083,8 +3179,8 @@ Content-Length: 527
   "planId" : 1,
   "planName" : "memberName",
   "description" : "testDescription",
-  "planStart" : "2023-08-10T10:18:22.7085476",
-  "planEnd" : "2023-08-08T10:18:22.7085476",
+  "planStart" : "2023-08-10T14:22:27.7881896",
+  "planEnd" : "2023-08-08T14:22:27.7881896",
   "categories" : [ {
     "id" : 1,
     "content" : "testCategory1"
@@ -3235,8 +3331,8 @@ Content-Length: 527
   "planId" : 1,
   "planName" : "memberName",
   "description" : "testDescription",
-  "planStart" : "2023-08-10T10:18:22.8635484",
-  "planEnd" : "2023-08-08T10:18:22.8635484",
+  "planStart" : "2023-08-10T14:22:27.9811895",
+  "planEnd" : "2023-08-08T14:22:27.9811895",
   "categories" : [ {
     "id" : 1,
     "content" : "testCategory1"
@@ -3352,8 +3448,8 @@ Host: localhost:8080
 {
   "planName" : "memberName",
   "description" : "testDescription",
-  "planStart" : "2023-08-08T10:18:22.9175449",
-  "planEnd" : "2023-08-06T10:18:22.9175449",
+  "planStart" : "2023-08-08T14:22:28.0491879",
+  "planEnd" : "2023-08-06T14:22:28.0491879",
   "categories" : [ {
     "content" : "testCategory1"
   }, {
@@ -3464,8 +3560,8 @@ Content-Length: 527
   "planId" : 1,
   "planName" : "memberName",
   "description" : "testDescription",
-  "planStart" : "2023-08-08T10:18:22.9175449",
-  "planEnd" : "2023-08-06T10:18:22.9175449",
+  "planStart" : "2023-08-08T14:22:28.0491879",
+  "planEnd" : "2023-08-06T14:22:28.0491879",
   "categories" : [ {
     "id" : 1,
     "content" : "testCategory1"
@@ -4378,7 +4474,7 @@ Content-Length: 171
     "name" : "name",
     "email" : "email"
   },
-  "createdAt" : "2023-08-10T10:18:26.6655467",
+  "createdAt" : "2023-08-10T14:22:32.4511877",
   "content" : "content",
   "commentCount" : 0
 } ]</code></pre>
@@ -4483,7 +4579,7 @@ Content-Length: 167
     "name" : "name",
     "email" : "email"
   },
-  "createdAt" : "2023-08-10T10:18:26.7205467",
+  "createdAt" : "2023-08-10T14:22:32.5131902",
   "content" : "content",
   "commentCount" : 0
 }</code></pre>
@@ -4594,7 +4690,7 @@ Content-Length: 167
     "name" : "name",
     "email" : "email"
   },
-  "createdAt" : "2023-08-10T10:18:26.6105475",
+  "createdAt" : "2023-08-10T14:22:32.3751884",
   "content" : "content",
   "commentCount" : 0
 }</code></pre>
@@ -4755,7 +4851,7 @@ Content-Length: 148
     "name" : "name",
     "email" : "email"
   },
-  "createdAt" : "2023-08-10T10:18:15.6165458"
+  "createdAt" : "2023-08-10T14:22:19.7591901"
 } ]</code></pre>
 </div>
 </div>
@@ -4864,7 +4960,7 @@ Content-Length: 144
     "name" : "name",
     "email" : "email"
   },
-  "createdAt" : "2023-08-10T10:18:14.6225486"
+  "createdAt" : "2023-08-10T14:22:18.8201909"
 }</code></pre>
 </div>
 </div>
