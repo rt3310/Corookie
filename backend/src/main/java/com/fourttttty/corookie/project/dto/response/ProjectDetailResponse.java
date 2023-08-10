@@ -1,22 +1,25 @@
 package com.fourttttty.corookie.project.dto.response;
 
-import com.fourttttty.corookie.member.domain.Member;
 import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.project.domain.ProjectMember;
 import lombok.Builder;
 import java.time.LocalDateTime;
 
 @Builder
-public record ProjectResponse(String name,
-                              String description,
-                              LocalDateTime createdAt,
-                              LocalDateTime updatedAt,
-                              Boolean enabled,
-                              String invitationLink,
-                              Boolean invitationStatus) {
+public record ProjectDetailResponse(Long id,
+                                    String name,
+                                    String description,
+                                    LocalDateTime createdAt,
+                                    LocalDateTime updatedAt,
+                                    Boolean enabled,
+                                    String invitationLink,
+                                    Boolean invitationStatus,
+                                    String managerName,
+                                    Boolean isManager) {
 
-    public static ProjectResponse from(Project project) {
-        return ProjectResponse.builder()
+    public static ProjectDetailResponse from(Project project, Boolean isManager) {
+        return ProjectDetailResponse.builder()
+                .id(project.getId())
                 .name(project.getName())
                 .description(project.getDescription())
                 .createdAt(project.getCreatedAt())
@@ -24,12 +27,15 @@ public record ProjectResponse(String name,
                 .enabled(project.getEnabled())
                 .invitationLink(project.getInvitationLink())
                 .invitationStatus(project.getInvitationStatus())
+                .managerName(project.getManager().getName())
+                .isManager(isManager)
                 .build();
-         }
+    }
 
-    public static ProjectResponse from(ProjectMember projectMember) {
+    public static ProjectDetailResponse from(ProjectMember projectMember) {
         Project project = projectMember.getId().getProject();
-        return ProjectResponse.builder()
+        return ProjectDetailResponse.builder()
+                .id(project.getId())
                 .name(project.getName())
                 .description(project.getDescription())
                 .createdAt(project.getCreatedAt())

@@ -1,7 +1,5 @@
 package com.fourttttty.corookie.project.application.service;
 
-import com.fourttttty.corookie.global.exception.ProjectNotDisabledException;
-import com.fourttttty.corookie.global.exception.ProjectNotFoundException;
 import com.fourttttty.corookie.member.application.repository.MemberRepository;
 import com.fourttttty.corookie.member.domain.AuthProvider;
 import com.fourttttty.corookie.member.domain.Member;
@@ -12,7 +10,6 @@ import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.project.domain.ProjectMember;
 import com.fourttttty.corookie.project.domain.ProjectMemberId;
 import com.fourttttty.corookie.project.dto.request.ProjectMemberCreateRequest;
-import com.fourttttty.corookie.project.dto.response.MemberProjectResponse;
 import com.fourttttty.corookie.project.dto.response.ProjectMemberResponse;
 import com.fourttttty.corookie.project.util.Base62Encoder;
 import com.fourttttty.corookie.textchannel.application.repository.TextChannelRepository;
@@ -20,7 +17,6 @@ import com.fourttttty.corookie.texture.member.application.repository.FakeMemberR
 import com.fourttttty.corookie.texture.project.application.repository.FakeProjectMemberRepository;
 import com.fourttttty.corookie.texture.project.application.repository.FakeProjectRepository;
 import com.fourttttty.corookie.texture.textchannel.application.repository.FakeTextChannelRepository;
-import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -29,6 +25,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ProjectMemberServiceTest {
 
@@ -50,8 +47,8 @@ class ProjectMemberServiceTest {
         projectMemberService = new ProjectMemberService(projectMemberRepository, memberRepository, projectRepository,
                 new ProjectService(projectRepository, textChannelRepository, memberRepository, projectMemberRepository,
                         new InvitationLinkGenerateService(new Base62Encoder())));
-        member = Member.of("name", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
-        project = Project.of("name", "description", true,
+        member = Member.of("memberName", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
+        project = Project.of("memberName", "description", true,
                 "http://test.com", false, member);
         projectRepository.save(project);
         memberRepository.save(member);
@@ -61,44 +58,28 @@ class ProjectMemberServiceTest {
     @DisplayName("프로젝트-회원 관계 추가")
     void createIfNone() {
         // given
-        ProjectMemberCreateRequest request = new ProjectMemberCreateRequest(1L, 1L);
+        ProjectMemberCreateRequest request = new ProjectMemberCreateRequest(project.getId(), member.getId());
 
         // when
         ProjectMemberResponse response = projectMemberService.createIfNone(request);
 
         // then
-        assertThat(response.name()).isEqualTo(member.getName());
-        assertThat(response.email()).isEqualTo(member.getEmail());
+        assertThat(response.memberName()).isEqualTo(member.getName());
+        assertThat(response.memberEmail()).isEqualTo(member.getEmail());
     }
 
     @Test
     @DisplayName("프로젝트-회원 관계 삭제")
     void delete() {
         // given
-        Long projectId = 1L;
-        Long memberId = 1L;
-        ProjectMemberId id = new ProjectMemberId(project, member);
-
-
-        // when
         projectMemberRepository.save(ProjectMember.of(project, member));
 
-        // then
-        projectMemberRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-
-
         // when
-        projectMemberService.delete(projectId, memberId);
+        projectMemberService.delete(project.getId(), member.getId());
 
         // then
-        if(projectMemberRepository.findById(id).isPresent()) {
-            throw new EntityExistsException();
-        }
-
-        Project disabledProject = projectRepository.findById(projectId).orElseThrow(ProjectNotFoundException::new);
-        if(disabledProject.getEnabled()) {
-            throw new ProjectNotDisabledException();
-        }
+        assertThatThrownBy(() -> projectMemberService.findById(new ProjectMemberId(project, member)))
+                .isInstanceOf(EntityNotFoundException.class);
     }
 
     @Test
@@ -106,15 +87,14 @@ class ProjectMemberServiceTest {
     void findByProjectId() {
         // given
         projectMemberRepository.save(ProjectMember.of(project, member));
-        Long projectId = 1L;
 
         // when
-        List<ProjectMemberResponse> findResponses = projectMemberService.findByProjectId(projectId);
+        List<ProjectMemberResponse> findResponses = projectMemberService.findByProjectId(project.getId());
 
         // then
         assertThat(findResponses.size()).isEqualTo(1);
-        assertThat(findResponses.get(0).name()).isEqualTo("name");
-        assertThat(findResponses.get(0).email()).isEqualTo("test@gmail.com");
+        assertThat(findResponses.get(0).memberName()).isEqualTo("memberName");
+        assertThat(findResponses.get(0).memberEmail()).isEqualTo("test@gmail.com");
     }
 
     @Test
@@ -122,16 +102,13 @@ class ProjectMemberServiceTest {
     void findByMemberId() {
         // given
         projectMemberRepository.save(ProjectMember.of(project, member));
-        Long memberId = 1L;
 
         // when
-        List<MemberProjectResponse> findResponses = projectMemberService.findByMemberId(memberId);
+        List<ProjectMemberResponse> findResponses = projectMemberService.findByMemberId(member.getId());
 
         // then
         assertThat(findResponses.size()).isEqualTo(1);
-        assertThat(findResponses.get(0).name()).isEqualTo("name");
-        assertThat(findResponses.get(0).description()).isEqualTo("description");
-        assertThat(findResponses.get(0).enabled()).isEqualTo(Boolean.TRUE);
-        assertThat(findResponses.get(0).invitationStatus()).isEqualTo(Boolean.FALSE);
+        assertThat(findResponses.get(0).memberName()).isEqualTo("memberName");
+        assertThat(findResponses.get(0).memberEmail()).isEqualTo("test@gmail.com");
     }
 }

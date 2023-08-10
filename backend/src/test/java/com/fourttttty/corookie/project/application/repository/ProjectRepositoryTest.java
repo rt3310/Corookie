@@ -31,7 +31,7 @@ class ProjectRepositoryTest {
 
     @BeforeEach
     void initObjects() {
-        member = Member.of("name", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
+        member = Member.of("memberName", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
         memberRepository.save(member);
     }
 
@@ -39,7 +39,7 @@ class ProjectRepositoryTest {
     @DisplayName("프로젝트 저장 테스트")
     void saveProject() {
         // given
-        Project project = Project.of("name",
+        Project project = Project.of("memberName",
                 "description",
                 Boolean.FALSE,
                 "http://test.com",
@@ -55,14 +55,14 @@ class ProjectRepositoryTest {
         assertThat(savedProject.getEnabled()).isEqualTo(project.getEnabled());
         assertThat(savedProject.getInvitationLink()).isEqualTo(project.getInvitationLink());
         assertThat(savedProject.getInvitationStatus()).isEqualTo(project.getInvitationStatus());
-        assertThat(savedProject.getMember()).isEqualTo(project.getMember());
+        assertThat(savedProject.getManager()).isEqualTo(project.getManager());
     }
 
     @Test
     @DisplayName("프로젝트 상세 조회")
     void findById() {
         // given
-        Project project = Project.of("name",
+        Project project = Project.of("memberName",
                 "description",
                 Boolean.FALSE,
                 "http://test.com",
@@ -80,7 +80,7 @@ class ProjectRepositoryTest {
         assertThat(foundProject.get().getEnabled()).isEqualTo(project.getEnabled());
         assertThat(foundProject.get().getInvitationLink()).isEqualTo(project.getInvitationLink());
         assertThat(foundProject.get().getInvitationStatus()).isEqualTo(project.getInvitationStatus());
-        assertThat(foundProject.get().getMember()).isEqualTo(project.getMember());
+        assertThat(foundProject.get().getManager()).isEqualTo(project.getManager());
     }
 
 // To-Do : findByInvitaion Link 테스트 짜기    findByInvitationLink
@@ -89,7 +89,7 @@ class ProjectRepositoryTest {
     @DisplayName("프로젝트 목록 조회")
     void findAll() {
         // given
-        Project project = Project.of("name",
+        Project project = Project.of("memberName",
                 "description",
                 Boolean.FALSE,
                 "http://test.com",
@@ -107,7 +107,7 @@ class ProjectRepositoryTest {
         assertThat(projects.get(0).getEnabled()).isEqualTo(project.getEnabled());
         assertThat(projects.get(0).getInvitationLink()).isEqualTo(project.getInvitationLink());
         assertThat(projects.get(0).getInvitationStatus()).isEqualTo(project.getInvitationStatus());
-        assertThat(projects.get(0).getMember()).isEqualTo(project.getMember());
+        assertThat(projects.get(0).getManager()).isEqualTo(project.getManager());
     }
 }
 

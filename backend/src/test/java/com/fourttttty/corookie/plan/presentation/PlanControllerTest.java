@@ -68,12 +68,12 @@ class PlanControllerTest extends RestDocsTest {
 
     @BeforeEach
     void initTexture() {
-        member = Member.of("name", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
-        project = Project.of("name", "description", true,
+        member = Member.of("memberName", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
+        project = Project.of("memberName", "description", true,
             "http://test.com", false, member);
 
         plan = Plan.of(1L,
-            "name",
+            "memberName",
             "testDescription",
             LocalDateTime.now(),
             LocalDateTime.now().minusDays(2),
@@ -128,39 +128,39 @@ class PlanControllerTest extends RestDocsTest {
     @DisplayName("일정 생성")
     void planCreate() throws Exception {
         //given
-        given(planService.createPlan(any(PlanCreateRequest.class), any(Long.class)))
-            .willReturn(PlanResponse.from(plan,
+        PlanResponse response = PlanResponse.from(plan,
                 planCategories.stream()
-                    .map(PlanCategoryResponse::from)
-                    .toList(),
+                        .map(PlanCategoryResponse::from)
+                        .toList(),
                 planMembers.stream()
-                    .map(member -> PlanMemberResponse.from(PlanMember.of(member, plan)))
-                    .toList()));
+                        .map(member -> PlanMemberResponse.from(PlanMember.of(member, plan)))
+                        .toList());
+        given(planService.createPlan(any(PlanCreateRequest.class), any(Long.class)))
+            .willReturn(response);
 
-        PlanCreateRequest request = new PlanCreateRequest(
-            plan.getPlanName(),
-            plan.getDescription(),
-            plan.getPlanStart(),
-            plan.getPlanEnd(),
-            planCategories.stream()
-                .map(planCategory -> new PlanCategoryCreateRequest(planCategory.getContent()))
-                .toList(),
-            planMembers.stream()
-                .map(member -> new PlanMemberCreateRequest(member.getId()))
-                .toList()
-        );
         //when
         ResultActions perform = mockMvc.perform(post("/api/v1/projects/{projectId}/plans", 1L)
             .contentType(MediaType.APPLICATION_JSON)
-            .content(toJson(request)));
+            .content(toJson(new PlanCreateRequest(
+                plan.getPlanName(),
+                plan.getDescription(),
+                plan.getPlanStart(),
+                plan.getPlanEnd(),
+                planCategories.stream()
+                    .map(planCategory -> new PlanCategoryCreateRequest(planCategory.getContent()))
+                    .toList(),
+                planMembers.stream()
+                    .map(member1 -> new PlanMemberCreateRequest(member1.getId()))
+                    .toList()
+            ))));
 
         //then
         perform.andExpect(status().isOk())
-            .andExpect(jsonPath("$.planName").value(request.planName()))
-            .andExpect(jsonPath("$.description").value(request.description()))
+            .andExpect(jsonPath("$.planName").value(response.planName()))
+            .andExpect(jsonPath("$.description").value(response.description()))
             .andExpect(
-                jsonPath("$.categories[0].content").value(request.categories().get(0).content()))
-            .andExpect(jsonPath("$.members[0].id").value(request.members().get(0).id()));
+                jsonPath("$.categories[0].content").value(response.categories().get(0).content()))
+            .andExpect(jsonPath("$.members[0].memberId").value(response.members().get(0).memberId()));
 
         perform.andDo(print())
             .andDo(document("plan-create",
@@ -176,7 +176,7 @@ class PlanControllerTest extends RestDocsTest {
                     fieldWithPath("categories").type(ARRAY).description("일정 카테고리"),
                     fieldWithPath("members").type(ARRAY).description("일정 멤버"),
                     fieldWithPath("categories.[].content").type(STRING).description("일정 카테고리 내용"),
-                    fieldWithPath("members.[].id").type(NUMBER).description("일정 멤버 id")),
+                    fieldWithPath("members.[].memberId").type(NUMBER).description("일정 멤버 키")),
                 responseFields(
                     fieldWithPath("planName").type(STRING).description("일정 이름"),
                     fieldWithPath("description").type(STRING).description("일정 설명"),
@@ -184,12 +184,12 @@ class PlanControllerTest extends RestDocsTest {
                     fieldWithPath("planEnd").type(STRING).description("일정 종료일"),
                     fieldWithPath("enabled").type(BOOLEAN).description("활성화"),
                     fieldWithPath("categories").type(ARRAY).description("일정 카테고리"),
-                    fieldWithPath("categories.[].id").type(NUMBER).description("일정 카테고리 id"),
+                    fieldWithPath("categories.[].id").type(NUMBER).description("일정 카테고리 키"),
                     fieldWithPath("categories.[].content").type(STRING).description("일정 카테고리 내용"),
                     fieldWithPath("members").type(ARRAY).description("일정 카테고리"),
-                    fieldWithPath("members.[].id").type(NUMBER).description("일정 멤버 id"),
-                    fieldWithPath("members.[].name").type(STRING).description("일정 멤버 내용"),
-                    fieldWithPath("planId").type(NUMBER).description("일정 id"))));
+                    fieldWithPath("members.[].memberId").type(NUMBER).description("일정 멤버 키"),
+                    fieldWithPath("members.[].memberName").type(STRING).description("일정 멤버 내용"),
+                    fieldWithPath("planId").type(NUMBER).description("일정 키"))));
     }
 
     @Test
@@ -219,17 +219,17 @@ class PlanControllerTest extends RestDocsTest {
             .andExpect(jsonPath("$.description").value(planResponse.description()))
             .andExpect(jsonPath("$.categories[0].content").value(
                 planResponse.categories().get(0).content()))
-            .andExpect(jsonPath("$.members[0].id").value(
-                planResponse.members().get(0).id()))
-            .andExpect(jsonPath("$.members[0].name").value(
-                planResponse.members().get(0).name()));
+            .andExpect(jsonPath("$.members[0].memberId").value(
+                planResponse.members().get(0).memberId()))
+            .andExpect(jsonPath("$.members[0].memberName").value(
+                planResponse.members().get(0).memberName()));
 
         perform.andDo(print())
             .andDo(document("plan-detail",
                 getDocumentResponse(),
                 pathParameters(
-                    parameterWithName("projectId").description("프로젝트 id"),
-                    parameterWithName("planId").description("플랜 id")),
+                    parameterWithName("projectId").description("프로젝트 키"),
+                    parameterWithName("planId").description("플랜 memberId")),
                 responseFields(
                     fieldWithPath("planName").type(STRING).description("일정 이름"),
                     fieldWithPath("description").type(STRING).description("일정 설명"),
@@ -237,12 +237,12 @@ class PlanControllerTest extends RestDocsTest {
                     fieldWithPath("planEnd").type(STRING).description("일정 종료일"),
                     fieldWithPath("enabled").type(BOOLEAN).description("활성화"),
                     fieldWithPath("categories").type(ARRAY).description("일정 카테고리"),
-                    fieldWithPath("categories.[].id").type(NUMBER).description("일정 카테고리 id"),
+                    fieldWithPath("categories.[].id").type(NUMBER).description("일정 카테고리 키"),
                     fieldWithPath("categories.[].content").type(STRING).description("일정 카테고리 내용"),
                     fieldWithPath("members").type(ARRAY).description("일정 카테고리"),
-                    fieldWithPath("members.[].id").type(NUMBER).description("일정 멤버 id"),
-                    fieldWithPath("members.[].name").type(STRING).description("일정 멤버 내용"),
-                    fieldWithPath("planId").type(NUMBER).description("일정 id"))));
+                    fieldWithPath("members.[].memberId").type(NUMBER).description("일정 멤버 키"),
+                    fieldWithPath("members.[].memberName").type(STRING).description("일정 멤버 내용"),
+                    fieldWithPath("planId").type(NUMBER).description("일정 memberId"))));
     }
 
     @Test
@@ -293,10 +293,10 @@ class PlanControllerTest extends RestDocsTest {
             .andExpect(jsonPath("$.description").value(planResponse.description()))
             .andExpect(jsonPath("$.categories[0].content").value(
                 planResponse.categories().get(0).content()))
-            .andExpect(jsonPath("$.members[0].id").value(
-                planResponse.members().get(0).id()))
-            .andExpect(jsonPath("$.members[0].name").value(
-                planResponse.members().get(0).name()));
+            .andExpect(jsonPath("$.members[0].memberId").value(
+                planResponse.members().get(0).memberId()))
+            .andExpect(jsonPath("$.members[0].memberName").value(
+                planResponse.members().get(0).memberName()));
 
         perform.andDo(print())
             .andDo(document("plan-update",
@@ -313,7 +313,7 @@ class PlanControllerTest extends RestDocsTest {
                     fieldWithPath("categories").type(ARRAY).description("일정 카테고리"),
                     fieldWithPath("members").type(ARRAY).description("일정 멤버"),
                     fieldWithPath("categories.[].content").type(STRING).description("일정 카테고리 내용"),
-                    fieldWithPath("members.[].id").type(NUMBER).description("일정 멤버 id")),
+                    fieldWithPath("members.[].memberId").type(NUMBER).description("일정 멤버 키")),
                 responseFields(
                     fieldWithPath("planName").type(STRING).description("일정 이름"),
                     fieldWithPath("description").type(STRING).description("일정 설명"),
@@ -321,12 +321,12 @@ class PlanControllerTest extends RestDocsTest {
                     fieldWithPath("planEnd").type(STRING).description("일정 종료일"),
                     fieldWithPath("enabled").type(BOOLEAN).description("활성화"),
                     fieldWithPath("categories").type(ARRAY).description("일정 카테고리"),
-                    fieldWithPath("categories.[].id").type(NUMBER).description("일정 카테고리 id"),
+                    fieldWithPath("categories.[].id").type(NUMBER).description("일정 카테고리 키"),
                     fieldWithPath("categories.[].content").type(STRING).description("일정 카테고리 내용"),
                     fieldWithPath("members").type(ARRAY).description("일정 카테고리"),
-                    fieldWithPath("members.[].id").type(NUMBER).description("일정 멤버 id"),
-                    fieldWithPath("members.[].name").type(STRING).description("일정 멤버 내용"),
-                    fieldWithPath("planId").type(NUMBER).description("일정 id"))));
+                    fieldWithPath("members.[].memberId").type(NUMBER).description("일정 멤버 키"),
+                    fieldWithPath("members.[].memberName").type(STRING).description("일정 멤버 내용"),
+                    fieldWithPath("planId").type(NUMBER).description("일정 키"))));
     }
 
     @Test
@@ -383,7 +383,7 @@ class PlanControllerTest extends RestDocsTest {
                     fieldWithPath("content").type(STRING).description("카테고리 내용")),
                 responseFields(
                     fieldWithPath("content").type(STRING).description("카테고리 내용"),
-                    fieldWithPath("id").type(NUMBER).description("카테고리 id"))));
+                    fieldWithPath("id").type(NUMBER).description("카테고리 키"))));
     }
 
     @Test
@@ -434,8 +434,8 @@ class PlanControllerTest extends RestDocsTest {
 
         //then
         perform.andExpect(status().isOk())
-            .andExpect(jsonPath("$.id").value(planMembers.get(0).getId()))
-            .andExpect(jsonPath("$.name").value(planMembers.get(0).getName()));
+            .andExpect(jsonPath("$.memberId").value(planMembers.get(0).getId()))
+            .andExpect(jsonPath("$.memberName").value(planMembers.get(0).getName()));
 
         perform.andDo(print())
             .andDo(document("planMember-create",
@@ -445,10 +445,10 @@ class PlanControllerTest extends RestDocsTest {
                     parameterWithName("projectId").description("프로젝트 키"),
                     parameterWithName("planId").description("일정 키")),
                 requestFields(
-                    fieldWithPath("id").type(NUMBER).description("멤버 키")),
+                    fieldWithPath("memberId").type(NUMBER).description("멤버 키")),
                 responseFields(
-                    fieldWithPath("name").type(STRING).description("멤버 이름"),
-                    fieldWithPath("id").type(NUMBER).description("멤버 id"))));
+                        fieldWithPath("memberId").type(NUMBER).description("멤버 키"),
+                    fieldWithPath("memberName").type(STRING).description("멤버 이름"))));
     }
 
     @Test
@@ -475,6 +475,6 @@ class PlanControllerTest extends RestDocsTest {
                     parameterWithName("projectId").description("프로젝트 키"),
                     parameterWithName("planId").description("일정 키")),
                 requestFields(
-                    fieldWithPath("id").type(NUMBER).description("멤버 키"))));
+                    fieldWithPath("memberId").type(NUMBER).description("멤버 키"))));
     }
 }

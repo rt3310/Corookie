@@ -39,8 +39,8 @@ class IssueFilteringServiceTest {
         memberRepository = new FakeMemberRepository();
         issueRepository = new FakeIssueRepository(projectRepository, memberRepository);
         issueFilteringService = new IssueFilteringService(issueRepository);
-        member = Member.of("name", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
-        project = Project.of("name", "description", true,
+        member = Member.of("memberName", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
+        project = Project.of("memberName", "description", true,
                 "http://test.com", false, member);
         memberRepository.save(member);
         projectRepository.save(project);

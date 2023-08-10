@@ -75,7 +75,7 @@ class ThreadControllerTest extends RestDocsTest {
     void findAllThread() throws Exception {
         // given
         LocalDateTime now = LocalDateTime.now();
-        ThreadDetailResponse threadDetailResponse = new ThreadDetailResponse(new MemberResponse(thread.getWriter().getName()),
+        ThreadDetailResponse threadDetailResponse = new ThreadDetailResponse(MemberResponse.from(thread.getWriter()),
                 now,
                 thread.getContent(),
                 thread.getCommentCount());
@@ -103,7 +103,8 @@ class ThreadControllerTest extends RestDocsTest {
                                 fieldWithPath("[].content").type(STRING).description("스레드 내용"),
                                 fieldWithPath("[].commentCount").type(NUMBER).description("댓글 수"),
                                 fieldWithPath("[].createdAt").type(STRING).description("생성 일자"),
-                                fieldWithPath("[].writer.name").type(STRING).description("작성자"))
+                                fieldWithPath("[].writer.name").type(STRING).description("작성자 이름"),
+                                fieldWithPath("[].writer.email").type(STRING).description("작성자 이메일"))
                 ));
     }
 
@@ -113,7 +114,7 @@ class ThreadControllerTest extends RestDocsTest {
         // given
         LocalDateTime now = LocalDateTime.now();
         ThreadDetailResponse threadDetailResponse = new ThreadDetailResponse(
-                new MemberResponse(thread.getWriter().getName()),
+                MemberResponse.from(thread.getWriter()),
                 now,
                 thread.getContent(),
                 thread.getCommentCount()
@@ -143,7 +144,8 @@ class ThreadControllerTest extends RestDocsTest {
                                 fieldWithPath("content").type(STRING).description("스레드 내용"),
                                 fieldWithPath("commentCount").type(NUMBER).description("댓글 수"),
                                 fieldWithPath("createdAt").type(STRING).description("생성 일자"),
-                                fieldWithPath("writer.name").type(STRING).description("작성자"))
+                                fieldWithPath("writer.name").type(STRING).description("작성자 이름"),
+                                fieldWithPath("writer.email").type(STRING).description("작성자 이메일"))
                 ));
     }
 
@@ -153,7 +155,7 @@ class ThreadControllerTest extends RestDocsTest {
         // given
         LocalDateTime now = LocalDateTime.now();
         ThreadDetailResponse threadDetailResponse = new ThreadDetailResponse(
-                new MemberResponse(thread.getWriter().getName()),
+                MemberResponse.from(thread.getWriter()),
                 now,
                 thread.getContent(),
                 thread.getCommentCount()
@@ -187,7 +189,8 @@ class ThreadControllerTest extends RestDocsTest {
                                 fieldWithPath("content").type(STRING).description("스레드 내용"),
                                 fieldWithPath("commentCount").type(NUMBER).description("댓글 수"),
                                 fieldWithPath("createdAt").type(STRING).description("생성 일자"),
-                                fieldWithPath("writer.name").type(STRING).description("작성자"))
+                                fieldWithPath("writer.name").type(STRING).description("작성자 이름"),
+                                fieldWithPath("writer.email").type(STRING).description("작성자 이메일"))
                 ));
     }
 

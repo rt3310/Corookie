@@ -24,8 +24,13 @@ instance.interceptors.request.use(
 export const apis = {
     auth: token => instance.post('/api/v1/auth', token),
 
+    createProject: data => instance.post('/api/v1/projects', data),
+    getProjects: () => instance.get('/api/v1/projects'),
+    getProject: projectId => instance.get(`/api/v1/projects/${projectId}`),
+
     getIssueList: projectId => instance.get(`/api/v1/projects/${projectId}/issues`),
     createIssue: (projectId, data) => instance.post(`/api/v1/projects/${projectId}/issues`, data),
 
     getMember: memberId => instance.get(`/api/v1/members/${memberId}`),
+    getMe: () => instance.get(`api/v1/members/me`),
 }

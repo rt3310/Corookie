@@ -83,8 +83,6 @@ class TextChannelControllerTest extends RestDocsTest {
                         pathParameters(
                                 parameterWithName("projectId").description("프로젝트 키")),
                         requestFields(
-                                fieldWithPath("name").type(STRING).description("채널명")),
-                        responseFields(
                                 fieldWithPath("name").type(STRING).description("채널명"))));
     }
 
@@ -176,7 +174,7 @@ class TextChannelControllerTest extends RestDocsTest {
 
     @Test
     @DisplayName("텍스트 채널 삭제")
-    void deleteTextChannel() throws Exception{
+    void deleteTextChannel() throws Exception {
         // given
 
         // when

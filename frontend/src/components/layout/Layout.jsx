@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
 import styled from 'styled-components'
 
 import * as utils from 'utils'
 import * as hooks from 'hooks'
+import * as api from 'api'
 import * as components from 'components'
 
 const Layout = () => {

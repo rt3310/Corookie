@@ -1,6 +1,5 @@
 package com.fourttttty.corookie.project.application.service;
 
-import com.fourttttty.corookie.issue.domain.Issue;
 import com.fourttttty.corookie.member.application.repository.MemberRepository;
 import com.fourttttty.corookie.member.domain.Member;
 import com.fourttttty.corookie.project.application.repository.ProjectMemberRepository;
@@ -9,7 +8,6 @@ import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.project.domain.ProjectMember;
 import com.fourttttty.corookie.project.domain.ProjectMemberId;
 import com.fourttttty.corookie.project.dto.request.ProjectMemberCreateRequest;
-import com.fourttttty.corookie.project.dto.response.MemberProjectResponse;
 import com.fourttttty.corookie.project.dto.response.ProjectMemberResponse;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -66,10 +63,15 @@ public class ProjectMemberService {
                 .toList();
     }
 
-    public List<MemberProjectResponse> findByMemberId(Long memberId) {
+    public List<ProjectMemberResponse> findByMemberId(Long memberId) {
         return projectMemberRepository.findByMemberId(memberId).stream()
-                .map(projectMember -> MemberProjectResponse.from(
+                .map(projectMember -> ProjectMemberResponse.from(
                         ProjectMember.of(projectMember.getId().getProject(), projectMember.getId().getMember())))
                 .toList();
+    }
+
+    public ProjectMemberResponse findById(ProjectMemberId projectMemberId) {
+        return ProjectMemberResponse.from(projectMemberRepository.findById(projectMemberId)
+                .orElseThrow(EntityNotFoundException::new));
     }
 }

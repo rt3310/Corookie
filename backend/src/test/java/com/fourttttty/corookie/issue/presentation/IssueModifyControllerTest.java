@@ -51,7 +51,7 @@ class IssueModifyControllerTest extends RestDocsTest {
 
     @BeforeEach
     void initTexture() {
-        member = Member.of("name", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
+        member = Member.of("memberName", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
         issue = Issue.of("topic",
                 "description",
                 IssueProgress.TODO,
@@ -70,7 +70,12 @@ class IssueModifyControllerTest extends RestDocsTest {
     @Test
     @DisplayName("이슈 진행도를 수정한다")
     void issueProgressModify() throws Exception {
-        IssueDetailResponse response = IssueDetailResponse.from(issue);
+        IssueDetailResponse response = new IssueDetailResponse(1L,
+                "topic",
+                "description",
+                IssueProgress.TODO,
+                IssuePriority.HIGH,
+                IssueCategory.BACKEND);
         given(issueUpdateService.changeIssueProgress(any(Long.class), any(IssueProgressUpdateRequest.class)))
                 .willReturn(response);
 
@@ -82,6 +87,7 @@ class IssueModifyControllerTest extends RestDocsTest {
 
         // then
         perform.andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(response.id()))
                 .andExpect(jsonPath("$.topic").value(response.topic()))
                 .andExpect(jsonPath("$.description").value(response.description()))
                 .andExpect(jsonPath("$.progress").value(response.progress().getValue()))
@@ -98,6 +104,7 @@ class IssueModifyControllerTest extends RestDocsTest {
                         requestFields(
                                 fieldWithPath("progress").type(STRING).description("이슈 진행도")),
                         responseFields(
+                                fieldWithPath("id").type(NUMBER).description("이슈 키"),
                                 fieldWithPath("topic").type(STRING).description("제목"),
                                 fieldWithPath("description").type(STRING).description("설명"),
                                 fieldWithPath("progress").type(STRING).description("이슈 진행도"),
@@ -108,7 +115,12 @@ class IssueModifyControllerTest extends RestDocsTest {
     @Test
     @DisplayName("이슈 토픽을 수정한다")
     void issueTopicModify() throws Exception {
-        IssueDetailResponse response = IssueDetailResponse.from(issue);
+        IssueDetailResponse response = new IssueDetailResponse(1L,
+                "topic",
+                "description",
+                IssueProgress.TODO,
+                IssuePriority.HIGH,
+                IssueCategory.BACKEND);
         given(issueUpdateService.changeIssueTopic(any(Long.class), any(IssueTopicUpdateRequest.class)))
                 .willReturn(response);
 
@@ -120,6 +132,7 @@ class IssueModifyControllerTest extends RestDocsTest {
 
         // then
         perform.andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(response.id()))
                 .andExpect(jsonPath("$.topic").value(response.topic()))
                 .andExpect(jsonPath("$.description").value(response.description()))
                 .andExpect(jsonPath("$.progress").value(response.progress().getValue()))
@@ -136,6 +149,7 @@ class IssueModifyControllerTest extends RestDocsTest {
                         requestFields(
                                 fieldWithPath("topic").type(STRING).description("이슈 제목")),
                         responseFields(
+                                fieldWithPath("id").type(NUMBER).description("이슈 키"),
                                 fieldWithPath("topic").type(STRING).description("제목"),
                                 fieldWithPath("description").type(STRING).description("설명"),
                                 fieldWithPath("progress").type(STRING).description("이슈 진행도"),
@@ -146,7 +160,12 @@ class IssueModifyControllerTest extends RestDocsTest {
     @Test
     @DisplayName("이슈 담당자를 수정한다")
     void issueManagerModify() throws Exception {
-        IssueDetailResponse response = IssueDetailResponse.from(issue);
+        IssueDetailResponse response = new IssueDetailResponse(1L,
+                "topic",
+                "description",
+                IssueProgress.TODO,
+                IssuePriority.HIGH,
+                IssueCategory.BACKEND);
         given(issueUpdateService.changeIssueManager(any(Long.class), any(IssueManagerUpdateRequest.class)))
                 .willReturn(response);
 
@@ -158,6 +177,7 @@ class IssueModifyControllerTest extends RestDocsTest {
 
         // then
         perform.andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(response.id()))
                 .andExpect(jsonPath("$.topic").value(response.topic()))
                 .andExpect(jsonPath("$.description").value(response.description()))
                 .andExpect(jsonPath("$.progress").value(response.progress().getValue()))
@@ -174,6 +194,7 @@ class IssueModifyControllerTest extends RestDocsTest {
                         requestFields(
                                 fieldWithPath("managerId").type(NUMBER).description("이슈 담당자")),
                         responseFields(
+                                fieldWithPath("id").type(NUMBER).description("이슈 키"),
                                 fieldWithPath("topic").type(STRING).description("제목"),
                                 fieldWithPath("description").type(STRING).description("설명"),
                                 fieldWithPath("progress").type(STRING).description("이슈 진행도"),
@@ -184,7 +205,12 @@ class IssueModifyControllerTest extends RestDocsTest {
     @Test
     @DisplayName("이슈 중요도를 수정한다")
     void issuePriorityModify() throws Exception {
-        IssueDetailResponse response = IssueDetailResponse.from(issue);
+        IssueDetailResponse response = new IssueDetailResponse(1L,
+                "topic",
+                "description",
+                IssueProgress.TODO,
+                IssuePriority.HIGH,
+                IssueCategory.BACKEND);
         given(issueUpdateService.changeIssuePriority(any(Long.class), any(IssuePriorityUpdateRequest.class)))
                 .willReturn(response);
 
@@ -196,6 +222,7 @@ class IssueModifyControllerTest extends RestDocsTest {
 
         // then
         perform.andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(response.id()))
                 .andExpect(jsonPath("$.topic").value(response.topic()))
                 .andExpect(jsonPath("$.description").value(response.description()))
                 .andExpect(jsonPath("$.progress").value(response.progress().getValue()))
@@ -212,6 +239,7 @@ class IssueModifyControllerTest extends RestDocsTest {
                         requestFields(
                                 fieldWithPath("priority").type(STRING).description("이슈 중요도")),
                         responseFields(
+                                fieldWithPath("id").type(NUMBER).description("이슈 키"),
                                 fieldWithPath("topic").type(STRING).description("제목"),
                                 fieldWithPath("description").type(STRING).description("설명"),
                                 fieldWithPath("progress").type(STRING).description("이슈 진행도"),
@@ -222,7 +250,12 @@ class IssueModifyControllerTest extends RestDocsTest {
     @Test
     @DisplayName("이슈 카테고리를 수정한다")
     void issueCategoryModify() throws Exception {
-        IssueDetailResponse response = IssueDetailResponse.from(issue);
+        IssueDetailResponse response = new IssueDetailResponse(1L,
+                "topic",
+                "description",
+                IssueProgress.TODO,
+                IssuePriority.HIGH,
+                IssueCategory.BACKEND);
         given(issueUpdateService.changeIssueCategory(any(Long.class), any(IssueCategoryUpdateRequest.class)))
                 .willReturn(response);
 
@@ -234,6 +267,7 @@ class IssueModifyControllerTest extends RestDocsTest {
 
         // then
         perform.andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(response.id()))
                 .andExpect(jsonPath("$.topic").value(response.topic()))
                 .andExpect(jsonPath("$.description").value(response.description()))
                 .andExpect(jsonPath("$.progress").value(response.progress().getValue()))
@@ -250,6 +284,7 @@ class IssueModifyControllerTest extends RestDocsTest {
                         requestFields(
                                 fieldWithPath("category").type(STRING).description("이슈 카테고리")),
                         responseFields(
+                                fieldWithPath("id").type(NUMBER).description("이슈 키"),
                                 fieldWithPath("topic").type(STRING).description("제목"),
                                 fieldWithPath("description").type(STRING).description("설명"),
                                 fieldWithPath("progress").type(STRING).description("이슈 진행도"),
@@ -260,7 +295,12 @@ class IssueModifyControllerTest extends RestDocsTest {
     @Test
     @DisplayName("이슈 설명을 수정한다")
     void issueDescriptionModify() throws Exception {
-        IssueDetailResponse response = IssueDetailResponse.from(issue);
+        IssueDetailResponse response = new IssueDetailResponse(1L,
+                "topic",
+                "description",
+                IssueProgress.TODO,
+                IssuePriority.HIGH,
+                IssueCategory.BACKEND);
         given(issueUpdateService.changeIssueDescription(any(Long.class), any(IssueDescriptionUpdateRequest.class)))
                 .willReturn(response);
 
@@ -272,6 +312,7 @@ class IssueModifyControllerTest extends RestDocsTest {
 
         // then
         perform.andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(response.id()))
                 .andExpect(jsonPath("$.topic").value(response.topic()))
                 .andExpect(jsonPath("$.description").value(response.description()))
                 .andExpect(jsonPath("$.progress").value(response.progress().getValue()))
@@ -288,6 +329,7 @@ class IssueModifyControllerTest extends RestDocsTest {
                         requestFields(
                                 fieldWithPath("description").type(STRING).description("이슈 설명")),
                         responseFields(
+                                fieldWithPath("id").type(NUMBER).description("이슈 키"),
                                 fieldWithPath("topic").type(STRING).description("제목"),
                                 fieldWithPath("description").type(STRING).description("설명"),
                                 fieldWithPath("progress").type(STRING).description("이슈 진행도"),
