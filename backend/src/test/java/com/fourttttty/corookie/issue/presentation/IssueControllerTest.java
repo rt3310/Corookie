@@ -75,7 +75,9 @@ class IssueControllerTest extends RestDocsTest {
                 "description",
                 IssueProgress.TODO,
                 IssuePriority.HIGH,
-                IssueCategory.BACKEND);
+                IssueCategory.BACKEND,
+                1L,
+                member.getName());
         given(issueService.create(any(IssueCreateRequest.class), any(Long.class), any(Long.class)))
                 .willReturn(response);
 
@@ -95,7 +97,9 @@ class IssueControllerTest extends RestDocsTest {
                 .andExpect(jsonPath("$.description").value(response.description()))
                 .andExpect(jsonPath("$.progress").value(response.progress().getValue()))
                 .andExpect(jsonPath("$.priority").value(response.priority().getName()))
-                .andExpect(jsonPath("$.category").value(response.category().getValue()));
+                .andExpect(jsonPath("$.category").value(response.category().getValue()))
+                .andExpect(jsonPath("$.managerId").value(response.managerId()))
+                .andExpect(jsonPath("$.managerName").value(response.managerName()));
 
         perform.andDo(print())
                 .andDo(document("issue-create",
@@ -115,7 +119,9 @@ class IssueControllerTest extends RestDocsTest {
                                 fieldWithPath("description").type(STRING).description("설명"),
                                 fieldWithPath("progress").type(STRING).description("이슈 진행도"),
                                 fieldWithPath("priority").type(STRING).description("이슈 중요도"),
-                                fieldWithPath("category").type(STRING).description("이슈 카테고리"))));
+                                fieldWithPath("category").type(STRING).description("이슈 카테고리"),
+                                fieldWithPath("managerId").type(NUMBER).description("이슈 담당자 키"),
+                                fieldWithPath("managerName").type(STRING).description("이슈 담당자 이름"))));
     }
 
     @Test
@@ -167,7 +173,9 @@ class IssueControllerTest extends RestDocsTest {
                 "description",
                 IssueProgress.TODO,
                 IssuePriority.HIGH,
-                IssueCategory.BACKEND);
+                IssueCategory.BACKEND,
+                1L,
+                member.getName());
         given(issueService.findById(any(Long.class)))
                 .willReturn(response);
 
@@ -183,7 +191,9 @@ class IssueControllerTest extends RestDocsTest {
                 .andExpect(jsonPath("$.description").value(response.description()))
                 .andExpect(jsonPath("$.progress").value(response.progress().getValue()))
                 .andExpect(jsonPath("$.priority").value(response.priority().getName()))
-                .andExpect(jsonPath("$.category").value(response.category().getValue()));
+                .andExpect(jsonPath("$.category").value(response.category().getValue()))
+                .andExpect(jsonPath("$.managerId").value(response.managerId()))
+                .andExpect(jsonPath("$.managerName").value(response.managerName()));
 
         perform.andDo(print())
                 .andDo(document("issue-detail",
@@ -198,7 +208,9 @@ class IssueControllerTest extends RestDocsTest {
                                 fieldWithPath("description").type(STRING).description("설명"),
                                 fieldWithPath("progress").type(STRING).description("이슈 진행도"),
                                 fieldWithPath("priority").type(STRING).description("이슈 중요도"),
-                                fieldWithPath("category").type(STRING).description("이슈 카테고리"))));
+                                fieldWithPath("category").type(STRING).description("이슈 카테고리"),
+                                fieldWithPath("managerId").type(NUMBER).description("이슈 담당자 키"),
+                                fieldWithPath("managerName").type(STRING).description("이슈 담당자 이름"))));
     }
 
     @Test
