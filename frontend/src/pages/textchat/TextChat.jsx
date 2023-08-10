@@ -105,6 +105,11 @@ const TextChat = () => {
         setPinOn(prevPinOn => !prevPinOn)
     }
 
+    const [pinOn, setPinOn] = useState(true)
+    const togglePin = () => {
+        setPinOn(prevPinOn => !prevPinOn)
+    }
+
     return (
         <S.Wrap>
             <S.Header>
