@@ -5,18 +5,20 @@ export const URL = {
     },
     HOME: {
         MAIN: '/',
-        LANDING: '/landing',
+    },
+    PROJECT: {
+        MAIN: '/project',
     },
     CHAT: {
-        TEXT: '/chat/text',
-        VIDEO: '/chat/video',
-        DIRECT: '/chat/direct',
+        TEXT: '/project/chat/text',
+        VIDEO: '/project/chat/video',
+        DIRECT: '/project/chat/direct',
     },
     TASK: {
-        BOARD: '/task/board',
+        BOARD: '/project/task/board',
     },
     PLAN: {
-        CALENDER: '/plan/calendar',
+        CALENDER: '/project/plan/calendar',
     },
 }
 
