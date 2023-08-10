@@ -29,7 +29,6 @@ spring:
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
 
-
 logging:
   level:
     org.hibernate.SQL: debug
@@ -43,3 +42,13 @@ client:
   host: localhost
   url: http://localhost:3000
   endpoint: success
+
+cloud:
+  aws:
+    s3:
+      bucket: corookie-ai
+    stack.auto: false
+    region.static: ap-northeast-2
+    credentials:
+      accessKey: AKIAVQXB5F7YCPRAA53Q
+      secretKey: 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
