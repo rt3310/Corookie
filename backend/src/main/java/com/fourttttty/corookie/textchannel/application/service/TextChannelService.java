@@ -34,8 +34,10 @@ public class TextChannelService {
                 );
     }
 
-    public TextChannel findEntityById(Long id) {
-        return textChannelRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+    public List<TextChannelResponse> findByProjectId(Long projectId) {
+        return textChannelRepository.findByProjectId(projectId).stream()
+                .map(TextChannelResponse::from)
+                .toList();
     }
 
     @Transactional

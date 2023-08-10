@@ -28,6 +28,10 @@ export const apis = {
     getProjects: () => instance.get('/api/v1/projects'),
     getProject: projectId => instance.get(`/api/v1/projects/${projectId}`),
 
+    getProjectMembers: projectId => instance.get(`/api/v1/projects/${projectId}/projectmembers`),
+
+    getTextChannels: projectId => instance.get(`/api/v1/projects/${projectId}/text-channels`),
+
     getIssueList: projectId => instance.get(`/api/v1/projects/${projectId}/issues`),
     createIssue: (projectId, data) => instance.post(`/api/v1/projects/${projectId}/issues`, data),
 
