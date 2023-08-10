@@ -1,27 +1,17 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const VideoBoard = () => {
+import * as components from 'components'
+
+const VideoBoard = ({ streamManager }) => {
     return (
         <S.Wrap>
-            <S.VideoBox>
-                <S.ProfileName>권현수</S.ProfileName>
-            </S.VideoBox>
-            <S.VideoBox>
-                <S.ProfileName>박종서</S.ProfileName>
-            </S.VideoBox>
-            <S.VideoBox>
-                <S.ProfileName>서원호</S.ProfileName>
-            </S.VideoBox>
-            <S.VideoBox>
-                <S.ProfileName>신승수</S.ProfileName>
-            </S.VideoBox>
-            <S.VideoBox>
-                <S.ProfileName>최효빈</S.ProfileName>
-            </S.VideoBox>
-            <S.VideoBox>
-                <S.ProfileName>황상미</S.ProfileName>
-            </S.VideoBox>
+            <components.VideoBox streamManager={streamManager} name="권현수" />
+            <components.VideoBox streamManager={streamManager} name="박종서" />
+            <components.VideoBox streamManager={streamManager} name="서원호" />
+            <components.VideoBox streamManager={streamManager} name="신승수" />
+            <components.VideoBox streamManager={streamManager} name="최효빈" />
+            <components.VideoBox streamManager={streamManager} name="황상미" />
         </S.Wrap>
     )
 }

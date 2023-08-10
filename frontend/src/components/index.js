@@ -35,6 +35,7 @@ export { default as KanbanBoard } from './taskboard/KanbanBoard'
 export { default as VideoBoard } from './videochat/VideoBoard'
 export { default as TextChatBox } from './videochat/TextChatBox'
 export { default as VideoControl } from './videochat/VideoControl'
+export { default as VideoBox } from './videochat/VideoBox'
 
 export { default as DMComment } from './directmessage/DMComment'
 export { default as DMThread } from './directmessage/DMThread'

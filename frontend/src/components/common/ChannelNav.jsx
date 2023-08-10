@@ -72,7 +72,7 @@ const ChannelNav = () => {
                     <S.ChannelHead onClick={() => setOpenVideo(!openVideo)}>
                         화상 채널 &nbsp; <IoIosArrowDown />
                     </S.ChannelHead>
-                    <S.Channel onClick={() => navigate(utils.URL.CHAT.VIDEO)}>1. 회의</S.Channel>
+                    <S.Channel onClick={() => navigate(utils.URL.CHAT.VIDEO + '/sessionAAA')}>1. 회의</S.Channel>
                     <S.Channel>2. 자유</S.Channel>
                     <S.AddChannelButton>
                         <BsPlus /> 채널 추가
