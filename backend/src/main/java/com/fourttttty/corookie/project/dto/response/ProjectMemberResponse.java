@@ -6,9 +6,10 @@ import lombok.Builder;
 @Builder
 public record ProjectMemberResponse(Long memberId,
                                     String memberName,
-                                    String memberEmail) {
+                                    String memberEmail,
+                                    Boolean isManager) {
     public static ProjectMemberResponse from(ProjectMember projectMember) {
         Member member = projectMember.getId().getMember();
-        return new ProjectMemberResponse(member.getId(), member.getName(), member.getEmail());
+        return new ProjectMemberResponse(member.getId(), member.getName(), member.getEmail(), projectMember.isManager());
     }
 }
