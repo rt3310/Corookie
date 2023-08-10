@@ -6,10 +6,12 @@ import { BsPlus } from 'react-icons/bs'
 import 'react-responsive-carousel/lib/styles/carousel.min.css'
 import { Carousel } from 'react-responsive-carousel'
 
+import * as hooks from 'hooks'
 import * as api from 'api'
 
 const LandingMain = () => {
     const navigate = useNavigate()
+    const accessToken = hooks.getCookie('Authorization')
     const [projects, setProjects] = useState([])
     const [createFormOpened, setCreateFormOpened] = useState(false)
     const [project, setProject] = useState({
@@ -30,6 +32,9 @@ const LandingMain = () => {
     }
 
     useEffect(() => {
+        if (!accessToken) {
+            return
+        }
         initProjects()
     }, [])
 
@@ -57,7 +62,7 @@ const LandingMain = () => {
                             <BsPlus />
                         </S.CreateProjectButton>
                         {projects.map((project, index) => (
-                            <S.ProjectBox key={index} onClick={() => navigate('/project/' + project.id + '/chat/text')}>
+                            <S.ProjectBox key={index} onClick={() => navigate('/project/' + project.id)}>
                                 {project.name}
                                 {/* <img src={require('images/thread_profile.png').default} alt={`스레드 이미지 ${index}`} /> */}
                             </S.ProjectBox>

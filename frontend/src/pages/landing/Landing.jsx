@@ -8,7 +8,6 @@ const Landing = () => {
             <components.FullPageScroll>
                 <S.Box>
                     <components.LandingHeader />
-                    <S.Cover />
                     <S.Section1>
                         <components.LandingMain />
                     </S.Section1>
@@ -93,13 +92,6 @@ const S = {
         height: 100vh;
         width: 100%;
         background-color: ${({ theme }) => theme.color.white};
-    `,
-    Cover: styled.div`
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 100vh;
-        width: 100%;
     `,
 }
 
