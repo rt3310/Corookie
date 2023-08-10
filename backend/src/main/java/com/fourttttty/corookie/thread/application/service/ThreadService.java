@@ -46,7 +46,7 @@ public class ThreadService {
     }
 
     public List<ThreadDetailResponse> findAll(Long TextChannelId) {
-        return threadRepository.findAll(TextChannelId)
+        return threadRepository.findByTextChannelId(TextChannelId)
                 .stream()
                 .map(ThreadDetailResponse::from)
                 .toList();

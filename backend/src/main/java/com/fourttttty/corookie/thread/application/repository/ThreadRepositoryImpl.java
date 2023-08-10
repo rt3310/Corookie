@@ -26,7 +26,7 @@ public class ThreadRepositoryImpl implements ThreadRepository {
     }
 
     @Override
-    public List<Thread> findAll(Long textChannelId) {
+    public List<Thread> findByTextChannelId(Long textChannelId) {
         return threadJpaRepository.findByTextChannelId(textChannelId);
     }
 }

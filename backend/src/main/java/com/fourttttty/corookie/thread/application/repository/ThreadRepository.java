@@ -11,5 +11,6 @@ public interface ThreadRepository {
 
     Optional<Thread> findById(Long threadId);
 
-    List<Thread> findAll(Long TextChannel);
+    List<Thread> findByTextChannelId(Long textChannelId);
+
 }

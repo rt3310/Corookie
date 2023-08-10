@@ -21,7 +21,9 @@ public enum ExceptionCode {
     PROJECT_NOT_DISABLED(BAD_REQUEST, "PROJECT_003", "프로젝트가 비활성화되지 않았습니다."),
     PROJECT_NOT_OPEN_FOR_INVITATION(BAD_REQUEST, "PROJECT_004", "초대를 허용하지 않는 프로젝트입니다."),
     PLAN_NOT_FOUND(BAD_REQUEST, "PLAN_001", "일정을 찾을 수 없습니다."),
-    PLAN_NOT_ENABLED(BAD_REQUEST,"PLAN_002","더 이상 사용되지 않는 일정입니다.");
+    PLAN_NOT_ENABLED(BAD_REQUEST,"PLAN_002","더 이상 사용되지 않는 일정입니다."),
+
+    EMOJI_INVALID(BAD_REQUEST, "EMOJI_001", "유효하지 않은 이모지 유형입니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

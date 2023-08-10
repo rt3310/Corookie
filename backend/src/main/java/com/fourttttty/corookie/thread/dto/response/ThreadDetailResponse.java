@@ -4,17 +4,20 @@ import com.fourttttty.corookie.member.dto.response.MemberResponse;
 import com.fourttttty.corookie.thread.domain.Thread;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public record ThreadDetailResponse(MemberResponse writer,
                                    LocalDateTime createdAt,
                                    String content,
-                                   Integer commentCount) {
+                                   Integer commentCount
+                                   /*List<ThreadEmojiResponse> emojis*/) {
 
-    public static ThreadDetailResponse from(Thread thread) {
+    public static ThreadDetailResponse from(Thread thread) {/*, List<ThreadEmojiResponse> emojis*/
         return new ThreadDetailResponse(
                 MemberResponse.from(thread.getWriter()),
                 thread.getCreatedAt(),
                 thread.getContent(),
-                thread.getCommentCount());
+                thread.getCommentCount()
+                /*, emojis*/);
     }
 }

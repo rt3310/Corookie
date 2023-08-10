@@ -24,6 +24,9 @@ import com.fourttttty.corookie.project.application.repository.ProjectRepository;
 import com.fourttttty.corookie.project.application.repository.ProjectRepositoryImpl;
 import com.fourttttty.corookie.project.infrastructure.ProjectJpaRepository;
 import com.fourttttty.corookie.project.infrastructure.ProjectMemberJpaRepository;
+import com.fourttttty.corookie.thread.application.repository.ThreadEmojiRepository;
+import com.fourttttty.corookie.thread.application.repository.ThreadEmojiRepositoryImpl;
+import com.fourttttty.corookie.thread.infrastructure.ThreadEmojiJpaRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +55,8 @@ public class TestConfig {
     private CategoryInPlanJpaRepository categoryInPlanJpaRepository;
     @Autowired
     private PlanMemberJpaRepository planMemberJpaRepository;
+    @Autowired
+    private ThreadEmojiJpaRepository threadEmojiJpaRepository;
 
     @Bean
     public MemberRepository memberRepository() {
@@ -93,4 +98,6 @@ public class TestConfig {
         return new PlanMemberRepositoryImpl(planMemberJpaRepository);
     }
 
+    @Bean
+    public ThreadEmojiRepository threadEmojiRepository() { return new ThreadEmojiRepositoryImpl(threadEmojiJpaRepository); }
 }
