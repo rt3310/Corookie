@@ -23,4 +23,7 @@ instance.interceptors.request.use(
 
 export const apis = {
     auth: token => instance.post('/api/v1/auth', token),
+
+    getProjects: () => instance.get('/api/v1/projects'),
+    createProject: data => instance.post('/api/v1/projects', data),
 }

@@ -8,6 +8,7 @@ const Landing = () => {
             <components.FullPageScroll>
                 <S.Box>
                     <components.LandingHeader />
+                    <S.Cover />
                     <S.Section1>
                         <components.LandingMain />
                     </S.Section1>
@@ -59,11 +60,10 @@ const S = {
         justify-content: center;
         height: 100vh;
         width: 100%;
-        background: linear-gradient(
-            to bottom,
-            ${({ theme }) => theme.color.main} 80%,
-            ${({ theme }) => theme.color.lightgray}
-        );
+        /* background-image: url(${require('images/background.png').default});
+        background-size: 100% 1000px;
+        background-position-y: center; */
+        background: ${({ theme }) => theme.color.main};
     `,
     Section2: styled.div`
         display: flex;
@@ -93,6 +93,13 @@ const S = {
         height: 100vh;
         width: 100%;
         background-color: ${({ theme }) => theme.color.white};
+    `,
+    Cover: styled.div`
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 100%;
     `,
 }
 
