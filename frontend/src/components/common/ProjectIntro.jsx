@@ -10,6 +10,7 @@ import * as components from 'components'
 const ProjectIntro = () => {
     const { manager, managerOpened, openManager, closeManager } = hooks.setManagerState()
     const { members, memberOpened, openMember, closeMember } = hooks.memberState()
+    const { project } = hooks.projectState()
     const [flip, setFlip] = useState(false)
     const managerTextRef = useRef(null)
     const memberTextRef = useRef(null)
@@ -70,17 +71,17 @@ const ProjectIntro = () => {
             <S.RotateContainer className={flip ? 'card' : null} ref={flippedRef}>
                 <S.Container className="cards">
                     <S.Title>
-                        Co - 공통 프로젝트
+                        {project.name}
                         <IoChevronForward onClick={() => setFlip(!flip)} />
                     </S.Title>
-                    <S.Description>웹 개발 초보자들을 위한 프로젝트 협업 툴</S.Description>
+                    <S.Description>{project.description}</S.Description>
                     <S.Line />
                     <S.MemberInfo>
                         <S.Manager>
                             <S.ManagerText ref={managerTextRef} onClick={e => clickManager(e)}>
                                 관리자
                             </S.ManagerText>
-                            <S.ManagerName>{manager}</S.ManagerName>
+                            <S.ManagerName>{project.managerName}</S.ManagerName>
                         </S.Manager>
                         <S.Members ref={memberTextRef} onClick={() => clickMember()}>
                             <IoPeople />
