@@ -7,6 +7,7 @@ import com.fourttttty.corookie.textchannel.dto.response.TextChannelResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,14 +32,14 @@ public class TextChannelController {
 
     @PostMapping
     public ResponseEntity<TextChannelResponse> textChannelCreate(@PathVariable Long projectId,
-                                                                 TextChannelCreateRequest request) {
+                                                                 @RequestBody @Validated TextChannelCreateRequest request) {
         return ResponseEntity.ok(textChannelService.create(request, projectId));
     }
 
     @PutMapping("/{textChannelId}")
     public ResponseEntity<TextChannelResponse> textChannelModify(@PathVariable Long projectId,
                                                                  @PathVariable Long textChannelId,
-                                                                 TextChannelModifyRequest request) {
+                                                                 @RequestBody @Validated TextChannelModifyRequest request) {
         return ResponseEntity.ok(textChannelService.modify(textChannelId, request));
     }
 
