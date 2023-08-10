@@ -59,7 +59,11 @@ const S = {
         justify-content: center;
         height: 100vh;
         width: 100%;
-        background-color: ${({ theme }) => theme.color.main};
+        background: linear-gradient(
+            to bottom,
+            ${({ theme }) => theme.color.main} 80%,
+            ${({ theme }) => theme.color.lightgray}
+        );
     `,
     Section2: styled.div`
         display: flex;
@@ -67,7 +71,7 @@ const S = {
         justify-content: center;
         height: 100vh;
         width: 100%;
-        background-color: ${({ theme }) => theme.color.main};
+        background-color: ${({ theme }) => theme.color.white};
     `,
     Section3: styled.div`
         display: flex;
@@ -75,7 +79,7 @@ const S = {
         justify-content: center;
         height: 100vh;
         width: 100%;
-        background-color: ${({ theme }) => theme.color.main};
+        background-color: ${({ theme }) => theme.color.white};
     `,
     Section4: styled.div`
         display: flex;
@@ -83,12 +87,12 @@ const S = {
         justify-content: center;
         height: 100vh;
         width: 100%;
-        background-color: ${({ theme }) => theme.color.main};
+        background-color: ${({ theme }) => theme.color.white};
     `,
     Section5: styled.div`
         height: 100vh;
         width: 100%;
-        background-color: ${({ theme }) => theme.color.main};
+        background-color: ${({ theme }) => theme.color.white};
     `,
 }
 
