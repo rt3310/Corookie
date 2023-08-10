@@ -10,6 +10,7 @@ import * as StompJs from '@stomp/stompjs'
 import * as SockJs from 'sockjs-client'
 
 import { IoExitOutline } from 'react-icons/io5'
+import { AiOutlinePushpin, AiFillPushpin } from 'react-icons/ai'
 
 const TextChat = () => {
     const { commentOpened } = hooks.commentState()
@@ -99,10 +100,18 @@ const TextChat = () => {
         }
     }, [])
 
+    const [pinOn, setPinOn] = useState(true)
+    const togglePin = () => {
+        setPinOn(prevPinOn => !prevPinOn)
+    }
+
     return (
         <S.Wrap>
             <S.Header>
-                <S.Title>1. 공지</S.Title>
+                <S.Title>
+                    1. 공지
+                    <S.PinButton onClick={togglePin}>{pinOn ? <AiFillPushpin /> : <AiOutlinePushpin />}</S.PinButton>
+                </S.Title>
                 <S.ExitButton>
                     <IoExitOutline />
                 </S.ExitButton>
@@ -141,6 +150,10 @@ const S = {
     `,
     Title: styled.div`
         font-size: ${({ theme }) => theme.fontsize.title2};
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
     `,
     ExitButton: styled.div`
         margin: 0 0 0 auto;
@@ -190,6 +203,16 @@ const S = {
         }
         &::-webkit-scrollbar-thumb:hover {
             background: ${({ theme }) => theme.color.gray};
+        }
+    `,
+    PinButton: styled.div`
+        margin: auto 16px;
+        color: ${({ theme }) => theme.color.main};
+        transition-duration: 0.2s;
+        cursor: pointer;
+        & svg {
+            width: 18px;
+            height: 19px;
         }
     `,
 }
