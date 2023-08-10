@@ -131,7 +131,7 @@ const S = {
         transition: transform 0.3s;
         transform: perspective(800px) rotateY(0deg);
         position: relative;
-        z-index: 1;
+        z-index: 10000;
         & > .card {
             transform: rotateY(180deg);
         }

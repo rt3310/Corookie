@@ -39,7 +39,7 @@ const IssuePreview = ({ id, title, type, manager, priority, status }) => {
             case '황상미':
                 return <img src={require('images/thread_profile.png').default} alt="프로필 이미지" />
             default:
-                return null
+                return <img src={require('images/thread_profile.png').default} alt="프로필 이미지" />
         }
     }
     return (
@@ -93,7 +93,7 @@ const S = {
         border-radius: 100%;
         background-color: ${({ theme, status }) => {
             switch (status) {
-                case 'toDo':
+                case 'todo':
                     return theme.color.success
                 case 'inProgress':
                     return theme.color.pending

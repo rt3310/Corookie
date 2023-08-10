@@ -58,6 +58,7 @@ const S = {
     `,
     Wrap: styled.div`
         /* padding: 0 16px; */
+        min-height: 100%;
         overflow-y: auto;
         &::-webkit-scrollbar {
             height: 0px;
