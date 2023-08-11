@@ -35,6 +35,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
+import static org.springframework.restdocs.payload.JsonFieldType.BOOLEAN;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -48,9 +49,6 @@ class ThreadControllerTest extends RestDocsTest {
 
     @MockBean
     private ThreadService threadService;
-
-    @MockBean
-    private ThreadEmojiService threadEmojiService;
 
     @MockBean
     private SimpMessageSendingOperations sendingOperations;
@@ -76,7 +74,8 @@ class ThreadControllerTest extends RestDocsTest {
                 0,
                 textChannel,
                 member);
-        List<ThreadEmojiResponse> emojis = new ArrayList<>();
+        emojis = new ArrayList<>();
+        emojis.add(ThreadEmojiResponse.from(1L, false, 1L));
     }
 
     @Test
@@ -123,7 +122,6 @@ class ThreadControllerTest extends RestDocsTest {
     void findThreadById() throws Exception {
         // given
         LocalDateTime now = LocalDateTime.now();
-        emojis.add(ThreadEmojiResponse.from(1L, false, 1L));
 
         ThreadDetailResponse threadDetailResponse = new ThreadDetailResponse(
                 MemberResponse.from(thread.getWriter()),
@@ -132,6 +130,9 @@ class ThreadControllerTest extends RestDocsTest {
                 thread.getCommentCount(),
                 emojis
         );
+
+        given(threadService.findById(any(Long.class), any(Long.class)))
+                .willReturn(threadDetailResponse);
 
         // when
         ResultActions perform = mockMvc.perform(get("/api/v1/projects/{projectId}/text-channels/{textChannelId}/threads/{threadId}", 1L, 1L, 1L));
@@ -155,7 +156,11 @@ class ThreadControllerTest extends RestDocsTest {
                                 fieldWithPath("commentCount").type(NUMBER).description("댓글 수"),
                                 fieldWithPath("createdAt").type(STRING).description("생성 일자"),
                                 fieldWithPath("writer.name").type(STRING).description("작성자 이름"),
-                                fieldWithPath("writer.email").type(STRING).description("작성자 이메일"))
+                                fieldWithPath("writer.email").type(STRING).description("작성자 이메일"),
+                                fieldWithPath("emojis.[].emojiId").type(NUMBER).description("이모지 키"),
+                                fieldWithPath("emojis.[].isClicked").type(BOOLEAN).description("회원의 이모지 클릭 여부"),
+                                fieldWithPath("emojis.[].count").type(NUMBER).description("이모지 갯수")
+                        )
                 ));
     }
 
@@ -164,8 +169,7 @@ class ThreadControllerTest extends RestDocsTest {
     void modifyTextChannel() throws Exception {
         // given
         LocalDateTime now = LocalDateTime.now();
-        emojis.add(ThreadEmojiResponse.from(1L, false, 1L));
-        
+
         ThreadDetailResponse threadDetailResponse = new ThreadDetailResponse(
                 MemberResponse.from(thread.getWriter()),
                 now,
@@ -204,7 +208,11 @@ class ThreadControllerTest extends RestDocsTest {
                                 fieldWithPath("commentCount").type(NUMBER).description("댓글 수"),
                                 fieldWithPath("createdAt").type(STRING).description("생성 일자"),
                                 fieldWithPath("writer.name").type(STRING).description("작성자 이름"),
-                                fieldWithPath("writer.email").type(STRING).description("작성자 이메일"))
+                                fieldWithPath("writer.email").type(STRING).description("작성자 이메일"),
+                                fieldWithPath("emojis.[].emojiId").type(NUMBER).description("이모지 키"),
+                                fieldWithPath("emojis.[].isClicked").type(BOOLEAN).description("회원의 이모지 클릭 여부"),
+                                fieldWithPath("emojis.[].count").type(NUMBER).description("이모지 갯수")
+                        )
                 ));
     }
 
