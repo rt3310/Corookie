@@ -7,15 +7,16 @@ import * as hooks from 'hooks'
 
 const MainCategory = () => {
     const navigate = useNavigate()
+    const { project } = hooks.projectState()
     const { menu, openMenu } = hooks.menuState()
 
     const planClick = () => {
-        navigate(utils.URL.PLAN.CALENDER)
+        navigate('/project/' + project.id + '/plan')
         openMenu('plan')
     }
 
     const taskClick = () => {
-        navigate(utils.URL.TASK.BOARD)
+        navigate('/project/' + project.id + '/task')
         openMenu('task')
     }
 

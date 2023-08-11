@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
+import { useParams } from 'react-router'
 import styled from 'styled-components'
 
 import * as components from 'components'
@@ -13,19 +14,24 @@ import { IoExitOutline } from 'react-icons/io5'
 import { AiOutlinePushpin, AiFillPushpin } from 'react-icons/ai'
 
 const TextChat = () => {
+    const { projectId, channelId } = useParams()
     const { commentOpened } = hooks.commentState()
-    const [me, setMe] = useState()
+    const [threads, setThreads] = useState([])
+    const { page, upPage, initPage, size, sort, direction } = hooks.threadsState()
+    const [member, setMember] = useState()
+    const [textChannel, setTextChannel] = useState(null)
     const [currentChat, setCurrentChat] = useState({
-        textChannelId: 1,
+        textChannelId: null,
         writerId: null,
         content: '',
     })
-    const [chats, setChats] = useState([])
+    const [prevScrollHeight, setPrevScrollHeight] = useState()
+    const target = useRef(null)
+    const preventRef = useRef(true) //옵저버 중복 실행 방지
+    const endRef = useRef(false) //모든 글 로드 확인
+    const scrollRef = useRef(null)
+    const [pinOn, setPinOn] = useState(true)
     const client = useRef({})
-
-    useEffect(() => {
-        console.log(chats)
-    }, [chats])
 
     const connectThread = () => {
         client.current = new StompJs.Client({
@@ -41,13 +47,13 @@ const TextChat = () => {
             heartbeatOutgoing: 4000,
             onConnect: () => {
                 console.log('Connected')
-                client.current.subscribe('/topic/thread/' + 1, message => {
+                client.current.subscribe('/topic/thread/' + channelId, message => {
                     const jsonBody = JSON.parse(message.body)
-                    setChats(chats => [...chats, jsonBody])
+                    setThreads(threads => [jsonBody, ...threads])
                 })
                 client.current.publish({
                     destination: '/app/thread/',
-                    body: JSON.stringify(chats),
+                    body: JSON.stringify(threads),
                 })
             },
             onStompError: frame => {
@@ -78,39 +84,82 @@ const TextChat = () => {
 
         setCurrentChat({
             ...currentChat,
-            writerId: me.id,
             content: '',
         })
+        if (scrollRef.current) {
+            scrollRef.current.scrollTop = scrollRef.current.scrollHeight
+        }
+    }
+
+    const obsHandler = entries => {
+        //옵저버 콜백함수
+        const entry = entries[0]
+        if (!endRef.current && entry.isIntersecting && preventRef.current) {
+            //옵저버 중복 실행 방지
+            preventRef.current = false //옵저버 중복 실행 방지
+            upPage()
+        }
     }
 
     useEffect(() => {
-        api.apis
-            .getMe()
-            .then(response => {
-                console.log(response.data)
-                setMe(response.data)
+        initPage()
+        const observer = new IntersectionObserver(obsHandler, { threshold: 0.5 })
+        if (target.current) {
+            observer.observe(target.current)
+        }
+        const initChannel = async () => {
+            const memberRes = await api.apis.getMe()
+            const textChannelRes = await api.apis.getTextChannel(projectId, channelId)
+            setMember(memberRes.data)
+            setTextChannel(textChannelRes.data)
+            setCurrentChat({
+                ...currentChat,
+                textChannelId: textChannelRes.data.id,
+                writerId: memberRes.data.id,
             })
-            .catch(error => {
-                console.log(error)
-            })
+        }
+        initChannel()
         connectThread()
 
         return () => {
+            observer.disconnect()
             disconnect()
         }
-    }, [])
+    }, [projectId, channelId])
 
-    const [pinOn, setPinOn] = useState(true)
-    const togglePin = () => {
-        setPinOn(prevPinOn => !prevPinOn)
-    }
+    const getThreads = useCallback(async () => {
+        api.apis.getThreads(projectId, channelId, page, size, sort, direction).then(response => {
+            if (page === 0) {
+                setThreads(response.data)
+                return
+            }
+            setThreads(threads => [...threads, ...response.data])
+        })
+        setPrevScrollHeight(scrollRef.current?.scrollHeight)
+        preventRef.current = true
+    }, [channelId, page])
+
+    useEffect(() => {
+        getThreads()
+    }, [page])
+
+    useEffect(() => {
+        console.log(threads)
+        if (prevScrollHeight) {
+            scrollRef.current.scrollTop = scrollRef.current?.scrollHeight - prevScrollHeight
+            return setPrevScrollHeight(null)
+        }
+        scrollRef.current.scrollTop = scrollRef.current?.scrollHeight - scrollRef.current?.clientHeight
+    }, [threads])
 
     return (
         <S.Wrap>
             <S.Header>
                 <S.Title>
-                    1. 공지
-                    <S.PinButton onClick={togglePin}>{pinOn ? <AiFillPushpin /> : <AiOutlinePushpin />}</S.PinButton>
+                    {textChannel && textChannel.name}
+                    <S.PinButton onClick={() => setPinOn(!pinOn)}>
+                        {pinOn ? <AiFillPushpin /> : <AiOutlinePushpin />}
+                    </S.PinButton>
                 </S.Title>
                 <S.ExitButton>
                     <IoExitOutline />
@@ -118,10 +167,12 @@ const TextChat = () => {
             </S.Header>
             <S.Container>
                 <S.ChatBox>
-                    <S.ThreadBox>
-                        {chats.map((c, idx) => (
-                            <components.Thread key={idx} chat={c} />
-                        ))}
+                    <S.ThreadBox ref={scrollRef}>
+                        <div ref={target} />
+                        {threads &&
+                            [...threads]
+                                .reverse()
+                                .map((thread, idx) => <components.Thread key={idx} thread={thread} />)}
                     </S.ThreadBox>
                     <components.EditBox currentChat={currentChat} setCurrentChat={setCurrentChat} send={send} />
                 </S.ChatBox>
