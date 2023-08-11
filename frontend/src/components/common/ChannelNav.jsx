@@ -1,73 +1,68 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
-import { IoIosArrowDown } from 'react-icons/io'
+
+import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io'
 import { BsPlus } from 'react-icons/bs'
 import { AiOutlinePushpin, AiFillPushpin } from 'react-icons/ai'
+
 import * as utils from 'utils'
+import * as api from 'api'
+import * as hooks from 'hooks'
 
 const ChannelNav = () => {
     const navigate = useNavigate()
+    const { project } = hooks.projectState()
+    const { projectMembers, setProjectMembers } = hooks.projectMembersState()
+    const { textChannels } = hooks.textChannelsState()
     const [openText, setOpenText] = useState(true)
     const [openDm, setOpenDm] = useState(true)
     const [openVideo, setOpenVideo] = useState(true)
+    const [pinOn, setPinOn] = useState(true)
+
+    useEffect(() => {
+        const initProjectMembers = async () => {
+            const projectMembersRes = await api.apis.getProjectMembers(project.id)
+            setProjectMembers(projectMembersRes.data)
+        }
+
+        initProjectMembers()
+    }, [])
 
     return (
         <S.Wrap>
             <S.Container>
                 <S.TextChannelList className={openText ? 'opened' : ''}>
                     <S.ChannelHead onClick={() => setOpenText(!openText)}>
-                        텍스트 채널 &nbsp; <IoIosArrowDown />
+                        텍스트 채널 &nbsp; <IoIosArrowUp />
                     </S.ChannelHead>
-                    <S.Channel onClick={() => navigate(utils.URL.CHAT.TEXT)}>
-                        1. 공지
-                        <AiOutlinePushpin />
-                    </S.Channel>
-                    <S.Channel>2. 자유</S.Channel>
-                    <S.Channel>3. Backend</S.Channel>
-                    <S.Channel>4. Frontend</S.Channel>
+                    {textChannels.map((textChannel, index) => (
+                        <S.Channel onClick={() => navigate(utils.URL.CHAT.TEXT)}>
+                            {index + 1}. {textChannel.name}
+                            {pinOn && <AiFillPushpin />}
+                        </S.Channel>
+                    ))}
                     <S.AddChannelButton>
                         <BsPlus /> 채널 추가
                     </S.AddChannelButton>
                 </S.TextChannelList>
                 <S.DmList className={openDm ? 'opened' : ''}>
                     <S.ChannelHead onClick={() => setOpenDm(!openDm)}>
-                        Direct Message &nbsp; <IoIosArrowDown />
+                        Direct Message &nbsp; <IoIosArrowUp />
                     </S.ChannelHead>
-                    <S.DmMember onClick={() => navigate(utils.URL.CHAT.DIRECT)}>
-                        <S.DmProfileImage>
-                            <img src={require('images/profile.png').default} alt="프로필" />
-                        </S.DmProfileImage>
-                        황상미
-                    </S.DmMember>
-                    <S.DmMember>
-                        <S.DmProfileImage>
-                            <img src={require('images/profile.png').default} alt="프로필" />
-                        </S.DmProfileImage>
-                        황상미
-                    </S.DmMember>
-                    <S.DmMember>
-                        <S.DmProfileImage>
-                            <img src={require('images/profile.png').default} alt="프로필" />
-                        </S.DmProfileImage>
-                        황상미
-                    </S.DmMember>
-                    <S.DmMember>
-                        <S.DmProfileImage>
-                            <img src={require('images/profile.png').default} alt="프로필" />
-                        </S.DmProfileImage>
-                        황상미
-                    </S.DmMember>
-                    <S.DmMember>
-                        <S.DmProfileImage>
-                            <img src={require('images/profile.png').default} alt="프로필" />
-                        </S.DmProfileImage>
-                        황상미
-                    </S.DmMember>
+                    {projectMembers &&
+                        projectMembers.map(member => (
+                            <S.DmMember onClick={() => navigate(utils.URL.CHAT.DIRECT)}>
+                                <S.DmProfileImage>
+                                    <img src={require('images/profile.png').default} alt="프로필" />
+                                </S.DmProfileImage>
+                                {member.memberName}
+                            </S.DmMember>
+                        ))}
                 </S.DmList>
                 <S.VideoChannelList className={openVideo ? 'opened' : ''}>
                     <S.ChannelHead onClick={() => setOpenVideo(!openVideo)}>
-                        화상 채널 &nbsp; <IoIosArrowDown />
+                        화상 채널 &nbsp; <IoIosArrowUp />
                     </S.ChannelHead>
                     <S.Channel onClick={() => navigate(utils.URL.CHAT.VIDEO)}>1. 회의</S.Channel>
                     <S.Channel>2. 자유</S.Channel>
@@ -151,9 +146,17 @@ const S = {
             transform: rotateZ(360deg);
         }
     `,
+    PinButton: styled.div`
+        color: ${({ theme }) => theme.color.main};
+
+        & svg {
+            width: 16px;
+            height: 16px;
+        }
+    `,
     Channel: styled.li`
         font-size: ${({ theme }) => theme.fontsize.sub1};
-        padding: 12px 16px;
+        padding: 10px 20px;
         cursor: pointer;
         transition-duration: 0.2s;
         display: flex;
@@ -164,6 +167,12 @@ const S = {
         &:hover {
             background-color: ${({ theme }) => theme.color.main};
             color: ${({ theme }) => theme.color.white};
+
+            & > div {
+                & svg {
+                    color: ${({ theme }) => theme.color.white};
+                }
+            }
         }
 
         &:last-child {
@@ -205,7 +214,7 @@ const S = {
     DmMember: styled.li`
         display: flex;
         align-items: center;
-        padding: 6px 16px;
+        padding: 6px 20px;
         font-size: ${({ theme }) => theme.fontsize.sub1};
         cursor: pointer;
 

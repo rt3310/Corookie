@@ -83,23 +83,16 @@ class TextChannelControllerTest extends RestDocsTest {
                         pathParameters(
                                 parameterWithName("projectId").description("프로젝트 키")),
                         requestFields(
-                                fieldWithPath("name").type(STRING).description("채널명")),
-                        responseFields(
                                 fieldWithPath("name").type(STRING).description("채널명"))));
     }
 
     @Test
-    @DisplayName("텍스트 채널 전체 조회")
+    @DisplayName("프로젝트에 해당하는 텍스트 채널 전체 조회")
     void findAllTextChannel() throws Exception {
         // given
-        TextChannel textChannel2 = TextChannel.of("name",
-                true,
-                true,
-                project);
-
-        given(textChannelService.findAll())
-                .willReturn(List.of(TextChannelResponse.from(textChannel),
-                        TextChannelResponse.from(textChannel2)));
+        given(textChannelService.findByProjectId(any(Long.class)))
+                .willReturn(List.of(TextChannelResponse.from(this.textChannel),
+                        TextChannelResponse.from(textChannel)));
 
         // when
         ResultActions perform = mockMvc.perform(get("/api/v1/projects/{projectId}/text-channels", 1L));
@@ -176,7 +169,7 @@ class TextChannelControllerTest extends RestDocsTest {
 
     @Test
     @DisplayName("텍스트 채널 삭제")
-    void deleteTextChannel() throws Exception{
+    void deleteTextChannel() throws Exception {
         // given
 
         // when

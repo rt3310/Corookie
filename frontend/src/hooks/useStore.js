@@ -1,4 +1,20 @@
 import { create } from 'zustand'
+
+export const projectState = create(set => ({
+    project: null,
+    setProject: data => set(state => ({ project: data })),
+}))
+
+export const textChannelsState = create(set => ({
+    textChannels: [],
+    setTextChannels: data => set(state => ({ textChannels: data })),
+}))
+
+export const projectMembersState = create(set => ({
+    projectMembers: [],
+    setProjectMembers: data => set(state => ({ projectMembers: data })),
+}))
+
 export const menuState = create(set => ({
     menu: '',
     openMenu: menu => set(state => ({ openedMenu: menu })),

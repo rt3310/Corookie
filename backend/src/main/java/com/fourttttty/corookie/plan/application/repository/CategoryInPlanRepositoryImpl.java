@@ -2,7 +2,6 @@ package com.fourttttty.corookie.plan.application.repository;
 
 import com.fourttttty.corookie.plan.domain.CategoryInPlan;
 import com.fourttttty.corookie.plan.domain.CategoryInPlanId;
-import com.fourttttty.corookie.plan.domain.Plan;
 import com.fourttttty.corookie.plan.infrastructure.CategoryInPlanJpaRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +25,7 @@ public class CategoryInPlanRepositoryImpl implements CategoryInPlanRepository {
 
     @Override
     public List<CategoryInPlan> findByPlanId(Long planId) {
-        return categoryInPlanJpaRepository.findAllById_PlanId(planId);
+        return categoryInPlanJpaRepository.findAllByIdPlanId(planId);
     }
 
     @Override

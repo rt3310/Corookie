@@ -23,26 +23,28 @@ public class TextChannelService {
 
     public List<TextChannelResponse> findAll() {
         return textChannelRepository.findAll().stream()
-                .map(textChannel -> new TextChannelResponse(textChannel.getChannelName()))
+                .map(TextChannelResponse::from)
                 .toList();
     }
 
     public TextChannelResponse findById(Long id) {
-        return new TextChannelResponse(textChannelRepository
+        return TextChannelResponse.from(textChannelRepository
                 .findById(id)
                 .orElseThrow(EntityNotFoundException::new)
-                .getChannelName());
+                );
     }
 
-    public TextChannel findEntityById(Long id) {
-        return textChannelRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+    public List<TextChannelResponse> findByProjectId(Long projectId) {
+        return textChannelRepository.findByProjectId(projectId).stream()
+                .map(TextChannelResponse::from)
+                .toList();
     }
 
     @Transactional
     public TextChannelResponse create(TextChannelCreateRequest request, Long projectId) {
-        return new TextChannelResponse(textChannelRepository.save(request.toEntity(projectRepository
+        return TextChannelResponse.from(textChannelRepository.save(request.toEntity(projectRepository
                         .findById(projectId)
-                        .orElseThrow(EntityNotFoundException::new))).getChannelName());
+                        .orElseThrow(EntityNotFoundException::new))));
     }
 
     @Transactional
@@ -56,7 +58,7 @@ public class TextChannelService {
     public TextChannelResponse modify(Long id, TextChannelModifyRequest request) {
         TextChannel textChannel = textChannelRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         textChannel.modifyChannelName(request.name());
-        return new TextChannelResponse(textChannel.getChannelName());
+        return TextChannelResponse.from(textChannel);
     }
 
     @Transactional

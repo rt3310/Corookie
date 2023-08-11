@@ -121,7 +121,7 @@ public class PlanService {
     @Transactional
     public void deletePlanMember(Long id, PlanMemberDeleteRequest request) {
         planMemberService.deletePlanMember(PlanMember.of(
-            memberRepository.findById(request.id()).orElseThrow(EntityNotFoundException::new),
+            memberRepository.findById(request.memberId()).orElseThrow(EntityNotFoundException::new),
             findEntityById(id)));
     }
 

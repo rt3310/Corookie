@@ -44,7 +44,7 @@ public class SecurityConfig {
                 .headers(c -> c.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
                 .authorizeHttpRequests(
                         requests ->
-                                requests.requestMatchers("/oauth2/**", "/api/v1/auth").permitAll()
+                                requests.requestMatchers("/oauth2/**", "/api/v1/auth", "/ws/chat", "/topic/**", "/app/**", "/chat/**").permitAll()
                                         .requestMatchers("/api/**").hasRole("USER")
                                         .anyRequest().authenticated())
                 .oauth2Login(setOAuth2Config())

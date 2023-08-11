@@ -48,8 +48,6 @@ class PlanServiceTest {
 
     private Member member;
     private Project project;
-    private PlanCreateRequest planCreateRequest;
-    private Plan plan;
 
 
     @BeforeEach
@@ -66,34 +64,26 @@ class PlanServiceTest {
         planMemberService = new PlanMemberService(planMemberRepository,memberRepository,planRepository);
         planService = new PlanService(planRepository,projectRepository,planCategoryRepository,memberRepository, categoryInPlanService, planMemberService);
 
-        member = Member.of( "name", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
-        project = Project.of("name", "description", true,
+        member = Member.of( "memberName", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
+        project = Project.of("memberName", "description", true,
             "http://test.com", false, member);
-
-        plan = Plan.of("name",
-            "testDescription",
-            LocalDateTime.now(),
-            LocalDateTime.now().minusDays(2),
-            true,
-            project);
-
-        planCreateRequest = new PlanCreateRequest("createPlan",
-            "createPlanDescription",
-            LocalDateTime.now().minusDays(2),
-            LocalDateTime.now(),
-            List.of(new PlanCategoryCreateRequest("CreateCategory")),
-            List.of(new PlanMemberCreateRequest(1L)));
+        memberRepository.save(member);
+        projectRepository.save(project);
     }
 
     @Test
     @DisplayName("일정 생성")
     void createPlan() {
         // given
+        PlanCreateRequest planCreateRequest = new PlanCreateRequest("createPlan",
+                "createPlanDescription",
+                LocalDateTime.now().minusDays(2),
+                LocalDateTime.now(),
+                List.of(new PlanCategoryCreateRequest("CreateCategory")),
+                List.of(new PlanMemberCreateRequest(member.getId())));
 
         // when
-        memberRepository.save(member);
-        projectRepository.save(project);
-        PlanResponse response = planService.createPlan(planCreateRequest, 1L);
+        PlanResponse response = planService.createPlan(planCreateRequest, project.getId());
 
         // then
         assertThat(response.planName()).isEqualTo(planCreateRequest.planName());
@@ -106,9 +96,13 @@ class PlanServiceTest {
     @DisplayName("일정 조회")
     void findById() {
         // given
-        memberRepository.save(member);
-        projectRepository.save(project);
-        PlanResponse response = planService.createPlan(planCreateRequest, 1L);
+        PlanCreateRequest planCreateRequest = new PlanCreateRequest("createPlan",
+                "createPlanDescription",
+                LocalDateTime.now().minusDays(2),
+                LocalDateTime.now(),
+                List.of(new PlanCategoryCreateRequest("CreateCategory")),
+                List.of(new PlanMemberCreateRequest(member.getId())));
+        planService.createPlan(planCreateRequest, project.getId());
 
         // when
         PlanResponse foundResponse = planService.findById(1L);
@@ -124,19 +118,23 @@ class PlanServiceTest {
     @DisplayName("일정 수정")
     void modifyPlan() {
         // given
-        memberRepository.save(member);
-        projectRepository.save(project);
-        PlanResponse savedResponse = planService.createPlan(planCreateRequest, 1L);
+        PlanCreateRequest planCreateRequest = new PlanCreateRequest("createPlan",
+                "createPlanDescription",
+                LocalDateTime.now().minusDays(2),
+                LocalDateTime.now(),
+                List.of(new PlanCategoryCreateRequest("CreateCategory")),
+                List.of(new PlanMemberCreateRequest(member.getId())));
+        PlanResponse savedResponse = planService.createPlan(planCreateRequest, project.getId());
 
         PlanUpdateRequest updateRequest = new PlanUpdateRequest("modifyPlan",
             "modifyPlanDescription",
             LocalDateTime.now().minusDays(4),
             LocalDateTime.now().minusDays(2),
             List.of(new PlanCategoryDeleteRequest("modifyCategory1")),
-            List.of(new PlanMemberDeleteRequest(1L)));
+            List.of(new PlanMemberDeleteRequest(member.getId())));
 
         // when
-        PlanResponse modifiedResponse = planService.modifyPlan(updateRequest, 1L, 1L);
+        PlanResponse modifiedResponse = planService.modifyPlan(updateRequest, 1L, project.getId());
 
         // then
         assertThat(modifiedResponse.planName()).isEqualTo(updateRequest.planName());
@@ -147,9 +145,13 @@ class PlanServiceTest {
     @DisplayName("일정 삭제")
     void deletePlan() {
         // given
-        memberRepository.save(member);
-        projectRepository.save(project);
-        planService.createPlan(planCreateRequest, 1L);
+        PlanCreateRequest planCreateRequest = new PlanCreateRequest("createPlan",
+                "createPlanDescription",
+                LocalDateTime.now().minusDays(2),
+                LocalDateTime.now(),
+                List.of(new PlanCategoryCreateRequest("CreateCategory")),
+                List.of(new PlanMemberCreateRequest(member.getId())));
+        planService.createPlan(planCreateRequest, project.getId());
 
         //when
         planService.deletePlan(1L);

@@ -22,7 +22,7 @@ public class PlanMemberService {
 
     @Transactional
     public PlanMemberResponse create(Plan plan, PlanMemberCreateRequest request){
-        PlanMember planMember = PlanMember.of(memberRepository.findById(request.id()).orElseThrow(
+        PlanMember planMember = PlanMember.of(memberRepository.findById(request.memberId()).orElseThrow(
             EntityNotFoundException::new),plan);
         return PlanMemberResponse.from(planMember);
     }
