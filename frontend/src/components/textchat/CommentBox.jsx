@@ -36,8 +36,8 @@ const CommentBox = () => {
 const S = {
     Wrap: styled.div`
         display: flex;
-        width: 400px;
-        min-width: 400px;
+        width: 360px;
+        min-width: 360px;
         border-radius: 8px;
         flex-direction: column;
         background-color: ${({ theme }) => theme.color.white};

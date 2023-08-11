@@ -75,8 +75,8 @@ const S = {
         display: flex;
         flex-direction: column;
         align-items: center;
-        width: 320px;
-        min-width: 320px;
+        width: 360px;
+        min-width: 360px;
         border-radius: 8px;
         background-color: ${({ theme }) => theme.color.white};
         box-shadow: ${({ theme }) => theme.shadow.card};
