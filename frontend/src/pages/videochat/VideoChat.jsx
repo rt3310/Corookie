@@ -12,14 +12,14 @@ import React, { useState, useEffect } from 'react'
 const VideoChat = () => {
     const { chatboxOpened } = hooks.chatBoxState()
     const [mySessionId, setMySessionId] = useState('SessionA123123')
-    const [myUserName, setMyUserName] = useState('Participant' + Math.floor(Math.random() * 100))
+    const [myUserName, setMyUserName] = useState('Participant' + 123)
     const [session, setSession] = useState(undefined)
     const [publisher, setPublisher] = useState(undefined)
     const [subscribers, setSubscribers] = useState([])
 
     const OPENVIDU_SERVER_URL = 'https://demos.openvidu.io/'
 
-    const onbeforeunload = () => {
+    const onbeforeunload = event => {
         leaveSession()
     }
 
@@ -32,7 +32,7 @@ const VideoChat = () => {
     }, [])
 
     const deleteSubscriber = streamManager => {
-        setSubscribers(prevSubscribers => prevSubscribers.filter(sub => sub !== streamManager))
+        setSubscribers(subscribers => subscribers.filter(sub => sub !== streamManager))
     }
 
     const joinSession = async () => {
@@ -42,7 +42,10 @@ const VideoChat = () => {
 
         newSession.on('streamCreated', event => {
             const subscriber = newSession.subscribe(event.stream, undefined)
-            setSubscribers(prevSubscribers => [...prevSubscribers, subscriber])
+            console.log('subscriber: ')
+            console.log(subscriber)
+            setSubscribers(subscribers => [...subscribers, subscriber])
+            console.log('subscibers: ' + subscribers)
         })
 
         newSession.on('streamDestroyed', event => {
@@ -77,8 +80,9 @@ const VideoChat = () => {
                         .getSettings().deviceId
                     const currentVideoDevice = videoDevices.find(device => device.deviceId === currentVideoDeviceId)
 
-                    setMainStreamManager(publisher)
                     setPublisher(publisher)
+                    console.log('publisher: ')
+                    console.log(publisher)
                 })
                 .catch(error => {
                     console.log('There was an error connecting to the session:', error.code, error.message)
@@ -127,7 +131,9 @@ const VideoChat = () => {
         return response.data // The token
     }
 
-    // ---------------- 위쪽이 종서가 추가한 코드 ------------------
+    useEffect(() => {
+        console.log(subscribers)
+    }, [subscribers])
 
     return (
         <S.Wrap>
@@ -140,12 +146,19 @@ const VideoChat = () => {
             <S.Container>
                 <S.ChatBox>
                     <S.ThreadBox>
-                        {subscribers.map((sub, i) => (
-                            <div key={i}>
-                                <components.VideoBox streamManager={sub} />
-                                <span>test + {i}</span>
-                            </div>
-                        ))}
+                        <iframe src="https://i9a402.p.ssafy.io:8443" width={1500} height={1000}>
+                            <p>사용 중인 브라우저는 iframe을 지원하지 않습니다.</p>
+                        </iframe>
+                        <components.VideoBox streamManager={publisher} />
+                        <div>
+                            {subscribers.map((sub, i) => (
+                                <div key={i}>
+                                    <span>{sub.id}111</span>
+                                    <components.VideoBox streamManager={sub} />
+                                    <span>test + {i}</span>
+                                </div>
+                            ))}
+                        </div>
                         <components.VideoControl />
                     </S.ThreadBox>
                 </S.ChatBox>
