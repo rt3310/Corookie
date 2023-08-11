@@ -11,6 +11,7 @@ import * as api from 'api'
 const KanbanBoard = () => {
     const { tasks, setTasks } = hooks.tasksState()
     const { project } = hooks.projectState()
+    const { issueDetailOpened, openIssueDetail, closeIssueDetail } = hooks.issueDetailState()
 
     useEffect(() => {
         api.apis
@@ -21,7 +22,15 @@ const KanbanBoard = () => {
             .catch(error => {
                 console.log(error)
             })
-    })
+    }, [])
+
+    const toggleIssueDetail = id => {
+        if (issueDetailOpened === id) {
+            closeIssueDetail()
+        } else {
+            openIssueDetail(id)
+        }
+    }
 
     const tasksByStatus = tasks.reduce((acc, task) => {
         if (!acc[task.progress]) {
@@ -121,7 +130,7 @@ const KanbanBoard = () => {
                                             <S.IssueContainer {...provided.droppableProps} ref={provided.innerRef}>
                                                 {column.items.map((item, index) => {
                                                     return (
-                                                        <Draggable key={item.id} draggableId={item.id} index={index}>
+                                                        <Draggable key={item.id} draggableId={item.topic} index={index}>
                                                             {(provided, snapshot) => {
                                                                 return (
                                                                     <S.IssueDrag
@@ -132,20 +141,23 @@ const KanbanBoard = () => {
                                                                         style={{
                                                                             ...provided.draggableProps.style,
                                                                         }}>
-                                                                        <S.IssueTopic>{item.topic}</S.IssueTopic>
-                                                                        <S.IssueInfo>
-                                                                            <S.Type>{item.category}</S.Type>
-                                                                            <S.Priority priority={item.priority}>
-                                                                                {renderPriority(item.priority)}
-                                                                            </S.Priority>
-                                                                            <S.ProfileImg
-                                                                                src={
-                                                                                    require('images/thread_profile.png')
-                                                                                        .default
-                                                                                }
-                                                                                alt="Profile"
-                                                                            />
-                                                                        </S.IssueInfo>
+                                                                        <S.Container
+                                                                            onClick={() => toggleIssueDetail(item.id)}>
+                                                                            <S.IssueTopic>{item.topic}</S.IssueTopic>
+                                                                            <S.IssueInfo>
+                                                                                <S.Type>{item.category}</S.Type>
+                                                                                <S.Priority priority={item.priority}>
+                                                                                    {renderPriority(item.priority)}
+                                                                                </S.Priority>
+                                                                                <S.ProfileImg
+                                                                                    src={
+                                                                                        require('images/thread_profile.png')
+                                                                                            .default
+                                                                                    }
+                                                                                    alt="Profile"
+                                                                                />
+                                                                            </S.IssueInfo>
+                                                                        </S.Container>
                                                                     </S.IssueDrag>
                                                                 )
                                                             }}
@@ -195,9 +207,10 @@ const S = {
         display: flex;
         flex-direction: column;
         margin: 0 4px;
-        width: 100%;
         background-color: ${({ theme }) => theme.color.background};
         max-height: calc(100vh - 208px);
+        flex: 1;
+        min-width: 0;
     `,
     TaskBox: styled.div`
         width: 100%;
@@ -219,9 +232,14 @@ const S = {
         box-shadow: ${props =>
             props.isDragging ? `1px 1px 5px 1px ${props.theme.color.middlegray}` : `${props.theme.shadow.card}`};
     `,
+    Container: styled.div`
+        height: 100%;
+        width: 100%;
+    `,
 
     IssueTopic: styled.div`
         margin: 8px 0;
+        overflow: hidden;
     `,
     IssueInfo: styled.div`
         display: flex;

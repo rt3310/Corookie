@@ -17,6 +17,7 @@ const Layout = () => {
             try {
                 const projectRes = await api.apis.getProject(1)
                 const projectId = projectRes.data.id
+                console.log('projectId: ' + projectId)
                 const textChannelsRes = await api.apis.getTextChannels(projectId)
                 setProject(projectRes.data)
                 setTextChannels(textChannelsRes.data)
