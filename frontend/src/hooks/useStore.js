@@ -10,6 +10,17 @@ export const textChannelsState = create(set => ({
     setTextChannels: data => set(state => ({ textChannels: data })),
 }))
 
+export const threadsState = create(set => ({
+    threads: [],
+    page: 0,
+    size: 10,
+    sort: 'createdAt',
+    direction: 'desc',
+    setThreads: data => set(state => ({ threads: data })),
+    addThread: data => set(state => ({ threads: [...state.thread, data] })),
+    upPage: () => set(state => ({ page: state.page + 1 })),
+}))
+
 export const projectMembersState = create(set => ({
     projectMembers: [],
     setProjectMembers: data => set(state => ({ projectMembers: data })),

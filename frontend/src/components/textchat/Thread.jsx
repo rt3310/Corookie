@@ -7,7 +7,7 @@ import * as components from 'components'
 import * as hooks from 'hooks'
 import * as utils from 'utils'
 
-const Thread = ({ chat }) => {
+const Thread = ({ thread }) => {
     const text = useRef(null)
     const [overText, setOverText] = useState(false)
     const [closedText, setClosedText] = useState(false)
@@ -111,19 +111,19 @@ const Thread = ({ chat }) => {
                 </S.ImageBox>
                 <S.ContentBox>
                     <S.MemberInfoBox>
-                        <S.MemberName>황상미</S.MemberName>
-                        <S.CreatedTime>오전 11:12</S.CreatedTime>
+                        <S.MemberName>{thread && thread.writer.name}</S.MemberName>
+                        <S.CreatedTime>{thread && utils.calDate(thread.createdAt)}</S.CreatedTime>
                         <S.CommentButton onClick={() => toggleComment()} open={commentOpened}>
-                            <div>
+                            {/* <div>
                                 <img src={require('images/profile.png').default} alt="프로필" />
                                 <img src={require('images/profile.png').default} alt="프로필" />
                                 <img src={require('images/profile.png').default} alt="프로필" />
-                            </div>
-                            3개의 댓글 <IoIosArrowForward />
+                            </div> */}
+                            {thread.commentCount}개의 댓글 <IoIosArrowForward />
                         </S.CommentButton>
                     </S.MemberInfoBox>
                     <S.Text ref={text}>
-                        <components.Message isCode={isCode} text={code} language={language} chat={chat} />
+                        <components.Message isCode={isCode} text={code} language={language} thread={thread} />
                     </S.Text>
                     {closedText && (
                         <S.MoreButton>
