@@ -1,25 +1,31 @@
 package com.fourttttty.corookie.issue.dto.response;
 
+import com.fourttttty.corookie.issue.domain.IssueCategory;
 import com.fourttttty.corookie.issue.domain.Issue;
+import com.fourttttty.corookie.issue.domain.IssuePriority;
+import com.fourttttty.corookie.issue.domain.IssueProgress;
 import lombok.Builder;
 
-import java.util.List;
-
 @Builder
-public record IssueDetailResponse(String topic,
+public record IssueDetailResponse(Long id,
+                                  String topic,
                                   String description,
-                                  String progress,
-                                  String priority,
-                                  List<IssueCategoryResponse> issueCategories) {
+                                  IssueProgress progress,
+                                  IssuePriority priority,
+                                  IssueCategory category,
+                                  Long managerId,
+                                  String managerName) {
 
-    public static IssueDetailResponse from(Issue issue,
-                                           List<IssueCategoryResponse> issueCategories) {
+    public static IssueDetailResponse from(Issue issue) {
         return IssueDetailResponse.builder()
+                .id(issue.getId())
                 .topic(issue.getTopic())
                 .description(issue.getDescription())
-                .progress(issue.getProgress().getValue())
-                .priority(issue.getPriority().getValue())
-                .issueCategories(issueCategories)
+                .progress(issue.getProgress())
+                .priority(issue.getPriority())
+                .category(issue.getCategory())
+                .managerId(issue.getManager().getId())
+                .managerName(issue.getManager().getName())
                 .build();
     }
 }

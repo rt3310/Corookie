@@ -21,7 +21,7 @@ const LoginSuccess = () => {
                 const res = await api.apis.auth(token)
                 hooks.setAccessToken(res.data.accessToken)
                 hooks.setRefreshToken(res.data.refreshToken)
-                navigate('/chat/text')
+                navigate('/')
             } catch (err) {
                 alert('로그인에 실패했습니다. 잠시 후 다시 시도해주세요')
             }

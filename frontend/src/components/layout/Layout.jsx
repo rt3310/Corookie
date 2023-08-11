@@ -1,13 +1,36 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
 import styled from 'styled-components'
 
 import * as utils from 'utils'
 import * as hooks from 'hooks'
+import * as api from 'api'
 import * as components from 'components'
 
 const Layout = () => {
     const { profileOpened } = hooks.profileState()
+    const { project, setProject } = hooks.projectState()
+    const { textChannels, setTextChannels } = hooks.textChannelsState()
+
+    useEffect(() => {
+        const initProject = async () => {
+            try {
+                const projectRes = await api.apis.getProject(1)
+                const projectId = projectRes.data.id
+                const textChannelsRes = await api.apis.getTextChannels(projectId)
+                setProject(projectRes.data)
+                setTextChannels(textChannelsRes.data)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+        initProject()
+    }, [])
+
+    if (!project) {
+        return
+    }
 
     return (
         <S.Wrap>

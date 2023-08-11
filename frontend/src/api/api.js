@@ -24,8 +24,13 @@ instance.interceptors.request.use(
 export const apis = {
     auth: token => instance.post('/api/v1/auth', token),
 
-    createProject: (name, description) => instance.post('/api/v1/projects', { name, description }),
-    getProjectList: () => instance.get('api/v1/projects'),
+    createProject: data => instance.post('/api/v1/projects', data),
+    getProjects: () => instance.get('/api/v1/projects'),
+    getProject: projectId => instance.get(`/api/v1/projects/${projectId}`),
+
+    getProjectMembers: projectId => instance.get(`/api/v1/projects/${projectId}/projectmembers`),
+
+    getTextChannels: projectId => instance.get(`/api/v1/projects/${projectId}/text-channels`),
 
     getIssueList: projectId => instance.get(`/api/v1/projects/${projectId}/issues`),
     createIssue: (projectId, data) => instance.post(`/api/v1/projects/${projectId}/issues`, data),
@@ -49,4 +54,5 @@ export const apis = {
     // instance.put 'https://naver.com?issue=123'
     getProjectMembers: projectId => instance.get(`/api/v1/projects/${projectId}/projectmembers`),
     getMember: memberId => instance.get(`/api/v1/members/${memberId}`),
+    getMe: () => instance.get(`api/v1/members/me`),
 }

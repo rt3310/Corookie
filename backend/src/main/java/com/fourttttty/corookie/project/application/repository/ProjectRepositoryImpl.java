@@ -19,6 +19,11 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     }
 
     @Override
+    public List<Project> findByManagerId(Long managerId) {
+        return projectJpaRepository.findByManagerId(managerId);
+    }
+
+    @Override
     public Optional<Project> findByInvitationLink(String invitationLink) {
         return projectJpaRepository.findByInvitationLink(invitationLink);
     }

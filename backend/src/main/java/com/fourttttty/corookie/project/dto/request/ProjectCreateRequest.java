@@ -9,10 +9,9 @@ import java.nio.ByteBuffer;
 import java.util.UUID;
 
 public record ProjectCreateRequest(@NotBlank String name,
-                                   @NotNull String description,
-                                   @NotNull Boolean invitationStatus) {
+                                   @NotNull String description) {
 
-    public Project toEntity(String invitationLink, Member member) {
-        return Project.of(name, description, true, invitationLink, invitationStatus, member);
+    public Project toEntity(Member member) {
+        return Project.of(name, description, true, "", false, member);
     }
 }

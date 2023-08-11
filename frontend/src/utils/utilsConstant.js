@@ -6,16 +6,19 @@ export const URL = {
     HOME: {
         MAIN: '/',
     },
+    PROJECT: {
+        MAIN: '/project/:projectId',
+    },
     CHAT: {
-        TEXT: '/chat/text',
-        VIDEO: '/chat/video',
-        DIRECT: '/chat/direct',
+        TEXT: '/project/:projectId/chat/text',
+        VIDEO: '/project/:projectId/chat/video',
+        DIRECT: '/project/:projectId/chat/direct',
     },
     TASK: {
-        BOARD: '/task/board',
+        BOARD: '/project/:projectId/task/board',
     },
     PLAN: {
-        CALENDER: '/plan/calendar',
+        CALENDER: '/project/:projectId/plan/calendar',
     },
 }
 

@@ -4,9 +4,25 @@ import styled from 'styled-components'
 import { IoMdSend } from 'react-icons/io'
 import { AiOutlinePaperClip } from 'react-icons/ai'
 
-const EditBox = () => {
-    const [chat, setChat] = useState('')
+const EditBox = ({ currentChat, setCurrentChat, send }) => {
     const text = useRef(null)
+
+    const inputChat = e => {
+        if (e.key === 'Enter') {
+            if (e.shiftKey) {
+                return
+            }
+
+            if (currentChat.content.replace(/\s+/gi, '') === '') {
+                e.preventDefault()
+                return
+            }
+
+            send()
+            e.preventDefault()
+            return
+        }
+    }
 
     useEffect(() => {
         if (text) {
@@ -14,12 +30,17 @@ const EditBox = () => {
             let height = text.current.scrollHeight
             text.current.style.height = `${height + 20}px`
         }
-    }, [chat])
+    }, [currentChat])
 
     return (
         <S.Wrap>
-            <S.Edit ref={text} onChange={e => setChat(e.target.value)} rows={1}></S.Edit>
-            <S.SendButton>
+            <S.Edit
+                ref={text}
+                onChange={e => setCurrentChat({ ...currentChat, content: e.target.value })}
+                onKeyPress={e => inputChat(e)}
+                value={currentChat.content}
+                rows={1}></S.Edit>
+            <S.SendButton onClick={() => send()}>
                 <IoMdSend />
             </S.SendButton>
             <S.FileButton>
