@@ -34,8 +34,10 @@ export const apis = {
         instance.get(`/api/v1/projects/${projectId}/text-channels/${textChannelId}`),
     getTextChannels: projectId => instance.get(`/api/v1/projects/${projectId}/text-channels`),
 
-    getThreads: (projectId, textChannelId, page) =>
-        instance.get(`/api/v1/projects/${projectId}/text-channels/${textChannelId}/threads?page=${page}`),
+    getThreads: (projectId, textChannelId, page, size, sort, direction) =>
+        instance.get(
+            `/api/v1/projects/${projectId}/text-channels/${textChannelId}/threads?page=${page}&size=${size}&sort=${sort},${direction}`,
+        ),
 
     getIssueList: projectId => instance.get(`/api/v1/projects/${projectId}/issues`),
     createIssue: (projectId, data) => instance.post(`/api/v1/projects/${projectId}/issues`, data),

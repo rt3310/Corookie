@@ -16,7 +16,8 @@ import { AiOutlinePushpin, AiFillPushpin } from 'react-icons/ai'
 const TextChat = () => {
     const { projectId, channelId } = useParams()
     const { commentOpened } = hooks.commentState()
-    const [page, setPage] = useState(1)
+    const [threads, setThreads] = useState([])
+    const { page, upPage, initPage, size, sort, direction } = hooks.threadsState()
     const [member, setMember] = useState()
     const [textChannel, setTextChannel] = useState(null)
     const [currentChat, setCurrentChat] = useState({
@@ -24,8 +25,7 @@ const TextChat = () => {
         writerId: null,
         content: '',
     })
-    const [threads, setThreads] = useState([])
-    const [load, setLoad] = useState(false) //로딩 스피너
+    const [prevScrollHeight, setPrevScrollHeight] = useState()
     const target = useRef(null)
     const preventRef = useRef(true) //옵저버 중복 실행 방지
     const endRef = useRef(false) //모든 글 로드 확인
@@ -47,10 +47,9 @@ const TextChat = () => {
             heartbeatOutgoing: 4000,
             onConnect: () => {
                 console.log('Connected')
-                client.current.subscribe('/topic/thread/' + 1, message => {
+                client.current.subscribe('/topic/thread/' + channelId, message => {
                     const jsonBody = JSON.parse(message.body)
-                    console.log(jsonBody)
-                    setThreads(chats => [...chats, jsonBody])
+                    setThreads(threads => [jsonBody, ...threads])
                 })
                 client.current.publish({
                     destination: '/app/thread/',
@@ -77,7 +76,6 @@ const TextChat = () => {
         if (currentChat.content.replace(/\s+/gi, '') === '') {
             return
         }
-        console.log(currentChat)
 
         client.current.publish({
             destination: '/app/thread',
@@ -88,11 +86,27 @@ const TextChat = () => {
             ...currentChat,
             content: '',
         })
+        if (scrollRef.current) {
+            scrollRef.current.scrollTop = scrollRef.current.scrollHeight
+        }
+    }
+
+    const obsHandler = entries => {
+        //옵저버 콜백함수
+        const entry = entries[0]
+        if (!endRef.current && entry.isIntersecting && preventRef.current) {
+            //옵저버 중복 실행 방지
+            preventRef.current = false //옵저버 중복 실행 방지
+            upPage()
+        }
     }
 
     useEffect(() => {
+        initPage()
         const observer = new IntersectionObserver(obsHandler, { threshold: 0.5 })
-        if (target.current) observer.observe(target.current)
+        if (target.current) {
+            observer.observe(target.current)
+        }
         const initChannel = async () => {
             const memberRes = await api.apis.getMe()
             const textChannelRes = await api.apis.getTextChannel(projectId, channelId)
@@ -113,30 +127,29 @@ const TextChat = () => {
         }
     }, [projectId, channelId])
 
-    const obsHandler = entries => {
-        //옵저버 콜백함수
-        const entry = entries[0]
-        if (!endRef.current && entry.isIntersecting && preventRef.current) {
-            //옵저버 중복 실행 방지
-            preventRef.current = false //옵저버 중복 실행 방지
-            setPage(prev => prev + 1)
-        }
-    }
-
     const getThreads = useCallback(async () => {
-        setLoad(true)
-        const threadsRes = await api.apis.getThreads(projectId, channelId, page)
-        setThreads([...threads, threadsRes.data])
+        api.apis.getThreads(projectId, channelId, page, size, sort, direction).then(response => {
+            if (page === 0) {
+                setThreads(response.data)
+                return
+            }
+            setThreads(threads => [...threads, ...response.data])
+        })
+        setPrevScrollHeight(scrollRef.current?.scrollHeight)
         preventRef.current = true
-        setLoad(false)
-    }, [projectId, channelId, page])
+    }, [channelId, page])
 
     useEffect(() => {
         getThreads()
     }, [page])
 
     useEffect(() => {
-        scrollRef.current.scrollTop = scrollRef.current.scrollHeight
+        console.log(threads)
+        if (prevScrollHeight) {
+            scrollRef.current.scrollTop = scrollRef.current?.scrollHeight - prevScrollHeight
+            return setPrevScrollHeight(null)
+        }
+        scrollRef.current.scrollTop = scrollRef.current?.scrollHeight - scrollRef.current?.clientHeight
     }, [threads])
 
     return (
@@ -156,7 +169,10 @@ const TextChat = () => {
                 <S.ChatBox>
                     <S.ThreadBox ref={scrollRef}>
                         <div ref={target} />
-                        {threads && threads.map((thread, idx) => <components.Thread key={idx} thread={thread} />)}
+                        {threads &&
+                            [...threads]
+                                .reverse()
+                                .map((thread, idx) => <components.Thread key={idx} thread={thread} />)}
                     </S.ThreadBox>
                     <components.EditBox currentChat={currentChat} setCurrentChat={setCurrentChat} send={send} />
                 </S.ChatBox>
