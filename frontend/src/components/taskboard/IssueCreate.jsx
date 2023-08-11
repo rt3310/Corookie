@@ -12,28 +12,37 @@ const IssueCreate = () => {
     const { value: category, setValue: setCategory } = hooks.createCategoryState()
     const { closeIssueDetail } = hooks.issueDetailState()
     const { tasks, setTasks } = hooks.tasksState()
+    const { project } = hooks.projectState()
+    const { members } = hooks.memberState()
     const [title, setTitle] = useState('')
     let createRef = useRef(null)
     let titleInput = useRef(null)
 
     const postIssue = () => {
-        const data = {
-            topic: title,
-            description: '',
-            progress: 'todo',
-            priority: priority,
-            manager: manager,
-            category: category,
-        }
+        if (title !== '' && priority !== '중요도' && manager !== '책임자' && category !== '분류') {
+            const data = {
+                topic: title,
+                description: '',
+                progress: 'todo',
+                priority: priority,
+                manager: manager,
+                category: category,
+            }
 
-        api.apis
-            .createIssue(1, data)
-            .then(response => {
-                console.log(response)
-            })
-            .catch(error => {
-                console.log(error)
-            })
+            closeIssueCreate()
+
+            api.apis
+                .createIssue(project.id, data)
+                .then(response => {
+                    console.log(response)
+                    setTasks([...tasks, response.data])
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+        } else {
+            alert('정보를 입력해주세요. ')
+        }
     }
 
     useEffect(() => {
@@ -55,33 +64,11 @@ const IssueCreate = () => {
 
     const handleTitleChange = e => setTitle(e.target.value)
 
-    const saveIssue = () => {
-        if (title !== '' && priority !== '중요도' && manager !== '책임자' && category !== '분류') {
-            const newId = tasks.length > 0 ? Number(tasks[tasks.length - 1].id) + 1 : 1
-
-            const newTask = {
-                id: newId + '',
-                title: title,
-                type: category,
-                manager: manager,
-                priority: priority,
-                status: 'toDo',
-                content: '',
-            }
-
-            setTasks([...tasks, newTask])
-
-            closeIssueCreate()
-        } else {
-            alert('정보를 입력해주세요. ')
-        }
-    }
-
     useEffect(() => {
         console.log('변화', tasks)
     }, [tasks])
 
-    const managerList = ['황상미', '최효빈', '신승수', '박종서', '서원호', '권현수']
+    const managerList = members.map(member => member.memberName)
     const priorityList = ['Highest', 'High', 'Normal', 'Low', 'Lowest']
     const categoryList = ['frontend', 'backend', 'design', 'development', 'product', 'other']
     return (
@@ -99,7 +86,7 @@ const IssueCreate = () => {
                         <components.ToggleButton btnType={utils.ISSUE_OPTIONS.createCategory} list={categoryList} />
                     </S.ButtonContainer>
                 </S.Properties>
-                <S.Save onClick={() => saveIssue()}>저장</S.Save>
+                <S.Save onClick={() => postIssue()}>저장</S.Save>
             </S.Values>
         </S.Container>
     )

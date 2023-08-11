@@ -7,7 +7,7 @@ import { IoClose, IoLink } from 'react-icons/io5'
 
 const MemberSetting = ({ memberTextRef }) => {
     const { members, memberOpened, closeMember, removeMember } = hooks.memberState()
-    const { manager } = hooks.setManagerState()
+    const { project } = hooks.projectState()
     const { linkActivated, activateLink, deactivateLink } = hooks.linkState()
 
     const copyLink = async text => {
@@ -20,8 +20,8 @@ const MemberSetting = ({ memberTextRef }) => {
     }
 
     const handleRemoveMember = member => {
-        if (window.confirm(`${member.name}님을 팀에서 퇴출시키겠습니까? `)) {
-            removeMember(member.id)
+        if (window.confirm(`${member.memberName}님을 팀에서 퇴출시키겠습니까? `)) {
+            removeMember(member.memberId)
         }
     }
 
@@ -62,10 +62,12 @@ const MemberSetting = ({ memberTextRef }) => {
                     <S.Line />
                     {members.map(member => {
                         return (
-                            <S.Member key={member.id} className={member.name === manager ? 'manager' : null}>
-                                <img src={member.img} alt={member.name} />
-                                <S.Name>{member.name}</S.Name>
-                                {member.name === manager ? (
+                            <S.Member
+                                key={member.memberId}
+                                className={member.memberName === project.managerName ? 'manager' : null}>
+                                <img src={member.img} alt={member.memberName} />
+                                <S.Name>{member.memberName}</S.Name>
+                                {member.memberName === project.managerName ? (
                                     <S.ManagerButton>
                                         <FaCrown />
                                     </S.ManagerButton>
@@ -101,7 +103,7 @@ const S = {
         display: flex;
         position: absolute;
         top: 116px;
-        left: 216px;
+        left: 217px;
         z-index: 999;
         background-color: ${({ theme }) => theme.color.white};
         width: 180px;
