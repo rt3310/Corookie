@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import * as utils from 'utils'
 import * as hooks from 'hooks'
 
-const LandingHeader = () => {
+const LandingStart = () => {
     const { profileOpened, openProfile, closeProfile } = hooks.profileState()
     const accessToken = hooks.getCookie('Authorization')
     const navigate = useNavigate()
@@ -20,12 +20,7 @@ const LandingHeader = () => {
 
     return (
         <S.Wrap>
-            <S.Title onClick={() => navigate(utils.URL.HOME.LANDING)}>CoRookie</S.Title>
-            {/* <S.Profile onClick={() => toggleProfile()}>
-                <img src={require('images/thread_profile.png').default} alt="스레드 이미지" />
-            </S.Profile> */}
-            <S.AboutUs>About Us</S.AboutUs>
-            {!accessToken && <S.Login onClick={() => navigate(utils.URL.LOGIN.LOGIN)}>Login</S.Login>}
+            {!accessToken && <S.Login onClick={() => navigate(utils.URL.LOGIN.LOGIN)}>시작하기</S.Login>}
             {accessToken && (
                 <S.Login
                     onClick={() => {
@@ -48,7 +43,7 @@ const S = {
         height: 56px;
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: center;
     `,
     Title: styled.div`
         width: 167px;
@@ -69,23 +64,27 @@ const S = {
             height: 40px;
         }
     `,
-    AboutUs: styled.div`
-        width: 100%;
-        height: 100%;
-        margin-left: 24px;
-        padding: 24px 8px 0;
-        color: ${({ theme }) => theme.color.main};
-        cursor: pointer;
-    `,
     Login: styled.div`
+        display: flex;
+        justify-content: center;
+        align-items: center;
         height: 100%;
-        width: 100%;
-        text-align: right;
-        margin-left: auto;
-        padding: 24px 32px 0 32px;
+        width: 180px;
+        padding: 10px;
         color: ${({ theme }) => theme.color.main};
-        cursor: pointer;
+
+        border-radius: 8px;
+        border: 1px solid ${({ theme }) => theme.color.main};
+        background-color: ${({ theme }) => theme.color.main};
+        color: ${({ theme }) => theme.color.white};
+        margin: auto 0 0 0;
+        transition: all 0.2s linear;
+
+        &:hover {
+            background-color: ${({ theme }) => theme.color.white};
+            color: ${({ theme }) => theme.color.main};
+        }
     `,
 }
 
-export default LandingHeader
+export default LandingStart

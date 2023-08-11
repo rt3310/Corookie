@@ -7,7 +7,7 @@ const Landing = () => {
         <S.Wrap>
             <components.FullPageScroll>
                 <S.Box>
-                    <components.LandingHeader />
+                    {/* <components.LandingHeader /> */}
                     <S.Section1>
                         <components.LandingMain />
                     </S.Section1>
@@ -59,10 +59,10 @@ const S = {
         justify-content: center;
         height: 100vh;
         width: 100%;
-        /* background-image: url(${require('images/background.png').default});
+        background-image: url(${require('images/main_background.png').default});
         background-size: 100% 1000px;
-        background-position-y: center; */
-        background: ${({ theme }) => theme.color.main};
+        background-position-y: center;
+        /* background: ${({ theme }) => theme.color.main}; */
     `,
     Section2: styled.div`
         display: flex;

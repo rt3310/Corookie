@@ -9,7 +9,7 @@ import { Carousel } from 'react-responsive-carousel'
 import * as hooks from 'hooks'
 import * as api from 'api'
 
-const LandingMain = () => {
+const ProjectChoose = () => {
     const navigate = useNavigate()
     const accessToken = hooks.getCookie('Authorization')
     const [projects, setProjects] = useState([])
@@ -43,14 +43,7 @@ const LandingMain = () => {
             <S.Logo>
                 <img src={require('images/logo.png').default} alt={'로고'} />
             </S.Logo>
-            <S.Title>
-                웹 개발 초심자를 위한<nav></nav>프로젝트 협업 툴
-            </S.Title>
-            <S.SubTitle>
-                웹 개발 프로젝트에 필요한 기본적인 기능을 모두 제공하여<nav></nav>처음으로 웹 개발을 진행하는 사람도
-                원활한 협업을 할 수 있습니다.
-            </S.SubTitle>
-            <components.LandingStart />
+
             {!createFormOpened && (
                 <S.ProjectCarousel>
                     <Carousel
@@ -96,25 +89,6 @@ const LandingMain = () => {
 const S = {
     Wrap: styled.div`
         position: relative;
-    `,
-
-    Title: styled.div`
-        width: auto;
-        color: ${({ theme }) => theme.color.black};
-        margin: 10px 8px 40px 8px;
-        padding: 8px;
-        text-align: center;
-        line-height: 1.5;
-        font-size: ${({ theme }) => theme.fontsize.landingtitle};
-    `,
-    SubTitle: styled.div`
-        width: auto;
-        color: ${({ theme }) => theme.color.black};
-        margin: 16px 8px 32px 8px;
-        padding: 8px;
-        text-align: center;
-        font-size: ${({ theme }) => theme.fontsize.sub1};
-        line-height: 2;
     `,
     ProjectBox: styled.div`
         display: flex;
@@ -255,4 +229,4 @@ const S = {
     `,
 }
 
-export default LandingMain
+export default ProjectChoose
