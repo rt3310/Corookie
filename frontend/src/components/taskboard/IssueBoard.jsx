@@ -7,17 +7,18 @@ import * as api from 'api'
 
 const IssueBoard = () => {
     const { issueCreateOpened } = hooks.issueCreateState()
-    const { tasks } = hooks.tasksState()
+    const { project } = hooks.projectState()
+    const { tasks, setTasks } = hooks.tasksState()
 
     useEffect(() => {
-        const projectId = 1
         api.apis
-            .getIssueList(1)
+            .getIssueList(project.id)
             .then(response => {
                 console.log(response.data)
+                setTasks(response.data)
             })
             .catch(error => {
-                console.log(error)
+                console.log('태스크 불러오기 실패', error)
             })
     }, [])
 
@@ -26,18 +27,8 @@ const IssueBoard = () => {
             <S.Wrap>
                 {issueCreateOpened && <components.IssueCreate />}
                 {Array.isArray(tasks) &&
-                    tasks.map((task, idx) => {
-                        return (
-                            <components.IssuePreview
-                                key={idx}
-                                id={task.id}
-                                title={task.title}
-                                type={task.type}
-                                manager={task.manager}
-                                priority={task.priority}
-                                status={task.status}
-                            />
-                        )
+                    tasks.map(task => {
+                        return <components.IssuePreview key={task.id} task={task} />
                     })}
             </S.Wrap>
         </S.Container>
@@ -58,6 +49,7 @@ const S = {
     `,
     Wrap: styled.div`
         /* padding: 0 16px; */
+        min-height: 100%;
         overflow-y: auto;
         &::-webkit-scrollbar {
             height: 0px;

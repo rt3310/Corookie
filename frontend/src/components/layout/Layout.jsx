@@ -18,7 +18,7 @@ const Layout = () => {
         const initProject = async projectId => {
             try {
                 const projectRes = await api.apis.getProject(projectId)
-                const textChannelsRes = await api.apis.getTextChannels(projectId)
+                const textChannelsRes = await api.apis.getTextChannels(projectRes.data.id)
                 setProject(projectRes.data)
                 setTextChannels(textChannelsRes.data)
             } catch (error) {

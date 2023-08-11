@@ -19,6 +19,7 @@ export { default as Imoticon } from './textchat/Imoticon'
 
 export { default as TaskHeader } from './taskboard/TaskHeader'
 export { default as ToggleButton } from './taskboard/ToggleButton'
+export { default as ManagerToggleButton } from './taskboard/ManagerToggleButton'
 
 export { default as IssueBoard } from './taskboard/IssueBoard'
 export { default as IssuePreview } from './taskboard/IssuePreview'
