@@ -7,10 +7,13 @@ import com.fourttttty.corookie.member.dto.response.MemberResponse;
 import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.support.RestDocsTest;
 import com.fourttttty.corookie.textchannel.domain.TextChannel;
+import com.fourttttty.corookie.thread.application.service.ThreadEmojiService;
 import com.fourttttty.corookie.thread.application.service.ThreadService;
 import com.fourttttty.corookie.thread.domain.Thread;
 import com.fourttttty.corookie.thread.dto.request.ThreadModifyRequest;
 import com.fourttttty.corookie.thread.dto.response.ThreadDetailResponse;
+import com.fourttttty.corookie.thread.dto.response.ThreadEmojiResponse;
+import com.fourttttty.corookie.thread.dto.response.ThreadListResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,6 +24,7 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.fourttttty.corookie.support.ApiDocumentUtils.getDocumentRequest;
@@ -46,9 +50,13 @@ class ThreadControllerTest extends RestDocsTest {
     private ThreadService threadService;
 
     @MockBean
+    private ThreadEmojiService threadEmojiService;
+
+    @MockBean
     private SimpMessageSendingOperations sendingOperations;
 
     private Thread thread;
+    private List<ThreadEmojiResponse> emojis;
 
     @BeforeEach
     void initTexture() {
@@ -68,6 +76,7 @@ class ThreadControllerTest extends RestDocsTest {
                 0,
                 textChannel,
                 member);
+        List<ThreadEmojiResponse> emojis = new ArrayList<>();
     }
 
     @Test
@@ -75,22 +84,23 @@ class ThreadControllerTest extends RestDocsTest {
     void findAllThread() throws Exception {
         // given
         LocalDateTime now = LocalDateTime.now();
-        ThreadDetailResponse threadDetailResponse = new ThreadDetailResponse(MemberResponse.from(thread.getWriter()),
+        ThreadListResponse threadListResponse = new ThreadListResponse(MemberResponse.from(thread.getWriter()),
                 now,
                 thread.getContent(),
-                thread.getCommentCount());
+                thread.getCommentCount()
+                );
 
         given(threadService.findAll(any(Long.class)))
-                .willReturn(List.of(threadDetailResponse));
+                .willReturn(List.of(threadListResponse));
 
         // when
         ResultActions perform = mockMvc.perform(get("/api/v1/projects/{projectId}/text-channels/{textChannelId}/threads", 1L, 1L));
 
         // then
         perform.andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].content").value(threadDetailResponse.content()))
-                .andExpect(jsonPath("$[0].commentCount").value(threadDetailResponse.commentCount()))
-                .andExpect(jsonPath("$[0].writer.name").value(threadDetailResponse.writer().name()));
+                .andExpect(jsonPath("$[0].content").value(threadListResponse.content()))
+                .andExpect(jsonPath("$[0].commentCount").value(threadListResponse.commentCount()))
+                .andExpect(jsonPath("$[0].writer.name").value(threadListResponse.writer().name()));
 
         perform.andDo(print())
                 .andDo(document("thread-find-all",
@@ -113,15 +123,15 @@ class ThreadControllerTest extends RestDocsTest {
     void findThreadById() throws Exception {
         // given
         LocalDateTime now = LocalDateTime.now();
+        emojis.add(ThreadEmojiResponse.from(1L, false, 1L));
+
         ThreadDetailResponse threadDetailResponse = new ThreadDetailResponse(
                 MemberResponse.from(thread.getWriter()),
                 now,
                 thread.getContent(),
-                thread.getCommentCount()
+                thread.getCommentCount(),
+                emojis
         );
-
-        given(threadService.findById(any(Long.class)))
-                .willReturn(threadDetailResponse);
 
         // when
         ResultActions perform = mockMvc.perform(get("/api/v1/projects/{projectId}/text-channels/{textChannelId}/threads/{threadId}", 1L, 1L, 1L));
@@ -154,14 +164,17 @@ class ThreadControllerTest extends RestDocsTest {
     void modifyTextChannel() throws Exception {
         // given
         LocalDateTime now = LocalDateTime.now();
+        emojis.add(ThreadEmojiResponse.from(1L, false, 1L));
+        
         ThreadDetailResponse threadDetailResponse = new ThreadDetailResponse(
                 MemberResponse.from(thread.getWriter()),
                 now,
                 thread.getContent(),
-                thread.getCommentCount()
+                thread.getCommentCount(),
+                emojis
         );
 
-        given(threadService.modify(any(ThreadModifyRequest.class), any(Long.class)))
+        given(threadService.modify(any(ThreadModifyRequest.class), any(Long.class), any(Long.class)))
                 .willReturn(threadDetailResponse);
 
         ThreadModifyRequest request = new ThreadModifyRequest("content");
@@ -175,7 +188,8 @@ class ThreadControllerTest extends RestDocsTest {
         perform.andExpect(status().isOk())
                 .andExpect(jsonPath("$.content").value(threadDetailResponse.content()))
                 .andExpect(jsonPath("$.commentCount").value(threadDetailResponse.commentCount()))
-                .andExpect(jsonPath("$.writer.name").value(threadDetailResponse.writer().name()));
+                .andExpect(jsonPath("$.writer.name").value(threadDetailResponse.writer().name()))
+                .andExpect(jsonPath("$.emojis.[0].emojiId").value(threadDetailResponse.emojis().get(0).emojiId()));
 
         perform.andDo(print())
                 .andDo(document("thread-modify",
