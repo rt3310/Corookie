@@ -30,6 +30,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -80,7 +81,7 @@ class CommentControllerTest extends RestDocsTest {
         // given
         LocalDateTime now = LocalDateTime.now();
         CommentDetailResponse commentDetailResponse = new CommentDetailResponse(thread.getContent(),
-                MemberResponse.from(thread.getWriter()),
+                new MemberResponse(1L, "name", "email@mail.com"),
                 now
                 );
 
@@ -106,6 +107,7 @@ class CommentControllerTest extends RestDocsTest {
                         responseFields(
                                 fieldWithPath("[].content").type(STRING).description("댓글 내용"),
                                 fieldWithPath("[].createdAt").type(STRING).description("생성 일자"),
+                                fieldWithPath("[].writer.id").type(NUMBER).description("작성자 키"),
                                 fieldWithPath("[].writer.name").type(STRING).description("작성자 이름"),
                                 fieldWithPath("[].writer.email").type(STRING).description("작성자 이메일"))
                 ));
@@ -117,19 +119,17 @@ class CommentControllerTest extends RestDocsTest {
         // given
         LocalDateTime now = LocalDateTime.now();
         CommentDetailResponse commentDetailResponse = new CommentDetailResponse(thread.getContent(),
-                MemberResponse.from(thread.getWriter()),
+                new MemberResponse(1L, "name", "email@mail.com"),
                 now
         );
 
         given(commentService.modify(any(CommentModifyRequest.class), any(Long.class)))
                 .willReturn(commentDetailResponse);
 
-        CommentModifyRequest request = new CommentModifyRequest("content");
-
         // when
         ResultActions perform = mockMvc.perform(put("/api/v1/projects/{projectId}/text-channels/{textChannelId}/threads/{threadId}/comments/{commentId}", 1L, 1L, 1L, 1L)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(request)));
+                .content(toJson(new CommentModifyRequest("content"))));
 
         // then
         perform.andExpect(status().isOk())
@@ -148,6 +148,7 @@ class CommentControllerTest extends RestDocsTest {
                         responseFields(
                                 fieldWithPath("content").type(STRING).description("댓글 내용"),
                                 fieldWithPath("createdAt").type(STRING).description("생성 일자"),
+                                fieldWithPath("writer.id").type(NUMBER).description("작성자 키"),
                                 fieldWithPath("writer.name").type(STRING).description("작성자 이름"),
                                 fieldWithPath("writer.email").type(STRING).description("작성자 이메일"))
                 ));
@@ -156,8 +157,6 @@ class CommentControllerTest extends RestDocsTest {
     @Test
     @DisplayName("댓글 삭제")
     void deleteComment() throws Exception{
-        // given
-
         // when
         ResultActions perform = mockMvc.perform(delete("/api/v1/projects/{projectId}/text-channels/{textChannelId}/threads/{threadId}/comments/{commentId}", 1L, 1L, 1L, 1L));
 

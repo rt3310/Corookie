@@ -517,15 +517,16 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 148
+Content-Length: 172
 
 [ {
   "content" : "content",
   "writer" : {
+    "id" : 1,
     "name" : "name",
-    "email" : "email"
+    "email" : "email@mail.com"
   },
-  "createdAt" : "2023-08-10T14:22:19.7591901"
+  "createdAt" : "2023-08-11T13:04:37.6169879"
 } ]</code></pre>
 </div>
 </div>
@@ -552,6 +553,11 @@ Content-Length: 148
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].createdAt</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">생성 일자</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].writer.id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작성자 키</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].writer.name</code></p></td>
@@ -626,15 +632,16 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 144
+Content-Length: 168
 
 {
   "content" : "content",
   "writer" : {
+    "id" : 1,
     "name" : "name",
-    "email" : "email"
+    "email" : "email@mail.com"
   },
-  "createdAt" : "2023-08-10T14:22:18.8201909"
+  "createdAt" : "2023-08-11T13:04:36.7499855"
 }</code></pre>
 </div>
 </div>
@@ -661,6 +668,11 @@ Content-Length: 144
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>createdAt</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">생성 일자</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>writer.id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작성자 키</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>writer.name</code></p></td>

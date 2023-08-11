@@ -20,7 +20,7 @@ const App = () => {
                         <Route path={utils.URL.CHAT.VIDEO} element={<pages.VideoChat />} />
                         <Route path={utils.URL.CHAT.DIRECT} element={<pages.DirectMessage />} />
                         <Route path={utils.URL.TASK.BOARD} element={<pages.TaskBoard />} />
-                        <Route path={utils.URL.PLAN.CALENDER} element={<pages.Plan />} />
+                        <Route path={utils.URL.PLAN.PLAN} element={<pages.Plan />} />
                     </Route>
 
                     <Route path={utils.URL.LOGIN.LOGIN} element={<pages.Login />} />

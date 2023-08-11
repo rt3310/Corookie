@@ -10,6 +10,7 @@ import * as api from 'api'
 
 const ProjectIntro = () => {
     const { manager, managerOpened, openManager, closeManager } = hooks.setManagerState()
+    const { projectMembers } = hooks.projectMembersState()
     const { members, setMembers, memberOpened, openMember, closeMember } = hooks.memberState()
     const { project, setProject } = hooks.projectState()
     const [flip, setFlip] = useState(false)
@@ -99,7 +100,7 @@ const ProjectIntro = () => {
                         </S.Manager>
                         <S.Members ref={memberTextRef} onClick={() => clickMember()}>
                             <IoPeople />
-                            {members.length}
+                            {projectMembers.length}
                         </S.Members>
                         <components.MemberSetting memberTextRef={memberTextRef} />
                     </S.MemberInfo>

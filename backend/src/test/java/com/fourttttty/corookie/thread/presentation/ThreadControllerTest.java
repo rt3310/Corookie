@@ -18,6 +18,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.test.web.servlet.ResultActions;
@@ -37,8 +38,7 @@ import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.JsonFieldType.BOOLEAN;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -82,17 +82,22 @@ class ThreadControllerTest extends RestDocsTest {
     void findAllThread() throws Exception {
         // given
         LocalDateTime now = LocalDateTime.now();
-        ThreadListResponse threadListResponse = new ThreadListResponse(MemberResponse.from(thread.getWriter()),
+        ThreadDetailResponse threadDetailResponse = new ThreadDetailResponse(
+                new MemberResponse(1L, "name", "email@mail.com"),
                 now,
                 thread.getContent(),
                 thread.getCommentCount()
                 );
 
-        given(threadService.findAll(any(Long.class)))
-                .willReturn(List.of(threadListResponse));
+        given(threadService.findByTextChannelIdLatest(any(Long.class), any(Pageable.class)))
+                .willReturn(List.of(threadDetailResponse));
 
         // when
-        ResultActions perform = mockMvc.perform(get("/api/v1/projects/{projectId}/text-channels/{textChannelId}/threads", 1L, 1L));
+        ResultActions perform = mockMvc.perform(get("/api/v1/projects/{projectId}/text-channels/{textChannelId}/threads",
+                1L, 1L)
+                .param("page", "0")
+                .param("size", "10")
+                .param("sort", "createdAt,desc"));
 
         // then
         perform.andExpect(status().isOk())
@@ -107,10 +112,16 @@ class ThreadControllerTest extends RestDocsTest {
                         pathParameters(
                                 parameterWithName("projectId").description("프로젝트 키"),
                                 parameterWithName("textChannelId").description("텍스트 채널 키")),
+                        queryParameters(
+                                parameterWithName("page").description("페이지 번호"),
+                                parameterWithName("size").description("요청 개수"),
+                                parameterWithName("sort").description("정렬 기준")
+                        ),
                         responseFields(
                                 fieldWithPath("[].content").type(STRING).description("스레드 내용"),
                                 fieldWithPath("[].commentCount").type(NUMBER).description("댓글 수"),
                                 fieldWithPath("[].createdAt").type(STRING).description("생성 일자"),
+                                fieldWithPath("[].writer.id").type(NUMBER).description("작성자 키"),
                                 fieldWithPath("[].writer.name").type(STRING).description("작성자 이름"),
                                 fieldWithPath("[].writer.email").type(STRING).description("작성자 이메일"))
                 ));
@@ -123,7 +134,7 @@ class ThreadControllerTest extends RestDocsTest {
         LocalDateTime now = LocalDateTime.now();
 
         ThreadDetailResponse threadDetailResponse = new ThreadDetailResponse(
-                MemberResponse.from(thread.getWriter()),
+                new MemberResponse(1L, "name", "email@mail.com"),
                 now,
                 thread.getContent(),
                 thread.getCommentCount(),
@@ -154,6 +165,7 @@ class ThreadControllerTest extends RestDocsTest {
                                 fieldWithPath("content").type(STRING).description("스레드 내용"),
                                 fieldWithPath("commentCount").type(NUMBER).description("댓글 수"),
                                 fieldWithPath("createdAt").type(STRING).description("생성 일자"),
+                                fieldWithPath("writer.id").type(NUMBER).description("작성자 키"),
                                 fieldWithPath("writer.name").type(STRING).description("작성자 이름"),
                                 fieldWithPath("writer.email").type(STRING).description("작성자 이메일"),
                                 fieldWithPath("emojis.[].emojiId").type(NUMBER).description("이모지 키"),
@@ -170,7 +182,7 @@ class ThreadControllerTest extends RestDocsTest {
         LocalDateTime now = LocalDateTime.now();
 
         ThreadDetailResponse threadDetailResponse = new ThreadDetailResponse(
-                MemberResponse.from(thread.getWriter()),
+                new MemberResponse(1L, "name", "email@mail.com"),
                 now,
                 thread.getContent(),
                 thread.getCommentCount(),
@@ -206,6 +218,7 @@ class ThreadControllerTest extends RestDocsTest {
                                 fieldWithPath("content").type(STRING).description("스레드 내용"),
                                 fieldWithPath("commentCount").type(NUMBER).description("댓글 수"),
                                 fieldWithPath("createdAt").type(STRING).description("생성 일자"),
+                                fieldWithPath("writer.id").type(NUMBER).description("작성자 키"),
                                 fieldWithPath("writer.name").type(STRING).description("작성자 이름"),
                                 fieldWithPath("writer.email").type(STRING).description("작성자 이메일"),
                                 fieldWithPath("emojis.[].emojiId").type(NUMBER).description("이모지 키"),

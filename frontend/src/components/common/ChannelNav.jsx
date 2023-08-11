@@ -37,7 +37,9 @@ const ChannelNav = () => {
                         텍스트 채널 &nbsp; <IoIosArrowUp />
                     </S.ChannelHead>
                     {textChannels.map((textChannel, index) => (
-                        <S.Channel onClick={() => navigate(utils.URL.CHAT.TEXT)}>
+                        <S.Channel
+                            key={textChannel.id}
+                            onClick={() => navigate('/project/' + project.id + '/channel/text/' + textChannel.id)}>
                             {index + 1}. {textChannel.name}
                             {pinOn && <AiFillPushpin />}
                         </S.Channel>
@@ -52,7 +54,7 @@ const ChannelNav = () => {
                     </S.ChannelHead>
                     {projectMembers &&
                         projectMembers.map(member => (
-                            <S.DmMember onClick={() => navigate(utils.URL.CHAT.DIRECT)}>
+                            <S.DmMember key={member.memberId} onClick={() => navigate(utils.URL.CHAT.DIRECT)}>
                                 <S.DmProfileImage>
                                     <img src={require('images/profile.png').default} alt="프로필" />
                                 </S.DmProfileImage>
@@ -231,7 +233,7 @@ const S = {
             display: flex;
         }
     `,
-    DmProfileImage: styled.li`
+    DmProfileImage: styled.div`
         display: flex;
         align-items: center;
         margin: 0 10px 0 0;

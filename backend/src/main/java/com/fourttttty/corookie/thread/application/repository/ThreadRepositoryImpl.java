@@ -4,6 +4,8 @@ import com.fourttttty.corookie.thread.domain.Thread;
 import com.fourttttty.corookie.thread.infrastructure.ThreadJpaRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -26,7 +28,7 @@ public class ThreadRepositoryImpl implements ThreadRepository {
     }
 
     @Override
-    public List<Thread> findByTextChannelId(Long textChannelId) {
-        return threadJpaRepository.findByTextChannelId(textChannelId);
+    public Page<Thread> findByTextChannelIdLatest(Long textChannelId, Pageable pageable) {
+        return threadJpaRepository.findByTextChannelId(textChannelId, pageable);
     }
 }

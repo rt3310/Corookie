@@ -482,7 +482,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="_request"><a class="link" href="#_request">Request</a></h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/projects/1/text-channels/1/threads HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/projects/1/text-channels/1/threads?page=0&amp;size=10&amp;sort=createdAt%2Cdesc HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -539,6 +539,11 @@ Host: localhost:8080</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">생성 일자</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].writer.id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작성자 키</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].writer.name</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">작성자 이름</p></td>
@@ -560,14 +565,15 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 171
+Content-Length: 194
 
 [ {
   "writer" : {
+    "id" : 1,
     "name" : "name",
-    "email" : "email"
+    "email" : "email@mail.com"
   },
-  "createdAt" : "2023-08-10T14:22:32.4511877",
+  "createdAt" : "2023-08-11T13:04:49.453989",
   "content" : "content",
   "commentCount" : 0
 } ]</code></pre>
@@ -601,6 +607,11 @@ Content-Length: 171
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].createdAt</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">생성 일자</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].writer.id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작성자 키</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].writer.name</code></p></td>
@@ -665,14 +676,15 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 167
+Content-Length: 191
 
 {
   "writer" : {
+    "id" : 1,
     "name" : "name",
-    "email" : "email"
+    "email" : "email@mail.com"
   },
-  "createdAt" : "2023-08-10T14:22:32.5131902",
+  "createdAt" : "2023-08-11T13:04:49.5299869",
   "content" : "content",
   "commentCount" : 0
 }</code></pre>
@@ -706,6 +718,11 @@ Content-Length: 167
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>createdAt</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">생성 일자</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>writer.id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작성자 키</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>writer.name</code></p></td>
@@ -776,14 +793,15 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 167
+Content-Length: 190
 
 {
   "writer" : {
+    "id" : 1,
     "name" : "name",
-    "email" : "email"
+    "email" : "email@mail.com"
   },
-  "createdAt" : "2023-08-10T14:22:32.3751884",
+  "createdAt" : "2023-08-11T13:04:49.386987",
   "content" : "content",
   "commentCount" : 0
 }</code></pre>
@@ -817,6 +835,11 @@ Content-Length: 167
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>createdAt</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">생성 일자</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>writer.id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작성자 키</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>writer.name</code></p></td>
