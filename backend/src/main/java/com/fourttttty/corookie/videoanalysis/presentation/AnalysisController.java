@@ -18,11 +18,9 @@ public class AnalysisController {
     private final AnalysisService analysisService;
 
     @PostMapping
-    public ResponseEntity<AnalysisResponse> uploadRecord(@RequestPart("file")MultipartFile multipartFile){
-        try{
-            return ResponseEntity.ok(analysisService.uploadAudio(multipartFile));
-        }catch (Exception e){
-            return ResponseEntity.ok().build();
-        }
+    public ResponseEntity<AnalysisResponse> AnalysisCreate(
+        @RequestParam("file")MultipartFile file,
+        @PathVariable("videoChannelId") Long videoChannelId){
+        return ResponseEntity.ok(analysisService.createAnalysis(file,videoChannelId));
     }
 }
