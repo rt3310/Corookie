@@ -46,9 +46,12 @@ client:
 cloud:
   aws:
     s3:
-      bucket: corookie-ai
-    stack.auto: false
-    region.static: ap-northeast-2
+      bucket: corookie.sss
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
     credentials:
-      accessKey: AKIAVQXB5F7YCPRAA53Q
-      secretKey: 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
+      access-key: AKIAVQXB5F7YOTLUYLDZ
+      secret-key: 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
+
