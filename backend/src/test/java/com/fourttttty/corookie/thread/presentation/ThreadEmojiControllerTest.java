@@ -130,7 +130,6 @@ public class ThreadEmojiControllerTest extends RestDocsTest {
     @DisplayName("쓰레드에 이모지 제거")
     void threadEmojiDelete() throws Exception {
         // given
-        ThreadEmojiCreateRequest request = new ThreadEmojiCreateRequest(1L);
 
         // when
         ResultActions perform = mockMvc.perform(delete("/api/v1/projects/{projectId}/text-channels/{textChannelId}/threads/{threadId}/emojis/{emojiId}", 1L, 1L, 1L, 1L)

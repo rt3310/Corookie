@@ -7,7 +7,6 @@ import com.fourttttty.corookie.member.dto.response.MemberResponse;
 import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.support.RestDocsTest;
 import com.fourttttty.corookie.textchannel.domain.TextChannel;
-import com.fourttttty.corookie.thread.application.service.ThreadEmojiService;
 import com.fourttttty.corookie.thread.application.service.ThreadService;
 import com.fourttttty.corookie.thread.domain.Thread;
 import com.fourttttty.corookie.thread.dto.request.ThreadModifyRequest;

@@ -18,8 +18,8 @@ public class ThreadEmojiRepositoryImpl implements ThreadEmojiRepository {
     }
 
     @Override
-    public Optional<ThreadEmoji> findByEmojiAndThread(Long emojiId, Long threadId, Long memberId) {
-        return threadEmojiJpaRepository.findByMemberIdAndEmojiIdAndThreadId(emojiId, threadId, memberId);
+    public Optional<ThreadEmoji> findByMemberAndEmojiAndThread(Long memberId, Long emojiId, Long threadId) {
+        return threadEmojiJpaRepository.findByMemberIdAndEmojiIdAndThreadId(memberId, emojiId, threadId);
     }
 
     @Override
@@ -28,12 +28,17 @@ public class ThreadEmojiRepositoryImpl implements ThreadEmojiRepository {
     }
 
     @Override
-    public Boolean existsById(Long threadEmojiId) {
-        return threadEmojiJpaRepository.existsById(threadEmojiId);
+    public Boolean existsByMemberAndEmojiAndThread(Long memberId, Long emojiId, Long threadId) {
+        return threadEmojiJpaRepository.existsByMemberIdAndEmojiIdAndThreadId(memberId, emojiId, threadId);
     }
 
     @Override
-    public void delete(Long threadEmojiId) {
-        threadEmojiJpaRepository.deleteById(threadEmojiId);
+    public void delete(ThreadEmoji threadEmoji) {
+        threadEmojiJpaRepository.delete(threadEmoji);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        threadEmojiJpaRepository.deleteById(id);
     }
 }

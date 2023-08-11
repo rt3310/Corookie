@@ -30,14 +30,14 @@ public class ThreadEmojiController {
     public ResponseEntity<ThreadEmojiResponse> threadEmojiCreate(ThreadEmojiCreateRequest request,
                                                                  @PathVariable Long threadId,
                                                                  @AuthenticationPrincipal LoginUser loginUser) {
-        return ResponseEntity.ok(threadEmojiService.create(request, threadId, loginUser.getMemberId()));
+        return ResponseEntity.ok(threadEmojiService.create(request, loginUser.getMemberId(), threadId));
     }
 
     @DeleteMapping("/{emojiId}")
     public ResponseEntity<Void> threadEmojiDelete(@PathVariable Long emojiId,
                                                   @PathVariable Long threadId,
                                                   @AuthenticationPrincipal LoginUser loginUser){
-        threadEmojiService.delete(emojiId, threadId, loginUser.getMemberId());
+        threadEmojiService.delete(loginUser.getMemberId(), emojiId, threadId);
         return ResponseEntity.noContent().build();
     }
 }

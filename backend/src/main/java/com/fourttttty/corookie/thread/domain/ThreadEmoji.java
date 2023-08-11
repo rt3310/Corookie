@@ -14,7 +14,7 @@ public class ThreadEmoji {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "thread_emoji_id")
-    private Long threadEmojiId;
+    private Long id;
 
     @Column(name = "memeber_id")
     private Long memberId;

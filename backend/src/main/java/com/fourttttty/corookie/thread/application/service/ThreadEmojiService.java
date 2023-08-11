@@ -19,7 +19,7 @@ public class ThreadEmojiService {
     private final ThreadEmojiRepository threadEmojiRepository;
 
     @Transactional
-    public ThreadEmojiResponse create(ThreadEmojiCreateRequest request, Long threadId, Long memberId) {
+    public ThreadEmojiResponse create(ThreadEmojiCreateRequest request, Long memberId, Long threadId) {
         Long emojiId = request.emojiId();
 
         ThreadEmoji threadEmoji  = threadEmojiRepository.save(ThreadEmoji.of(memberId, emojiId, threadId));
@@ -28,16 +28,19 @@ public class ThreadEmojiService {
     }
 
     @Transactional
-    public void delete(Long emojiId, Long threadId, Long memberId) {
-        Long id = getThreadEmojiId(emojiId, threadId, memberId);
-        threadEmojiRepository.delete(id);
+    public void delete(Long memberId, Long emojiId, Long threadId) {
+        //Long id = getThreadEmojiId(memberId, emojiId, threadId);
+        ThreadEmoji threadEmoji = threadEmojiRepository
+                .findByMemberAndEmojiAndThread(memberId, emojiId, threadId)
+                .orElseThrow(EntityNotFoundException::new);
+        threadEmojiRepository.delete(threadEmoji);
     }
 
-    private Long getThreadEmojiId(Long emojiId, Long threadId, Long memberId) {
+    private Long getThreadEmojiId(Long memberId, Long emojiId, Long threadId) {
         ThreadEmoji threadEmoji = threadEmojiRepository
-                .findByEmojiAndThread(emojiId, threadId, memberId)
+                .findByMemberAndEmojiAndThread(memberId, emojiId, threadId)
                 .orElseThrow(EntityNotFoundException::new);
-        return threadEmoji.getThreadEmojiId();
+        return threadEmoji.getId();
     }
 
     public List<ThreadEmojiResponse> findByThreadAndMember(Long threadId, Long memberId) {
@@ -45,8 +48,7 @@ public class ThreadEmojiService {
 
         for (Emoji emoji : Emoji.values()) {
             Long emojiId = emoji.getId();
-            Long threadEmojiId = getThreadEmojiId(memberId, emojiId, threadId);
-            Boolean isClicked = threadEmojiRepository.existsById(threadEmojiId);
+            Boolean isClicked = threadEmojiRepository.existsByMemberAndEmojiAndThread(memberId, emojiId, threadId);
             Long count = threadEmojiRepository.countByEmojiAndThread(emojiId, threadId);
             list.add(ThreadEmojiResponse.from(emojiId, isClicked, count));
         }

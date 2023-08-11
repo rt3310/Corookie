@@ -6,8 +6,9 @@ import java.util.Optional;
 
 public interface ThreadEmojiRepository {
     ThreadEmoji save(ThreadEmoji threadEmoji);
-    Optional<ThreadEmoji> findByEmojiAndThread(Long emojiId, Long threadId, Long memberId);
+    Optional<ThreadEmoji> findByMemberAndEmojiAndThread(Long memberId, Long emojiId, Long threadId);
     Long countByEmojiAndThread(Long emojiId, Long threadId);
-    Boolean existsById(Long threadEmojiId);
-    void delete(Long threadEmojiId);
+    Boolean existsByMemberAndEmojiAndThread(Long memberId, Long emojiId, Long threadId);
+    void delete(ThreadEmoji threadEmoji);
+    void deleteById(Long id);
 }
