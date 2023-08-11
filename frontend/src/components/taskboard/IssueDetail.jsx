@@ -3,35 +3,52 @@ import styled from 'styled-components'
 
 import * as hooks from 'hooks'
 import * as components from 'components'
+import * as api from 'api'
 import { IoTrashOutline, IoClose, IoPencil } from 'react-icons/io5'
 import * as utils from 'utils'
 
 const IssueDetail = ({ id }) => {
     const { closeIssueDetail } = hooks.issueDetailState()
     const { tasks, setTasks } = hooks.tasksState()
+    const { project } = hooks.projectState()
+    const { members } = hooks.memberState()
     const { value: priorityValue, setValue: setPriorityValue } = hooks.detailPriorityState()
     const { value: managerValue, setValue: setManagerValue } = hooks.detailManagerState()
     const { value: categoryValue, setValue: setCategoryValue } = hooks.detailCategoryState()
 
-    const taskWithId = tasks.find(task => task.id === id)
+    const [task, setTask] = useState(null)
 
-    const managerList = ['황상미', '최효빈', '신승수', '박종서', '서원호', '권현수']
+    const [title, setTitle] = useState('')
+    const [content, setContent] = useState('')
+    // const [status, setStatus] = useState('')
+
     const priorityList = ['Highest', 'High', 'Normal', 'Low', 'Lowest']
     const categoryList = ['frontend', 'backend', 'design', 'development', 'product', 'other']
-    const [title, setTitle] = useState(taskWithId.title)
-    const [content, setContent] = useState(taskWithId.content)
-    const [priority, setPriority] = useState(taskWithId.priority)
-    const [manager, setManager] = useState(taskWithId.manager)
-    const [category, setCategory] = useState(taskWithId.type)
+
     const [editTitle, setEditTitle] = useState(false)
     const [editContent, setEditContent] = useState(false)
 
-    const statusOfTask = taskWithId ? taskWithId.status : 'Not found'
-
-    const [chosenState, setChosenState] = useState(statusOfTask)
-
     let titleRef = useRef()
     let contentRef = useRef()
+
+    useEffect(() => {
+        setEditTitle(false)
+        setEditContent(false)
+        api.apis
+            .getIssueDetail(project.id, id)
+            .then(response => {
+                console.log('task', response.data)
+                setTask(response.data)
+                setTitle(response.data.topic)
+                setContent(response.data.description)
+                setPriorityValue(response.data.priority)
+                setManagerValue({ managerId: response.data.managerId, managerName: response.data.managerName })
+                setCategoryValue(response.data.category)
+            })
+            .catch(error => {
+                console.log('태스크 상세 실패', error)
+            })
+    }, [id])
 
     useEffect(() => {
         if (editTitle === true) {
@@ -50,62 +67,102 @@ const IssueDetail = ({ id }) => {
     const handleTitleChange = e => {
         setTitle(e.target.value)
     }
-    const titleKeyDown = e => {
+    const titleKeyDown = async e => {
         if (e.key === 'Enter') {
             setEditTitle(false)
-            const updatedTasks = tasks.map(task => (task.id === id ? { ...task, title } : task))
-            setTasks(updatedTasks)
+            const issueRes = await api.apis.changeIssueTitle(project.id, task.id, { topic: title })
+            setTask(issueRes.data)
+            setTitle(task.topic)
+            const issuesRes = await api.apis.getIssueList(project.id)
+            setTasks(issuesRes.data)
         }
     }
     const handleContentChange = e => setContent(e.target.value)
-    const contentKeyDown = e => {
+    const contentKeyDown = async e => {
         if (e.key === 'Enter') {
             setEditContent(false)
-            const updatedTasks = tasks.map(task => (task.id === id ? { ...task, content } : task))
-            setTasks(updatedTasks)
+            const issueRes = await api.apis.changeIssueContent(project.id, task.id, { description: content })
+            setTask(issueRes.data)
+            setContent(task.description)
+            const issuesRes = await api.apis.getIssueList(project.id)
+            setTasks(issuesRes.data)
         }
     }
 
     const onRemove = () => {
         if (window.confirm('정말 삭제하시겠습니까?')) {
             const updatedTasks = tasks.filter(task => task.id !== id)
-            setTasks(updatedTasks)
-            alert('삭제되었습니다. ')
-            closeIssueDetail()
+            api.apis
+                .deleteIssue(project.id, task.id)
+                .then(response => {
+                    console.log(response.data)
+                    setTasks(updatedTasks)
+                    alert('삭제되었습니다. ')
+                    closeIssueDetail()
+                })
+                .catch(error => {
+                    console.log(error)
+                })
         }
     }
-    const changeStatus = status => {
-        const updatedTasks = tasks.map(task => (task.id === id ? { ...task, status } : task))
-        setTasks(updatedTasks)
+    const changeStatus = async status => {
+        const issueRes = await api.apis.changeIssueStatus(project.id, id, { progress: status })
+        setTask(issueRes.data)
+        const issuesRes = await api.apis.getIssueList(project.id)
+        setTasks(issuesRes.data)
     }
 
-    useEffect(() => {
-        const taskWithId = tasks.find(task => task.id === id)
-        const statusOfTask = taskWithId ? taskWithId.status : 'Not found'
-        setChosenState(statusOfTask)
-    }, [id, tasks])
+    // useEffect(() => {
+    //     setPriorityValue(task.priority)
+    //     setManagerValue(task.managerName)
+    //     setCategoryValue(task.category)
+    // }, [id])
 
     useEffect(() => {
-        const taskWithId = tasks.find(task => task.id === id)
-        setPriorityValue(taskWithId.priority)
-        setManagerValue(taskWithId.manager)
-        setCategoryValue(taskWithId.type)
-    }, [id])
-
-    useEffect(() => {
-        const updatedTasks = tasks.map(task => (task.id === id ? { ...task, priority: `${priorityValue}` } : task))
-        setTasks(updatedTasks)
+        if (task && task.id) {
+            console.log('중요도', priorityValue)
+            const updatedTasks = tasks.map(task => (task.id === id ? { ...task, priority: `${priorityValue}` } : task))
+            api.apis
+                .changeIssuePriority(project.id, id, {
+                    priority: priorityValue,
+                })
+                .then(response => {
+                    console.log(response.data)
+                    setTasks(updatedTasks)
+                })
+                .catch(error => console.log(error))
+        }
     }, [priorityValue])
 
     useEffect(() => {
-        const updatedTasks = tasks.map(task => (task.id === id ? { ...task, manager: `${managerValue}` } : task))
-        setTasks(updatedTasks)
-    }, [managerValue])
+        if (task && task.id) {
+            const updatedTasks = tasks.map(task => (task.id === id ? { ...task, manager: `${managerValue}` } : task))
+            api.apis
+                .changeIssueManager(project.id, id, { managerId: managerValue.managerId })
+                .then(response => {
+                    console.log(response.data)
+                    setTasks(updatedTasks)
+                })
+                .catch(error => console.log(error))
+        }
+    }, [setManagerValue])
 
     useEffect(() => {
-        const updatedTasks = tasks.map(task => (task.id === id ? { ...task, type: `${categoryValue}` } : task))
-        setTasks(updatedTasks)
+        if (task && task.id) {
+            const updatedTasks = tasks.map(task => (task.id === id ? { ...task, category: `${categoryValue}` } : task))
+            api.apis
+                .changeIssueCategory(project.id, id, { category: categoryValue })
+                .then(response => {
+                    console.log(response.data)
+                    setTasks(updatedTasks)
+                })
+                .catch(error => console.log(error))
+        }
     }, [categoryValue])
+
+    if (!task) {
+        return
+    }
 
     return (
         <S.Wrap>
@@ -121,7 +178,7 @@ const IssueDetail = ({ id }) => {
                                 onKeyDown={titleKeyDown}
                             />
                         ) : (
-                            <S.IssueTitleText>{taskWithId.title}</S.IssueTitleText>
+                            <S.IssueTitleText>{task.topic}</S.IssueTitleText>
                         )}
                         {!editTitle && <IoPencil onClick={() => setEditTitle(true)} />}
                     </S.IssueTitle>
@@ -130,20 +187,20 @@ const IssueDetail = ({ id }) => {
                     </S.Close>
                 </S.Header>
                 <S.Status>
-                    <S.StatusBox onClick={() => changeStatus('toDo')} status="toDo" chosen={chosenState}>
+                    <S.StatusBox onClick={() => changeStatus('todo')} status="todo" chosen={task.progress}>
                         ToDo
                     </S.StatusBox>
-                    <S.StatusBox onClick={() => changeStatus('inProgress')} status="inProgress" chosen={chosenState}>
+                    <S.StatusBox onClick={() => changeStatus('inProgress')} status="inProgress" chosen={task.progress}>
                         InProgress
                     </S.StatusBox>
-                    <S.StatusBox onClick={() => changeStatus('done')} status="done" chosen={chosenState}>
+                    <S.StatusBox onClick={() => changeStatus('done')} status="done" chosen={task.progress}>
                         Done
                     </S.StatusBox>
                 </S.Status>
                 <S.Manager>
                     <S.Text>담당자</S.Text>
                     <S.ButtonContainer>
-                        <components.ToggleButton btnType={utils.ISSUE_OPTIONS.detailManager} list={managerList} />
+                        <components.ManagerToggleButton btnType={utils.ISSUE_OPTIONS.detailManager} list={members} />
                     </S.ButtonContainer>
                 </S.Manager>
                 <S.Priority>
@@ -172,7 +229,7 @@ const IssueDetail = ({ id }) => {
                             onKeyDown={contentKeyDown}
                         />
                     ) : (
-                        <S.DescriptionBoxContent>{taskWithId.content}</S.DescriptionBoxContent>
+                        <S.DescriptionBoxContent>{task.description}</S.DescriptionBoxContent>
                     )}
                 </S.DescriptionBox>
                 <S.Delete>
@@ -287,7 +344,7 @@ const S = {
         background-color: ${({ status, chosen, theme }) =>
             chosen !== status
                 ? theme.color.gray
-                : chosen === 'toDo'
+                : chosen === 'todo'
                 ? theme.color.success
                 : chosen === 'inProgress'
                 ? theme.color.pending
@@ -296,7 +353,7 @@ const S = {
         transition-duration: 0.2s;
         &:hover {
             background-color: ${({ status, theme }) =>
-                status === 'toDo'
+                status === 'todo'
                     ? theme.color.success
                     : status === 'inProgress'
                     ? theme.color.pending

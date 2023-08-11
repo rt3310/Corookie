@@ -29,6 +29,22 @@ export const apis = {
 
     getIssueList: projectId => instance.get(`/api/v1/projects/${projectId}/issues`),
     createIssue: (projectId, data) => instance.post(`/api/v1/projects/${projectId}/issues`, data),
+    deleteIssue: (projectId, issueId) => instance.delete(`/api/v1/projects/${projectId}/issues/${issueId}`),
+    getIssueDetail: (projectId, issueId) => instance.get(`/api/v1/projects/${projectId}/issues/${issueId}`),
+    changeIssueTitle: (projectId, issueId, topic) =>
+        instance.put(`/api/v1/projects/${projectId}/issues/${issueId}/topic`, topic),
+    changeIssueContent: (projectId, issueId, description) =>
+        instance.put(`/api/v1/projects/${projectId}/issues/${issueId}/description`, description),
+    changeIssueStatus: (projectId, issueId, progress) =>
+        instance.put(`/api/v1/projects/${projectId}/issues/${issueId}/progress`, progress),
+    changeIssuePriority: (projectId, issueId, priority) =>
+        instance.put(`/api/v1/projects/${projectId}/issues/${issueId}/priority`, priority),
+    changeIssueManager: (projectId, issueId, managerId) =>
+        instance.put(`/api/v1/projects/${projectId}/issues/${issueId}/manager`, managerId),
+    changeIssueCategory: (projectId, issueId, category) =>
+        instance.put(`/api/v1/projects/${projectId}/issues/${issueId}/category`, category),
+    filterIssue: (projectId, type, condition) =>
+        instance.get(`/api/v1/projects/${projectId}/issues/filter?type=${type}&condition=${condition}`),
 
     // instance.put 'https://naver.com?issue=123'
     getProjectMembers: projectId => instance.get(`/api/v1/projects/${projectId}/projectmembers`),

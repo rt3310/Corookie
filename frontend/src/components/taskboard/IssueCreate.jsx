@@ -13,6 +13,7 @@ const IssueCreate = () => {
     const { closeIssueDetail } = hooks.issueDetailState()
     const { tasks, setTasks } = hooks.tasksState()
     const { project } = hooks.projectState()
+    const { members } = hooks.memberState()
     const [title, setTitle] = useState('')
     let createRef = useRef(null)
     let titleInput = useRef(null)
@@ -67,7 +68,7 @@ const IssueCreate = () => {
         console.log('변화', tasks)
     }, [tasks])
 
-    const managerList = ['황상미', '최효빈', '신승수', '박종서', '서원호', '권현수']
+    const managerList = members.map(member => member.memberName)
     const priorityList = ['Highest', 'High', 'Normal', 'Low', 'Lowest']
     const categoryList = ['frontend', 'backend', 'design', 'development', 'product', 'other']
     return (

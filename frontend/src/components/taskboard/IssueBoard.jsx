@@ -20,24 +20,15 @@ const IssueBoard = () => {
             .catch(error => {
                 console.log('태스크 불러오기 실패', error)
             })
-    }, [setTasks])
+    }, [])
 
     return (
         <S.Container>
             <S.Wrap>
                 {issueCreateOpened && <components.IssueCreate />}
                 {Array.isArray(tasks) &&
-                    tasks.map((task, idx) => {
-                        return (
-                            <components.IssuePreview
-                                key={idx}
-                                title={task.topic}
-                                type={task.category}
-                                manager={task.memberName}
-                                priority={task.priority}
-                                status={task.progress}
-                            />
-                        )
+                    tasks.map(task => {
+                        return <components.IssuePreview key={task.id} task={task} />
                     })}
             </S.Wrap>
         </S.Container>

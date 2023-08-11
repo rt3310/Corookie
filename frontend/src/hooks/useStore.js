@@ -46,7 +46,6 @@ export const profileState = create(set => ({
 }))
 
 export const setManagerState = create(set => ({
-    manager: '최효빈',
     managerOpened: false,
     openManager: () => set(state => ({ managerOpened: true })),
     closeManager: () => set(state => ({ managerOpened: false })),
@@ -106,12 +105,12 @@ export const createPriorityState = create(set => ({
 }))
 
 export const managerState = create(set => ({
-    value: '책임자',
+    value: { managerId: '', managerName: '책임자' },
     setValue: input => set(state => ({ value: input })),
 }))
 
 export const detailManagerState = create(set => ({
-    value: '책임자',
+    value: { managerId: '', managerName: '책임자' },
     setValue: input => set(state => ({ value: input })),
 }))
 

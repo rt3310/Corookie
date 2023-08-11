@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import styled from 'styled-components'
 
@@ -6,22 +6,35 @@ import { IoReorderTwoSharp } from 'react-icons/io5'
 import { BiChevronsUp, BiChevronUp, BiChevronDown, BiChevronsDown } from 'react-icons/bi'
 
 import * as hooks from 'hooks'
+import * as api from 'api'
 
 const KanbanBoard = () => {
-    const { tasks } = hooks.tasksState()
+    const { tasks, setTasks } = hooks.tasksState()
+    const { project } = hooks.projectState()
+
+    useEffect(() => {
+        api.apis
+            .getIssueList(project.id)
+            .then(response => {
+                setTasks(response.data)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    })
 
     const tasksByStatus = tasks.reduce((acc, task) => {
-        if (!acc[task.status]) {
-            acc[task.status] = []
+        if (!acc[task.progress]) {
+            acc[task.progress] = []
         }
-        acc[task.status].push(task)
+        acc[task.progress].push(task)
         return acc
     }, {})
 
     const taskStatus = {
         toDo: {
             name: 'To Do',
-            items: tasksByStatus['toDo'] || [],
+            items: tasksByStatus['todo'] || [],
         },
         inProgress: {
             name: 'In Progress',
@@ -119,9 +132,9 @@ const KanbanBoard = () => {
                                                                         style={{
                                                                             ...provided.draggableProps.style,
                                                                         }}>
-                                                                        <S.IssueTopic>{item.title}</S.IssueTopic>
+                                                                        <S.IssueTopic>{item.topic}</S.IssueTopic>
                                                                         <S.IssueInfo>
-                                                                            <S.Type>{item.type}</S.Type>
+                                                                            <S.Type>{item.category}</S.Type>
                                                                             <S.Priority priority={item.priority}>
                                                                                 {renderPriority(item.priority)}
                                                                             </S.Priority>

@@ -1,13 +1,16 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 
 import * as hooks from 'hooks'
 import { IoReorderTwoSharp } from 'react-icons/io5'
 import { BiChevronsUp, BiChevronUp, BiChevronDown, BiChevronsDown } from 'react-icons/bi'
 
-const IssuePreview = ({ id, title, type, manager, priority, status }) => {
+import * as api from 'api'
+
+const IssuePreview = ({ task }) => {
     const { issueDetailOpened, openIssueDetail, closeIssueDetail } = hooks.issueDetailState()
     const { closeProfile } = hooks.profileState()
+
     const renderPriority = priority => {
         switch (priority) {
             case 'Highest':
@@ -30,26 +33,30 @@ const IssuePreview = ({ id, title, type, manager, priority, status }) => {
             closeIssueDetail()
         } else {
             openIssueDetail(id)
-            closeProfile()
         }
     }
 
     const renderProfile = manager => {
         switch (manager) {
-            case '황상미':
+            case '1':
                 return <img src={require('images/thread_profile.png').default} alt="프로필 이미지" />
             default:
                 return <img src={require('images/thread_profile.png').default} alt="프로필 이미지" />
         }
     }
+
+    if (!task) {
+        return
+    }
+
     return (
-        <S.Wrap onClick={() => toggleIssueDetail(id)} id={id} issueDetailOpened={issueDetailOpened}>
-            {title}
+        <S.Wrap onClick={() => toggleIssueDetail(task.id)} id={task.id} issueDetailOpened={issueDetailOpened}>
+            {task.topic}
             <S.Description>
-                <S.Status status={status} />
-                <S.Type>{type}</S.Type>
-                <S.Profile>{renderProfile(manager)}</S.Profile>
-                <S.Priority priority={priority}>{renderPriority(priority)}</S.Priority>
+                <S.Status status={task.progress} />
+                <S.Type>{task.category}</S.Type>
+                <S.Profile>{renderProfile(task.managerId)}</S.Profile>
+                <S.Priority priority={task.priority}>{renderPriority(task.priority)}</S.Priority>
             </S.Description>
         </S.Wrap>
     )
