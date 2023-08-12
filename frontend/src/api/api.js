@@ -39,6 +39,11 @@ export const apis = {
             `/api/v1/projects/${projectId}/text-channels/${textChannelId}/threads?page=${page}&size=${size}&sort=${sort},${direction}`,
         ),
 
+    getComments: (projectId, textChannelId, threadId, page, size, sort, direction) =>
+        instance.get(
+            `/api/v1/projects/${projectId}/text-channels/${textChannelId}/threads/${threadId}/comments?page=${page}&size=${size}&sort=${sort},${direction}`,
+        ),
+
     getIssueList: projectId => instance.get(`/api/v1/projects/${projectId}/issues`),
     createIssue: (projectId, data) => instance.post(`/api/v1/projects/${projectId}/issues`, data),
     deleteIssue: (projectId, issueId) => instance.delete(`/api/v1/projects/${projectId}/issues/${issueId}`),
@@ -59,7 +64,6 @@ export const apis = {
         instance.get(`/api/v1/projects/${projectId}/issues/filter?type=${type}&condition=${condition}`),
 
     // instance.put 'https://naver.com?issue=123'
-    getProjectMembers: projectId => instance.get(`/api/v1/projects/${projectId}/projectmembers`),
     getMember: memberId => instance.get(`/api/v1/members/${memberId}`),
     getMe: () => instance.get(`api/v1/members/me`),
 }

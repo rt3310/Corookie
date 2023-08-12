@@ -3,10 +3,13 @@ import styled from 'styled-components'
 
 import * as style from 'style'
 import * as hooks from 'hooks'
+import * as api from 'api'
+
 import { IoPencil } from 'react-icons/io5'
 
 const ProfileBox = () => {
     const { profileName, profileEdit, setName, openEdit, closeEdit } = hooks.profileState()
+    const { id, name, email, setMe } = hooks.meState()
     const handleNameChange = e => setName(e.target.value)
     const nameKeyDown = e => {
         if (e.key === 'Enter') {
@@ -31,6 +34,12 @@ const ProfileBox = () => {
         }
     }, [profileEdit])
 
+    useEffect(() => {
+        api.apis.getMe().then(response => {
+            setMe(response.data)
+        })
+    }, [])
+
     return (
         <S.Wrap>
             <S.Header>프로필</S.Header>
@@ -51,7 +60,7 @@ const ProfileBox = () => {
                 <S.MemberInfoBox>
                     <S.MemberNameContainer>
                         {!profileEdit ? (
-                            <S.MemberName>{profileName}</S.MemberName>
+                            <S.MemberName>{name}</S.MemberName>
                         ) : (
                             <S.MemberNameEdit
                                 ref={nameRef}
@@ -63,7 +72,7 @@ const ProfileBox = () => {
                         )}
                         {!profileEdit && <S.EditName onClick={() => openEdit()}>편집</S.EditName>}
                     </S.MemberNameContainer>
-                    <S.MemberEmail>ssafy@email.com</S.MemberEmail>
+                    <S.MemberEmail>{email ? email : '이메일이 없습니다'}</S.MemberEmail>
                 </S.MemberInfoBox>
             </S.ContentBox>
         </S.Wrap>

@@ -12,7 +12,7 @@ export const URL = {
     CHAT: {
         TEXT: '/project/:projectId/channel/text/:channelId',
         VIDEO: '/project/:projectId/channel/video/:channelId',
-        DIRECT: '/project/:projectId/channel/direct',
+        DIRECT: '/project/:projectId/channel/direct/:channelId',
     },
     TASK: {
         BOARD: '/project/:projectId/task',

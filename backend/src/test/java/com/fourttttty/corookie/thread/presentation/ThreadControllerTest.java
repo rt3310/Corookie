@@ -76,6 +76,7 @@ class ThreadControllerTest extends RestDocsTest {
         // given
         LocalDateTime now = LocalDateTime.now();
         ThreadDetailResponse threadDetailResponse = new ThreadDetailResponse(
+                1L,
                 new MemberResponse(1L, "name", "email@mail.com"),
                 now,
                 thread.getContent(),
@@ -107,9 +108,9 @@ class ThreadControllerTest extends RestDocsTest {
                         queryParameters(
                                 parameterWithName("page").description("페이지 번호"),
                                 parameterWithName("size").description("요청 개수"),
-                                parameterWithName("sort").description("정렬 기준")
-                        ),
+                                parameterWithName("sort").description("정렬 기준")),
                         responseFields(
+                                fieldWithPath("[].id").type(NUMBER).description("스레드 키"),
                                 fieldWithPath("[].content").type(STRING).description("스레드 내용"),
                                 fieldWithPath("[].commentCount").type(NUMBER).description("댓글 수"),
                                 fieldWithPath("[].createdAt").type(STRING).description("생성 일자"),
@@ -125,6 +126,7 @@ class ThreadControllerTest extends RestDocsTest {
         // given
         LocalDateTime now = LocalDateTime.now();
         ThreadDetailResponse threadDetailResponse = new ThreadDetailResponse(
+                1L,
                 new MemberResponse(1L, "name", "email@mail.com"),
                 now,
                 thread.getContent(),
@@ -152,6 +154,7 @@ class ThreadControllerTest extends RestDocsTest {
                                 parameterWithName("textChannelId").description("텍스트 채널 키"),
                                 parameterWithName("threadId").description("스레드 키")),
                         responseFields(
+                                fieldWithPath("id").type(NUMBER).description("스레드 키"),
                                 fieldWithPath("content").type(STRING).description("스레드 내용"),
                                 fieldWithPath("commentCount").type(NUMBER).description("댓글 수"),
                                 fieldWithPath("createdAt").type(STRING).description("생성 일자"),
@@ -167,6 +170,7 @@ class ThreadControllerTest extends RestDocsTest {
         // given
         LocalDateTime now = LocalDateTime.now();
         ThreadDetailResponse threadDetailResponse = new ThreadDetailResponse(
+                1L,
                 new MemberResponse(1L, "name", "email@mail.com"),
                 now,
                 thread.getContent(),
@@ -198,6 +202,7 @@ class ThreadControllerTest extends RestDocsTest {
                                 parameterWithName("textChannelId").description("텍스트 채널 키"),
                                 parameterWithName("threadId").description("스레드 키")),
                         responseFields(
+                                fieldWithPath("id").type(NUMBER).description("스레드 키"),
                                 fieldWithPath("content").type(STRING).description("스레드 내용"),
                                 fieldWithPath("commentCount").type(NUMBER).description("댓글 수"),
                                 fieldWithPath("createdAt").type(STRING).description("생성 일자"),

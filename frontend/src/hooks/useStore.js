@@ -14,6 +14,22 @@ export const threadsState = create(set => ({
     initPage: () => set(state => ({ ...state, page: 0 })),
 }))
 
+export const commentsState = create(set => ({
+    page: 0,
+    size: 10,
+    sort: 'createdAt',
+    direction: 'desc',
+    upPage: () => set(state => ({ ...state, page: state.page + 1 })),
+    initPage: () => set(state => ({ ...state, page: 0 })),
+}))
+
+export const selectedThreadState = create(set => ({
+    threadId: null,
+    commentCount: 0,
+    setThreadId: data => set(state => ({ threadId: data })),
+    setCommentCount: data => set(state => ({ commentCount: data })),
+}))
+
 export const projectMembersState = create(set => ({
     projectMembers: [],
     setProjectMembers: data => set(state => ({ projectMembers: data })),
@@ -70,6 +86,18 @@ export const setManagerState = create(set => ({
     openManager: () => set(state => ({ managerOpened: true })),
     closeManager: () => set(state => ({ managerOpened: false })),
     setManager: manager => set(state => ({ manager: manager })),
+}))
+
+export const meState = create(set => ({
+    id: null,
+    name: null,
+    email: null,
+    setMe: data =>
+        set(state => ({
+            id: data.id,
+            name: data.name,
+            email: data.email,
+        })),
 }))
 
 export const memberState = create(set => ({
