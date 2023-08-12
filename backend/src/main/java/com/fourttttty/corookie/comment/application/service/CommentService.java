@@ -9,6 +9,7 @@ import com.fourttttty.corookie.member.application.service.MemberService;
 import com.fourttttty.corookie.thread.application.service.ThreadService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,9 +24,8 @@ public class CommentService {
     private final ThreadService threadService;
     private final MemberService memberService;
 
-    public List<CommentDetailResponse> findAll(Long threadId) {
-        return commentRepository.findAll(threadId)
-                .stream()
+    public List<CommentDetailResponse> findByThreadId(Long threadId, Pageable pageable) {
+        return commentRepository.findByThreadId(threadId, pageable).stream()
                 .map(CommentDetailResponse::from)
                 .toList();
     }

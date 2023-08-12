@@ -18,7 +18,6 @@ const TextChat = () => {
     const { commentOpened } = hooks.commentState()
     const [threads, setThreads] = useState([])
     const { page, upPage, initPage, size, sort, direction } = hooks.threadsState()
-    const [member, setMember] = useState()
     const [textChannel, setTextChannel] = useState(null)
     const [currentChat, setCurrentChat] = useState({
         textChannelId: null,
@@ -110,7 +109,6 @@ const TextChat = () => {
         const initChannel = async () => {
             const memberRes = await api.apis.getMe()
             const textChannelRes = await api.apis.getTextChannel(projectId, channelId)
-            setMember(memberRes.data)
             setTextChannel(textChannelRes.data)
             setCurrentChat({
                 ...currentChat,
@@ -170,13 +168,11 @@ const TextChat = () => {
                     <S.ThreadBox ref={scrollRef}>
                         <div ref={target} />
                         {threads &&
-                            [...threads]
-                                .reverse()
-                                .map((thread, idx) => <components.Thread key={idx} thread={thread} />)}
+                            [...threads].reverse().map(thread => <components.Thread key={thread.id} thread={thread} />)}
                     </S.ThreadBox>
                     <components.EditBox currentChat={currentChat} setCurrentChat={setCurrentChat} send={send} />
                 </S.ChatBox>
-                {commentOpened && <components.CommentBox />}
+                {commentOpened && <components.CommentBox projectId={projectId} channelId={channelId} />}
             </S.Container>
         </S.Wrap>
     )

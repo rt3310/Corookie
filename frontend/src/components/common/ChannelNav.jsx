@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useParams } from 'react-router'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -11,6 +12,7 @@ import * as api from 'api'
 import * as hooks from 'hooks'
 
 const ChannelNav = () => {
+    const { projectId } = useParams()
     const navigate = useNavigate()
     const { project } = hooks.projectState()
     const { projectMembers, setProjectMembers } = hooks.projectMembersState()
@@ -22,7 +24,7 @@ const ChannelNav = () => {
 
     useEffect(() => {
         const initProjectMembers = async () => {
-            const projectMembersRes = await api.apis.getProjectMembers(project.id)
+            const projectMembersRes = await api.apis.getProjectMembers(projectId)
             setProjectMembers(projectMembersRes.data)
         }
 
@@ -54,7 +56,11 @@ const ChannelNav = () => {
                     </S.ChannelHead>
                     {projectMembers &&
                         projectMembers.map(member => (
-                            <S.DmMember key={member.memberId} onClick={() => navigate(utils.URL.CHAT.DIRECT)}>
+                            <S.DmMember
+                                key={member.memberId}
+                                onClick={() =>
+                                    navigate('/project/' + project.id + '/channel/direct/' + member.memberId)
+                                }>
                                 <S.DmProfileImage>
                                     <img src={require('images/profile.png').default} alt="프로필" />
                                 </S.DmProfileImage>

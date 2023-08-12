@@ -3,9 +3,25 @@ import styled from 'styled-components'
 
 import { IoMdSend } from 'react-icons/io'
 
-const CommentEditBox = () => {
-    const [chat, setChat] = useState('')
+const CommentEditBox = ({ currentComment, setCurrentComment, send }) => {
     const text = useRef(null)
+
+    const inputComment = e => {
+        if (e.key === 'Enter') {
+            if (e.shiftKey) {
+                return
+            }
+
+            if (currentComment.content.replace(/\s+/gi, '') === '') {
+                e.preventDefault()
+                return
+            }
+
+            send()
+            e.preventDefault()
+            return
+        }
+    }
 
     useEffect(() => {
         if (text) {
@@ -13,12 +29,17 @@ const CommentEditBox = () => {
             let height = text.current.scrollHeight
             text.current.style.height = `${height + 20}px`
         }
-    }, [chat])
+    }, [currentComment])
 
     return (
         <S.Wrap>
-            <S.Edit ref={text} onChange={e => setChat(e.target.value)} rows={1}></S.Edit>
-            <S.SendButton>
+            <S.Edit
+                ref={text}
+                onKeyPress={e => inputComment(e)}
+                onChange={e => setCurrentComment({ ...currentComment, content: e.target.value })}
+                value={currentComment.content}
+                rows={1}></S.Edit>
+            <S.SendButton onClick={() => send()}>
                 <IoMdSend />
             </S.SendButton>
         </S.Wrap>

@@ -17,6 +17,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.test.web.servlet.ResultActions;
@@ -34,8 +35,7 @@ import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -80,16 +80,23 @@ class CommentControllerTest extends RestDocsTest {
     void findAllComment() throws Exception {
         // given
         LocalDateTime now = LocalDateTime.now();
-        CommentDetailResponse commentDetailResponse = new CommentDetailResponse(thread.getContent(),
+        CommentDetailResponse commentDetailResponse = new CommentDetailResponse(
+                1L,
+                thread.getContent(),
                 new MemberResponse(1L, "name", "email@mail.com"),
                 now
                 );
 
-        given(commentService.findAll(any(Long.class)))
+        given(commentService.findByThreadId(any(Long.class), any(Pageable.class)))
                 .willReturn(List.of(commentDetailResponse));
 
         // when
-        ResultActions perform = mockMvc.perform(get("/api/v1/projects/{projectId}/text-channels/{textChannelId}/threads/{threadId}/comments", 1L, 1L, 1L));
+        ResultActions perform = mockMvc.perform(
+                get("/api/v1/projects/{projectId}/text-channels/{textChannelId}/threads/{threadId}/comments?",
+                        1L, 1L, 1L)
+                        .param("page", "0")
+                        .param("size", "10")
+                        .param("sort", "createdAt,desc"));
 
         // then
         perform.andExpect(status().isOk())
@@ -104,7 +111,12 @@ class CommentControllerTest extends RestDocsTest {
                                 parameterWithName("projectId").description("프로젝트 키"),
                                 parameterWithName("textChannelId").description("텍스트 채널 키"),
                                 parameterWithName("threadId").description("스레드 키")),
+                        queryParameters(
+                                parameterWithName("page").description("페이지 번호"),
+                                parameterWithName("size").description("요청 개수"),
+                                parameterWithName("sort").description("정렬 기준")),
                         responseFields(
+                                fieldWithPath("[].id").type(NUMBER).description("댓글 키"),
                                 fieldWithPath("[].content").type(STRING).description("댓글 내용"),
                                 fieldWithPath("[].createdAt").type(STRING).description("생성 일자"),
                                 fieldWithPath("[].writer.id").type(NUMBER).description("작성자 키"),
@@ -118,7 +130,9 @@ class CommentControllerTest extends RestDocsTest {
     void modifyTextChannel() throws Exception {
         // given
         LocalDateTime now = LocalDateTime.now();
-        CommentDetailResponse commentDetailResponse = new CommentDetailResponse(thread.getContent(),
+        CommentDetailResponse commentDetailResponse = new CommentDetailResponse(
+                1L,
+                thread.getContent(),
                 new MemberResponse(1L, "name", "email@mail.com"),
                 now
         );
@@ -146,6 +160,7 @@ class CommentControllerTest extends RestDocsTest {
                                 parameterWithName("threadId").description("스레드 키"),
                                 parameterWithName("commentId").description("댓글 키")),
                         responseFields(
+                                fieldWithPath("id").type(NUMBER).description("댓글 키"),
                                 fieldWithPath("content").type(STRING).description("댓글 내용"),
                                 fieldWithPath("createdAt").type(STRING).description("생성 일자"),
                                 fieldWithPath("writer.id").type(NUMBER).description("작성자 키"),

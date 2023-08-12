@@ -14,6 +14,7 @@ const Thread = ({ thread }) => {
     const [addImoticon, setAddImoticon] = useState(false)
     const { closeProfile } = hooks.profileState()
     const { commentOpened, openComment, closeComment } = hooks.commentState()
+    const { threadId, setThreadId } = hooks.selectedThreadState()
 
     const [thumbCnt, setThumbCnt] = useState(0)
     const [happyCnt, setHappyCnt] = useState(0)
@@ -67,13 +68,10 @@ const Thread = ({ thread }) => {
         setClosedText(true)
     }
 
-    const toggleComment = () => {
-        if (commentOpened) {
-            closeComment()
-        } else {
-            openComment()
-            closeProfile()
-        }
+    const openCommentBox = () => {
+        setThreadId(thread.id)
+        openComment()
+        closeProfile()
     }
 
     const childImoticonData = [
@@ -113,7 +111,7 @@ const Thread = ({ thread }) => {
                     <S.MemberInfoBox>
                         <S.MemberName>{thread && thread.writer.name}</S.MemberName>
                         <S.CreatedTime>{thread && utils.calDate(thread.createdAt)}</S.CreatedTime>
-                        <S.CommentButton onClick={() => toggleComment()} open={commentOpened}>
+                        <S.CommentButton onClick={() => openCommentBox()} open={commentOpened}>
                             {/* <div>
                                 <img src={require('images/profile.png').default} alt="프로필" />
                                 <img src={require('images/profile.png').default} alt="프로필" />
