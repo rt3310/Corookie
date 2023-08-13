@@ -1,4 +1,6 @@
 package com.fourttttty.corookie.member.dto.request;
 
-public record MemberUpdateRequest() {
+import jakarta.validation.constraints.NotBlank;
+
+public record MemberProfileUpdateRequest(@NotBlank String imageUrl) {
 }

@@ -7,6 +7,7 @@ import com.fourttttty.corookie.comment.dto.request.CommentModifyRequest;
 import com.fourttttty.corookie.comment.dto.response.CommentDetailResponse;
 import com.fourttttty.corookie.member.application.service.MemberService;
 import com.fourttttty.corookie.thread.application.service.ThreadService;
+import com.fourttttty.corookie.thread.domain.Thread;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -32,12 +33,14 @@ public class CommentService {
 
     @Transactional
     public CommentDetailResponse create(CommentCreateRequest request, Long writerId) {
-        Comment comment = Comment.of(
+        Thread thread = threadService.findEntityById(request.threadId());
+        CommentDetailResponse response = CommentDetailResponse.from(commentRepository.save(Comment.of(
                 request.content(),
                 true,
-                threadService.findEntityById(request.threadId()),
-                memberService.findEntityById(writerId));
-        return CommentDetailResponse.from(commentRepository.save(comment));
+                thread,
+                memberService.findEntityById(writerId))));
+        thread.upCommentCount();
+        return response;
     }
 
     @Transactional

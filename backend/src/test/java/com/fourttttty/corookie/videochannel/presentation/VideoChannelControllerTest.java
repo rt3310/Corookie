@@ -48,7 +48,7 @@ class VideoChannelControllerTest extends RestDocsTest {
 
     @BeforeEach
     void initTexture() {
-        Member member = Member.of("name", "email", Oauth2.of(AuthProvider.KAKAO, "account"));
+        Member member = Member.of("name", "email", "https://test", Oauth2.of(AuthProvider.KAKAO, "account"));
         project = Project.of("project",
                 "descriptiion",
                 true,

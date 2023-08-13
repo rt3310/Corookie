@@ -9,9 +9,6 @@ import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.project.domain.ProjectMember;
 import com.fourttttty.corookie.project.domain.ProjectMemberId;
 import com.fourttttty.corookie.support.TestConfig;
-import com.fourttttty.corookie.texture.member.application.repository.FakeMemberRepository;
-import com.fourttttty.corookie.texture.project.application.repository.FakeProjectMemberRepository;
-import com.fourttttty.corookie.texture.project.application.repository.FakeProjectRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -41,8 +37,8 @@ public class ProjectMemberRepositoryTest {
 
     @BeforeEach
     void initObjects() {
-        member = Member.of("memberName", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
-        member2 = Member.of("name2", "test2@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
+        member = Member.of("memberName", "test@gmail.com", "https://test", Oauth2.of(AuthProvider.KAKAO, "account"));
+        member2 = Member.of("name2", "test2@gmail.com", "https://test", Oauth2.of(AuthProvider.KAKAO, "account"));
         project = Project.of("memberName",
                 "description",
                 Boolean.TRUE,
