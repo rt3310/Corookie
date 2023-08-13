@@ -5,11 +5,12 @@ import * as hooks from 'hooks'
 import { FaCrown } from 'react-icons/fa'
 
 const ManagerSetting = ({ managerTextRef }) => {
-    const { manager, setManager, managerOpened, closeManager } = hooks.setManagerState()
+    const { managerOpened, closeManager } = hooks.setManagerState()
+    const { project, setProject } = hooks.projectState()
     const { members } = hooks.memberState()
     const managerChange = member => {
         if (window.confirm(`관리자를 ${member}로 변경하시겠습니까?`)) {
-            setManager(member)
+            setProject({ ...project, managerName: member })
         }
     }
 
@@ -35,23 +36,35 @@ const ManagerSetting = ({ managerTextRef }) => {
                 <S.Container>
                     <S.Title>관리자 변경</S.Title>
                     <S.Line />
-                    {members.map(member => {
-                        return (
-                            <S.Member key={member.id} className={member.name === manager ? 'manager' : null}>
-                                <img src={member.img} alt={member.name} />
-                                <S.Name>{member.name}</S.Name>
-                                {member.name !== manager ? (
-                                    <S.ManagerButton>
-                                        <FaCrown onClick={() => managerChange(member.name)} />
-                                    </S.ManagerButton>
-                                ) : (
-                                    <S.CurrentManager>
-                                        <FaCrown />
-                                    </S.CurrentManager>
-                                )}
-                            </S.Member>
-                        )
-                    })}
+                    {project.isManager &&
+                        members.map(member => {
+                            return (
+                                <S.Member
+                                    key={member.memberId}
+                                    className={member.name === project.managerName ? 'manager' : null}>
+                                    <img src={member.img} alt={member.memberName} />
+                                    <S.Name>{member.memberName}</S.Name>
+                                    {member.memberName !== project.managerName ? (
+                                        <S.ManagerButton>
+                                            <FaCrown onClick={() => managerChange(member.memberName)} />
+                                        </S.ManagerButton>
+                                    ) : (
+                                        <S.CurrentManager>
+                                            <FaCrown />
+                                        </S.CurrentManager>
+                                    )}
+                                </S.Member>
+                            )
+                        })}
+                    {!project.isManager && (
+                        <S.Member className="manager">
+                            {/* <img src={member.img} alt={member.memberName} /> */}
+                            <S.Name>project.managerName</S.Name>
+                            <S.ManagerButton>
+                                <FaCrown />
+                            </S.ManagerButton>
+                        </S.Member>
+                    )}
                 </S.Container>
             ) : null}
         </S.Wrap>

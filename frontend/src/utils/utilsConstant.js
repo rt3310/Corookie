@@ -1,21 +1,24 @@
 export const URL = {
     LOGIN: {
-        LOGIN: '/login',
+        LOGIN: '/signin',
         SUCCESS: '/success',
     },
     HOME: {
         MAIN: '/',
     },
+    PROJECT: {
+        MAIN: '/project/:projectId',
+    },
     CHAT: {
-        TEXT: '/chat/text',
-        VIDEO: '/chat/video',
-        DIRECT: '/chat/direct',
+        TEXT: '/project/:projectId/channel/text/:channelId',
+        VIDEO: '/project/:projectId/channel/video/:channelId',
+        DIRECT: '/project/:projectId/channel/direct/:channelId',
     },
     TASK: {
-        BOARD: '/task/board',
+        BOARD: '/project/:projectId/task',
     },
     PLAN: {
-        CALENDER: '/plan/calendar',
+        PLAN: '/project/:projectId/plan',
     },
 }
 

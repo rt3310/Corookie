@@ -5,10 +5,12 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 
 @Builder
-public record TextChannelResponse(String name) {
+public record TextChannelResponse(Long id,
+                                  String name) {
 
     public static TextChannelResponse from(TextChannel textChannel) {
         return TextChannelResponse.builder()
+                .id(textChannel.getId())
                 .name(textChannel.getChannelName())
                 .build();
     }

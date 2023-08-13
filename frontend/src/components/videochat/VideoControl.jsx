@@ -56,6 +56,7 @@ const VideoControl = () => {
 const S = {
     Wrap: styled.div`
         display: flex;
+        width: 100%;
         border-radius: 8px;
         background-color: ${({ theme }) => theme.color.white};
         border: 2px solid
@@ -63,8 +64,8 @@ const S = {
                 return open ? theme.color.main : theme.color.white
             }};
         box-shadow: ${({ theme }) => theme.shadow.card};
-        margin: 16px;
-        padding: 4px 16px;
+        margin: 8px 16px;
+        padding: 8px 16px;
 
         &:first-child {
             margin-top: 0;
@@ -80,7 +81,8 @@ const S = {
         justify-content: center;
         align-items: center;
         width: 100%;
-        height: 100%;
+        height: 36px;
+        padding: 0 16px;
     `,
     SettingButton: styled.div`
         display: flex;

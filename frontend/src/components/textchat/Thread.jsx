@@ -7,13 +7,14 @@ import * as components from 'components'
 import * as hooks from 'hooks'
 import * as utils from 'utils'
 
-const Thread = ({ chat }) => {
+const Thread = ({ thread }) => {
     const text = useRef(null)
     const [overText, setOverText] = useState(false)
     const [closedText, setClosedText] = useState(false)
     const [addImoticon, setAddImoticon] = useState(false)
     const { closeProfile } = hooks.profileState()
     const { commentOpened, openComment, closeComment } = hooks.commentState()
+    const { threadId, setThreadId } = hooks.selectedThreadState()
 
     const [thumbCnt, setThumbCnt] = useState(0)
     const [happyCnt, setHappyCnt] = useState(0)
@@ -67,13 +68,10 @@ const Thread = ({ chat }) => {
         setClosedText(true)
     }
 
-    const toggleComment = () => {
-        if (commentOpened) {
-            closeComment()
-        } else {
-            openComment()
-            closeProfile()
-        }
+    const openCommentBox = () => {
+        setThreadId(thread.id)
+        openComment()
+        closeProfile()
     }
 
     const childImoticonData = [
@@ -111,19 +109,19 @@ const Thread = ({ chat }) => {
                 </S.ImageBox>
                 <S.ContentBox>
                     <S.MemberInfoBox>
-                        <S.MemberName>황상미</S.MemberName>
-                        <S.CreatedTime>오전 11:12</S.CreatedTime>
-                        <S.CommentButton onClick={() => toggleComment()} open={commentOpened}>
-                            <div>
+                        <S.MemberName>{thread && thread.writer.name}</S.MemberName>
+                        <S.CreatedTime>{thread && utils.calDate(thread.createdAt)}</S.CreatedTime>
+                        <S.CommentButton onClick={() => openCommentBox()} open={commentOpened}>
+                            {/* <div>
                                 <img src={require('images/profile.png').default} alt="프로필" />
                                 <img src={require('images/profile.png').default} alt="프로필" />
                                 <img src={require('images/profile.png').default} alt="프로필" />
-                            </div>
-                            3개의 댓글 <IoIosArrowForward />
+                            </div> */}
+                            {thread.commentCount}개의 댓글 <IoIosArrowForward />
                         </S.CommentButton>
                     </S.MemberInfoBox>
                     <S.Text ref={text}>
-                        <components.Message isCode={isCode} text={code} language={language} chat={chat} />
+                        <components.Message isCode={isCode} text={code} language={language} thread={thread} />
                     </S.Text>
                     {closedText && (
                         <S.MoreButton>
