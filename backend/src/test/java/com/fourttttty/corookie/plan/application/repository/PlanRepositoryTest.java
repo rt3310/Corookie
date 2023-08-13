@@ -36,7 +36,7 @@ class PlanRepositoryTest {
     private MemberRepository memberRepository;
     @Autowired
     private ProjectRepository projectRepository;
-    Member member = Member.of("memberName","memberEmail", Oauth2.of(AuthProvider.KAKAO, "account"));
+    Member member = Member.of("memberName","memberEmail", "https://test", Oauth2.of(AuthProvider.KAKAO, "account"));
     Project project = Project.of("memberName",
         "description",
         true,

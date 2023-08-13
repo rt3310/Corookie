@@ -68,7 +68,7 @@ class PlanControllerTest extends RestDocsTest {
 
     @BeforeEach
     void initTexture() {
-        member = Member.of("memberName", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
+        member = Member.of("memberName", "test@gmail.com", "https://test", Oauth2.of(AuthProvider.KAKAO, "account"));
         project = Project.of("memberName", "description", true,
             "http://test.com", false, member);
 
@@ -85,11 +85,11 @@ class PlanControllerTest extends RestDocsTest {
                 PlanCategory.of(2L, "testCategory2"));
 
         planMembers = List.of(
-                Member.of(1L, "name1", "test@gmail.com",
+                Member.of(1L, "name1", "test@gmail.com", "https://test",
                         Oauth2.of(AuthProvider.KAKAO, "account")),
-                Member.of(2L, "name2", "test@gmail.com",
+                Member.of(2L, "name2", "test@gmail.com", "https://test",
                         Oauth2.of(AuthProvider.KAKAO, "account")),
-                Member.of(4L, "name3", "test@gmail.com",
+                Member.of(4L, "name3", "test@gmail.com", "https://test",
                         Oauth2.of(AuthProvider.KAKAO, "account")));
     }
 

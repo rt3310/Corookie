@@ -3,8 +3,6 @@ package com.fourttttty.corookie.issue.application.repository;
 import com.fourttttty.corookie.issue.domain.Issue;
 import com.fourttttty.corookie.issue.domain.IssueProgress;
 import com.fourttttty.corookie.issue.infrastructure.IssueJpaRepository;
-import com.fourttttty.corookie.member.domain.Member;
-import com.fourttttty.corookie.project.domain.Project;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;

@@ -52,7 +52,7 @@ class ThreadControllerTest extends RestDocsTest {
 
     @BeforeEach
     void initTexture() {
-        Member member = Member.of("name", "email", Oauth2.of(AuthProvider.KAKAO, "account"));
+        Member member = Member.of("name", "email", "https://test", Oauth2.of(AuthProvider.KAKAO, "account"));
         Project project = Project.of("project",
                 "description",
                 true,
@@ -77,7 +77,7 @@ class ThreadControllerTest extends RestDocsTest {
         LocalDateTime now = LocalDateTime.now();
         ThreadDetailResponse threadDetailResponse = new ThreadDetailResponse(
                 1L,
-                new MemberResponse(1L, "name", "email@mail.com"),
+                new MemberResponse(1L, "name", "email@mail.com", "https://test.com"),
                 now,
                 thread.getContent(),
                 thread.getCommentCount());
@@ -116,7 +116,8 @@ class ThreadControllerTest extends RestDocsTest {
                                 fieldWithPath("[].createdAt").type(STRING).description("생성 일자"),
                                 fieldWithPath("[].writer.id").type(NUMBER).description("작성자 키"),
                                 fieldWithPath("[].writer.name").type(STRING).description("작성자 이름"),
-                                fieldWithPath("[].writer.email").type(STRING).description("작성자 이메일"))
+                                fieldWithPath("[].writer.email").type(STRING).description("작성자 이메일"),
+                                fieldWithPath("[].writer.imageUrl").type(STRING).description("작성자 프로필 url"))
                 ));
     }
 
@@ -127,7 +128,7 @@ class ThreadControllerTest extends RestDocsTest {
         LocalDateTime now = LocalDateTime.now();
         ThreadDetailResponse threadDetailResponse = new ThreadDetailResponse(
                 1L,
-                new MemberResponse(1L, "name", "email@mail.com"),
+                new MemberResponse(1L, "name", "email@mail.com", "https://test.com"),
                 now,
                 thread.getContent(),
                 thread.getCommentCount()
@@ -160,7 +161,8 @@ class ThreadControllerTest extends RestDocsTest {
                                 fieldWithPath("createdAt").type(STRING).description("생성 일자"),
                                 fieldWithPath("writer.id").type(NUMBER).description("작성자 키"),
                                 fieldWithPath("writer.name").type(STRING).description("작성자 이름"),
-                                fieldWithPath("writer.email").type(STRING).description("작성자 이메일"))
+                                fieldWithPath("writer.email").type(STRING).description("작성자 이메일"),
+                                fieldWithPath("writer.imageUrl").type(STRING).description("작성자 프로필 url"))
                 ));
     }
 
@@ -171,7 +173,7 @@ class ThreadControllerTest extends RestDocsTest {
         LocalDateTime now = LocalDateTime.now();
         ThreadDetailResponse threadDetailResponse = new ThreadDetailResponse(
                 1L,
-                new MemberResponse(1L, "name", "email@mail.com"),
+                new MemberResponse(1L, "name", "email@mail.com", "https://test.com"),
                 now,
                 thread.getContent(),
                 thread.getCommentCount()
@@ -208,7 +210,8 @@ class ThreadControllerTest extends RestDocsTest {
                                 fieldWithPath("createdAt").type(STRING).description("생성 일자"),
                                 fieldWithPath("writer.id").type(NUMBER).description("작성자 키"),
                                 fieldWithPath("writer.name").type(STRING).description("작성자 이름"),
-                                fieldWithPath("writer.email").type(STRING).description("작성자 이메일"))
+                                fieldWithPath("writer.email").type(STRING).description("작성자 이메일"),
+                                fieldWithPath("writer.imageUrl").type(STRING).description("작성자 프로필 url"))
                 ));
     }
 

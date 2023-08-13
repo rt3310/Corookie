@@ -74,11 +74,13 @@ export const profileState = create(set => ({
     profileOpened: false,
     profileEdit: false,
     profileName: '황상미',
+    profileImage: require('images/profilebox.png').default,
     openProfile: () => set(state => ({ profileOpened: true })),
     closeProfile: () => set(state => ({ profileOpened: false })),
     openEdit: () => set(state => ({ profileEdit: true })),
     closeEdit: () => set(state => ({ profileEdit: false })),
     setName: name => set(state => ({ profileName: name })),
+    setProfileImage: imageUrl => set(state => ({ profileImage: imageUrl })),
 }))
 
 export const setManagerState = create(set => ({
@@ -92,12 +94,15 @@ export const meState = create(set => ({
     id: null,
     name: null,
     email: null,
+    imageUrl: null,
     setMe: data =>
         set(state => ({
             id: data.id,
             name: data.name,
             email: data.email,
+            imageUrl: data.imageUrl,
         })),
+    setImageUrl: data => set(state => ({ imageUrl: data })),
 }))
 
 export const memberState = create(set => ({

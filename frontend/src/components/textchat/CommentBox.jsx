@@ -14,7 +14,7 @@ import * as StompJs from '@stomp/stompjs'
 const CommentBox = ({ projectId, channelId }) => {
     const { closeComment } = hooks.commentState()
     const { page, size, sort, direction, upPage, initPage } = hooks.commentsState()
-    const { threadId, setThreadId } = hooks.selectedThreadState()
+    const { threadId, setThreadId, commentCount, setCommentCount } = hooks.selectedThreadState()
     const [comments, setComments] = useState([])
     const [currentComment, setCurrentComment] = useState({
         threadId: threadId,
@@ -136,12 +136,16 @@ const CommentBox = ({ projectId, channelId }) => {
     }, [page])
 
     useEffect(() => {
-        console.log(comments)
+        const getThreadDetails = async () => {
+            const threadRes = await api.apis.getThread(projectId, channelId, threadId)
+            setCommentCount(threadRes.data.commentCount)
+        }
         if (prevScrollHeight) {
             scrollRef.current.scrollTop = scrollRef.current?.scrollHeight - prevScrollHeight
             return setPrevScrollHeight(null)
         }
         scrollRef.current.scrollTop = scrollRef.current?.scrollHeight - scrollRef.current?.clientHeight
+        getThreadDetails()
     }, [comments])
 
     return (
@@ -155,7 +159,7 @@ const CommentBox = ({ projectId, channelId }) => {
                     <IoClose />
                 </S.CloseButton>
             </S.CloseHeader>
-            <S.Header>3개의 댓글</S.Header>
+            <S.Header>{commentCount}개의 댓글</S.Header>
             <S.CommentSection ref={scrollRef}>
                 <div ref={target} />
                 {comments &&
