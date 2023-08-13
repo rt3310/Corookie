@@ -517,7 +517,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 175
+Content-Length: 208
 
 [ {
   "id" : 1,
@@ -525,9 +525,10 @@ Content-Length: 175
   "writer" : {
     "id" : 1,
     "name" : "name",
-    "email" : "email@mail.com"
+    "email" : "email@mail.com",
+    "imageUrl" : "https://test"
   },
-  "createdAt" : "2023-08-13T01:02:11.521626"
+  "createdAt" : "2023-08-14T02:57:15.664885"
 } ]</code></pre>
 </div>
 </div>
@@ -574,6 +575,11 @@ Content-Length: 175
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].writer.email</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">작성자 이메일</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].writer.imageUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작성자 프로필 url</p></td>
 </tr>
 </tbody>
 </table>
@@ -638,7 +644,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 171
+Content-Length: 204
 
 {
   "id" : 1,
@@ -646,9 +652,10 @@ Content-Length: 171
   "writer" : {
     "id" : 1,
     "name" : "name",
-    "email" : "email@mail.com"
+    "email" : "email@mail.com",
+    "imageUrl" : "https://test"
   },
-  "createdAt" : "2023-08-13T01:02:10.415648"
+  "createdAt" : "2023-08-14T02:57:14.643651"
 }</code></pre>
 </div>
 </div>
@@ -695,6 +702,11 @@ Content-Length: 171
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>writer.email</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">작성자 이메일</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>writer.imageUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작성자 프로필 url</p></td>
 </tr>
 </tbody>
 </table>

@@ -31,7 +31,7 @@ class ProjectRepositoryTest {
 
     @BeforeEach
     void initObjects() {
-        member = Member.of("memberName", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
+        member = Member.of("memberName", "test@gmail.com", "https://test", Oauth2.of(AuthProvider.KAKAO, "account"));
         memberRepository.save(member);
     }
 

@@ -4,8 +4,6 @@ import com.fourttttty.corookie.member.domain.AuthProvider;
 import com.fourttttty.corookie.member.domain.Member;
 import com.fourttttty.corookie.member.domain.Oauth2;
 import com.fourttttty.corookie.project.application.service.ProjectMemberService;
-import com.fourttttty.corookie.project.domain.Project;
-import com.fourttttty.corookie.project.domain.ProjectMember;
 import com.fourttttty.corookie.project.dto.request.ProjectMemberCreateRequest;
 import com.fourttttty.corookie.project.dto.response.ProjectMemberResponse;
 import com.fourttttty.corookie.support.RestDocsTest;
@@ -46,7 +44,7 @@ public class ProjectMemberControllerTest extends RestDocsTest {
 
     @BeforeEach
     void initTexture() {
-        member = Member.of("memberName", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
+        member = Member.of("memberName", "test@gmail.com", "https://test", Oauth2.of(AuthProvider.KAKAO, "account"));
     }
 
     @Test
@@ -55,7 +53,12 @@ public class ProjectMemberControllerTest extends RestDocsTest {
         // given
         Long projectId = 1L;
         Long memberId = 1L;
-        ProjectMemberResponse response = new ProjectMemberResponse(1L, member.getName(), member.getEmail(), false);
+        ProjectMemberResponse response = new ProjectMemberResponse(
+                1L,
+                member.getName(),
+                member.getEmail(),
+                member.getImageUrl(),
+                false);
         given(projectMemberService.createIfNone(any(ProjectMemberCreateRequest.class)))
                 .willReturn(response);
 
@@ -69,6 +72,7 @@ public class ProjectMemberControllerTest extends RestDocsTest {
                 .andExpect(jsonPath("$.memberId").value(response.memberId()))
                 .andExpect(jsonPath("$.memberName").value(response.memberName()))
                 .andExpect(jsonPath("$.memberEmail").value(response.memberEmail()))
+                .andExpect(jsonPath("$.memberImageUrl").value(response.memberImageUrl()))
                 .andExpect(jsonPath("$.isManager").value(response.isManager()));
 
         perform.andDo(print())
@@ -82,6 +86,7 @@ public class ProjectMemberControllerTest extends RestDocsTest {
                                 fieldWithPath("memberId").type(NUMBER).description("멤버 키"),
                                 fieldWithPath("memberName").type(STRING).description("멤버 이름"),
                                 fieldWithPath("memberEmail").type(STRING).description("멤버 이메일"),
+                                fieldWithPath("memberImageUrl").type(STRING).description("멤버 프로필 사진 url"),
                                 fieldWithPath("isManager").type(BOOLEAN).description("프로젝트 관리자 여부"))));
     }
 
@@ -107,7 +112,11 @@ public class ProjectMemberControllerTest extends RestDocsTest {
     @DisplayName("프로젝트에 등록된 회원 목록을 조회한다")
     void projectMemberList() throws Exception {
         // given
-        ProjectMemberResponse response = new ProjectMemberResponse(1L, member.getName(), member.getEmail(), true);
+        ProjectMemberResponse response = new ProjectMemberResponse(1L,
+                member.getName(),
+                member.getEmail(),
+                member.getImageUrl(),
+                true);
         given(projectMemberService.findByProjectId(any(Long.class))).willReturn(List.of(response));
 
         // when
@@ -119,6 +128,7 @@ public class ProjectMemberControllerTest extends RestDocsTest {
                 .andExpect(jsonPath("$[0].memberId").value(response.memberId()))
                 .andExpect(jsonPath("$[0].memberName").value(response.memberName()))
                 .andExpect(jsonPath("$[0].memberEmail").value(response.memberEmail()))
+                .andExpect(jsonPath("$[0].memberImageUrl").value(response.memberImageUrl()))
                 .andExpect(jsonPath("$[0].isManager").value(response.isManager()));
 
         perform.andDo(print())
@@ -131,6 +141,7 @@ public class ProjectMemberControllerTest extends RestDocsTest {
                                 fieldWithPath("[].memberId").type(NUMBER).description("멤버 키"),
                                 fieldWithPath("[].memberName").type(STRING).description("멤버 이름"),
                                 fieldWithPath("[].memberEmail").type(STRING).description("멤버 이메일"),
+                                fieldWithPath("[].memberImageUrl").type(STRING).description("멤버 프로필 사진 url"),
                                 fieldWithPath("[].isManager").type(BOOLEAN).description("프로젝트 관리자 여부"))));
     }
 }

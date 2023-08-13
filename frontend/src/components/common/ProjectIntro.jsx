@@ -55,6 +55,7 @@ const ProjectIntro = () => {
             .getProjectMembers(projectId)
             .then(response => {
                 setMembers(response.data)
+                console.log(response.data)
             })
             .catch(error => {
                 console.log('멤버 불러오기 실패', error)

@@ -15,6 +15,12 @@ import { AiOutlinePushpin, AiFillPushpin } from 'react-icons/ai'
 
 const TextChat = () => {
     const { projectId, channelId } = useParams()
+    const { closeProfile } = hooks.profileState()
+    const { closeComment } = hooks.commentState()
+    const { closeChatbox } = hooks.chatBoxState()
+    const { closeIssueDetail } = hooks.issueDetailState()
+    const { closeDmComment } = hooks.dmcommentState()
+    const { setThreadId, setCommentCount } = hooks.selectedThreadState()
     const { commentOpened } = hooks.commentState()
     const [threads, setThreads] = useState([])
     const { page, upPage, initPage, size, sort, direction } = hooks.threadsState()
@@ -116,6 +122,13 @@ const TextChat = () => {
                 writerId: memberRes.data.id,
             })
         }
+        closeComment()
+        closeIssueDetail()
+        closeChatbox()
+        closeDmComment()
+        setThreadId(null)
+        setCommentCount(0)
+        closeProfile()
         initChannel()
         connectThread()
 
@@ -168,7 +181,16 @@ const TextChat = () => {
                     <S.ThreadBox ref={scrollRef}>
                         <div ref={target} />
                         {threads &&
-                            [...threads].reverse().map(thread => <components.Thread key={thread.id} thread={thread} />)}
+                            [...threads]
+                                .reverse()
+                                .map(thread => (
+                                    <components.Thread
+                                        key={thread.id}
+                                        projectId={projectId}
+                                        channelId={channelId}
+                                        thread={thread}
+                                    />
+                                ))}
                     </S.ThreadBox>
                     <components.EditBox currentChat={currentChat} setCurrentChat={setCurrentChat} send={send} />
                 </S.ChatBox>

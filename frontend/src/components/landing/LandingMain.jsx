@@ -20,15 +20,21 @@ const LandingMain = () => {
     })
 
     const initProjects = async () => {
-        const projectsRes = await api.apis.getProjects()
-        setProjects(projectsRes.data)
-        console.log(projectsRes.data)
+        try {
+            const projectsRes = await api.apis.getProjects()
+            setProjects(projectsRes.data)
+        } catch (e) {
+            hooks.deleteCookie('Authorization')
+            hooks.deleteCookie('Refresh')
+        }
     }
 
     const createProject = async () => {
-        await api.apis.createProject(project)
-        initProjects()
-        setCreateFormOpened(false)
+        try {
+            await api.apis.createProject(project)
+            initProjects()
+            setCreateFormOpened(false)
+        } catch (e) {}
     }
 
     useEffect(() => {

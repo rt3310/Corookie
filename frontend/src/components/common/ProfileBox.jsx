@@ -1,32 +1,64 @@
 import React, { useRef, useEffect } from 'react'
 import styled from 'styled-components'
+import uuid from 'react-uuid'
+
+import AWS from 'aws-sdk'
+import { IoPencil } from 'react-icons/io5'
 
 import * as style from 'style'
 import * as hooks from 'hooks'
 import * as api from 'api'
 
-import { IoPencil } from 'react-icons/io5'
-
 const ProfileBox = () => {
+    AWS.config.update({
+        region: 'ap-northeast-2',
+        credentials: new AWS.CognitoIdentityCredentials({
+            IdentityPoolId: 'ap-northeast-2:01b0b700-68e1-41d4-bc17-1318e1b139de',
+        }),
+    })
+
+    const { id, name, email, imageUrl, setImageUrl } = hooks.meState()
     const { profileName, profileEdit, setName, openEdit, closeEdit } = hooks.profileState()
-    const { id, name, email, setMe } = hooks.meState()
+    const fileRef = useRef()
+    let nameRef = useRef()
+
+    const handleFileInput = e => {
+        const file = e.target.files[0]
+
+        const upload = new AWS.S3.ManagedUpload({
+            params: {
+                Bucket: 'corookie-resources',
+                Key: uuid() + '.jpg',
+                Body: file,
+            },
+        })
+
+        const promise = upload.promise()
+
+        promise.then(
+            function (data) {
+                console.log(data)
+                api.apis.changeMemberProfile(id, { imageUrl: data.Location }).then(response => {
+                    setImageUrl(response.data.imageUrl)
+                })
+            },
+            function (err) {
+                return alert('Error: ' + err.message)
+            },
+        )
+    }
+
     const handleNameChange = e => setName(e.target.value)
+
     const nameKeyDown = e => {
         if (e.key === 'Enter') {
             closeEdit()
         }
     }
+
     const handleFileClick = e => {
         fileRef.current.click()
     }
-
-    const handleFileChange = e => {
-        console.log(e.target.files[0])
-    }
-
-    const fileRef = useRef()
-
-    let nameRef = useRef()
 
     useEffect(() => {
         if (profileEdit) {
@@ -34,23 +66,17 @@ const ProfileBox = () => {
         }
     }, [profileEdit])
 
-    useEffect(() => {
-        api.apis.getMe().then(response => {
-            setMe(response.data)
-        })
-    }, [])
-
     return (
         <S.Wrap>
             <S.Header>프로필</S.Header>
             <S.ImageBox onClick={handleFileClick}>
-                <img src={require('images/profilebox.png').default} alt="프로필 이미지" />
+                <img src={imageUrl} alt="프로필 이미지" />
                 <S.FileUpload>
                     <input
                         ref={fileRef}
                         type="file"
                         accept="image/*"
-                        onChange={handleFileChange}
+                        onChange={handleFileInput}
                         style={{ display: 'none' }}
                     />
                     <IoPencil />

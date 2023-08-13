@@ -12,6 +12,7 @@ const Layout = () => {
     const { projectId } = useParams()
     const { profileOpened } = hooks.profileState()
     const { project, setProject } = hooks.projectState()
+    const { setMe } = hooks.meState()
     const { textChannels, setTextChannels } = hooks.textChannelsState()
 
     useEffect(() => {
@@ -27,6 +28,12 @@ const Layout = () => {
         }
 
         initProject(projectId)
+    }, [])
+
+    useEffect(() => {
+        api.apis.getMe().then(response => {
+            setMe(response.data)
+        })
     }, [])
 
     if (!project) {
