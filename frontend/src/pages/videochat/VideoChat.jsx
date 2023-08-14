@@ -21,7 +21,7 @@ const VideoChat = () => {
                 <S.ChatBox>
                     <S.ThreadBox>
                         <iframe
-                            src="https://i9a402.p.ssafy.io:8443"
+                            src="https://i9a402.p.ssafy.io:8443/#/sessionTest"
                             allow="camera;microphone;fullscreen;autoplay"
                             width={1200}
                             height={800}>
