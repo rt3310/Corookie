@@ -49,15 +49,20 @@ const LandingMain = () => {
             <S.Logo>
                 <img src={require('images/logo.png').default} alt={'로고'} />
             </S.Logo>
-            <S.Title>
-                웹 개발 초심자를 위한<nav></nav>프로젝트 협업 툴
-            </S.Title>
-            <S.SubTitle>
-                웹 개발 프로젝트에 필요한 기본적인 기능을 모두 제공하여<nav></nav>처음으로 웹 개발을 진행하는 사람도
-                원활한 협업을 할 수 있습니다.
-            </S.SubTitle>
-            <components.LandingStart />
-            {!createFormOpened && (
+            {!accessToken && (
+                <>
+                    <S.Title>
+                        웹 개발 초심자를 위한<nav></nav>프로젝트 협업 툴
+                    </S.Title>
+                    <S.SubTitle>
+                        웹 개발 프로젝트에 필요한 기본적인 기능을 모두 제공하여<nav></nav>처음으로 웹 개발을 진행하는
+                        사람도 원활한 협업을 할 수 있습니다.
+                    </S.SubTitle>
+                    <components.LandingStart />
+                </>
+            )}
+
+            {accessToken && !createFormOpened && (
                 <S.ProjectCarousel>
                     <Carousel
                         showStatus={false}
@@ -107,7 +112,7 @@ const S = {
     Title: styled.div`
         width: auto;
         color: ${({ theme }) => theme.color.black};
-        margin: 10px 8px 40px 8px;
+        margin: 10px 8px 30px 8px;
         padding: 8px;
         text-align: center;
         line-height: 1.5;
@@ -257,7 +262,7 @@ const S = {
         /* height: auto; */
         padding: auto;
         text-align: center;
-        margin: 180px 24px 8px 24px;
+        margin: 10px 24px 8px 24px;
     `,
 }
 
