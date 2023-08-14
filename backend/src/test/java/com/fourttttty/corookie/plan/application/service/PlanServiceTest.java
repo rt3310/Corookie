@@ -59,7 +59,7 @@ class PlanServiceTest {
         projectRepository = new FakeProjectRepository();
         planMemberRepository = new FakePlanMemberRepository(planRepository);
 
-        planCategoryService = new PlanCategoryService(planCategoryRepository);
+        planCategoryService = new PlanCategoryService(planCategoryRepository, projectRepository);
         categoryInPlanService = new CategoryInPlanService(categoryInPlanRepository,planRepository,planCategoryService);
         planMemberService = new PlanMemberService(planMemberRepository,memberRepository,planRepository);
         planService = new PlanService(planRepository,projectRepository,planCategoryRepository,memberRepository, categoryInPlanService, planMemberService);
@@ -79,7 +79,7 @@ class PlanServiceTest {
                 "createPlanDescription",
                 LocalDateTime.now().minusDays(2),
                 LocalDateTime.now(),
-                List.of(new PlanCategoryCreateRequest("CreateCategory")),
+                List.of(new PlanCategoryCreateRequest("CreateCategory", "#ffddaa")),
                 List.of(new PlanMemberCreateRequest(member.getId())));
 
         // when
@@ -100,7 +100,7 @@ class PlanServiceTest {
                 "createPlanDescription",
                 LocalDateTime.now().minusDays(2),
                 LocalDateTime.now(),
-                List.of(new PlanCategoryCreateRequest("CreateCategory")),
+                List.of(new PlanCategoryCreateRequest("CreateCategory", "#ffddaa")),
                 List.of(new PlanMemberCreateRequest(member.getId())));
         planService.createPlan(planCreateRequest, project.getId());
 
@@ -122,7 +122,7 @@ class PlanServiceTest {
                 "createPlanDescription",
                 LocalDateTime.now().minusDays(2),
                 LocalDateTime.now(),
-                List.of(new PlanCategoryCreateRequest("CreateCategory")),
+                List.of(new PlanCategoryCreateRequest("CreateCategory", "#ffddaa")),
                 List.of(new PlanMemberCreateRequest(member.getId())));
         PlanResponse savedResponse = planService.createPlan(planCreateRequest, project.getId());
 
@@ -130,7 +130,7 @@ class PlanServiceTest {
             "modifyPlanDescription",
             LocalDateTime.now().minusDays(4),
             LocalDateTime.now().minusDays(2),
-            List.of(new PlanCategoryDeleteRequest("modifyCategory1")),
+            List.of(new PlanCategoryDeleteRequest("modifyCategory1", "#ffddaa")),
             List.of(new PlanMemberDeleteRequest(member.getId())));
 
         // when
@@ -149,7 +149,7 @@ class PlanServiceTest {
                 "createPlanDescription",
                 LocalDateTime.now().minusDays(2),
                 LocalDateTime.now(),
-                List.of(new PlanCategoryCreateRequest("CreateCategory")),
+                List.of(new PlanCategoryCreateRequest("CreateCategory", "#ffddaa")),
                 List.of(new PlanMemberCreateRequest(member.getId())));
         planService.createPlan(planCreateRequest, project.getId());
 

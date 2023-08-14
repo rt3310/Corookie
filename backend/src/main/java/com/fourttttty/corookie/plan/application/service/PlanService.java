@@ -62,19 +62,19 @@ public class PlanService {
     @Transactional
     public PlanResponse createPlan(PlanCreateRequest request, Long projectId) {
         Plan plan = planRepository.save(Plan.of(request.planName(),
-            request.description(),
-            request.planStart(),
-            request.planEnd(),
-            true,
-            projectRepository.findById(projectId).orElseThrow(ProjectNotFoundException::new)));
+                request.description(),
+                request.planStart(),
+                request.planEnd(),
+                true,
+                projectRepository.findById(projectId).orElseThrow(ProjectNotFoundException::new)));
 
         return PlanResponse.from(plan,
-            request.categories().stream()
-                .map(categoryRequest -> categoryInPlanService.create(plan, categoryRequest))
-                .toList(),
-            request.members().stream()
-                .map(memberRequest -> planMemberService.create(plan, memberRequest))
-                .toList());
+                request.categories().stream()
+                        .map(categoryRequest -> categoryInPlanService.create(projectId, plan, categoryRequest))
+                        .toList(),
+                request.members().stream()
+                        .map(memberRequest -> planMemberService.create(plan, memberRequest))
+                        .toList());
     }
 
     @Transactional
@@ -82,17 +82,17 @@ public class PlanService {
         Long projectId) {
         Plan plan = findEntityById(planId);
         plan.update(request.planName(),
-            request.description(),
-            request.planStart(),
-            request.planEnd(),
-            projectRepository.findById(projectId).orElseThrow(EntityNotFoundException::new));
+                request.description(),
+                request.planStart(),
+                request.planEnd(),
+                projectRepository.findById(projectId).orElseThrow(EntityNotFoundException::new));
 
         return PlanResponse.from(plan,
-            categoryInPlanService.findAllByPlanId(planId).stream()
-                .map(categoryInPlan -> PlanCategoryResponse.from(
-                    categoryInPlan.getId().getPlanCategory()))
-                .toList(),
-            planMemberService.findAllByPlanId(planId));
+                categoryInPlanService.findAllByPlanId(planId).stream()
+                        .map(categoryInPlan -> PlanCategoryResponse.from(
+                                categoryInPlan.getId().getPlanCategory()))
+                        .toList(),
+                planMemberService.findAllByPlanId(planId));
     }
 
     @Transactional
@@ -101,15 +101,13 @@ public class PlanService {
     }
 
     @Transactional
-    public PlanCategoryResponse createPlanCategory(Long id, PlanCategoryCreateRequest request) {
-        return categoryInPlanService.create(findEntityById(id), request);
+    public PlanCategoryResponse createPlanCategory(Long projectId, Long planId, PlanCategoryCreateRequest request) {
+        return categoryInPlanService.create(projectId, findEntityById(planId), request);
     }
 
     @Transactional
     public void deletePlanCategory(Long id, String content) {
-        categoryInPlanService.deleteCategoryInPlan(
-            CategoryInPlan.of(findEntityById(id),
-                planCategoryRepository.findByContent(content)
+        categoryInPlanService.deleteCategoryInPlan(CategoryInPlan.of(findEntityById(id), planCategoryRepository.findByContent(content)
                     .orElseThrow(EntityNotFoundException::new)));
     }
 

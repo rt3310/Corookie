@@ -42,7 +42,11 @@ public class CategoryInPlanRepositoryTest {
     private CategoryInPlanRepository categoryInPlanRepository;
 
 
-    Member member = Member.of("memberName", "memberEmail", "https://test", Oauth2.of(AuthProvider.KAKAO, "account"));
+    Member member = Member.of(
+            "memberName",
+            "memberEmail",
+            "https://test",
+            Oauth2.of(AuthProvider.KAKAO, "account"));
     Project project = Project.of("memberName",
         "description",
         true,
@@ -57,9 +61,9 @@ public class CategoryInPlanRepositoryTest {
         project
     );
     List<PlanCategory> categories = List.of(
-            PlanCategory.of("testCategory1"),
-            PlanCategory.of("testCategory2"),
-            PlanCategory.of("testCategory3"));
+            PlanCategory.of("testCategory1", "#ffddaa", project),
+            PlanCategory.of("testCategory2", "#ffddaa", project),
+            PlanCategory.of("testCategory3", "#ffddaa", project));
 
     @BeforeEach
     void setUp() {
