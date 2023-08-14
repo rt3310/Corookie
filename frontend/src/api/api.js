@@ -27,6 +27,7 @@ export const apis = {
     createProject: data => instance.post('/api/v1/projects', data),
     getProjects: () => instance.get('/api/v1/projects'),
     getProject: projectId => instance.get(`/api/v1/projects/${projectId}`),
+    getInvitedProject: inviteLink => instance.get(`/api/v1/projects/invite/${inviteLink}`),
 
     getProjectMembers: projectId => instance.get(`/api/v1/projects/${projectId}/projectmembers`),
 

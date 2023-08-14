@@ -102,6 +102,7 @@ export const meState = create(set => ({
             email: data.email,
             imageUrl: data.imageUrl,
         })),
+    setName: data => set(state => ({ name: data })),
     setImageUrl: data => set(state => ({ imageUrl: data })),
 }))
 

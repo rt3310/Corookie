@@ -121,6 +121,7 @@ const S = {
             width: 30px;
             height: 30px;
             margin-right: 16px;
+            border-radius: 4px;
         }
         &.manager div {
             color: ${({ theme }) => theme.color.gray};

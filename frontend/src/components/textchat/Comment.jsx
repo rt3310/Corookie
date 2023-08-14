@@ -31,9 +31,7 @@ const Comment = ({ comment }) => {
         <S.Wrap>
             <S.ImageBox>
                 <img
-                    src={
-                        comment.writer.imageUrl ? comment.writer.imageUrl : require('images/thread_profile.png').default
-                    }
+                    src={comment.writer.imageUrl ? comment.writer.imageUrl : require('images/profile.png').default}
                     alt="스레드 이미지"
                 />
             </S.ImageBox>
