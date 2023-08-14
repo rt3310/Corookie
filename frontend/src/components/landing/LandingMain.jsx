@@ -76,7 +76,8 @@ const LandingMain = () => {
                         </S.CreateProjectButton>
                         {projects.map((project, index) => (
                             <S.ProjectBox key={index} onClick={() => navigate('/project/' + project.id)}>
-                                {project.name}
+                                <S.ProjectName>{project.name}</S.ProjectName>
+                                <S.ProjectDescription>{project.description}</S.ProjectDescription>
                             </S.ProjectBox>
                         ))}
                     </Carousel>
@@ -99,6 +100,15 @@ const LandingMain = () => {
                         <S.CreateAcceptButton onClick={() => createProject()}>생성</S.CreateAcceptButton>
                     </S.CreateAccess>
                 </S.ProjectCreateForm>
+            )}
+            {accessToken && (
+                <S.Login
+                    onClick={() => {
+                        hooks.deleteCookie('Authorization')
+                        hooks.deleteCookie('Refresh')
+                    }}>
+                    Logout
+                </S.Login>
             )}
         </S.Wrap>
     )
@@ -138,6 +148,7 @@ const S = {
         border-radius: 8px;
         background-color: ${({ theme }) => theme.color.main};
         transition-duration: 0.2s;
+        color: ${({ theme }) => theme.color.white};
         cursor: pointer;
     `,
     ProjectCarousel: styled.div`
@@ -246,16 +257,38 @@ const S = {
         height: 30px;
         margin: 0 8px;
         border-radius: 4px;
-        background-color: ${({ theme }) => theme.color.success};
+        background-color: ${({ theme }) => theme.color.main};
         font-size: ${({ theme }) => theme.fontsize.content};
+        border-radius: 8px;
+        border: 1px solid ${({ theme }) => theme.color.main};
+        background-color: ${({ theme }) => theme.color.main};
+        color: ${({ theme }) => theme.color.white};
+        margin: auto 0 0 0;
+        transition: all 0.2s linear;
+
+        &:hover {
+            background-color: ${({ theme }) => theme.color.white};
+            color: ${({ theme }) => theme.color.main};
+        }
     `,
     CreateCancelButton: styled.button`
         width: 80px;
         height: 30px;
         margin: 0 8px;
         border-radius: 4px;
-        background-color: ${({ theme }) => theme.color.warning};
+        background-color: ${({ theme }) => theme.color.main};
         font-size: ${({ theme }) => theme.fontsize.content};
+        border-radius: 8px;
+        border: 1px solid ${({ theme }) => theme.color.main};
+        background-color: ${({ theme }) => theme.color.main};
+        color: ${({ theme }) => theme.color.white};
+        margin: auto 0 0 0;
+        transition: all 0.2s linear;
+
+        &:hover {
+            background-color: ${({ theme }) => theme.color.white};
+            color: ${({ theme }) => theme.color.main};
+        }
     `,
     Logo: styled.div`
         width: auto;
@@ -264,6 +297,29 @@ const S = {
         text-align: center;
         margin: 10px 24px 8px 24px;
     `,
+    Login: styled.div`
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        width: 180px;
+        padding: 10px;
+        color: ${({ theme }) => theme.color.main};
+
+        border-radius: 8px;
+        border: 1px solid ${({ theme }) => theme.color.main};
+        background-color: ${({ theme }) => theme.color.main};
+        color: ${({ theme }) => theme.color.white};
+        margin: auto 0 0 0;
+        transition: all 0.2s linear;
+
+        &:hover {
+            background-color: ${({ theme }) => theme.color.white};
+            color: ${({ theme }) => theme.color.main};
+        }
+    `,
+    ProjectName: styled.div``,
+    ProjectDescription: styled.div``,
 }
 
 export default LandingMain
