@@ -23,6 +23,8 @@ const App = () => {
                         <Route path={utils.URL.PLAN.PLAN} element={<pages.Plan />} />
                     </Route>
 
+                    <Route path={utils.URL.PROJECT.INVITE} element={<components.ProjectInvite />} />
+
                     <Route path={utils.URL.LOGIN.LOGIN} element={<pages.Login />} />
                     <Route path={utils.URL.LOGIN.SUCCESS} element={<pages.LoginSuccess />} />
                 </Routes>

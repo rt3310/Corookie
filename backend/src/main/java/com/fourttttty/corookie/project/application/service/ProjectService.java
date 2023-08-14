@@ -1,11 +1,13 @@
 package com.fourttttty.corookie.project.application.service;
 
+import com.fourttttty.corookie.config.security.LoginUser;
 import com.fourttttty.corookie.member.application.repository.MemberRepository;
 import com.fourttttty.corookie.member.domain.Member;
 import com.fourttttty.corookie.project.application.repository.ProjectMemberRepository;
 import com.fourttttty.corookie.project.application.repository.ProjectRepository;
 import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.project.domain.ProjectMember;
+import com.fourttttty.corookie.project.domain.ProjectMemberId;
 import com.fourttttty.corookie.project.dto.request.ProjectCreateRequest;
 import com.fourttttty.corookie.project.dto.request.ProjectUpdateRequest;
 import com.fourttttty.corookie.project.dto.response.ProjectDetailResponse;
@@ -74,6 +76,15 @@ public class ProjectService {
     @Transactional
     public void deleteById(Long projectId) {
         projectRepository.findById(projectId).orElseThrow(EntityNotFoundException::new).delete();
+    }
+
+    @Transactional
+    public ProjectDetailResponse findByInvitationLink(String invitationLink, Long memberId) {
+        Project project = findEntityById(invitationLinkGenerateService.decodingInvitationLink(invitationLink));
+        Member member = memberRepository.findById(memberId).orElseThrow(EntityNotFoundException::new);
+        projectMemberRepository.findById(new ProjectMemberId(project, member))
+                .orElseGet(() -> projectMemberRepository.save(ProjectMember.of(project, member)));
+        return ProjectDetailResponse.from(project, project.isManager(memberId));
     }
 
 }

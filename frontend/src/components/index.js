@@ -8,6 +8,7 @@ export { default as ProfileBox } from './common/ProfileBox'
 export { default as ManagerSetting } from './common/ManagerSetting'
 export { default as MemberSetting } from './common/MemberSetting'
 export { default as ExitModal } from './common/ExitModal'
+export { default as ProjectInvite } from './common/ProjectInvite'
 
 export { default as Thread } from './textchat/Thread'
 export { default as CommentBox } from './textchat/CommentBox'
