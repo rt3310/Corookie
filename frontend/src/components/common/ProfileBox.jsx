@@ -17,8 +17,8 @@ const ProfileBox = () => {
         }),
     })
 
-    const { id, name, email, imageUrl, setImageUrl } = hooks.meState()
-    const { profileName, profileEdit, setName, openEdit, closeEdit } = hooks.profileState()
+    const { id, name, email, imageUrl, setName, setImageUrl, setMe } = hooks.meState()
+    const { profileEdit, openEdit, closeEdit } = hooks.profileState()
     const fileRef = useRef()
     let nameRef = useRef()
 
@@ -52,7 +52,14 @@ const ProfileBox = () => {
 
     const nameKeyDown = e => {
         if (e.key === 'Enter') {
-            closeEdit()
+            api.apis
+                .changeMemberName(id, { name: name })
+                .then(response => {
+                    closeEdit()
+                })
+                .catch(err => {
+                    setMe(api.apis.getMe())
+                })
         }
     }
 
@@ -70,7 +77,7 @@ const ProfileBox = () => {
         <S.Wrap>
             <S.Header>프로필</S.Header>
             <S.ImageBox onClick={handleFileClick}>
-                <img src={imageUrl} alt="프로필 이미지" />
+                <img src={imageUrl ? imageUrl : require('images/profile.png').default} alt="프로필 이미지" />
                 <S.FileUpload>
                     <input
                         ref={fileRef}
@@ -93,7 +100,7 @@ const ProfileBox = () => {
                                 onChange={handleNameChange}
                                 onKeyDown={nameKeyDown}
                                 type="text"
-                                value={profileName}
+                                value={name}
                             />
                         )}
                         {!profileEdit && <S.EditName onClick={() => openEdit()}>편집</S.EditName>}

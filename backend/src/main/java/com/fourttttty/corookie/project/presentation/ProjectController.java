@@ -1,6 +1,7 @@
 package com.fourttttty.corookie.project.presentation;
 
 import com.fourttttty.corookie.config.security.LoginUser;
+import com.fourttttty.corookie.project.application.service.InvitationLinkGenerateService;
 import com.fourttttty.corookie.project.application.service.ProjectService;
 import com.fourttttty.corookie.project.dto.request.ProjectCreateRequest;
 import com.fourttttty.corookie.project.dto.request.ProjectUpdateRequest;
@@ -48,5 +49,11 @@ public class ProjectController {
     public ResponseEntity<Object> projectDelete(@PathVariable Long projectId) {
         projectService.deleteById(projectId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/invite/{invitationLink}")
+    public ResponseEntity<ProjectDetailResponse> projectInvitation(@PathVariable String invitationLink,
+                                                                   @AuthenticationPrincipal LoginUser loginUser) {
+        return ResponseEntity.ok(projectService.findByInvitationLink(invitationLink, loginUser.getMemberId()));
     }
 }

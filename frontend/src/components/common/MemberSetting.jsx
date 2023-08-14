@@ -98,7 +98,11 @@ const MemberSetting = ({ memberTextRef }) => {
                     {linkActivated && (
                         <S.CreateLink>
                             <S.Text>초대링크 복사</S.Text>
-                            <IoLink onClick={() => copyLink('복사!')} />
+                            <IoLink
+                                onClick={() =>
+                                    copyLink(`http://localhost:3000/project/invite/${project.invitationLink}`)
+                                }
+                            />
                         </S.CreateLink>
                     )}
                 </S.Container>
@@ -151,6 +155,7 @@ const S = {
             width: 30px;
             height: 30px;
             margin-right: 16px;
+            border-radius: 4px;
         }
     `,
     Name: styled.div`

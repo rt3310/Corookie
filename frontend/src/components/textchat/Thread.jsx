@@ -128,11 +128,7 @@ const Thread = ({ projectId, channelId, thread }) => {
             <S.ChatBox>
                 <S.ImageBox>
                     <img
-                        src={
-                            thread.writer.imageUrl
-                                ? thread.writer.imageUrl
-                                : require('images/thread_profile.png').default
-                        }
+                        src={thread.writer.imageUrl ? thread.writer.imageUrl : require('images/profile.png').default}
                         alt="스레드 이미지"
                     />
                 </S.ImageBox>
