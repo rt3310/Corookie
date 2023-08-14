@@ -79,6 +79,7 @@ const S = {
         color: ${({ theme }) => theme.color.white};
         margin: auto 0 0 0;
         transition: all 0.2s linear;
+        cursor: pointer;
 
         &:hover {
             background-color: ${({ theme }) => theme.color.white};
