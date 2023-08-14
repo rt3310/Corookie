@@ -5,14 +5,13 @@ import * as components from 'components'
 import * as hooks from 'hooks'
 import * as api from 'api'
 
-const IssueBoard = () => {
+const IssueBoard = ({ projectId }) => {
     const { issueCreateOpened } = hooks.issueCreateState()
-    const { project } = hooks.projectState()
     const { tasks, setTasks } = hooks.tasksState()
 
     useEffect(() => {
         api.apis
-            .getIssueList(project.id)
+            .getIssueList(projectId)
             .then(response => {
                 console.log(response.data)
                 setTasks(response.data)
@@ -25,7 +24,7 @@ const IssueBoard = () => {
     return (
         <S.Container>
             <S.Wrap>
-                {issueCreateOpened && <components.IssueCreate />}
+                {issueCreateOpened && <components.IssueCreate projectId={projectId} />}
                 {Array.isArray(tasks) &&
                     tasks.map(task => {
                         return <components.IssuePreview key={task.id} task={task} />

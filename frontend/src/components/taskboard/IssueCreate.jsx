@@ -5,7 +5,7 @@ import * as components from 'components'
 import * as hooks from 'hooks'
 import * as utils from 'utils'
 import * as api from 'api'
-const IssueCreate = () => {
+const IssueCreate = ({ projectId }) => {
     const { closeIssueCreate } = hooks.issueCreateState()
     const { value: priority, setValue: setPriority } = hooks.createPriorityState()
     const { value: manager, setValue: setManager } = hooks.createManagerState()
@@ -32,7 +32,7 @@ const IssueCreate = () => {
             closeIssueCreate()
 
             api.apis
-                .createIssue(project.id, data)
+                .createIssue(projectId, data)
                 .then(response => {
                     console.log(response)
                     setTasks([...tasks, response.data])

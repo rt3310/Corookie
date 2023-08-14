@@ -110,7 +110,6 @@ class IssueRepositoryTest {
     @DisplayName("projectId로 이슈 목록을 조회한다")
     void findByProjectId() {
         // given
-        Long projectId = 1L;
         Issue issue = Issue.of("topic",
                 "description",
                 IssueProgress.TODO,
@@ -122,7 +121,7 @@ class IssueRepositoryTest {
         issueRepository.save(issue);
 
         // when
-        List<Issue> findIssue = issueRepository.findByProjectId(projectId);
+        List<Issue> findIssue = issueRepository.findByProjectId(project.getId());
 
         // then
         assertThat(findIssue.size()).isEqualTo(1L);
