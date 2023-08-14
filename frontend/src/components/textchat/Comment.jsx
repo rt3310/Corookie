@@ -30,7 +30,12 @@ const Comment = ({ comment }) => {
     return (
         <S.Wrap>
             <S.ImageBox>
-                <img src={require('images/thread_profile.png').default} alt="스레드 이미지" />
+                <img
+                    src={
+                        comment.writer.imageUrl ? comment.writer.imageUrl : require('images/thread_profile.png').default
+                    }
+                    alt="스레드 이미지"
+                />
             </S.ImageBox>
             <S.ContentBox>
                 <S.MemberInfoBox>
@@ -69,6 +74,7 @@ const S = {
         margin: 0 16px 0 0;
 
         & img {
+            border-radius: 8px;
             width: 40px;
             height: 40px;
         }

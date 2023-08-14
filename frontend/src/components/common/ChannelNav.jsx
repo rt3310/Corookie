@@ -26,6 +26,7 @@ const ChannelNav = () => {
         const initProjectMembers = async () => {
             const projectMembersRes = await api.apis.getProjectMembers(projectId)
             setProjectMembers(projectMembersRes.data)
+            console.log(projectMembersRes.data)
         }
 
         initProjectMembers()
@@ -62,7 +63,14 @@ const ChannelNav = () => {
                                     navigate('/project/' + project.id + '/channel/direct/' + member.memberId)
                                 }>
                                 <S.DmProfileImage>
-                                    <img src={require('images/profile.png').default} alt="프로필" />
+                                    <img
+                                        src={
+                                            member.memberImageUrl
+                                                ? member.memberImageUrl
+                                                : require('images/profile.png').default
+                                        }
+                                        alt="프로필"
+                                    />
                                 </S.DmProfileImage>
                                 {member.memberName}
                             </S.DmMember>
@@ -245,6 +253,7 @@ const S = {
         margin: 0 10px 0 0;
 
         & img {
+            border-radius: 4px;
             width: 20px;
         }
     `,
