@@ -744,13 +744,14 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 157
+Content-Length: 191
 
 [ {
   "id" : 1,
   "name" : "name",
-  "createdAt" : "2023-08-14T11:08:37.6040611",
-  "updatedAt" : "2023-08-14T11:08:37.6040611",
+  "description" : "description",
+  "createdAt" : "2023-08-14T14:22:25.8064064",
+  "updatedAt" : "2023-08-14T14:22:25.8064064",
   "enabled" : true
 } ]</code></pre>
 </div>
@@ -778,6 +779,11 @@ Content-Length: 157
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].name</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">제목</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].description</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].enabled</code></p></td>
@@ -845,8 +851,8 @@ Content-Length: 311
   "id" : 1,
   "name" : "name",
   "description" : "description",
-  "createdAt" : "2023-08-14T11:08:37.4620577",
-  "updatedAt" : "2023-08-14T11:08:37.4620577",
+  "createdAt" : "2023-08-14T14:22:25.6924056",
+  "updatedAt" : "2023-08-14T14:22:25.6924056",
   "enabled" : true,
   "invitationLink" : "http://test.com",
   "invitationStatus" : false,
@@ -984,8 +990,8 @@ Content-Length: 311
   "id" : 1,
   "name" : "name",
   "description" : "description",
-  "createdAt" : "2023-08-14T11:08:37.6600576",
-  "updatedAt" : "2023-08-14T11:08:37.6600576",
+  "createdAt" : "2023-08-14T14:22:25.8554051",
+  "updatedAt" : "2023-08-14T14:22:25.8554051",
   "enabled" : true,
   "invitationLink" : "http://test.com",
   "invitationStatus" : false,
@@ -1154,8 +1160,8 @@ Content-Length: 317
   "id" : 1,
   "name" : "memberName",
   "description" : "description",
-  "createdAt" : "2023-08-14T11:08:37.5240585",
-  "updatedAt" : "2023-08-14T11:08:37.5240585",
+  "createdAt" : "2023-08-14T14:22:25.7444045",
+  "updatedAt" : "2023-08-14T14:22:25.7444045",
   "enabled" : true,
   "invitationLink" : "http://test.com",
   "invitationStatus" : false,
@@ -3024,8 +3030,8 @@ Content-Length: 144
 [ {
   "id" : 1,
   "planName" : "memberName",
-  "planStart" : "2023-08-14T11:08:36.0260594",
-  "planEnd" : "2023-08-12T11:08:36.0260594"
+  "planStart" : "2023-08-14T14:22:24.4574088",
+  "planEnd" : "2023-08-12T14:22:24.4574088"
 } ]</code></pre>
 </div>
 </div>
@@ -3083,8 +3089,8 @@ Host: localhost:8080
 {
   "planName" : "memberName",
   "description" : "testDescription",
-  "planStart" : "2023-08-14T11:08:36.0920573",
-  "planEnd" : "2023-08-12T11:08:36.0920573",
+  "planStart" : "2023-08-14T14:22:24.5104053",
+  "planEnd" : "2023-08-12T14:22:24.5104053",
   "categories" : [ {
     "content" : "testCategory1"
   }, {
@@ -3191,8 +3197,8 @@ Content-Length: 527
   "planId" : 1,
   "planName" : "memberName",
   "description" : "testDescription",
-  "planStart" : "2023-08-14T11:08:36.0920573",
-  "planEnd" : "2023-08-12T11:08:36.0920573",
+  "planStart" : "2023-08-14T14:22:24.5104053",
+  "planEnd" : "2023-08-12T14:22:24.5104053",
   "categories" : [ {
     "id" : 1,
     "content" : "testCategory1"
@@ -3343,8 +3349,8 @@ Content-Length: 527
   "planId" : 1,
   "planName" : "memberName",
   "description" : "testDescription",
-  "planStart" : "2023-08-14T11:08:36.2500623",
-  "planEnd" : "2023-08-12T11:08:36.2500623",
+  "planStart" : "2023-08-14T14:22:24.6364055",
+  "planEnd" : "2023-08-12T14:22:24.6364055",
   "categories" : [ {
     "id" : 1,
     "content" : "testCategory1"
@@ -3460,8 +3466,8 @@ Host: localhost:8080
 {
   "planName" : "memberName",
   "description" : "testDescription",
-  "planStart" : "2023-08-12T11:08:36.3110591",
-  "planEnd" : "2023-08-10T11:08:36.3110591",
+  "planStart" : "2023-08-12T14:22:24.6854066",
+  "planEnd" : "2023-08-10T14:22:24.6854066",
   "categories" : [ {
     "content" : "testCategory1"
   }, {
@@ -3572,8 +3578,8 @@ Content-Length: 527
   "planId" : 1,
   "planName" : "memberName",
   "description" : "testDescription",
-  "planStart" : "2023-08-12T11:08:36.3110591",
-  "planEnd" : "2023-08-10T11:08:36.3110591",
+  "planStart" : "2023-08-12T14:22:24.6854066",
+  "planEnd" : "2023-08-10T14:22:24.6854066",
   "categories" : [ {
     "id" : 1,
     "content" : "testCategory1"
@@ -4524,7 +4530,7 @@ Content-Length: 246
     "email" : "email@mail.com",
     "imageUrl" : "https://test.com"
   },
-  "createdAt" : "2023-08-14T11:08:40.0110581",
+  "createdAt" : "2023-08-14T14:22:28.1924066",
   "content" : "content",
   "commentCount" : 0
 } ]</code></pre>
@@ -4647,7 +4653,7 @@ Content-Length: 242
     "email" : "email@mail.com",
     "imageUrl" : "https://test.com"
   },
-  "createdAt" : "2023-08-14T11:08:40.0670587",
+  "createdAt" : "2023-08-14T14:22:28.2354053",
   "content" : "content",
   "commentCount" : 0
 }</code></pre>
@@ -4776,7 +4782,7 @@ Content-Length: 242
     "email" : "email@mail.com",
     "imageUrl" : "https://test.com"
   },
-  "createdAt" : "2023-08-14T11:08:39.9550574",
+  "createdAt" : "2023-08-14T14:22:28.1424056",
   "content" : "content",
   "commentCount" : 0
 }</code></pre>
@@ -4955,7 +4961,7 @@ Content-Length: 219
     "email" : "email@mail.com",
     "imageUrl" : "https://test"
   },
-  "createdAt" : "2023-08-14T11:08:28.5970583"
+  "createdAt" : "2023-08-14T14:22:18.1724067"
 } ]</code></pre>
 </div>
 </div>
@@ -5082,7 +5088,7 @@ Content-Length: 215
     "email" : "email@mail.com",
     "imageUrl" : "https://test"
   },
-  "createdAt" : "2023-08-14T11:08:27.8210608"
+  "createdAt" : "2023-08-14T14:22:17.3504062"
 }</code></pre>
 </div>
 </div>
