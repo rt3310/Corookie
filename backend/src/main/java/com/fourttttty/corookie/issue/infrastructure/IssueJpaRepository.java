@@ -13,6 +13,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface IssueJpaRepository extends JpaRepository<Issue, Long> {
+    List<Issue> findByProjectId(Long project);
     List<Issue> findByProjectIdAndManagerId(Long projectId, Long managerId);
 
     List<Issue> findByProjectIdAndTopicContaining(Long projectId, String topic);
