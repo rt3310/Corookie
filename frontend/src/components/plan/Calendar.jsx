@@ -152,6 +152,7 @@ const S = {
     `,
     Day: styled.li`
         flex: 1 1 0%;
+        cursor: pointer;
 
         &:not(:last-child) {
             border-right: 1px solid ${({ theme }) => theme.color.middlegray};

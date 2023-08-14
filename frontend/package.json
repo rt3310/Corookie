@@ -21,6 +21,7 @@
         "react-transition-group": "^4.4.5",
         "rebass": "^4.0.7",
         "serve": "^14.2.0",
+        "socks-client": "^1.1.4",
         "styled-components": "^6.0.4",
         "swiper": "6.8.4",
         "tachyons": "^4.12.0",
