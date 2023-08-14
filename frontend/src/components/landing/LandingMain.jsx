@@ -23,6 +23,7 @@ const LandingMain = () => {
         try {
             const projectsRes = await api.apis.getProjects()
             setProjects(projectsRes.data)
+            console.log(projectsRes.data)
         } catch (e) {
             hooks.deleteCookie('Authorization')
             hooks.deleteCookie('Refresh')
@@ -70,7 +71,8 @@ const LandingMain = () => {
                         centerSlidePercentage={20}
                         stopOnHover={true}
                         showThumbs={false}
-                        autoPlay>
+                        autoPlay
+                        showIndicators={false}>
                         <S.CreateProjectButton onClick={() => setCreateFormOpened(true)}>
                             <BsPlus />
                         </S.CreateProjectButton>
@@ -86,12 +88,18 @@ const LandingMain = () => {
             {createFormOpened && (
                 <S.ProjectCreateForm>
                     <S.ProjectNameBox>
-                        <S.ProjectNameHeader>프로젝트 제목:</S.ProjectNameHeader>{' '}
-                        <S.ProjectNameInput onChange={e => setProject({ ...project, name: e.target.value })} />
+                        <S.ProjectNameHeader></S.ProjectNameHeader>
+                        <S.ProjectNameInput
+                            placeholder="프로젝트 제목을 입력하세요"
+                            maxlength="16"
+                            onChange={e => setProject({ ...project, name: e.target.value })}
+                        />
                     </S.ProjectNameBox>
                     <S.ProjectDescriptionBox>
-                        <S.ProjectDescriptionHeader>설명:</S.ProjectDescriptionHeader>
+                        <S.ProjectDescriptionHeader></S.ProjectDescriptionHeader>
                         <S.ProjectDescriptionInput
+                            placeholder="프로젝트 설명을 입력하세요"
+                            maxlength="24"
                             onChange={e => setProject({ ...project, description: e.target.value })}
                         />
                     </S.ProjectDescriptionBox>
@@ -101,14 +109,14 @@ const LandingMain = () => {
                     </S.CreateAccess>
                 </S.ProjectCreateForm>
             )}
-            {accessToken && (
-                <S.Login
+            {accessToken && !createFormOpened && (
+                <S.Logout
                     onClick={() => {
                         hooks.deleteCookie('Authorization')
                         hooks.deleteCookie('Refresh')
                     }}>
                     Logout
-                </S.Login>
+                </S.Logout>
             )}
         </S.Wrap>
     )
@@ -139,13 +147,16 @@ const S = {
     `,
     ProjectBox: styled.div`
         display: flex;
-        justify-content: center;
-        align-items: center;
-        flex: 0 0 auto;
+        flex-direction: column;
+        justify-content: flex-start;
+        /* align-items: center;
+        /* flex: 0 0 auto; */
+        margin: 4px;
         padding: 4px;
-        width: 100px;
-        height: 100px;
+        width: 200px;
+        height: 200px;
         border-radius: 8px;
+        box-shadow: ${({ theme }) => theme.shadow.card};
         background-color: ${({ theme }) => theme.color.main};
         transition-duration: 0.2s;
         color: ${({ theme }) => theme.color.white};
@@ -153,18 +164,18 @@ const S = {
     `,
     ProjectCarousel: styled.div`
         width: 100%;
-        height: 200px;
-        margin: 24px;
+        height: 210px;
+        margin: 40px;
         padding: 4px;
         display: flex;
         flex-direction: column;
         align-items: center;
         .carousel {
-            max-width: 1000px;
-            width: 600px;
+            max-width: 1100px;
+            width: 1100px;
         }
         .slider-wrapper {
-            width: 600px;
+            width: 1100px;
         }
     `,
     CreateProjectButton: styled.div`
@@ -173,89 +184,99 @@ const S = {
         align-items: center;
         flex: 0 0 auto;
         padding: 4px;
-        width: 100px;
-        height: 100px;
+        margin: 6px;
+        width: 200px;
+        height: 200px;
         border-radius: 8px;
         background-color: ${({ theme }) => theme.color.white};
         transition-duration: 0.2s;
         cursor: pointer;
 
         & > svg {
-            width: 80%;
-            height: 80%;
+            width: 30%;
+            height: 30%;
+            color: ${({ theme }) => theme.color.main};
         }
     `,
     ProjectCreateForm: styled.div`
-        width: 100%;
-        height: 200px;
-        margin: 24px;
-        padding: 4px;
+        width: 500px;
+        height: 500px;
+        /* margin: 40px 24px; */
+        padding: 16px;
+        border-radius: 8px;
+        /* border: 1px solid ${({ theme }) => theme.color.main}; */
+        background-color: ${({ theme }) => theme.color.white};
+        box-shadow: ${({ theme }) => theme.shadow.card};
+        color: ${({ theme }) => theme.color.lightgray};
         display: flex;
         flex-direction: column;
         align-items: center;
         .carousel {
             max-width: 1000px;
-            width: 600px;
+            /* width: 600px; */
         }
         .slider-wrapper {
-            width: 600px;
+            /* width: 600px; */
         }
     `,
     ProjectNameBox: styled.div`
-        width: 610px;
-        display: flex;
+        width: 100%;
+        margin: 30px 16px 30px 16px;
         align-items: center;
     `,
     ProjectNameHeader: styled.div`
-        width: 100px;
+        width: 100%;
         margin: 0 auto 0 0;
     `,
     ProjectNameInput: styled.input`
-        width: 500px;
+        width: 100%;
         height: 40px;
         resize: none;
         border: none;
         outline: none;
         border-radius: 8px;
-        margin: 8px 0;
-        font-size: ${({ theme }) => theme.fontsize.title2};
+        margin: 16px 0;
+        font-size: ${({ theme }) => theme.fontsize.logo};
         font-family: ${({ theme }) => theme.font.main};
+        background-color: ${({ theme }) => theme.color.white};
         padding: 8px 16px;
         overflow-y: hidden;
     `,
     ProjectDescriptionBox: styled.div`
-        width: 610px;
-        display: flex;
+        width: 100%;
+        /* display: flex; */
         align-items: center;
+        margin: 24px 16px;
     `,
     ProjectDescriptionHeader: styled.div`
         display: flex;
         align-items: flex-start;
-        width: 100px;
-        height: 100%;
-        margin: 20px auto 0 0;
+        width: 100%;
+        margin: 0 auto 0 0;
     `,
     ProjectDescriptionInput: styled.textarea`
-        width: 500px;
-        height: 80px;
+        width: 100%;
+        height: 190px;
         resize: none;
         border: none;
         outline: none;
         border-radius: 8px;
-        margin: 8px 0;
+        margin: 16px 0;
         font-size: ${({ theme }) => theme.fontsize.content};
         font-family: ${({ theme }) => theme.font.main};
+        background-color: ${({ theme }) => theme.color.white};
+        /* border: 1px solid ${({ theme }) => theme.color.black}; */
         padding: 8px 16px;
     `,
     CreateAccess: styled.div`
         display: flex;
-        justify-content: flex-end;
-        width: 610px;
+        justify-content: center;
+        width: 100%;
     `,
     CreateAcceptButton: styled.button`
         width: 80px;
-        height: 30px;
-        margin: 0 8px;
+        height: 40px;
+        /* margin: 0 0 0 8px; */
         border-radius: 4px;
         background-color: ${({ theme }) => theme.color.main};
         font-size: ${({ theme }) => theme.fontsize.content};
@@ -263,7 +284,6 @@ const S = {
         border: 1px solid ${({ theme }) => theme.color.main};
         background-color: ${({ theme }) => theme.color.main};
         color: ${({ theme }) => theme.color.white};
-        margin: auto 0 0 0;
         transition: all 0.2s linear;
 
         &:hover {
@@ -273,7 +293,7 @@ const S = {
     `,
     CreateCancelButton: styled.button`
         width: 80px;
-        height: 30px;
+        height: 40px;
         margin: 0 8px;
         border-radius: 4px;
         background-color: ${({ theme }) => theme.color.main};
@@ -297,29 +317,44 @@ const S = {
         text-align: center;
         margin: 10px 24px 8px 24px;
     `,
-    Login: styled.div`
+    Logout: styled.div`
         display: flex;
         justify-content: center;
         align-items: center;
         height: 100%;
-        width: 180px;
+        width: 140px;
         padding: 10px;
-        color: ${({ theme }) => theme.color.main};
-
+        margin: 80px auto 0 auto;
         border-radius: 8px;
-        border: 1px solid ${({ theme }) => theme.color.main};
-        background-color: ${({ theme }) => theme.color.main};
+        border: 1px solid ${({ theme }) => theme.color.black};
+        background-color: ${({ theme }) => theme.color.black};
         color: ${({ theme }) => theme.color.white};
-        margin: auto 0 0 0;
         transition: all 0.2s linear;
+        cursor: pointer;
 
         &:hover {
             background-color: ${({ theme }) => theme.color.white};
-            color: ${({ theme }) => theme.color.main};
+            color: ${({ theme }) => theme.color.black};
         }
     `,
-    ProjectName: styled.div``,
-    ProjectDescription: styled.div``,
+    ProjectName: styled.div`
+        width: 100%;
+        height: 60%;
+        padding: 30px 30px 16px 30px;
+        color: ${({ theme }) => theme.color.white};
+        font-size: ${({ theme }) => theme.fontsize.title2};
+        line-height: 1.5;
+        text-align: left;
+    `,
+    ProjectDescription: styled.div`
+        width: 100%;
+        height: 40%;
+        padding: 12px 30px 30px 30px;
+        color: ${({ theme }) => theme.color.white};
+        font-size: 13px;
+        text-align: left;
+        line-height: 1.5;
+    `,
 }
 
 export default LandingMain
