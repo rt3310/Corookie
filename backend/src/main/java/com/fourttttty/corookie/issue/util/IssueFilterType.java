@@ -7,6 +7,7 @@ public enum IssueFilterType {
     MANAGER("manager"),
     TOPIC("topic"),
     PROGRESS("progress"),
+    CATEGORY("category"),
     PRIORITY("priority");
     private final String value;
 
