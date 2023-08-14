@@ -1,6 +1,7 @@
 package com.fourttttty.corookie.issue.infrastructure;
 
 import com.fourttttty.corookie.issue.domain.Issue;
+import com.fourttttty.corookie.issue.domain.IssueCategory;
 import com.fourttttty.corookie.issue.domain.IssuePriority;
 import com.fourttttty.corookie.issue.domain.IssueProgress;
 import com.fourttttty.corookie.member.domain.Member;
@@ -21,6 +22,8 @@ public interface IssueJpaRepository extends JpaRepository<Issue, Long> {
 
     @Query("select i from Issue i where i.project.id = :projectId order by i.priority desc ")
     List<Issue> findAllOrderByPriorityDesc(@Param("projectId") Long projectId);
+
+    List<Issue> findByProjectIdAndCategory(Long projectId, IssueCategory category);
 
     List<Issue> findByProjectIdAndProgress(Long projectId, IssueProgress progress);
 }
