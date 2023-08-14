@@ -26,7 +26,7 @@ public class IssueRepositoryImpl implements IssueRepository {
     }
 
     public List<Issue> findByProjectId(Long projectId) {
-        return issueJpaRepository.findAll();
+        return issueJpaRepository.findByProjectId(projectId);
     }
 
     @Override

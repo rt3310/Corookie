@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react'
+import { useParams } from 'react-router'
 import styled from 'styled-components'
 
 import * as hooks from 'hooks'
 import * as components from 'components'
 
 const TaskBoard = () => {
+    const { projectId } = useParams()
     const { setValue: setPriorityValue } = hooks.priorityState()
     const { setValue: setManagerValue } = hooks.managerState()
     const { setValue: setCategoryValue } = hooks.categoryState()
@@ -31,9 +33,13 @@ const TaskBoard = () => {
 
     return (
         <S.Wrap>
-            <components.TaskHeader />
+            <components.TaskHeader projectId={projectId} />
             <S.IssueContainer>
-                {showIssue ? <components.IssueBoard /> : <components.KanbanBoard />}
+                {showIssue ? (
+                    <components.IssueBoard projectId={projectId} />
+                ) : (
+                    <components.KanbanBoard projectId={projectId} />
+                )}
                 {issueDetailOpened !== '-1' && <components.IssueDetail id={issueDetailOpened} />}
             </S.IssueContainer>
         </S.Wrap>
