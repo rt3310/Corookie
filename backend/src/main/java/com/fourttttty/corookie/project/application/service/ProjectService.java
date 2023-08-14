@@ -55,7 +55,7 @@ public class ProjectService {
         Project project = projectRepository.save(projectCreateRequest.toEntity(member));
 
         registerMemberForProject(member, project);
-        project.changeInvitationLink(invitationLinkGenerateService.generateInvitationLink((long) project.hashCode()));
+        project.changeInvitationLink(invitationLinkGenerateService.generateInvitationLink(project.getId()));
         project.createDefaultTextChannels().forEach(textChannelRepository::save);
         return ProjectDetailResponse.from(project, project.isManager(managerId));
     }
