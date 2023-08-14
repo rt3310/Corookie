@@ -478,7 +478,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/projects/1/projectmembers HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 39
+Content-Length: 42
 Host: localhost:8080
 
 {
@@ -523,12 +523,13 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 110
+Content-Length: 153
 
 {
   "memberId" : 1,
   "memberName" : "memberName",
   "memberEmail" : "test@gmail.com",
+  "memberImageUrl" : "https://test",
   "isManager" : false
 }</code></pre>
 </div>
@@ -561,6 +562,11 @@ Content-Length: 110
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberEmail</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">멤버 이메일</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberImageUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">멤버 프로필 사진 url</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>isManager</code></p></td>
@@ -612,12 +618,13 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 113
+Content-Length: 156
 
 [ {
   "memberId" : 1,
   "memberName" : "memberName",
   "memberEmail" : "test@gmail.com",
+  "memberImageUrl" : "https://test",
   "isManager" : true
 } ]</code></pre>
 </div>
@@ -650,6 +657,11 @@ Content-Length: 113
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].memberEmail</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">멤버 이메일</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].memberImageUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">멤버 프로필 사진 url</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].isManager</code></p></td>
@@ -714,7 +726,7 @@ Vary: Access-Control-Request-Headers</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-08-10 21:13:26 +0900
+Last updated 2023-08-11 09:30:52 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
