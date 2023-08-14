@@ -34,10 +34,10 @@ const Thread = ({ projectId, channelId, thread }) => {
     // const msg =
     //     '```java\npackage boj;\nimport java.io.BufferedReader;\nimport java.io.ioException;\n"문자열"\nimport java.io.InputStreamReader;\npublic class Problem2847\n\tpublic static void main(String[] args)throws Exception, IOException(\n\t\tBufferedReader br = new BufferedReader(new InputStreamReader(System.in));\n\t\tint N = Integer.parseInt(br.readLine());\n\t\tint[] score = new int[N];\n\t\tfor (int i=0; i<N; i++) {\n\t\t\tscore[i]=Integer.parseInt(br.readLine());\n\t\t}\n\t\t int prev=score[N-1];\n\t\t int cnt=0;\n\t\t for (int i=N-2; i>=0; i--) {\n\t\t\t if (score[i]>=prev) {\n\t\t\t	cnt+=score[i]-prev+1;\n\t\t\t	score[i]=prev-1;\n\t\t}\n\t\t prev=score[i];\n\t\t }\n\t\t System.out.println(cnt);\n\t }\n}\n```'
 
-    const msg = '나는 모든 걸 갖췄다. 재미. 세련미. 미. 그리고 황상미.'
+    // const msg = '나는 모든 걸 갖췄다. 재미. 세련미. 미. 그리고 황상미.'
 
     const regex = /```(\w*)\n([\s\S]*?)\n```/
-    const matches = msg.match(regex)
+    const matches = thread.content.match(regex)
 
     let isCode = false
     let language = null
@@ -48,7 +48,7 @@ const Thread = ({ projectId, channelId, thread }) => {
         language = matches[1]
         code = matches[2]
     } else {
-        code = msg
+        code = thread
     }
 
     useEffect(() => {

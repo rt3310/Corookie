@@ -16,10 +16,12 @@ const PlanRegister = () => {
     const [member, setMember] = useState({
         id: null,
         name: '참여자 선택',
+        color: '#ffffff',
     })
     const [category, setCategory] = useState({
         id: null,
         name: '분류 선택',
+        color: '#ffffff',
     })
     const [content, setContent] = useState('')
 

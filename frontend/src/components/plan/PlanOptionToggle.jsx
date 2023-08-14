@@ -2,9 +2,11 @@ import React, { useEffect, useState, useRef } from 'react'
 import styled from 'styled-components'
 
 import * as utils from 'utils'
+import { IoAdd } from 'react-icons/io5'
 
 const PlanOptionToggle = ({ state, selected, setSelected }) => {
     const [isActive, setIsActive] = useState(false)
+    const [addCategory, setAddCategory] = useState(false)
     const optionRef = useRef(null)
 
     useEffect(() => {
@@ -19,6 +21,25 @@ const PlanOptionToggle = ({ state, selected, setSelected }) => {
         }
     }, [optionRef])
 
+    const [newOption, setNewOption] = useState('')
+    let optionInput = useRef(null)
+    const handleAddOption = e => setNewOption(e.target.value)
+
+    useEffect(() => {
+        if (addCategory) {
+            optionInput.current.focus()
+        }
+        const handleOutside = e => {
+            if (optionInput.current && !optionInput.current.contains(e.target)) {
+                setAddCategory(false)
+            }
+        }
+        document.addEventListener('mousedown', handleOutside)
+        return () => {
+            document.removeEventListener('mousedown', handleOutside)
+        }
+    }, [optionInput, addCategory])
+
     return (
         <S.PlanOptionBox>
             <S.PlanOptionLabel>{utils.PLAN_OPTIONS[state].label}</S.PlanOptionLabel>
@@ -30,14 +51,29 @@ const PlanOptionToggle = ({ state, selected, setSelected }) => {
                             key={index}
                             onClick={() => {
                                 setIsActive(false)
-                                setSelected({
-                                    ...selected,
-                                    name: option,
-                                })
-                            }}>
-                            {option}
+                                setSelected([...selected, { name: option.name, color: option.color, id: option.id }])
+                            }}
+                            color={option.color}>
+                            {option.name}
                         </S.Option>
                     ))}
+                    {state === 'category' && (
+                        <S.AddOption>
+                            {!addCategory && (
+                                <S.Text onClick={() => setAddCategory(!addCategory)}>
+                                    <IoAdd /> 카테고리 추가
+                                </S.Text>
+                            )}
+                            {addCategory && (
+                                <S.NewOption
+                                    ref={optionInput}
+                                    value={newOption}
+                                    onChange={handleAddOption}
+                                    placeholder="제목을 입력하세요"
+                                />
+                            )}
+                        </S.AddOption>
+                    )}
                 </S.Options>
             </S.Selector>
         </S.PlanOptionBox>
@@ -74,6 +110,8 @@ const S = {
         height: 100%;
         flex-grow: 1;
         padding: 0 16px;
+        cursor: pointer;
+        pointer-events: auto;
         border-radius: 8px;
         font-family: ${({ theme }) => theme.font.main};
         font-size: ${({ theme }) => theme.fontsize.sub1};
@@ -125,6 +163,27 @@ const S = {
         &:last-child {
             border-radius: 0 0 8px 8px;
         }
+    `,
+    AddOption: styled.li`
+        padding: 8px;
+        cursor: pointer;
+        white-space: nowrap;
+        &:hover {
+            background-color: ${({ theme }) => theme.color.main};
+            color: ${({ theme }) => theme.color.white};
+        }
+    `,
+    Text: styled.div`
+        display: flex;
+        align-items: center;
+    `,
+    NewOption: styled.input`
+        margin: 0 8px 0 0;
+        width: 100%;
+        border: none;
+        outline: none;
+        font-family: 'Noto Sans KR', 'Pretendard', sans-serif;
+        font-size: ${({ theme }) => theme.fontsize.content};
     `,
 }
 
