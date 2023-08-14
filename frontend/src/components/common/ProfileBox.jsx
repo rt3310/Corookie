@@ -1,29 +1,64 @@
 import React, { useRef, useEffect } from 'react'
 import styled from 'styled-components'
+import uuid from 'react-uuid'
+
+import AWS from 'aws-sdk'
+import { IoPencil } from 'react-icons/io5'
 
 import * as style from 'style'
 import * as hooks from 'hooks'
-import { IoPencil } from 'react-icons/io5'
+import * as api from 'api'
 
 const ProfileBox = () => {
+    AWS.config.update({
+        region: 'ap-northeast-2',
+        credentials: new AWS.CognitoIdentityCredentials({
+            IdentityPoolId: 'ap-northeast-2:01b0b700-68e1-41d4-bc17-1318e1b139de',
+        }),
+    })
+
+    const { id, name, email, imageUrl, setImageUrl } = hooks.meState()
     const { profileName, profileEdit, setName, openEdit, closeEdit } = hooks.profileState()
+    const fileRef = useRef()
+    let nameRef = useRef()
+
+    const handleFileInput = e => {
+        const file = e.target.files[0]
+
+        const upload = new AWS.S3.ManagedUpload({
+            params: {
+                Bucket: 'corookie-resources',
+                Key: uuid() + '.jpg',
+                Body: file,
+            },
+        })
+
+        const promise = upload.promise()
+
+        promise.then(
+            function (data) {
+                console.log(data)
+                api.apis.changeMemberProfile(id, { imageUrl: data.Location }).then(response => {
+                    setImageUrl(response.data.imageUrl)
+                })
+            },
+            function (err) {
+                return alert('Error: ' + err.message)
+            },
+        )
+    }
+
     const handleNameChange = e => setName(e.target.value)
+
     const nameKeyDown = e => {
         if (e.key === 'Enter') {
             closeEdit()
         }
     }
+
     const handleFileClick = e => {
         fileRef.current.click()
     }
-
-    const handleFileChange = e => {
-        console.log(e.target.files[0])
-    }
-
-    const fileRef = useRef()
-
-    let nameRef = useRef()
 
     useEffect(() => {
         if (profileEdit) {
@@ -35,13 +70,13 @@ const ProfileBox = () => {
         <S.Wrap>
             <S.Header>프로필</S.Header>
             <S.ImageBox onClick={handleFileClick}>
-                <img src={require('images/profilebox.png').default} alt="프로필 이미지" />
+                <img src={imageUrl} alt="프로필 이미지" />
                 <S.FileUpload>
                     <input
                         ref={fileRef}
                         type="file"
                         accept="image/*"
-                        onChange={handleFileChange}
+                        onChange={handleFileInput}
                         style={{ display: 'none' }}
                     />
                     <IoPencil />
@@ -51,7 +86,7 @@ const ProfileBox = () => {
                 <S.MemberInfoBox>
                     <S.MemberNameContainer>
                         {!profileEdit ? (
-                            <S.MemberName>{profileName}</S.MemberName>
+                            <S.MemberName>{name}</S.MemberName>
                         ) : (
                             <S.MemberNameEdit
                                 ref={nameRef}
@@ -63,7 +98,7 @@ const ProfileBox = () => {
                         )}
                         {!profileEdit && <S.EditName onClick={() => openEdit()}>편집</S.EditName>}
                     </S.MemberNameContainer>
-                    <S.MemberEmail>ssafy@email.com</S.MemberEmail>
+                    <S.MemberEmail>{email ? email : '이메일이 없습니다'}</S.MemberEmail>
                 </S.MemberInfoBox>
             </S.ContentBox>
         </S.Wrap>
@@ -75,8 +110,8 @@ const S = {
         display: flex;
         flex-direction: column;
         align-items: center;
-        width: 320px;
-        min-width: 320px;
+        width: 360px;
+        min-width: 360px;
         border-radius: 8px;
         background-color: ${({ theme }) => theme.color.white};
         box-shadow: ${({ theme }) => theme.shadow.card};

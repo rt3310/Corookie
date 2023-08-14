@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { useParams } from 'react-router'
 import styled from 'styled-components'
 
 import { IoPeople, IoChevronForward, IoClose, IoRocket } from 'react-icons/io5'
@@ -6,11 +7,14 @@ import { AiOutlineCheckSquare } from 'react-icons/ai'
 
 import * as hooks from 'hooks'
 import * as components from 'components'
+import * as api from 'api'
 
 const ProjectIntro = () => {
+    const { projectId } = useParams()
     const { manager, managerOpened, openManager, closeManager } = hooks.setManagerState()
-    const { members, memberOpened, openMember, closeMember } = hooks.memberState()
-    const { project } = hooks.projectState()
+    const { projectMembers } = hooks.projectMembersState()
+    const { members, setMembers, memberOpened, openMember, closeMember } = hooks.memberState()
+    const { project, setProject } = hooks.projectState()
     const [flip, setFlip] = useState(false)
     const managerTextRef = useRef(null)
     const memberTextRef = useRef(null)
@@ -47,8 +51,16 @@ const ProjectIntro = () => {
     }
 
     useEffect(() => {
-        console.log(managerOpened)
-    }, [managerOpened])
+        api.apis
+            .getProjectMembers(projectId)
+            .then(response => {
+                setMembers(response.data)
+                console.log(response.data)
+            })
+            .catch(error => {
+                console.log('멤버 불러오기 실패', error)
+            })
+    }, [])
 
     useEffect(() => {
         const handleOutside = e => {
@@ -85,7 +97,7 @@ const ProjectIntro = () => {
                         </S.Manager>
                         <S.Members ref={memberTextRef} onClick={() => clickMember()}>
                             <IoPeople />
-                            {members.length}
+                            {projectMembers.length}
                         </S.Members>
                         <components.MemberSetting memberTextRef={memberTextRef} />
                     </S.MemberInfo>
@@ -111,12 +123,14 @@ const ProjectIntro = () => {
 
 const S = {
     Wrap: styled.div`
+        display: flex;
         width: 216px;
-        height: 150px;
+        height: 165px;
         flex-direction: column;
         transition: transform 0.3s;
         transform: perspective(800px) rotateY(0deg);
         position: relative;
+        z-index: 10000;
         & > .card {
             transform: rotateY(180deg);
         }
@@ -127,7 +141,7 @@ const S = {
         transform-style: preserve-3d;
         height: 100%;
         width: 100%;
-        margin: 16px 0;
+        margin: 16px 0 0;
         position: relative;
         overflow: visible;
         & > .cards {
@@ -146,7 +160,7 @@ const S = {
         background-color: ${({ theme }) => theme.color.white};
         border-radius: 8px;
         box-shadow: ${({ theme }) => theme.shadow.card};
-        padding: 24px;
+        padding: 24px 24px 2px;
         width: 100%;
         height: 100%;
     `,
@@ -234,7 +248,7 @@ const S = {
         padding-bottom: 8px;
     `,
     Line: styled.div`
-        margin: 0 8px;
+        margin: auto 8px 0;
         min-height: 1px;
         width: 206px;
         align-self: center;

@@ -64,7 +64,7 @@ class PlanServiceTest {
         planMemberService = new PlanMemberService(planMemberRepository,memberRepository,planRepository);
         planService = new PlanService(planRepository,projectRepository,planCategoryRepository,memberRepository, categoryInPlanService, planMemberService);
 
-        member = Member.of( "memberName", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
+        member = Member.of( "memberName", "test@gmail.com", "https://test", Oauth2.of(AuthProvider.KAKAO, "account"));
         project = Project.of("memberName", "description", true,
             "http://test.com", false, member);
         memberRepository.save(member);

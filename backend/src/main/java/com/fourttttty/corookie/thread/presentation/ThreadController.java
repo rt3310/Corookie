@@ -6,6 +6,9 @@ import com.fourttttty.corookie.thread.dto.request.ThreadModifyRequest;
 import com.fourttttty.corookie.thread.dto.response.ThreadDetailResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
@@ -30,9 +33,10 @@ public class ThreadController {
     @MessageMapping("/thread")
     public ResponseEntity<ThreadDetailResponse> threadCreate(ThreadCreateRequest request) {
         // 스레드 전달
-        sendingOperations.convertAndSend("/topic/thread/" + request.textChannelId(), request);
+        ThreadDetailResponse response = threadService.create(request);
+        sendingOperations.convertAndSend("/topic/thread/" + request.textChannelId(), response);
         // 스레드 생성
-        return ResponseEntity.ok(threadService.create(request, request.writerId()));
+        return ResponseEntity.ok(response);
     }
 
     // 스레드 상세 보기
@@ -46,8 +50,12 @@ public class ThreadController {
     // 특정 텍스트 채널의 스레드 전체 보기
     @GetMapping
     public ResponseEntity<List<ThreadDetailResponse>> threadList(@PathVariable Long projectId,
-                                                                 @PathVariable Long textChannelId) {
-        return ResponseEntity.ok(threadService.findAll(textChannelId));
+                                                                 @PathVariable Long textChannelId,
+                                                                 @PageableDefault(size = 10,
+                                                                         sort = "createdAt",
+                                                                         direction = Sort.Direction.DESC)
+                                                                     Pageable pageable) {
+        return ResponseEntity.ok(threadService.findByTextChannelIdLatest(textChannelId, pageable));
     }
 
     // 스레드 삭제

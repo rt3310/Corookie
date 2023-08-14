@@ -6,14 +6,17 @@ import { IoAdd, IoHappyOutline, IoSadOutline, IoThumbsUp } from 'react-icons/io5
 import * as components from 'components'
 import * as hooks from 'hooks'
 import * as utils from 'utils'
+import * as api from 'api'
 
-const Thread = ({ chat }) => {
+const Thread = ({ projectId, channelId, thread }) => {
     const text = useRef(null)
     const [overText, setOverText] = useState(false)
     const [closedText, setClosedText] = useState(false)
     const [addImoticon, setAddImoticon] = useState(false)
     const { closeProfile } = hooks.profileState()
     const { commentOpened, openComment, closeComment } = hooks.commentState()
+    const { threadId, setThreadId, commentCount, setCommentCount } = hooks.selectedThreadState()
+    const [currentCommentCount, setCurrentCommentCount] = useState(thread.commentCount)
 
     const [thumbCnt, setThumbCnt] = useState(0)
     const [happyCnt, setHappyCnt] = useState(0)
@@ -67,13 +70,11 @@ const Thread = ({ chat }) => {
         setClosedText(true)
     }
 
-    const toggleComment = () => {
-        if (commentOpened) {
-            closeComment()
-        } else {
-            openComment()
-            closeProfile()
-        }
+    const openCommentBox = () => {
+        setThreadId(thread.id)
+        setCommentCount(currentCommentCount)
+        openComment()
+        closeProfile()
     }
 
     const childImoticonData = [
@@ -103,27 +104,39 @@ const Thread = ({ chat }) => {
         }
     }, [imoticonRef])
 
+    useEffect(() => {
+        const getThreadDetail = async () => {
+            const threadRes = await api.apis.getThread(projectId, channelId, thread.id)
+            setCurrentCommentCount(threadRes.data.commentCount)
+            console.log(threadRes.data)
+        }
+
+        if (threadId === thread.id) {
+            getThreadDetail()
+        }
+    }, [commentCount])
+
     return (
-        <S.Wrap>
+        <S.Wrap open={thread.id === threadId}>
             <S.ChatBox>
                 <S.ImageBox>
                     <img src={require('images/thread_profile.png').default} alt="스레드 이미지" />
                 </S.ImageBox>
                 <S.ContentBox>
                     <S.MemberInfoBox>
-                        <S.MemberName>황상미</S.MemberName>
-                        <S.CreatedTime>오전 11:12</S.CreatedTime>
-                        <S.CommentButton onClick={() => toggleComment()} open={commentOpened}>
-                            <div>
+                        <S.MemberName>{thread && thread.writer.name}</S.MemberName>
+                        <S.CreatedTime>{thread && utils.calDate(thread.createdAt)}</S.CreatedTime>
+                        <S.CommentButton onClick={() => openCommentBox()} open={commentOpened}>
+                            {/* <div>
                                 <img src={require('images/profile.png').default} alt="프로필" />
                                 <img src={require('images/profile.png').default} alt="프로필" />
                                 <img src={require('images/profile.png').default} alt="프로필" />
-                            </div>
-                            3개의 댓글 <IoIosArrowForward />
+                            </div> */}
+                            {currentCommentCount}개의 댓글 <IoIosArrowForward />
                         </S.CommentButton>
                     </S.MemberInfoBox>
                     <S.Text ref={text}>
-                        <components.Message isCode={isCode} text={code} language={language} chat={chat} />
+                        <components.Message isCode={isCode} text={code} language={language} thread={thread} />
                     </S.Text>
                     {closedText && (
                         <S.MoreButton>
