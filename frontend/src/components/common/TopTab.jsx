@@ -61,6 +61,7 @@ const S = {
         width: 40px;
         margin: 16px 16px 0 0;
         cursor: pointer;
+        border-radius: 8px;
         & img {
             width: 40px;
             height: 40px;
