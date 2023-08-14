@@ -4,6 +4,7 @@ import com.fourttttty.corookie.plan.application.repository.CategoryInPlanReposit
 import com.fourttttty.corookie.plan.application.repository.PlanCategoryRepository;
 import com.fourttttty.corookie.plan.domain.PlanCategory;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Map;
@@ -20,6 +21,13 @@ public class FakePlanCategoryRepository implements PlanCategoryRepository {
     public PlanCategory save(PlanCategory planCategory) {
         store.put(autoIncrementdId++, planCategory);
         return planCategory;
+    }
+
+    @Override
+    public List<PlanCategory> findByProjectId(Long projectId) {
+        return store.values().stream()
+                .filter(planCategory -> planCategory.getProject().getId().equals(projectId))
+                .toList();
     }
 
     @Override
