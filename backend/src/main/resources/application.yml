@@ -52,6 +52,10 @@ cloud:
     stack:
       auto: false
     credentials:
-      access-key: AKIAVQXB5F7YOTLUYLDZ
-      secret-key: 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
+      access-key: ${s3.credentials.access-key}
+      secret-key: ${s3.credentials.secret-key}
 
+web-client:
+  vito-api:
+    access-key : ${vito-api.credentials.access-key}
+    secret-access-key : ${vito-api.credentials.secret-access-key}

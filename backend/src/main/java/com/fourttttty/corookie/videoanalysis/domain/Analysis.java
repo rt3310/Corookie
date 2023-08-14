@@ -12,15 +12,21 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.io.IOException;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.web.multipart.MultipartFile;
 
 @Entity
 @Table(name = "analysis")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 @EntityListeners(AuditingEntityListener.class)
 public class Analysis extends BaseTime {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "analysis_id", nullable = false)
@@ -29,13 +35,13 @@ public class Analysis extends BaseTime {
     @Column(nullable = false)
     private String s3URL;
 
-    @Column(nullable = false,columnDefinition = "text")
-    private String STTText;
+    @Column(nullable = false, columnDefinition = "text")
+    private String sttText;
 
-    @Column(nullable = false,columnDefinition = "text")
+    @Column(nullable = false, columnDefinition = "text")
     private String summarizationText;
 
-    @Column(nullable = false,columnDefinition = "text")
+    @Column(nullable = false, columnDefinition = "text")
     private Boolean enabled;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -43,23 +49,35 @@ public class Analysis extends BaseTime {
     private VideoChannel videoChannel;
 
     private Analysis(String s3URL,
-        String STTText,
+        String sttText,
         String summarizationText,
         Boolean enabled,
-        VideoChannel videoChannel){
+        VideoChannel videoChannel) {
         this.s3URL = s3URL;
-        this.STTText = STTText;
+        this.sttText = sttText;
         this.summarizationText = summarizationText;
         this.enabled = enabled;
         this.videoChannel = videoChannel;
     }
 
     public static Analysis of(String s3URL,
-        String STTText,
+        String sttText,
         String summarizationText,
         Boolean enabled,
-        VideoChannel videoChannel){
-        return new Analysis(s3URL,STTText,summarizationText,enabled,videoChannel);
+        VideoChannel videoChannel) {
+        return new Analysis(s3URL, sttText, summarizationText, enabled, videoChannel);
     }
-    public void delete(){ this.enabled = false; }
+
+    public void delete() {
+        this.enabled = false;
+    }
+
+    public static ByteArrayResource convertFileResource(MultipartFile file) throws IOException {
+        byte[] fileBytes = file.getBytes();
+        return new ByteArrayResource(fileBytes);
+    }
+
+    public static String getSttConfig(){
+        return new String( "{\"use_diarization\": true, \"diarization\": {\"spk_count\": 2}, \"use_multi_channel\": false, \"use_itn\": false, \"use_disfluency_filter\": false, \"use_profanity_filter\": false, \"use_paragraph_splitter\": true, \"paragraph_splitter\": {\"max\": 50}}");
+    }
 }

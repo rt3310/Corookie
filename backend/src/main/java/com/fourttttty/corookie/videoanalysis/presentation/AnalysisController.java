@@ -1,7 +1,6 @@
 package com.fourttttty.corookie.videoanalysis.presentation;
 
 import com.fourttttty.corookie.videoanalysis.application.service.AnalysisService;
-import com.fourttttty.corookie.videoanalysis.dto.AnalysisResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,9 +17,13 @@ public class AnalysisController {
     private final AnalysisService analysisService;
 
     @PostMapping
-    public ResponseEntity<AnalysisResponse> AnalysisCreate(
+    public ResponseEntity<Object> AnalysisCreate(
         @RequestParam("file")MultipartFile file,
         @PathVariable("videoChannelId") Long videoChannelId){
-        return ResponseEntity.ok(analysisService.createAnalysis(file,videoChannelId));
+        try {
+            return ResponseEntity.ok(analysisService.createAnalysis(file, videoChannelId));
+        }catch (Exception e) {
+            return ResponseEntity.status(500).body("An error occurred: " + e.getMessage());
+        }
     }
 }
