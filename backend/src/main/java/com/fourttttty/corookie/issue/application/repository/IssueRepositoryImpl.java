@@ -1,6 +1,7 @@
 package com.fourttttty.corookie.issue.application.repository;
 
 import com.fourttttty.corookie.issue.domain.Issue;
+import com.fourttttty.corookie.issue.domain.IssueCategory;
 import com.fourttttty.corookie.issue.domain.IssueProgress;
 import com.fourttttty.corookie.issue.infrastructure.IssueJpaRepository;
 import lombok.RequiredArgsConstructor;
@@ -56,5 +57,10 @@ public class IssueRepositoryImpl implements IssueRepository {
     @Override
     public List<Issue> findByProgress(Long projectId, IssueProgress progress) {
         return issueJpaRepository.findByProjectIdAndProgress(projectId, progress);
+    }
+
+    @Override
+    public List<Issue> findByCategory(Long projectId, IssueCategory category) {
+        return issueJpaRepository.findByProjectIdAndCategory(projectId, category);
     }
 }
