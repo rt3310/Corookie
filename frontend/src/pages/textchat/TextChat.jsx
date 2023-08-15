@@ -22,6 +22,7 @@ const TextChat = () => {
     const { closeDmComment } = hooks.dmcommentState()
     const { setThreadId, setCommentCount } = hooks.selectedThreadState()
     const { commentOpened } = hooks.commentState()
+    const { setTextChannels } = hooks.textChannelsState()
     const [threads, setThreads] = useState([])
     const { page, upPage, initPage, size, sort, direction } = hooks.threadsState()
     const [textChannel, setTextChannel] = useState(null)
@@ -35,7 +36,7 @@ const TextChat = () => {
     const preventRef = useRef(true) //옵저버 중복 실행 방지
     const endRef = useRef(false) //모든 글 로드 확인
     const scrollRef = useRef(null)
-    const [pinOn, setPinOn] = useState(true)
+    const [pinOn, setPinOn] = useState(false)
     const client = useRef({})
 
     const connectThread = () => {
@@ -96,6 +97,28 @@ const TextChat = () => {
         }
     }
 
+    const handlePin = () => {
+        const initChannels = async () => {
+            try {
+                const textChannelsRes = await api.apis.getTextChannels(projectId)
+                setTextChannels(textChannelsRes.data)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        if (pinOn) {
+            api.apis.textChannelUnpin(projectId, channelId).then(response => {
+                setPinOn(false)
+                initChannels()
+            })
+        } else {
+            api.apis.textChannelPin(projectId, channelId).then(response => {
+                setPinOn(true)
+                initChannels()
+            })
+        }
+    }
+
     const obsHandler = entries => {
         //옵저버 콜백함수
         const entry = entries[0]
@@ -116,6 +139,8 @@ const TextChat = () => {
             const memberRes = await api.apis.getMe()
             const textChannelRes = await api.apis.getTextChannel(projectId, channelId)
             setTextChannel(textChannelRes.data)
+            setPinOn(textChannelRes.data.isPinned)
+            console.log(textChannelRes.data)
             setCurrentChat({
                 ...currentChat,
                 textChannelId: textChannelRes.data.id,
@@ -168,7 +193,7 @@ const TextChat = () => {
             <S.Header>
                 <S.Title>
                     {textChannel && textChannel.name}
-                    <S.PinButton onClick={() => setPinOn(!pinOn)}>
+                    <S.PinButton onClick={() => handlePin()}>
                         {pinOn ? <AiFillPushpin /> : <AiOutlinePushpin />}
                     </S.PinButton>
                 </S.Title>
