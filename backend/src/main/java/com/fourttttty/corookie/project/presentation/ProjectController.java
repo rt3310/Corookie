@@ -1,7 +1,6 @@
 package com.fourttttty.corookie.project.presentation;
 
 import com.fourttttty.corookie.config.security.LoginUser;
-import com.fourttttty.corookie.project.application.service.InvitationLinkGenerateService;
 import com.fourttttty.corookie.project.application.service.ProjectService;
 import com.fourttttty.corookie.project.dto.request.ProjectCreateRequest;
 import com.fourttttty.corookie.project.dto.request.ProjectUpdateRequest;
@@ -49,6 +48,18 @@ public class ProjectController {
     public ResponseEntity<Object> projectDelete(@PathVariable Long projectId) {
         projectService.deleteById(projectId);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{projectId}/invite/enable")
+    public ResponseEntity<ProjectDetailResponse> projectInvitationEnable(@PathVariable Long projectId,
+                                                                         @AuthenticationPrincipal LoginUser loginUser) {
+        return ResponseEntity.ok(projectService.enableInvitationStatus(projectId, loginUser.getMemberId()));
+    }
+
+    @PutMapping("/{projectId}/invite/disable")
+    public ResponseEntity<ProjectDetailResponse> projectInvitationDisable(@PathVariable Long projectId,
+                                                                          @AuthenticationPrincipal LoginUser loginUser) {
+        return ResponseEntity.ok(projectService.disableInvitationStatus(projectId, loginUser.getMemberId()));
     }
 
     @GetMapping("/invite/{invitationLink}")

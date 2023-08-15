@@ -20,6 +20,10 @@ public enum ExceptionCode {
     PROJECT_NOT_ENABLED(BAD_REQUEST, "PROJECT_002", "더 이상 사용되지 않는 프로젝트입니다."),
     PROJECT_NOT_DISABLED(BAD_REQUEST, "PROJECT_003", "프로젝트가 비활성화되지 않았습니다."),
     PROJECT_NOT_OPEN_FOR_INVITATION(BAD_REQUEST, "PROJECT_004", "초대를 허용하지 않는 프로젝트입니다."),
+    INVITATION_STATUS_CHANGE_REQUEST_INVALID(BAD_REQUEST, "PROJECT_005", "프로젝트 관리자만 링크를 활성화 할 수 있습니다."),
+
+    CHANNEL_PIN_REQUEST_INVALID(BAD_REQUEST, "TEXT_CHANNEL_001", "프로젝트 인원만 채널 고정을 요청할 수 있습니다."),
+
     PLAN_NOT_FOUND(BAD_REQUEST, "PLAN_001", "일정을 찾을 수 없습니다."),
     PLAN_NOT_ENABLED(BAD_REQUEST,"PLAN_002","더 이상 사용되지 않는 일정입니다.");
 

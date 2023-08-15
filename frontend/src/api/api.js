@@ -28,12 +28,18 @@ export const apis = {
     getProjects: () => instance.get('/api/v1/projects'),
     getProject: projectId => instance.get(`/api/v1/projects/${projectId}`),
     getInvitedProject: inviteLink => instance.get(`/api/v1/projects/invite/${inviteLink}`),
+    enableInvitation: projectId => instance.put(`/api/v1/projects/${projectId}/invite/enable`),
+    disableInvitation: projectId => instance.put(`/api/v1/projects/${projectId}/invite/disable`),
 
     getProjectMembers: projectId => instance.get(`/api/v1/projects/${projectId}/projectmembers`),
 
     getTextChannel: (projectId, textChannelId) =>
         instance.get(`/api/v1/projects/${projectId}/text-channels/${textChannelId}`),
     getTextChannels: projectId => instance.get(`/api/v1/projects/${projectId}/text-channels`),
+    textChannelPin: (projectId, textChannelId) =>
+        instance.post(`/api/v1/projects/${projectId}/text-channels/${textChannelId}/pin`),
+    textChannelUnpin: (projectId, textChannelId) =>
+        instance.delete(`/api/v1/projects/${projectId}/text-channels/${textChannelId}/unpin`),
 
     getThread: (projectId, textChannelId, threadId) =>
         instance.get(`/api/v1/projects/${projectId}/text-channels/${textChannelId}/threads/${threadId}`),

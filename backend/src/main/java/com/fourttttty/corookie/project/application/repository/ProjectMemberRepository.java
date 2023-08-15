@@ -10,6 +10,7 @@ public interface ProjectMemberRepository {
     Optional<ProjectMember> findById(ProjectMemberId id);
     List<ProjectMember> findByMemberId(Long memberId);
     List<ProjectMember> findByProjectId(Long projectId);
+    boolean existsMemberInProject(Long projectId, Long memberId);
     void deleteById(ProjectMemberId id);
     Long countByProjectId(Long projectId);
     ProjectMember save(ProjectMember projectMember);

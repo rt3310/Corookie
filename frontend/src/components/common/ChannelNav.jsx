@@ -44,7 +44,7 @@ const ChannelNav = () => {
                             key={textChannel.id}
                             onClick={() => navigate('/project/' + project.id + '/channel/text/' + textChannel.id)}>
                             {index + 1}. {textChannel.name}
-                            {pinOn && <AiFillPushpin />}
+                            {textChannel.isPinned && <AiFillPushpin />}
                         </S.Channel>
                     ))}
                     <S.AddChannelButton>

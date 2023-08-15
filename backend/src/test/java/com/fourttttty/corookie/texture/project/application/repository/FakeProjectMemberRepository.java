@@ -72,6 +72,14 @@ public class FakeProjectMemberRepository implements ProjectMemberRepository {
     }
 
     @Override
+    public boolean existsMemberInProject(Long projectId, Long memberId) {
+        return store.values().stream()
+                .anyMatch(projectMember ->
+                        projectMember.getId().getProject().getId().equals(projectId) &&
+                        projectMember.getId().getMember().getId().equals(memberId));
+    }
+
+    @Override
     public void deleteById(ProjectMemberId projectMemberId) {
         Project project = projectMemberId.getProject();
         Member member = projectMemberId.getMember();

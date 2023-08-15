@@ -1,5 +1,7 @@
 package com.fourttttty.corookie.member.domain;
 
 public enum AuthProvider {
-    KAKAO
+    KAKAO,
+    GOOGLE,
+    GITHUB
 }
