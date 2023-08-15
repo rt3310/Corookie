@@ -14,7 +14,7 @@ const ProjectIntro = () => {
     const { manager, managerOpened, openManager, closeManager } = hooks.setManagerState()
     const { projectMembers } = hooks.projectMembersState()
     const { members, setMembers, memberOpened, openMember, closeMember } = hooks.memberState()
-    const { project, setProject } = hooks.projectState()
+    const { project } = hooks.projectState()
     const [flip, setFlip] = useState(false)
     const managerTextRef = useRef(null)
     const memberTextRef = useRef(null)

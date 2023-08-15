@@ -1,6 +1,7 @@
 package com.fourttttty.corookie.project.application.service;
 
-import com.fourttttty.corookie.config.security.LoginUser;
+import com.fourttttty.corookie.global.exception.InvalidProjectChangeRequestException;
+import com.fourttttty.corookie.global.exception.ProjectNotOpenForInvitationException;
 import com.fourttttty.corookie.member.application.repository.MemberRepository;
 import com.fourttttty.corookie.member.domain.Member;
 import com.fourttttty.corookie.project.application.repository.ProjectMemberRepository;
@@ -81,10 +82,38 @@ public class ProjectService {
     @Transactional
     public ProjectDetailResponse findByInvitationLink(String invitationLink, Long memberId) {
         Project project = findEntityById(invitationLinkGenerateService.decodingInvitationLink(invitationLink));
+        validateInvitationStatus(project);
         Member member = memberRepository.findById(memberId).orElseThrow(EntityNotFoundException::new);
         projectMemberRepository.findById(new ProjectMemberId(project, member))
                 .orElseGet(() -> projectMemberRepository.save(ProjectMember.of(project, member)));
         return ProjectDetailResponse.from(project, project.isManager(memberId));
     }
 
+    @Transactional
+    public ProjectDetailResponse enableInvitationStatus(Long projectId, Long memberId) {
+        Project project = findEntityById(projectId);
+        validateManagerAuthority(memberId, project);
+        project.enableLink();
+        return ProjectDetailResponse.from(project, project.isManager(memberId));
+    }
+
+    @Transactional
+    public ProjectDetailResponse disableInvitationStatus(Long projectId, Long memberId) {
+        Project project = findEntityById(projectId);
+        validateManagerAuthority(memberId, project);
+        project.disableLink();
+        return ProjectDetailResponse.from(project, project.isManager(memberId));
+    }
+
+    private static void validateManagerAuthority(Long memberId, Project project) {
+        if (!project.isManager(memberId)) {
+            throw new InvalidProjectChangeRequestException();
+        }
+    }
+
+    private static void validateInvitationStatus(Project project) {
+        if (!project.isEnabledLink()) {
+            throw new ProjectNotOpenForInvitationException();
+        }
+    }
 }
