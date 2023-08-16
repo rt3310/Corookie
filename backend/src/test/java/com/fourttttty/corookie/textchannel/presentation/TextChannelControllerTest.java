@@ -26,7 +26,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
-import static org.springframework.restdocs.payload.JsonFieldType.STRING;
+import static org.springframework.restdocs.payload.JsonFieldType.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
@@ -45,7 +45,7 @@ class TextChannelControllerTest extends RestDocsTest {
 
     @BeforeEach
     void initTexture() {
-        Member member = Member.of("name", "email", Oauth2.of(AuthProvider.KAKAO, "account"));
+        Member member = Member.of("name", "email", "https://test", Oauth2.of(AuthProvider.KAKAO, "account"));
         project = Project.of("project",
                 "description",
                 true,
@@ -62,19 +62,19 @@ class TextChannelControllerTest extends RestDocsTest {
     @DisplayName("텍스트 채널 생성")
     void createTextChannel() throws Exception {
         // given
+        TextChannelResponse response = new TextChannelResponse(1L, "name", false);
         given(textChannelService.create(any(TextChannelCreateRequest.class), any(Long.class)))
-                .willReturn(TextChannelResponse.from(textChannel));
-
-        TextChannelCreateRequest request = new TextChannelCreateRequest("name");
+                .willReturn(response);
 
         // when
         ResultActions perform = mockMvc.perform(post("/api/v1/projects/{projectId}/text-channels", 1L)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(request)));
+                .content(toJson(new TextChannelCreateRequest("name"))));
 
         // then
         perform.andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value(request.name()));
+                .andExpect(jsonPath("$.id").value(response.id()))
+                .andExpect(jsonPath("$.name").value(response.name()));
 
         perform.andDo(print())
                 .andDo(document("text-channel-create",
@@ -83,21 +83,20 @@ class TextChannelControllerTest extends RestDocsTest {
                         pathParameters(
                                 parameterWithName("projectId").description("프로젝트 키")),
                         requestFields(
-                                fieldWithPath("name").type(STRING).description("채널명"))));
+                                fieldWithPath("name").type(STRING).description("채널명")),
+                        responseFields(
+                                fieldWithPath("id").type(NUMBER).description("텍스트 채널 키"),
+                                fieldWithPath("name").type(STRING).description("채널명"),
+                                fieldWithPath("isPinned").type(BOOLEAN).description("고정 여부"))));
     }
 
     @Test
-    @DisplayName("텍스트 채널 전체 조회")
+    @DisplayName("프로젝트에 해당하는 텍스트 채널 전체 조회")
     void findAllTextChannel() throws Exception {
         // given
-        TextChannel textChannel2 = TextChannel.of("name",
-                true,
-                true,
-                project);
-
-        given(textChannelService.findAll())
-                .willReturn(List.of(TextChannelResponse.from(textChannel),
-                        TextChannelResponse.from(textChannel2)));
+        given(textChannelService.findByProjectId(any(Long.class), any(Long.class)))
+                .willReturn(List.of(new TextChannelResponse(1L, "name", false),
+                        new TextChannelResponse(2L, "name", false)));
 
         // when
         ResultActions perform = mockMvc.perform(get("/api/v1/projects/{projectId}/text-channels", 1L));
@@ -113,15 +112,17 @@ class TextChannelControllerTest extends RestDocsTest {
                         pathParameters(
                                 parameterWithName("projectId").description("프로젝트 키")),
                         responseFields(
-                                fieldWithPath("[].name").type(STRING).description("채널명"))));
+                                fieldWithPath("[].id").type(NUMBER).description("텍스트 채널 키"),
+                                fieldWithPath("[].name").type(STRING).description("채널명"),
+                                fieldWithPath("[].isPinned").type(BOOLEAN).description("고정 여부"))));
     }
 
     @Test
     @DisplayName("텍스트 채널 상세 조회")
     void findTextChannelById() throws Exception {
         // given
-        given(textChannelService.findById(any(Long.class)))
-                .willReturn(TextChannelResponse.from(textChannel));
+        given(textChannelService.findById(any(Long.class), any(Long.class)))
+                .willReturn(new TextChannelResponse(1L, "name", false));
 
         // when
         ResultActions perform = mockMvc.perform(get("/api/v1/projects/{projectId}/text-channels/{textChannelId}", 1L, 1L));
@@ -138,15 +139,17 @@ class TextChannelControllerTest extends RestDocsTest {
                                 parameterWithName("projectId").description("프로젝트 키"),
                                 parameterWithName("textChannelId").description("텍스트 채널 키")),
                         responseFields(
-                                fieldWithPath("name").type(STRING).description("채널명"))));
+                                fieldWithPath("id").type(NUMBER).description("텍스트 채널 키"),
+                                fieldWithPath("name").type(STRING).description("채널명"),
+                                fieldWithPath("isPinned").type(BOOLEAN).description("고정 여부"))));
     }
 
     @Test
     @DisplayName("텍스트 채널 수정")
     void modifyTextChannel() throws Exception {
         // given
-        given(textChannelService.modify(any(Long.class), any(TextChannelModifyRequest.class)))
-                .willReturn(TextChannelResponse.from(textChannel));
+        given(textChannelService.modify(any(Long.class), any(TextChannelModifyRequest.class), any(Long.class)))
+                .willReturn(new TextChannelResponse(1L, "name", false));
 
         TextChannelModifyRequest request = new TextChannelModifyRequest("name");
 
@@ -169,7 +172,9 @@ class TextChannelControllerTest extends RestDocsTest {
                         requestFields(
                                 fieldWithPath("name").type(STRING).description("채널명")),
                         responseFields(
-                                fieldWithPath("name").type(STRING).description("채널명"))));
+                                fieldWithPath("id").type(NUMBER).description("텍스트 채널 키"),
+                                fieldWithPath("name").type(STRING).description("채널명"),
+                                fieldWithPath("isPinned").type(BOOLEAN).description("고정 여부"))));
     }
 
     @Test

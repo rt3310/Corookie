@@ -51,7 +51,7 @@ class IssueModifyControllerTest extends RestDocsTest {
 
     @BeforeEach
     void initTexture() {
-        member = Member.of("memberName", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
+        member = Member.of("memberName", "test@gmail.com", "https://test", Oauth2.of(AuthProvider.KAKAO, "account"));
         issue = Issue.of("topic",
                 "description",
                 IssueProgress.TODO,
@@ -75,7 +75,9 @@ class IssueModifyControllerTest extends RestDocsTest {
                 "description",
                 IssueProgress.TODO,
                 IssuePriority.HIGH,
-                IssueCategory.BACKEND);
+                IssueCategory.BACKEND,
+                1L,
+                member.getName());
         given(issueUpdateService.changeIssueProgress(any(Long.class), any(IssueProgressUpdateRequest.class)))
                 .willReturn(response);
 
@@ -92,7 +94,9 @@ class IssueModifyControllerTest extends RestDocsTest {
                 .andExpect(jsonPath("$.description").value(response.description()))
                 .andExpect(jsonPath("$.progress").value(response.progress().getValue()))
                 .andExpect(jsonPath("$.priority").value(response.priority().getName()))
-                .andExpect(jsonPath("$.category").value(response.category().getValue()));
+                .andExpect(jsonPath("$.category").value(response.category().getValue()))
+                .andExpect(jsonPath("$.managerId").value(response.managerId()))
+                .andExpect(jsonPath("$.managerName").value(response.managerName()));
 
         perform.andDo(print())
                 .andDo(document("issue-progress-modify",
@@ -109,7 +113,9 @@ class IssueModifyControllerTest extends RestDocsTest {
                                 fieldWithPath("description").type(STRING).description("설명"),
                                 fieldWithPath("progress").type(STRING).description("이슈 진행도"),
                                 fieldWithPath("priority").type(STRING).description("이슈 중요도"),
-                                fieldWithPath("category").type(STRING).description("이슈 카테고리"))));
+                                fieldWithPath("category").type(STRING).description("이슈 카테고리"),
+                                fieldWithPath("managerId").type(NUMBER).description("이슈 담당자 키"),
+                                fieldWithPath("managerName").type(STRING).description("이슈 담당자 이름"))));
     }
 
     @Test
@@ -120,7 +126,9 @@ class IssueModifyControllerTest extends RestDocsTest {
                 "description",
                 IssueProgress.TODO,
                 IssuePriority.HIGH,
-                IssueCategory.BACKEND);
+                IssueCategory.BACKEND,
+                1L,
+                member.getName());
         given(issueUpdateService.changeIssueTopic(any(Long.class), any(IssueTopicUpdateRequest.class)))
                 .willReturn(response);
 
@@ -137,7 +145,9 @@ class IssueModifyControllerTest extends RestDocsTest {
                 .andExpect(jsonPath("$.description").value(response.description()))
                 .andExpect(jsonPath("$.progress").value(response.progress().getValue()))
                 .andExpect(jsonPath("$.priority").value(response.priority().getName()))
-                .andExpect(jsonPath("$.category").value(response.category().getValue()));
+                .andExpect(jsonPath("$.category").value(response.category().getValue()))
+                .andExpect(jsonPath("$.managerId").value(response.managerId()))
+                .andExpect(jsonPath("$.managerName").value(response.managerName()));
 
         perform.andDo(print())
                 .andDo(document("issue-topic-modify",
@@ -154,7 +164,9 @@ class IssueModifyControllerTest extends RestDocsTest {
                                 fieldWithPath("description").type(STRING).description("설명"),
                                 fieldWithPath("progress").type(STRING).description("이슈 진행도"),
                                 fieldWithPath("priority").type(STRING).description("이슈 중요도"),
-                                fieldWithPath("category").type(STRING).description("이슈 카테고리"))));
+                                fieldWithPath("category").type(STRING).description("이슈 카테고리"),
+                                fieldWithPath("managerId").type(NUMBER).description("이슈 담당자 키"),
+                                fieldWithPath("managerName").type(STRING).description("이슈 담당자 이름"))));
     }
 
     @Test
@@ -165,7 +177,9 @@ class IssueModifyControllerTest extends RestDocsTest {
                 "description",
                 IssueProgress.TODO,
                 IssuePriority.HIGH,
-                IssueCategory.BACKEND);
+                IssueCategory.BACKEND,
+                1L,
+                member.getName());
         given(issueUpdateService.changeIssueManager(any(Long.class), any(IssueManagerUpdateRequest.class)))
                 .willReturn(response);
 
@@ -182,7 +196,9 @@ class IssueModifyControllerTest extends RestDocsTest {
                 .andExpect(jsonPath("$.description").value(response.description()))
                 .andExpect(jsonPath("$.progress").value(response.progress().getValue()))
                 .andExpect(jsonPath("$.priority").value(response.priority().getName()))
-                .andExpect(jsonPath("$.category").value(response.category().getValue()));
+                .andExpect(jsonPath("$.category").value(response.category().getValue()))
+                .andExpect(jsonPath("$.managerId").value(response.managerId()))
+                .andExpect(jsonPath("$.managerName").value(response.managerName()));
 
         perform.andDo(print())
                 .andDo(document("issue-manager-modify",
@@ -199,7 +215,9 @@ class IssueModifyControllerTest extends RestDocsTest {
                                 fieldWithPath("description").type(STRING).description("설명"),
                                 fieldWithPath("progress").type(STRING).description("이슈 진행도"),
                                 fieldWithPath("priority").type(STRING).description("이슈 중요도"),
-                                fieldWithPath("category").type(STRING).description("이슈 카테고리"))));
+                                fieldWithPath("category").type(STRING).description("이슈 카테고리"),
+                                fieldWithPath("managerId").type(NUMBER).description("이슈 담당자 키"),
+                                fieldWithPath("managerName").type(STRING).description("이슈 담당자 이름"))));
     }
 
     @Test
@@ -210,7 +228,9 @@ class IssueModifyControllerTest extends RestDocsTest {
                 "description",
                 IssueProgress.TODO,
                 IssuePriority.HIGH,
-                IssueCategory.BACKEND);
+                IssueCategory.BACKEND,
+                1L,
+                member.getName());
         given(issueUpdateService.changeIssuePriority(any(Long.class), any(IssuePriorityUpdateRequest.class)))
                 .willReturn(response);
 
@@ -227,7 +247,9 @@ class IssueModifyControllerTest extends RestDocsTest {
                 .andExpect(jsonPath("$.description").value(response.description()))
                 .andExpect(jsonPath("$.progress").value(response.progress().getValue()))
                 .andExpect(jsonPath("$.priority").value(response.priority().getName()))
-                .andExpect(jsonPath("$.category").value(response.category().getValue()));
+                .andExpect(jsonPath("$.category").value(response.category().getValue()))
+                .andExpect(jsonPath("$.managerId").value(response.managerId()))
+                .andExpect(jsonPath("$.managerName").value(response.managerName()));
 
         perform.andDo(print())
                 .andDo(document("issue-priority-modify",
@@ -244,7 +266,9 @@ class IssueModifyControllerTest extends RestDocsTest {
                                 fieldWithPath("description").type(STRING).description("설명"),
                                 fieldWithPath("progress").type(STRING).description("이슈 진행도"),
                                 fieldWithPath("priority").type(STRING).description("이슈 중요도"),
-                                fieldWithPath("category").type(STRING).description("이슈 카테고리"))));
+                                fieldWithPath("category").type(STRING).description("이슈 카테고리"),
+                                fieldWithPath("managerId").type(NUMBER).description("이슈 담당자 키"),
+                                fieldWithPath("managerName").type(STRING).description("이슈 담당자 이름"))));
     }
 
     @Test
@@ -255,7 +279,8 @@ class IssueModifyControllerTest extends RestDocsTest {
                 "description",
                 IssueProgress.TODO,
                 IssuePriority.HIGH,
-                IssueCategory.BACKEND);
+                IssueCategory.BACKEND,1L,
+                member.getName());
         given(issueUpdateService.changeIssueCategory(any(Long.class), any(IssueCategoryUpdateRequest.class)))
                 .willReturn(response);
 
@@ -272,7 +297,9 @@ class IssueModifyControllerTest extends RestDocsTest {
                 .andExpect(jsonPath("$.description").value(response.description()))
                 .andExpect(jsonPath("$.progress").value(response.progress().getValue()))
                 .andExpect(jsonPath("$.priority").value(response.priority().getName()))
-                .andExpect(jsonPath("$.category").value(response.category().getValue()));
+                .andExpect(jsonPath("$.category").value(response.category().getValue()))
+                .andExpect(jsonPath("$.managerId").value(response.managerId()))
+                .andExpect(jsonPath("$.managerName").value(response.managerName()));
 
         perform.andDo(print())
                 .andDo(document("issue-category-modify",
@@ -289,7 +316,9 @@ class IssueModifyControllerTest extends RestDocsTest {
                                 fieldWithPath("description").type(STRING).description("설명"),
                                 fieldWithPath("progress").type(STRING).description("이슈 진행도"),
                                 fieldWithPath("priority").type(STRING).description("이슈 중요도"),
-                                fieldWithPath("category").type(STRING).description("이슈 카테고리"))));
+                                fieldWithPath("category").type(STRING).description("이슈 카테고리"),
+                                fieldWithPath("managerId").type(NUMBER).description("이슈 담당자 키"),
+                                fieldWithPath("managerName").type(STRING).description("이슈 담당자 이름"))));
     }
 
     @Test
@@ -300,7 +329,9 @@ class IssueModifyControllerTest extends RestDocsTest {
                 "description",
                 IssueProgress.TODO,
                 IssuePriority.HIGH,
-                IssueCategory.BACKEND);
+                IssueCategory.BACKEND,
+                1L,
+                member.getName());
         given(issueUpdateService.changeIssueDescription(any(Long.class), any(IssueDescriptionUpdateRequest.class)))
                 .willReturn(response);
 
@@ -317,7 +348,9 @@ class IssueModifyControllerTest extends RestDocsTest {
                 .andExpect(jsonPath("$.description").value(response.description()))
                 .andExpect(jsonPath("$.progress").value(response.progress().getValue()))
                 .andExpect(jsonPath("$.priority").value(response.priority().getName()))
-                .andExpect(jsonPath("$.category").value(response.category().getValue()));
+                .andExpect(jsonPath("$.category").value(response.category().getValue()))
+                .andExpect(jsonPath("$.managerId").value(response.managerId()))
+                .andExpect(jsonPath("$.managerName").value(response.managerName()));
 
         perform.andDo(print())
                 .andDo(document("issue-description-modify",
@@ -334,6 +367,8 @@ class IssueModifyControllerTest extends RestDocsTest {
                                 fieldWithPath("description").type(STRING).description("설명"),
                                 fieldWithPath("progress").type(STRING).description("이슈 진행도"),
                                 fieldWithPath("priority").type(STRING).description("이슈 중요도"),
-                                fieldWithPath("category").type(STRING).description("이슈 카테고리"))));
+                                fieldWithPath("category").type(STRING).description("이슈 카테고리"),
+                                fieldWithPath("managerId").type(NUMBER).description("이슈 담당자 키"),
+                                fieldWithPath("managerName").type(STRING).description("이슈 담당자 이름"))));
     }
 }

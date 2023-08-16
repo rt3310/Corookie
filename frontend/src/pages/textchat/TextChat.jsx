@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
+import { useParams } from 'react-router'
 import styled from 'styled-components'
 
 import * as components from 'components'
@@ -10,21 +11,33 @@ import * as StompJs from '@stomp/stompjs'
 import * as SockJs from 'sockjs-client'
 
 import { IoExitOutline } from 'react-icons/io5'
+import { AiOutlinePushpin, AiFillPushpin } from 'react-icons/ai'
 
 const TextChat = () => {
+    const { projectId, channelId } = useParams()
+    const { closeProfile } = hooks.profileState()
+    const { closeComment } = hooks.commentState()
+    const { closeChatbox } = hooks.chatBoxState()
+    const { closeIssueDetail } = hooks.issueDetailState()
+    const { closeDmComment } = hooks.dmcommentState()
+    const { setThreadId, setCommentCount } = hooks.selectedThreadState()
     const { commentOpened } = hooks.commentState()
-    const [me, setMe] = useState()
+    const { setTextChannels } = hooks.textChannelsState()
+    const [threads, setThreads] = useState([])
+    const { page, upPage, initPage, size, sort, direction } = hooks.threadsState()
+    const [textChannel, setTextChannel] = useState(null)
     const [currentChat, setCurrentChat] = useState({
-        textChannelId: 1,
+        textChannelId: null,
         writerId: null,
         content: '',
     })
-    const [chats, setChats] = useState([])
+    const [prevScrollHeight, setPrevScrollHeight] = useState()
+    const target = useRef(null)
+    const preventRef = useRef(true) //옵저버 중복 실행 방지
+    const endRef = useRef(false) //모든 글 로드 확인
+    const scrollRef = useRef(null)
+    const [pinOn, setPinOn] = useState(false)
     const client = useRef({})
-
-    useEffect(() => {
-        console.log(chats)
-    }, [chats])
 
     const connectThread = () => {
         client.current = new StompJs.Client({
@@ -40,13 +53,13 @@ const TextChat = () => {
             heartbeatOutgoing: 4000,
             onConnect: () => {
                 console.log('Connected')
-                client.current.subscribe('/topic/thread/' + 1, message => {
+                client.current.subscribe('/topic/thread/' + channelId, message => {
                     const jsonBody = JSON.parse(message.body)
-                    setChats(chats => [...chats, jsonBody])
+                    setThreads(threads => [jsonBody, ...threads])
                 })
                 client.current.publish({
                     destination: '/app/thread/',
-                    body: JSON.stringify(chats),
+                    body: JSON.stringify(threads),
                 })
             },
             onStompError: frame => {
@@ -77,46 +90,136 @@ const TextChat = () => {
 
         setCurrentChat({
             ...currentChat,
-            writerId: me.id,
             content: '',
         })
+        if (scrollRef.current) {
+            scrollRef.current.scrollTop = scrollRef.current.scrollHeight
+        }
+    }
+
+    const handlePin = () => {
+        const initChannels = async () => {
+            try {
+                const textChannelsRes = await api.apis.getTextChannels(projectId)
+                setTextChannels(textChannelsRes.data)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        if (pinOn) {
+            api.apis.textChannelUnpin(projectId, channelId).then(response => {
+                setPinOn(false)
+                initChannels()
+            })
+        } else {
+            api.apis.textChannelPin(projectId, channelId).then(response => {
+                setPinOn(true)
+                initChannels()
+            })
+        }
+    }
+
+    const obsHandler = entries => {
+        //옵저버 콜백함수
+        const entry = entries[0]
+        if (!endRef.current && entry.isIntersecting && preventRef.current) {
+            //옵저버 중복 실행 방지
+            preventRef.current = false //옵저버 중복 실행 방지
+            upPage()
+        }
     }
 
     useEffect(() => {
-        api.apis
-            .getMe()
-            .then(response => {
-                console.log(response.data)
-                setMe(response.data)
+        initPage()
+        const observer = new IntersectionObserver(obsHandler, { threshold: 0.5 })
+        if (target.current) {
+            observer.observe(target.current)
+        }
+        const initChannel = async () => {
+            const memberRes = await api.apis.getMe()
+            const textChannelRes = await api.apis.getTextChannel(projectId, channelId)
+            setTextChannel(textChannelRes.data)
+            setPinOn(textChannelRes.data.isPinned)
+            console.log(textChannelRes.data)
+            setCurrentChat({
+                ...currentChat,
+                textChannelId: textChannelRes.data.id,
+                writerId: memberRes.data.id,
             })
-            .catch(error => {
-                console.log(error)
-            })
+        }
+        closeComment()
+        closeIssueDetail()
+        closeChatbox()
+        closeDmComment()
+        setThreadId(null)
+        setCommentCount(0)
+        closeProfile()
+        initChannel()
         connectThread()
 
         return () => {
+            observer.disconnect()
             disconnect()
         }
-    }, [])
+    }, [projectId, channelId])
+
+    const getThreads = useCallback(async () => {
+        api.apis.getThreads(projectId, channelId, page, size, sort, direction).then(response => {
+            if (page === 0) {
+                setThreads(response.data)
+                return
+            }
+            setThreads(threads => [...threads, ...response.data])
+        })
+        setPrevScrollHeight(scrollRef.current?.scrollHeight)
+        preventRef.current = true
+    }, [channelId, page])
+
+    useEffect(() => {
+        getThreads()
+    }, [page])
+
+    useEffect(() => {
+        console.log(threads)
+        if (prevScrollHeight) {
+            scrollRef.current.scrollTop = scrollRef.current?.scrollHeight - prevScrollHeight
+            return setPrevScrollHeight(null)
+        }
+        scrollRef.current.scrollTop = scrollRef.current?.scrollHeight - scrollRef.current?.clientHeight
+    }, [threads])
 
     return (
         <S.Wrap>
             <S.Header>
-                <S.Title>1. 공지</S.Title>
+                <S.Title>
+                    {textChannel && textChannel.name}
+                    <S.PinButton onClick={() => handlePin()}>
+                        {pinOn ? <AiFillPushpin /> : <AiOutlinePushpin />}
+                    </S.PinButton>
+                </S.Title>
                 <S.ExitButton>
                     <IoExitOutline />
                 </S.ExitButton>
             </S.Header>
             <S.Container>
                 <S.ChatBox>
-                    <S.ThreadBox>
-                        {chats.map((c, idx) => (
-                            <components.Thread key={idx} chat={c} />
-                        ))}
+                    <S.ThreadBox ref={scrollRef}>
+                        <div ref={target} />
+                        {threads &&
+                            [...threads]
+                                .reverse()
+                                .map(thread => (
+                                    <components.Thread
+                                        key={thread.id}
+                                        projectId={projectId}
+                                        channelId={channelId}
+                                        thread={thread}
+                                    />
+                                ))}
                     </S.ThreadBox>
                     <components.EditBox currentChat={currentChat} setCurrentChat={setCurrentChat} send={send} />
                 </S.ChatBox>
-                {commentOpened && <components.CommentBox />}
+                {commentOpened && <components.CommentBox projectId={projectId} channelId={channelId} />}
             </S.Container>
         </S.Wrap>
     )
@@ -141,6 +244,10 @@ const S = {
     `,
     Title: styled.div`
         font-size: ${({ theme }) => theme.fontsize.title2};
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
     `,
     ExitButton: styled.div`
         margin: 0 0 0 auto;
@@ -190,6 +297,16 @@ const S = {
         }
         &::-webkit-scrollbar-thumb:hover {
             background: ${({ theme }) => theme.color.gray};
+        }
+    `,
+    PinButton: styled.div`
+        margin: auto 16px;
+        color: ${({ theme }) => theme.color.main};
+        transition-duration: 0.2s;
+        cursor: pointer;
+        & svg {
+            width: 18px;
+            height: 18px;
         }
     `,
 }

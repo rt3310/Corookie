@@ -43,6 +43,7 @@ public class ProjectControllerTest extends RestDocsTest {
         ProjectListResponse response = ProjectListResponse.builder()
                 .id(1L)
                 .name("name")
+                .description("description")
                 .createdAt(now)
                 .updatedAt(now)
                 .enabled(true)
@@ -56,6 +57,7 @@ public class ProjectControllerTest extends RestDocsTest {
         perform.andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(response.id()))
                 .andExpect(jsonPath("$[0].name").value(response.name()))
+                .andExpect(jsonPath("$[0].description").value(response.description()))
                 .andExpect(jsonPath("$[0].createdAt").value(toJson(now).replace("\"", "")))
                 .andExpect(jsonPath("$[0].updatedAt").value(toJson(now).replace("\"", "")))
                 .andExpect(jsonPath("$[0].enabled").value(response.enabled()));
@@ -67,6 +69,7 @@ public class ProjectControllerTest extends RestDocsTest {
                         responseFields(
                                 fieldWithPath("[].id").type(NUMBER).description("프로젝트 키"),
                                 fieldWithPath("[].name").type(STRING).description("제목"),
+                                fieldWithPath("[].description").type(STRING).description("설명"),
                                 fieldWithPath("[].enabled").type(BOOLEAN).description("활성화 여부"),
                                 fieldWithPath("[].updatedAt").type(STRING).description("수정 날짜"),
                                 fieldWithPath("[].createdAt").type(STRING).description("생성 날짜"))));

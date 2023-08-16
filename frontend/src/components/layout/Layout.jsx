@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useParams } from 'react-router'
 import { Outlet } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -8,7 +9,36 @@ import * as api from 'api'
 import * as components from 'components'
 
 const Layout = () => {
+    const { projectId } = useParams()
     const { profileOpened } = hooks.profileState()
+    const { project, setProject } = hooks.projectState()
+    const { setMe } = hooks.meState()
+    const { textChannels, setTextChannels } = hooks.textChannelsState()
+
+    useEffect(() => {
+        const initProject = async projectId => {
+            try {
+                const projectRes = await api.apis.getProject(projectId)
+                const textChannelsRes = await api.apis.getTextChannels(projectRes.data.id)
+                setProject(projectRes.data)
+                setTextChannels(textChannelsRes.data)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+        initProject(projectId)
+    }, [])
+
+    useEffect(() => {
+        api.apis.getMe().then(response => {
+            setMe(response.data)
+        })
+    }, [])
+
+    if (!project) {
+        return
+    }
 
     return (
         <S.Wrap>

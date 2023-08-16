@@ -5,8 +5,16 @@ import styled from 'styled-components'
 import 'prismjs/components/prism-java'
 import '../../style/prism-material-light.css'
 
-const Message = ({ isCode, text, language, chat }) => {
+const Message = ({ isCode, text, language, thread }) => {
     if (isCode) {
+        if (!language || !Prism.languages[language]) {
+            return (
+                <S.Wrap isCode={isCode}>
+                    <S.Code>{text}</S.Code>
+                </S.Wrap>
+            )
+        }
+
         const html = Prism.highlight(text, Prism.languages[language], language)
         return (
             <S.Wrap isCode={isCode}>
@@ -14,7 +22,7 @@ const Message = ({ isCode, text, language, chat }) => {
             </S.Wrap>
         )
     } else {
-        return <div>{chat.content}</div>
+        return <div>{thread.content}</div>
     }
 }
 

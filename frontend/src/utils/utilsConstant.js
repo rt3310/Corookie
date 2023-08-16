@@ -1,21 +1,25 @@
 export const URL = {
     LOGIN: {
-        LOGIN: '/login',
+        LOGIN: '/signin',
         SUCCESS: '/success',
     },
     HOME: {
         MAIN: '/',
     },
+    PROJECT: {
+        MAIN: '/project/:projectId',
+        INVITE: 'project/invite/:inviteLink',
+    },
     CHAT: {
-        TEXT: '/chat/text',
-        VIDEO: '/chat/video',
-        DIRECT: '/chat/direct',
+        TEXT: '/project/:projectId/channel/text/:channelId',
+        VIDEO: '/project/:projectId/channel/video/:channelId',
+        DIRECT: '/project/:projectId/channel/direct/:channelId',
     },
     TASK: {
-        BOARD: '/task/board',
+        BOARD: '/project/:projectId/task',
     },
     PLAN: {
-        CALENDER: '/plan/calendar',
+        PLAN: '/project/:projectId/plan',
     },
 }
 
@@ -37,7 +41,11 @@ export const PLAN_OPTIONS = {
     member: {
         label: '참여자',
         placeholder: '참여자 선택',
-        options: ['참여자 선택', '홍길동', '홍길동'],
+        options: [
+            { name: '참여자 선택', color: '#ffffff', id: '1' },
+            { name: '홍길동', color: '#286ef0', id: '2' },
+            { name: '홍길동', color: 'ffc908', id: '3' },
+        ],
     },
     category: {
         label: '분류',

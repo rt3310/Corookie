@@ -1,80 +1,180 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
+import { useParams } from 'react-router'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { IoIosArrowDown } from 'react-icons/io'
+import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io'
 import { BsPlus } from 'react-icons/bs'
 import { AiOutlinePushpin, AiFillPushpin } from 'react-icons/ai'
 
 import * as utils from 'utils'
 import * as api from 'api'
+import * as hooks from 'hooks'
 
 const ChannelNav = () => {
+    const { projectId } = useParams()
     const navigate = useNavigate()
+    const { project } = hooks.projectState()
+    const { projectMembers, setProjectMembers } = hooks.projectMembersState()
+    const { textChannels, setTextChannels } = hooks.textChannelsState()
+    const { videoChannels, setVideoChannels } = hooks.videoChannelsState()
     const [openText, setOpenText] = useState(true)
     const [openDm, setOpenDm] = useState(true)
     const [openVideo, setOpenVideo] = useState(true)
+    const [pinOn, setPinOn] = useState(true)
+    const [createTextChannel, setCreateTextChannel] = useState(false)
+    const [createVideoChannel, setCreateVideoChannel] = useState(false)
+    const [channelTitle, setChannelTitle] = useState('')
+
+    useEffect(() => {
+        const initProjectMembers = async () => {
+            const projectMembersRes = await api.apis.getProjectMembers(projectId)
+            setProjectMembers(projectMembersRes.data)
+            console.log(projectMembersRes.data)
+        }
+
+        initProjectMembers()
+    }, [])
+
+    let createTextChannelRef = useRef(null)
+    let createVideoChannelRef = useRef(null)
+
+    const clickCreateTextChannel = () => {
+        setCreateTextChannel(true)
+    }
+
+    const clickCreateVideoChannel = () => {
+        setCreateVideoChannel(true)
+    }
+
+    useEffect(() => {
+        const handleOutside = e => {
+            if (createTextChannelRef.current && !createTextChannelRef.current.contains(e.target)) {
+                setChannelTitle('')
+                setCreateTextChannel(false)
+            }
+        }
+        document.addEventListener('mousedown', handleOutside)
+        return () => {
+            document.removeEventListener('mousedown', handleOutside)
+        }
+    }, [createTextChannelRef])
+
+    useEffect(() => {
+        const handleOutside = e => {
+            if (createVideoChannelRef.current && !createVideoChannelRef.current.contains(e.target)) {
+                setChannelTitle('')
+                setCreateVideoChannel(false)
+            }
+        }
+        document.addEventListener('mousedown', handleOutside)
+        return () => {
+            document.removeEventListener('mousedown', handleOutside)
+        }
+    }, [createVideoChannelRef])
+
+    const handleTitleChange = e => setChannelTitle(e.target.value)
+
+    const textTitleKeyDown = async e => {
+        if (e.key === 'Enter') {
+            api.apis.createTextChannel(projectId, { name: channelTitle }).then(response => {
+                console.log(response.data)
+                setTextChannels([...textChannels, response.data])
+            })
+            setCreateTextChannel(false)
+            setChannelTitle('')
+        }
+    }
+
+    const videoTitleKeyDown = async e => {
+        if (e.key === 'Enter') {
+            // api.apis.createVideoChannel(projectId, { name: channelTitle }).then(response => {
+            //     console.log(response.data)
+            //     setVideoChannels([...textChannels, response.data])
+            // })
+            setCreateVideoChannel(false)
+            setChannelTitle('')
+        }
+    }
+
+    useEffect(() => {
+        if (createTextChannel) {
+            createTextChannelRef.current.focus()
+        }
+    }, [createTextChannel])
+    useEffect(() => {
+        if (createVideoChannel) {
+            createVideoChannelRef.current.focus()
+        }
+    }, [createVideoChannel])
 
     return (
         <S.Wrap>
             <S.Container>
                 <S.TextChannelList className={openText ? 'opened' : ''}>
                     <S.ChannelHead onClick={() => setOpenText(!openText)}>
-                        텍스트 채널 &nbsp; <IoIosArrowDown />
+                        텍스트 채널 &nbsp; <IoIosArrowUp />
                     </S.ChannelHead>
-                    <S.Channel onClick={() => navigate(utils.URL.CHAT.TEXT)}>
-                        1. 공지
-                        <AiOutlinePushpin />
-                    </S.Channel>
-                    <S.Channel>2. 자유</S.Channel>
-                    <S.Channel>3. Backend</S.Channel>
-                    <S.Channel>4. Frontend</S.Channel>
-                    <S.AddChannelButton>
+                    {textChannels.map((textChannel, index) => (
+                        <S.Channel
+                            key={textChannel.id}
+                            onClick={() => navigate('/project/' + project.id + '/channel/text/' + textChannel.id)}>
+                            {index + 1}. {textChannel.name}
+                            {textChannel.isPinned && <AiFillPushpin />}
+                        </S.Channel>
+                    ))}
+                    {createTextChannel && (
+                        <S.AddChannel
+                            ref={createTextChannelRef}
+                            value={channelTitle}
+                            onChange={handleTitleChange}
+                            onKeyDown={textTitleKeyDown}
+                            placeholder="채널 이름을 입력하세요"></S.AddChannel>
+                    )}
+                    <S.AddChannelButton onClick={clickCreateTextChannel}>
                         <BsPlus /> 채널 추가
                     </S.AddChannelButton>
                 </S.TextChannelList>
                 <S.DmList className={openDm ? 'opened' : ''}>
                     <S.ChannelHead onClick={() => setOpenDm(!openDm)}>
-                        Direct Message &nbsp; <IoIosArrowDown />
+                        Direct Message &nbsp; <IoIosArrowUp />
                     </S.ChannelHead>
-                    <S.DmMember onClick={() => navigate(utils.URL.CHAT.DIRECT)}>
-                        <S.DmProfileImage>
-                            <img src={require('images/profile.png').default} alt="프로필" />
-                        </S.DmProfileImage>
-                        황상미
-                    </S.DmMember>
-                    <S.DmMember>
-                        <S.DmProfileImage>
-                            <img src={require('images/profile.png').default} alt="프로필" />
-                        </S.DmProfileImage>
-                        황상미
-                    </S.DmMember>
-                    <S.DmMember>
-                        <S.DmProfileImage>
-                            <img src={require('images/profile.png').default} alt="프로필" />
-                        </S.DmProfileImage>
-                        황상미
-                    </S.DmMember>
-                    <S.DmMember>
-                        <S.DmProfileImage>
-                            <img src={require('images/profile.png').default} alt="프로필" />
-                        </S.DmProfileImage>
-                        황상미
-                    </S.DmMember>
-                    <S.DmMember>
-                        <S.DmProfileImage>
-                            <img src={require('images/profile.png').default} alt="프로필" />
-                        </S.DmProfileImage>
-                        황상미
-                    </S.DmMember>
+                    {projectMembers &&
+                        projectMembers.map(member => (
+                            <S.DmMember
+                                key={member.memberId}
+                                onClick={() =>
+                                    navigate('/project/' + project.id + '/channel/direct/' + member.memberId)
+                                }>
+                                <S.DmProfileImage>
+                                    <img
+                                        src={
+                                            member.memberImageUrl
+                                                ? member.memberImageUrl
+                                                : require('images/profile.png').default
+                                        }
+                                        alt="프로필"
+                                    />
+                                </S.DmProfileImage>
+                                {member.memberName}
+                            </S.DmMember>
+                        ))}
                 </S.DmList>
                 <S.VideoChannelList className={openVideo ? 'opened' : ''}>
                     <S.ChannelHead onClick={() => setOpenVideo(!openVideo)}>
-                        화상 채널 &nbsp; <IoIosArrowDown />
+                        화상 채널 &nbsp; <IoIosArrowUp />
                     </S.ChannelHead>
                     <S.Channel onClick={() => navigate(utils.URL.CHAT.VIDEO)}>1. 회의</S.Channel>
                     <S.Channel>2. 자유</S.Channel>
-                    <S.AddChannelButton>
+                    {createVideoChannel && (
+                        <S.AddChannel
+                            ref={createVideoChannelRef}
+                            value={channelTitle}
+                            onChange={handleTitleChange}
+                            onKeyDown={videoTitleKeyDown}
+                            placeholder="채널 이름을 입력하세요"></S.AddChannel>
+                    )}
+                    <S.AddChannelButton onClick={clickCreateVideoChannel}>
                         <BsPlus /> 채널 추가
                     </S.AddChannelButton>
                 </S.VideoChannelList>
@@ -154,9 +254,17 @@ const S = {
             transform: rotateZ(360deg);
         }
     `,
+    PinButton: styled.div`
+        color: ${({ theme }) => theme.color.main};
+
+        & svg {
+            width: 16px;
+            height: 16px;
+        }
+    `,
     Channel: styled.li`
         font-size: ${({ theme }) => theme.fontsize.sub1};
-        padding: 12px 16px;
+        padding: 10px 20px;
         cursor: pointer;
         transition-duration: 0.2s;
         display: flex;
@@ -167,6 +275,12 @@ const S = {
         &:hover {
             background-color: ${({ theme }) => theme.color.main};
             color: ${({ theme }) => theme.color.white};
+
+            & > div {
+                & svg {
+                    color: ${({ theme }) => theme.color.white};
+                }
+            }
         }
 
         &:last-child {
@@ -180,6 +294,14 @@ const S = {
         .opened & {
             display: flex;
         }
+    `,
+    AddChannel: styled.input`
+        display: flex;
+        border: none;
+        outline: none;
+        font-size: ${({ theme }) => theme.fontsize.sub1};
+        padding: 10px 20px;
+        cursor: pointer;
     `,
     AddChannelButton: styled.div`
         display: flex;
@@ -208,7 +330,7 @@ const S = {
     DmMember: styled.li`
         display: flex;
         align-items: center;
-        padding: 6px 16px;
+        padding: 6px 20px;
         font-size: ${({ theme }) => theme.fontsize.sub1};
         cursor: pointer;
 
@@ -225,12 +347,13 @@ const S = {
             display: flex;
         }
     `,
-    DmProfileImage: styled.li`
+    DmProfileImage: styled.div`
         display: flex;
         align-items: center;
         margin: 0 10px 0 0;
 
         & img {
+            border-radius: 4px;
             width: 20px;
         }
     `,

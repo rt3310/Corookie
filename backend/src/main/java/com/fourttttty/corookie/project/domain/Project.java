@@ -92,6 +92,18 @@ public class Project extends BaseTime {
         return this.manager.equalsId(memberId);
     }
 
+    public boolean isEnabledLink() {
+        return this.invitationStatus;
+    }
+
+    public void enableLink() {
+        this.invitationStatus = true;
+    }
+
+    public void disableLink() {
+        this.invitationStatus = false;
+    }
+
     public void delete() {
         this.enabled = false;
     }

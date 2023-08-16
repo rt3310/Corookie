@@ -1,29 +1,95 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import * as components from 'components'
 
 import * as hooks from 'hooks'
 import * as utils from 'utils'
+import * as api from 'api'
 import { IoSearch, IoAdd } from 'react-icons/io5'
 
 const TaskHeader = () => {
     const { showIssue, openIssue, openKanban } = hooks.taskState()
     const { issueCreateOpened, openIssueCreate } = hooks.issueCreateState()
     const { closeIssueDetail } = hooks.issueDetailState()
+    const { project } = hooks.projectState()
+    const { setTasks } = hooks.tasksState()
+    const { members } = hooks.memberState()
 
-    const priorityList = ['Highest', 'High', 'Normal', 'Low', 'Lowest']
-    const managerList = ['황상미', '최효빈', '신승수', '박종서', '서원호', '권현수']
+    const { value: priorityValue, setValue: setPriorityValue } = hooks.priorityState()
+    const { value: managerValue, setValue: setManagerValue } = hooks.managerState()
+    const { value: categoryValue, setValue: setCategoryValue } = hooks.categoryState()
+    const { value: statusValue, setValue: setStatusValue } = hooks.statusState()
+
+    const priorityList = ['내림차순', '오름차순']
+    // const managerList = ['황상미', '최효빈', '신승수', '박종서', '서원호', '권현수']
     const categoryList = ['frontend', 'backend', 'design', 'development', 'product', 'other']
-    const statusList = ['To Do', 'In Progress', 'Done']
+    const statusList = ['todo', 'inProgress', 'done']
 
-    useEffect(() => {
-        console.log(issueCreateOpened)
-    }, [issueCreateOpened])
+    const [topic, setTopic] = useState('')
+
+    let topicRef = useRef()
+
+    const handleTopicChange = e => {
+        setTopic(e.target.value)
+    }
+
+    const topicKeyDown = async e => {
+        if (e.key === 'Enter') {
+            const issueRes = await api.apis.filterIssue(project.id, 'topic', topic)
+            setTasks(issueRes.data)
+        }
+    }
 
     const openKanbanHandle = () => {
         openKanban()
         closeIssueDetail()
     }
+
+    useEffect(() => {
+        api.apis
+            .filterIssue(project.id, 'priority', priorityValue)
+            .then(response => {
+                console.log(response.data)
+                setTasks(response.data)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }, [priorityValue])
+
+    useEffect(() => {
+        api.apis
+            .filterIssue(project.id, 'manager', managerValue.managerId)
+            .then(response => {
+                console.log(response)
+                setTasks(response.data)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }, [managerValue])
+
+    useEffect(() => {
+        api.apis
+            .filterIssue(project.id, 'category', categoryValue)
+            .then(response => {
+                setTasks(response.data)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }, [categoryValue])
+
+    useEffect(() => {
+        api.apis
+            .filterIssue(project.id, 'progress', statusValue)
+            .then(response => {
+                setTasks(response.data)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }, [statusValue])
 
     return (
         <S.Header>
@@ -39,7 +105,14 @@ const TaskHeader = () => {
             <S.Search>
                 <S.Filters>
                     <S.TopicFilter>
-                        <S.SearchTopic placeholder="토픽으로 검색" />
+                        <S.SearchTopic
+                            ref={topicRef}
+                            type="text"
+                            value={topic}
+                            placeholder="토픽으로 검색"
+                            onChange={handleTopicChange}
+                            onKeyDown={topicKeyDown}
+                        />
                         <S.SearchButton>
                             <IoSearch />
                         </S.SearchButton>
@@ -48,7 +121,7 @@ const TaskHeader = () => {
                         <components.ToggleButton btnType={utils.ISSUE_OPTIONS.priority} list={priorityList} />
                     </S.ToggleFilter>
                     <S.ToggleFilter>
-                        <components.ToggleButton btnType={utils.ISSUE_OPTIONS.manager} list={managerList} />
+                        <components.ManagerToggleButton btnType={utils.ISSUE_OPTIONS.manager} list={members} />
                     </S.ToggleFilter>
                     <S.CategoryToggleFilter>
                         <components.ToggleButton btnType={utils.ISSUE_OPTIONS.category} list={categoryList} />

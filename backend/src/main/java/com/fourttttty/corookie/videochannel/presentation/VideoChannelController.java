@@ -7,6 +7,7 @@ import com.fourttttty.corookie.videochannel.dto.request.VideoChannelModifyReques
 import com.fourttttty.corookie.videochannel.dto.response.VideoChannelResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,14 +32,14 @@ public class VideoChannelController {
 
     @PostMapping
     public ResponseEntity<VideoChannelResponse> videoChannelCreate(@PathVariable Long projectId,
-                                                                 VideoChannelCreateRequest request) {
+                                                                 @RequestBody @Validated VideoChannelCreateRequest request) {
         return ResponseEntity.ok(videoChannelService.create(request, projectId));
     }
 
     @PutMapping("/{videoChannelId}")
     public ResponseEntity<VideoChannelResponse> videoChannelModify(@PathVariable Long projectId,
                                                                  @PathVariable Long videoChannelId,
-                                                                 VideoChannelModifyRequest request) {
+                                                                 @RequestBody @Validated VideoChannelModifyRequest request) {
         return ResponseEntity.ok(videoChannelService.modify(videoChannelId, request));
     }
 

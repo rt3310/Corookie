@@ -1,8 +1,14 @@
 package com.fourttttty.corookie.textchannel.application.service;
 
+import com.fourttttty.corookie.global.exception.InvalidChannelPinRequestException;
+import com.fourttttty.corookie.member.application.repository.MemberRepository;
+import com.fourttttty.corookie.member.domain.Member;
+import com.fourttttty.corookie.project.application.repository.ProjectMemberRepository;
 import com.fourttttty.corookie.project.application.repository.ProjectRepository;
+import com.fourttttty.corookie.textchannel.application.repository.TextChannelPinRepository;
 import com.fourttttty.corookie.textchannel.application.repository.TextChannelRepository;
 import com.fourttttty.corookie.textchannel.domain.TextChannel;
+import com.fourttttty.corookie.textchannel.domain.TextChannelPin;
 import com.fourttttty.corookie.textchannel.dto.request.TextChannelCreateRequest;
 import com.fourttttty.corookie.textchannel.dto.request.TextChannelModifyRequest;
 import com.fourttttty.corookie.textchannel.dto.response.TextChannelResponse;
@@ -20,29 +26,27 @@ public class TextChannelService {
 
     private final TextChannelRepository textChannelRepository;
     private final ProjectRepository projectRepository;
+    private final TextChannelPinRepository textChannelPinRepository;
+    private final ProjectMemberRepository projectMemberRepository;
+    private final MemberRepository memberRepository;
 
-    public List<TextChannelResponse> findAll() {
-        return textChannelRepository.findAll().stream()
-                .map(TextChannelResponse::from)
+    public TextChannelResponse findById(Long id, Long memberId) {
+        return TextChannelResponse.from(textChannelRepository.findById(id)
+                .orElseThrow(EntityNotFoundException::new), textChannelPinRepository.exists(id, memberId));
+    }
+
+    public List<TextChannelResponse> findByProjectId(Long projectId, Long memberId) {
+        return textChannelRepository.findByProjectId(projectId, memberId).stream()
+                .map(textChannel -> TextChannelResponse.from(textChannel,
+                        textChannelPinRepository.exists(textChannel.getId(), memberId)))
                 .toList();
-    }
-
-    public TextChannelResponse findById(Long id) {
-        return TextChannelResponse.from(textChannelRepository
-                .findById(id)
-                .orElseThrow(EntityNotFoundException::new)
-                );
-    }
-
-    public TextChannel findEntityById(Long id) {
-        return textChannelRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
     @Transactional
     public TextChannelResponse create(TextChannelCreateRequest request, Long projectId) {
-        return TextChannelResponse.from(textChannelRepository.save(request.toEntity(projectRepository
-                        .findById(projectId)
-                        .orElseThrow(EntityNotFoundException::new))));
+        return TextChannelResponse.from(textChannelRepository.save(
+                request.toEntity(projectRepository.findById(projectId)
+                        .orElseThrow(EntityNotFoundException::new))), false);
     }
 
     @Transactional
@@ -53,10 +57,10 @@ public class TextChannelService {
     }
 
     @Transactional
-    public TextChannelResponse modify(Long id, TextChannelModifyRequest request) {
+    public TextChannelResponse modify(Long id, TextChannelModifyRequest request, Long memberId) {
         TextChannel textChannel = textChannelRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         textChannel.modifyChannelName(request.name());
-        return TextChannelResponse.from(textChannel);
+        return TextChannelResponse.from(textChannel, textChannelPinRepository.exists(textChannel.getId(), memberId));
     }
 
     @Transactional
@@ -65,4 +69,23 @@ public class TextChannelService {
         textChannel.deleteChannel();
     }
 
+    @Transactional
+    public void pinChannel(Long projectId, Long textChannelId, Long memberId) {
+        validateProjectMember(projectId, memberId);
+        TextChannel textChannel = textChannelRepository.findById(textChannelId).orElseThrow(EntityNotFoundException::new);
+        Member member = memberRepository.findById(memberId).orElseThrow(EntityNotFoundException::new);
+        textChannelPinRepository.save(TextChannelPin.of(textChannel, member));
+    }
+
+    @Transactional
+    public void unpinChannel(Long projectId, Long textChannelId, Long memberId) {
+        validateProjectMember(projectId, memberId);
+        textChannelPinRepository.delete(textChannelId, memberId);
+    }
+
+    private void validateProjectMember(Long projectId, Long memberId) {
+        if (!projectMemberRepository.existsMemberInProject(projectId, memberId)) {
+            throw new InvalidChannelPinRequestException();
+        }
+    }
 }

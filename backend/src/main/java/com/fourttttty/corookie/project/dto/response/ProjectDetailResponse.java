@@ -31,18 +31,4 @@ public record ProjectDetailResponse(Long id,
                 .isManager(isManager)
                 .build();
     }
-
-    public static ProjectDetailResponse from(ProjectMember projectMember) {
-        Project project = projectMember.getId().getProject();
-        return ProjectDetailResponse.builder()
-                .id(project.getId())
-                .name(project.getName())
-                .description(project.getDescription())
-                .createdAt(project.getCreatedAt())
-                .updatedAt(project.getUpdatedAt())
-                .enabled(project.getEnabled())
-                .invitationLink(project.getInvitationLink())
-                .invitationStatus(project.getInvitationStatus())
-                .build();
-    }
 }

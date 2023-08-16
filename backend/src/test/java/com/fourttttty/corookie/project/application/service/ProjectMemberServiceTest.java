@@ -47,7 +47,7 @@ class ProjectMemberServiceTest {
         projectMemberService = new ProjectMemberService(projectMemberRepository, memberRepository, projectRepository,
                 new ProjectService(projectRepository, textChannelRepository, memberRepository, projectMemberRepository,
                         new InvitationLinkGenerateService(new Base62Encoder())));
-        member = Member.of("memberName", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
+        member = Member.of("memberName", "test@gmail.com", "https://test", Oauth2.of(AuthProvider.KAKAO, "account"));
         project = Project.of("memberName", "description", true,
                 "http://test.com", false, member);
         projectRepository.save(project);

@@ -15,7 +15,7 @@ public interface ProjectMemberJpaRepository extends JpaRepository<ProjectMember,
     Optional<ProjectMember> findById(ProjectMemberId id);
     void deleteById(ProjectMemberId id);
     Long countByIdProjectId(Long projectId);
-
+    boolean existsByIdProjectIdAndIdMemberId(Long projectId, Long memberId);
     Optional<Project> findProjectById(ProjectMemberId id);
     Optional<Member> findMemberById(ProjectMemberId id);
 }

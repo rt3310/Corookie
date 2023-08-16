@@ -1,44 +1,122 @@
 import { create } from 'zustand'
+
+export const textChannelsState = create(set => ({
+    textChannels: [],
+    setTextChannels: data => set(state => ({ textChannels: data })),
+}))
+
+export const videoChannelsState = create(set => ({
+    videoChannels: ['회의', '자유'],
+    setVideoChannels: data => set(state => ({ videoChannels: data })),
+}))
+
+export const threadsState = create(set => ({
+    page: 0,
+    size: 10,
+    sort: 'createdAt',
+    direction: 'desc',
+    upPage: () => set(state => ({ ...state, page: state.page + 1 })),
+    initPage: () => set(state => ({ ...state, page: 0 })),
+}))
+
+export const commentsState = create(set => ({
+    page: 0,
+    size: 10,
+    sort: 'createdAt',
+    direction: 'desc',
+    upPage: () => set(state => ({ ...state, page: state.page + 1 })),
+    initPage: () => set(state => ({ ...state, page: 0 })),
+}))
+
+export const selectedThreadState = create(set => ({
+    threadId: null,
+    commentCount: 0,
+    setThreadId: data => set(state => ({ threadId: data })),
+    setCommentCount: data => set(state => ({ commentCount: data })),
+}))
+
+export const projectMembersState = create(set => ({
+    projectMembers: [],
+    setProjectMembers: data => set(state => ({ projectMembers: data })),
+}))
+
 export const menuState = create(set => ({
     menu: '',
     openMenu: menu => set(state => ({ openedMenu: menu })),
+}))
+
+export const projectState = create(set => ({
+    project: {
+        id: '',
+        name: '',
+        description: '',
+        createdAt: '',
+        updatedAt: '',
+        enabled: '',
+        invitationLink: '',
+        invitationStatus: '',
+        managerName: '',
+        isManager: '',
+    },
+    setProject: project =>
+        set(state => ({
+            project: {
+                id: project.id,
+                name: project.name,
+                description: project.description,
+                createdAt: project.createdAt,
+                updatedAt: project.updatedAt,
+                enabled: project.enabled,
+                invitationLink: project.invitationLink,
+                invitationStatus: project.invitationStatus,
+                managerName: project.managerName,
+                isManager: project.isManager,
+            },
+        })),
 }))
 
 export const profileState = create(set => ({
     profileOpened: false,
     profileEdit: false,
     profileName: '황상미',
+    profileImage: require('images/profilebox.png').default,
     openProfile: () => set(state => ({ profileOpened: true })),
     closeProfile: () => set(state => ({ profileOpened: false })),
     openEdit: () => set(state => ({ profileEdit: true })),
     closeEdit: () => set(state => ({ profileEdit: false })),
     setName: name => set(state => ({ profileName: name })),
+    setProfileImage: imageUrl => set(state => ({ profileImage: imageUrl })),
 }))
 
 export const setManagerState = create(set => ({
-    manager: '최효빈',
     managerOpened: false,
     openManager: () => set(state => ({ managerOpened: true })),
     closeManager: () => set(state => ({ managerOpened: false })),
     setManager: manager => set(state => ({ manager: manager })),
 }))
 
+export const meState = create(set => ({
+    id: null,
+    name: null,
+    email: null,
+    imageUrl: null,
+    setMe: data =>
+        set(state => ({
+            id: data.id,
+            name: data.name,
+            email: data.email,
+            imageUrl: data.imageUrl,
+        })),
+    setName: data => set(state => ({ name: data })),
+    setImageUrl: data => set(state => ({ imageUrl: data })),
+}))
+
 export const memberState = create(set => ({
     memberOpened: false,
-    members: [
-        { id: 1, name: '최효빈', img: require('images/thread_profile.png').default },
-        { id: 2, name: '박종서', img: require('images/thread_profile.png').default },
-        { id: 3, name: '서원호', img: require('images/thread_profile.png').default },
-        { id: 4, name: '권현수', img: require('images/thread_profile.png').default },
-        { id: 5, name: '황상미', img: require('images/thread_profile.png').default },
-        { id: 6, name: '신승수', img: require('images/thread_profile.png').default },
-    ],
+    members: [],
+    setMembers: members => set(state => ({ members: members })),
     openMember: () => set(state => ({ memberOpened: true })),
     closeMember: () => set(state => ({ memberOpened: false })),
-    removeMember: id =>
-        set(state => ({
-            members: state.members.filter(member => member.id !== id),
-        })),
 }))
 
 export const linkState = create(set => ({
@@ -66,58 +144,7 @@ export const taskState = create(set => ({
 }))
 
 export const tasksState = create(set => ({
-    tasks: [
-        {
-            id: '1',
-            title: '사용자는 프로젝트를 생성한다. 1',
-            type: 'frontend',
-            manager: '황상미',
-            priority: 'Normal',
-            status: 'toDo',
-            content:
-                '사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.',
-        },
-        {
-            id: '2',
-            title: '사용자는 프로젝트를 생성한다. 2',
-            type: 'frontend',
-            manager: '황상미',
-            priority: 'Normal',
-            status: 'toDo',
-            content:
-                '사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.',
-        },
-        {
-            id: '3',
-            title: '사용자는 프로젝트를 생성한다. 3',
-            type: 'frontend',
-            manager: '황상미',
-            priority: 'Normal',
-            status: 'toDo',
-            content:
-                '사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.',
-        },
-        {
-            id: '4',
-            title: '사용자는 프로젝트를 생성한다. 4',
-            type: 'frontend',
-            manager: '황상미',
-            priority: 'Normal',
-            status: 'toDo',
-            content:
-                '사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.',
-        },
-        {
-            id: '5',
-            title: '사용자는 프로젝트를 생성한다. 5',
-            type: 'frontend',
-            manager: '황상미',
-            priority: 'Normal',
-            status: 'toDo',
-            content:
-                '사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.사용자는 프로젝트를 생성하고 생성하고 생성생성생성한다.',
-        },
-    ],
+    tasks: [],
     setTasks: input => set(state => ({ tasks: input })),
 }))
 
@@ -137,12 +164,12 @@ export const createPriorityState = create(set => ({
 }))
 
 export const managerState = create(set => ({
-    value: '책임자',
+    value: { managerId: '', managerName: '책임자' },
     setValue: input => set(state => ({ value: input })),
 }))
 
 export const detailManagerState = create(set => ({
-    value: '책임자',
+    value: { managerId: '', managerName: '책임자' },
     setValue: input => set(state => ({ value: input })),
 }))
 

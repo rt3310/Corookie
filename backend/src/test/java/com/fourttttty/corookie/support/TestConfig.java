@@ -24,6 +24,12 @@ import com.fourttttty.corookie.project.application.repository.ProjectRepository;
 import com.fourttttty.corookie.project.application.repository.ProjectRepositoryImpl;
 import com.fourttttty.corookie.project.infrastructure.ProjectJpaRepository;
 import com.fourttttty.corookie.project.infrastructure.ProjectMemberJpaRepository;
+import com.fourttttty.corookie.textchannel.application.repository.TextChannelPinRepository;
+import com.fourttttty.corookie.textchannel.application.repository.TextChannelPinRepositoryImpl;
+import com.fourttttty.corookie.textchannel.application.repository.TextChannelRepository;
+import com.fourttttty.corookie.textchannel.application.repository.TextChannelRepositoryImpl;
+import com.fourttttty.corookie.textchannel.infrastructure.TextChannelJpaRepository;
+import com.fourttttty.corookie.textchannel.infrastructure.TextChannelPinJpaRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +58,10 @@ public class TestConfig {
     private CategoryInPlanJpaRepository categoryInPlanJpaRepository;
     @Autowired
     private PlanMemberJpaRepository planMemberJpaRepository;
+    @Autowired
+    TextChannelJpaRepository textChannelJpaRepository;
+    @Autowired
+    TextChannelPinJpaRepository textChannelPinJpaRepository;
 
     @Bean
     public MemberRepository memberRepository() {
@@ -91,6 +101,16 @@ public class TestConfig {
     @Bean
     public PlanMemberRepository planMemberRepository() {
         return new PlanMemberRepositoryImpl(planMemberJpaRepository);
+    }
+
+    @Bean
+    public TextChannelRepository textChannelRepository() {
+        return new TextChannelRepositoryImpl(textChannelJpaRepository);
+    }
+
+    @Bean
+    public TextChannelPinRepository textChannelPinRepository() {
+        return new TextChannelPinRepositoryImpl(textChannelPinJpaRepository);
     }
 
 }

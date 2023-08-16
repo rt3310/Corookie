@@ -12,7 +12,9 @@ public record IssueDetailResponse(Long id,
                                   String description,
                                   IssueProgress progress,
                                   IssuePriority priority,
-                                  IssueCategory category) {
+                                  IssueCategory category,
+                                  Long managerId,
+                                  String managerName) {
 
     public static IssueDetailResponse from(Issue issue) {
         return IssueDetailResponse.builder()
@@ -22,6 +24,8 @@ public record IssueDetailResponse(Long id,
                 .progress(issue.getProgress())
                 .priority(issue.getPriority())
                 .category(issue.getCategory())
+                .managerId(issue.getManager().getId())
+                .managerName(issue.getManager().getName())
                 .build();
     }
 }

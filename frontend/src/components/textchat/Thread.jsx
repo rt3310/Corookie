@@ -6,14 +6,18 @@ import { IoAdd, IoHappyOutline, IoSadOutline, IoThumbsUp } from 'react-icons/io5
 import * as components from 'components'
 import * as hooks from 'hooks'
 import * as utils from 'utils'
+import * as api from 'api'
 
-const Thread = ({ chat }) => {
+const Thread = ({ projectId, channelId, thread }) => {
     const text = useRef(null)
     const [overText, setOverText] = useState(false)
     const [closedText, setClosedText] = useState(false)
     const [addImoticon, setAddImoticon] = useState(false)
+    const [comments, setComments] = useState([])
     const { closeProfile } = hooks.profileState()
     const { commentOpened, openComment, closeComment } = hooks.commentState()
+    const { threadId, setThreadId, commentCount, setCommentCount } = hooks.selectedThreadState()
+    const [currentCommentCount, setCurrentCommentCount] = useState(thread.commentCount)
 
     const [thumbCnt, setThumbCnt] = useState(0)
     const [happyCnt, setHappyCnt] = useState(0)
@@ -31,10 +35,10 @@ const Thread = ({ chat }) => {
     // const msg =
     //     '```java\npackage boj;\nimport java.io.BufferedReader;\nimport java.io.ioException;\n"문자열"\nimport java.io.InputStreamReader;\npublic class Problem2847\n\tpublic static void main(String[] args)throws Exception, IOException(\n\t\tBufferedReader br = new BufferedReader(new InputStreamReader(System.in));\n\t\tint N = Integer.parseInt(br.readLine());\n\t\tint[] score = new int[N];\n\t\tfor (int i=0; i<N; i++) {\n\t\t\tscore[i]=Integer.parseInt(br.readLine());\n\t\t}\n\t\t int prev=score[N-1];\n\t\t int cnt=0;\n\t\t for (int i=N-2; i>=0; i--) {\n\t\t\t if (score[i]>=prev) {\n\t\t\t	cnt+=score[i]-prev+1;\n\t\t\t	score[i]=prev-1;\n\t\t}\n\t\t prev=score[i];\n\t\t }\n\t\t System.out.println(cnt);\n\t }\n}\n```'
 
-    const msg = '나는 모든 걸 갖췄다. 재미. 세련미. 미. 그리고 황상미.'
+    // const msg = '나는 모든 걸 갖췄다. 재미. 세련미. 미. 그리고 황상미.'
 
     const regex = /```(\w*)\n([\s\S]*?)\n```/
-    const matches = msg.match(regex)
+    const matches = thread.content.match(regex)
 
     let isCode = false
     let language = null
@@ -45,7 +49,7 @@ const Thread = ({ chat }) => {
         language = matches[1]
         code = matches[2]
     } else {
-        code = msg
+        code = thread
     }
 
     useEffect(() => {
@@ -67,13 +71,11 @@ const Thread = ({ chat }) => {
         setClosedText(true)
     }
 
-    const toggleComment = () => {
-        if (commentOpened) {
-            closeComment()
-        } else {
-            openComment()
-            closeProfile()
-        }
+    const openCommentBox = () => {
+        setThreadId(thread.id)
+        setCommentCount(currentCommentCount)
+        openComment()
+        closeProfile()
     }
 
     const childImoticonData = [
@@ -92,6 +94,12 @@ const Thread = ({ chat }) => {
     let imoticonRef = useRef(null)
 
     useEffect(() => {
+        api.apis.getComments(projectId, channelId, thread.id, 0, 3, 'createdAt', 'desc').then(response => {
+            setComments(response.data)
+        })
+    }, [])
+
+    useEffect(() => {
         const handleOutside = e => {
             if (imoticonRef.current && !imoticonRef.current.contains(e.target)) {
                 setAddImoticon(false)
@@ -103,27 +111,49 @@ const Thread = ({ chat }) => {
         }
     }, [imoticonRef])
 
+    useEffect(() => {
+        const getThreadDetail = async () => {
+            const threadRes = await api.apis.getThread(projectId, channelId, thread.id)
+            setCurrentCommentCount(threadRes.data.commentCount)
+            console.log(threadRes.data)
+        }
+
+        if (threadId === thread.id) {
+            getThreadDetail()
+        }
+    }, [commentCount])
+
     return (
-        <S.Wrap>
+        <S.Wrap open={thread.id === threadId}>
             <S.ChatBox>
                 <S.ImageBox>
-                    <img src={require('images/thread_profile.png').default} alt="스레드 이미지" />
+                    <img
+                        src={thread.writer.imageUrl ? thread.writer.imageUrl : require('images/profile.png').default}
+                        alt="스레드 이미지"
+                    />
                 </S.ImageBox>
                 <S.ContentBox>
                     <S.MemberInfoBox>
-                        <S.MemberName>황상미</S.MemberName>
-                        <S.CreatedTime>오전 11:12</S.CreatedTime>
-                        <S.CommentButton onClick={() => toggleComment()} open={commentOpened}>
+                        <S.MemberName>{thread && thread.writer.name}</S.MemberName>
+                        <S.CreatedTime>{thread && utils.calDate(thread.createdAt)}</S.CreatedTime>
+                        <S.CommentButton onClick={() => openCommentBox()} open={commentOpened}>
                             <div>
-                                <img src={require('images/profile.png').default} alt="프로필" />
-                                <img src={require('images/profile.png').default} alt="프로필" />
-                                <img src={require('images/profile.png').default} alt="프로필" />
+                                {comments.map(comment => (
+                                    <img
+                                        src={
+                                            comment.writer.imageUrl
+                                                ? comment.writer.imageUrl
+                                                : require('images/profile.png').default
+                                        }
+                                        alt="프로필"
+                                    />
+                                ))}
                             </div>
-                            3개의 댓글 <IoIosArrowForward />
+                            {currentCommentCount}개의 댓글 <IoIosArrowForward />
                         </S.CommentButton>
                     </S.MemberInfoBox>
                     <S.Text ref={text}>
-                        <components.Message isCode={isCode} text={code} language={language} chat={chat} />
+                        <components.Message isCode={isCode} text={code} language={language} thread={thread} />
                     </S.Text>
                     {closedText && (
                         <S.MoreButton>
@@ -225,6 +255,7 @@ const S = {
         margin: 0 16px 0 0;
 
         & img {
+            border-radius: 8px;
             width: 40px;
             height: 40px;
         }
@@ -236,6 +267,11 @@ const S = {
         display: flex;
         align-items: flex-end;
         margin: 0 0 16px 0;
+
+        & img {
+            border-radius: 4px;
+            box-shadow: ${({ theme }) => theme.shadow.card};
+        }
     `,
     MemberName: styled.div`
         font-size: ${({ theme }) => theme.fontsize.title3};

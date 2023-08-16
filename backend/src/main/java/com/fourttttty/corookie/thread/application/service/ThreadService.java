@@ -1,10 +1,7 @@
 package com.fourttttty.corookie.thread.application.service;
 
 import com.fourttttty.corookie.member.application.service.MemberService;
-import com.fourttttty.corookie.member.domain.Member;
 import com.fourttttty.corookie.textchannel.application.repository.TextChannelRepository;
-import com.fourttttty.corookie.textchannel.application.service.TextChannelService;
-import com.fourttttty.corookie.textchannel.domain.TextChannel;
 import com.fourttttty.corookie.thread.application.repository.ThreadRepository;
 import com.fourttttty.corookie.thread.domain.Thread;
 import com.fourttttty.corookie.thread.dto.request.ThreadCreateRequest;
@@ -12,10 +9,10 @@ import com.fourttttty.corookie.thread.dto.request.ThreadModifyRequest;
 import com.fourttttty.corookie.thread.dto.response.ThreadDetailResponse;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.NotActiveException;
 import java.util.List;
 
 @Service
@@ -28,10 +25,10 @@ public class ThreadService {
     private final MemberService memberService;
 
     @Transactional
-    public ThreadDetailResponse create(ThreadCreateRequest request, Long writerId) {
-        TextChannel textChannel = textChannelRepository.findById(request.textChannelId()).orElseThrow(EntityNotFoundException::new);
-        Member writer = memberService.findEntityById(writerId);
-        Thread thread = Thread.of(request.content(), true, 0, textChannel, writer);
+    public ThreadDetailResponse create(ThreadCreateRequest request) {
+        Thread thread = Thread.of(request.content(), true, 0,
+                textChannelRepository.findById(request.textChannelId()).orElseThrow(EntityNotFoundException::new),
+                memberService.findEntityById(request.writerId()));
         threadRepository.save(thread);
         return ThreadDetailResponse.from(thread);
     }
@@ -45,8 +42,8 @@ public class ThreadService {
         return ThreadDetailResponse.from(thread);
     }
 
-    public List<ThreadDetailResponse> findAll(Long TextChannelId) {
-        return threadRepository.findAll(TextChannelId)
+    public List<ThreadDetailResponse> findByTextChannelIdLatest(Long TextChannelId, Pageable pageable) {
+        return threadRepository.findByTextChannelIdLatest(TextChannelId, pageable)
                 .stream()
                 .map(ThreadDetailResponse::from)
                 .toList();

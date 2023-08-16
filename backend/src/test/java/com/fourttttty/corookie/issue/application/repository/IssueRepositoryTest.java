@@ -37,7 +37,7 @@ class IssueRepositoryTest {
     private MemberRepository memberRepository;
     @Autowired
     private ProjectRepository projectRepository;
-    Member member = Member.of("memberName", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
+    Member member = Member.of("memberName", "test@gmail.com", "https://test", Oauth2.of(AuthProvider.KAKAO, "account"));
     Project project = Project.of("memberName",
             "description",
             true,
@@ -110,7 +110,6 @@ class IssueRepositoryTest {
     @DisplayName("projectId로 이슈 목록을 조회한다")
     void findByProjectId() {
         // given
-        Long projectId = 1L;
         Issue issue = Issue.of("topic",
                 "description",
                 IssueProgress.TODO,
@@ -122,7 +121,7 @@ class IssueRepositoryTest {
         issueRepository.save(issue);
 
         // when
-        List<Issue> findIssue = issueRepository.findByProjectId(projectId);
+        List<Issue> findIssue = issueRepository.findByProjectId(project.getId());
 
         // then
         assertThat(findIssue.size()).isEqualTo(1L);

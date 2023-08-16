@@ -44,6 +44,7 @@ const fontsize = {
     title2: '18px',
     title3: '16px',
     sub1: '14px',
+    landingtitle: '60px',
 }
 
 const lineheight = {
@@ -56,6 +57,7 @@ const lineheight = {
 
 const shadow = {
     card: `0px 3px 3px 0px rgba(0, 0, 0, 0.03);`,
+    // card: `0px 4px 4px 0px rgba(0, 0, 0, 0.05);`,
 }
 
 const Theme = {

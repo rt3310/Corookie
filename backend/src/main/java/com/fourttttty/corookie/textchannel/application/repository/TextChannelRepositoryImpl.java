@@ -20,6 +20,11 @@ public class TextChannelRepositoryImpl implements TextChannelRepository {
     }
 
     @Override
+    public List<TextChannel> findByProjectId(Long projectId, Long memberId) {
+        return textChannelJpaRepository.findByProjectIdOrderByPinAndName(projectId, memberId);
+    }
+
+    @Override
     public Optional<TextChannel> findById(Long id) {
         return textChannelJpaRepository.findById(id);
     }

@@ -68,28 +68,28 @@ class PlanControllerTest extends RestDocsTest {
 
     @BeforeEach
     void initTexture() {
-        member = Member.of("memberName", "test@gmail.com", Oauth2.of(AuthProvider.KAKAO, "account"));
+        member = Member.of("memberName", "test@gmail.com", "https://test", Oauth2.of(AuthProvider.KAKAO, "account"));
         project = Project.of("memberName", "description", true,
-            "http://test.com", false, member);
+                "http://test.com", false, member);
 
         plan = Plan.of(1L,
-            "memberName",
-            "testDescription",
-            LocalDateTime.now(),
-            LocalDateTime.now().minusDays(2),
-            true,
-            project);
+                "memberName",
+                "testDescription",
+                LocalDateTime.now(),
+                LocalDateTime.now().minusDays(2),
+                true,
+                project);
 
         planCategories = List.of(
-                PlanCategory.of(1L, "testCategory1"),
-                PlanCategory.of(2L, "testCategory2"));
+                PlanCategory.of(1L, "testCategory1", "#ffddaa", project),
+                PlanCategory.of(2L, "testCategory2", "#ffddaa", project));
 
         planMembers = List.of(
-                Member.of(1L, "name1", "test@gmail.com",
+                Member.of(1L, "name1", "test@gmail.com", "https://test",
                         Oauth2.of(AuthProvider.KAKAO, "account")),
-                Member.of(2L, "name2", "test@gmail.com",
+                Member.of(2L, "name2", "test@gmail.com", "https://test",
                         Oauth2.of(AuthProvider.KAKAO, "account")),
-                Member.of(4L, "name3", "test@gmail.com",
+                Member.of(4L, "name3", "test@gmail.com", "https://test",
                         Oauth2.of(AuthProvider.KAKAO, "account")));
     }
 
@@ -135,24 +135,22 @@ class PlanControllerTest extends RestDocsTest {
                 planMembers.stream()
                         .map(member -> PlanMemberResponse.from(PlanMember.of(member, plan)))
                         .toList());
-        given(planService.createPlan(any(PlanCreateRequest.class), any(Long.class)))
-            .willReturn(response);
+        given(planService.createPlan(any(PlanCreateRequest.class), any(Long.class))).willReturn(response);
 
         //when
         ResultActions perform = mockMvc.perform(post("/api/v1/projects/{projectId}/plans", 1L)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(toJson(new PlanCreateRequest(
-                plan.getPlanName(),
-                plan.getDescription(),
-                plan.getPlanStart(),
-                plan.getPlanEnd(),
-                planCategories.stream()
-                    .map(planCategory -> new PlanCategoryCreateRequest(planCategory.getContent()))
-                    .toList(),
-                planMembers.stream()
-                    .map(member1 -> new PlanMemberCreateRequest(member1.getId()))
-                    .toList()
-            ))));
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(new PlanCreateRequest(
+                        plan.getPlanName(),
+                        plan.getDescription(),
+                        plan.getPlanStart(),
+                        plan.getPlanEnd(),
+                        planCategories.stream()
+                                .map(planCategory -> new PlanCategoryCreateRequest(planCategory.getContent(), planCategory.getColor()))
+                                .toList(),
+                        planMembers.stream()
+                                .map(member1 -> new PlanMemberCreateRequest(member1.getId()))
+                                .toList()))));
 
         //then
         perform.andExpect(status().isOk())
@@ -163,33 +161,35 @@ class PlanControllerTest extends RestDocsTest {
             .andExpect(jsonPath("$.members[0].memberId").value(response.members().get(0).memberId()));
 
         perform.andDo(print())
-            .andDo(document("plan-create",
-                getDocumentRequest(),
-                getDocumentResponse(),
-                pathParameters(
-                    parameterWithName("projectId").description("프로젝트 키")),
-                requestFields(
-                    fieldWithPath("planName").type(STRING).description("일정 이름"),
-                    fieldWithPath("description").type(STRING).description("일정 설명"),
-                    fieldWithPath("planStart").type(STRING).description("일정 시작일"),
-                    fieldWithPath("planEnd").type(STRING).description("일정 종료일"),
-                    fieldWithPath("categories").type(ARRAY).description("일정 카테고리"),
-                    fieldWithPath("members").type(ARRAY).description("일정 멤버"),
-                    fieldWithPath("categories.[].content").type(STRING).description("일정 카테고리 내용"),
-                    fieldWithPath("members.[].memberId").type(NUMBER).description("일정 멤버 키")),
-                responseFields(
-                    fieldWithPath("planName").type(STRING).description("일정 이름"),
-                    fieldWithPath("description").type(STRING).description("일정 설명"),
-                    fieldWithPath("planStart").type(STRING).description("일정 시작일"),
-                    fieldWithPath("planEnd").type(STRING).description("일정 종료일"),
-                    fieldWithPath("enabled").type(BOOLEAN).description("활성화"),
-                    fieldWithPath("categories").type(ARRAY).description("일정 카테고리"),
-                    fieldWithPath("categories.[].id").type(NUMBER).description("일정 카테고리 키"),
-                    fieldWithPath("categories.[].content").type(STRING).description("일정 카테고리 내용"),
-                    fieldWithPath("members").type(ARRAY).description("일정 카테고리"),
-                    fieldWithPath("members.[].memberId").type(NUMBER).description("일정 멤버 키"),
-                    fieldWithPath("members.[].memberName").type(STRING).description("일정 멤버 내용"),
-                    fieldWithPath("planId").type(NUMBER).description("일정 키"))));
+                .andDo(document("plan-create",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        pathParameters(
+                                parameterWithName("projectId").description("프로젝트 키")),
+                        requestFields(
+                                fieldWithPath("planName").type(STRING).description("일정 이름"),
+                                fieldWithPath("description").type(STRING).description("일정 설명"),
+                                fieldWithPath("planStart").type(STRING).description("일정 시작일"),
+                                fieldWithPath("planEnd").type(STRING).description("일정 종료일"),
+                                fieldWithPath("categories").type(ARRAY).description("일정 카테고리"),
+                                fieldWithPath("members").type(ARRAY).description("일정 멤버"),
+                                fieldWithPath("categories.[].content").type(STRING).description("일정 카테고리 내용"),
+                                fieldWithPath("categories.[].color").type(STRING).description("일정 카테고리 색"),
+                                fieldWithPath("members.[].memberId").type(NUMBER).description("일정 멤버 키")),
+                        responseFields(
+                                fieldWithPath("planName").type(STRING).description("일정 이름"),
+                                fieldWithPath("description").type(STRING).description("일정 설명"),
+                                fieldWithPath("planStart").type(STRING).description("일정 시작일"),
+                                fieldWithPath("planEnd").type(STRING).description("일정 종료일"),
+                                fieldWithPath("enabled").type(BOOLEAN).description("활성화"),
+                                fieldWithPath("categories").type(ARRAY).description("일정 카테고리"),
+                                fieldWithPath("categories.[].id").type(NUMBER).description("일정 카테고리 키"),
+                                fieldWithPath("categories.[].content").type(STRING).description("일정 카테고리 내용"),
+                                fieldWithPath("categories.[].color").type(STRING).description("일정 카테고리 색"),
+                                fieldWithPath("members").type(ARRAY).description("일정 카테고리"),
+                                fieldWithPath("members.[].memberId").type(NUMBER).description("일정 멤버 키"),
+                                fieldWithPath("members.[].memberName").type(STRING).description("일정 멤버 내용"),
+                                fieldWithPath("planId").type(NUMBER).description("일정 키"))));
     }
 
     @Test
@@ -197,52 +197,51 @@ class PlanControllerTest extends RestDocsTest {
     void planDetail() throws Exception {
         //given
         PlanResponse planResponse = PlanResponse.from(plan,
-            planCategories.stream()
-                .map(PlanCategoryResponse::from)
-                .toList(),
-            planMembers.stream()
-                .map(member -> PlanMemberResponse.from(PlanMember.of(member, plan)))
-                .toList()
-        );
+                planCategories.stream()
+                        .map(PlanCategoryResponse::from)
+                        .toList(),
+                planMembers.stream()
+                        .map(member -> PlanMemberResponse.from(PlanMember.of(member, plan)))
+                        .toList());
 
-        given(planService.findById(any(Long.class)))
-            .willReturn(planResponse);
+        given(planService.findById(any(Long.class))).willReturn(planResponse);
 
         //when
         ResultActions perform = mockMvc.perform(
-            get("/api/v1/projects/{projectId}/plans/{planId}", 1L, 1L));
+                get("/api/v1/projects/{projectId}/plans/{planId}", 1L, 1L));
 
         //then
         perform.andExpect(status().isOk())
-            .andExpect(jsonPath("$.planId").value(planResponse.planId()))
-            .andExpect(jsonPath("$.planName").value(planResponse.planName()))
-            .andExpect(jsonPath("$.description").value(planResponse.description()))
-            .andExpect(jsonPath("$.categories[0].content").value(
-                planResponse.categories().get(0).content()))
-            .andExpect(jsonPath("$.members[0].memberId").value(
-                planResponse.members().get(0).memberId()))
-            .andExpect(jsonPath("$.members[0].memberName").value(
-                planResponse.members().get(0).memberName()));
+                .andExpect(jsonPath("$.planId").value(planResponse.planId()))
+                .andExpect(jsonPath("$.planName").value(planResponse.planName()))
+                .andExpect(jsonPath("$.description").value(planResponse.description()))
+                .andExpect(jsonPath("$.categories[0].content").value(
+                        planResponse.categories().get(0).content()))
+                .andExpect(jsonPath("$.members[0].memberId").value(
+                        planResponse.members().get(0).memberId()))
+                .andExpect(jsonPath("$.members[0].memberName").value(
+                        planResponse.members().get(0).memberName()));
 
         perform.andDo(print())
-            .andDo(document("plan-detail",
-                getDocumentResponse(),
-                pathParameters(
-                    parameterWithName("projectId").description("프로젝트 키"),
-                    parameterWithName("planId").description("플랜 memberId")),
-                responseFields(
-                    fieldWithPath("planName").type(STRING).description("일정 이름"),
-                    fieldWithPath("description").type(STRING).description("일정 설명"),
-                    fieldWithPath("planStart").type(STRING).description("일정 시작일"),
-                    fieldWithPath("planEnd").type(STRING).description("일정 종료일"),
-                    fieldWithPath("enabled").type(BOOLEAN).description("활성화"),
-                    fieldWithPath("categories").type(ARRAY).description("일정 카테고리"),
-                    fieldWithPath("categories.[].id").type(NUMBER).description("일정 카테고리 키"),
-                    fieldWithPath("categories.[].content").type(STRING).description("일정 카테고리 내용"),
-                    fieldWithPath("members").type(ARRAY).description("일정 카테고리"),
-                    fieldWithPath("members.[].memberId").type(NUMBER).description("일정 멤버 키"),
-                    fieldWithPath("members.[].memberName").type(STRING).description("일정 멤버 내용"),
-                    fieldWithPath("planId").type(NUMBER).description("일정 memberId"))));
+                .andDo(document("plan-detail",
+                        getDocumentResponse(),
+                        pathParameters(
+                                parameterWithName("projectId").description("프로젝트 키"),
+                                parameterWithName("planId").description("플랜 memberId")),
+                        responseFields(
+                                fieldWithPath("planName").type(STRING).description("일정 이름"),
+                                fieldWithPath("description").type(STRING).description("일정 설명"),
+                                fieldWithPath("planStart").type(STRING).description("일정 시작일"),
+                                fieldWithPath("planEnd").type(STRING).description("일정 종료일"),
+                                fieldWithPath("enabled").type(BOOLEAN).description("활성화"),
+                                fieldWithPath("categories").type(ARRAY).description("일정 카테고리"),
+                                fieldWithPath("categories.[].id").type(NUMBER).description("일정 카테고리 키"),
+                                fieldWithPath("categories.[].content").type(STRING).description("일정 카테고리 내용"),
+                                fieldWithPath("categories.[].color").type(STRING).description("일정 카테고리 색"),
+                                fieldWithPath("members").type(ARRAY).description("일정 카테고리"),
+                                fieldWithPath("members.[].memberId").type(NUMBER).description("일정 멤버 키"),
+                                fieldWithPath("members.[].memberName").type(STRING).description("일정 멤버 내용"),
+                                fieldWithPath("planId").type(NUMBER).description("일정 memberId"))));
     }
 
     @Test
@@ -250,83 +249,83 @@ class PlanControllerTest extends RestDocsTest {
     void planModify() throws Exception {
         //given
         PlanUpdateRequest request = new PlanUpdateRequest(
-            plan.getPlanName(),
-            plan.getDescription(),
-            plan.getPlanStart().minusDays(2),
-            plan.getPlanEnd().minusDays(2),
-            planCategories.stream()
-                .map(planCategory -> new PlanCategoryDeleteRequest(planCategory.getContent()))
-                .toList(),
-            planMembers.stream()
-                .map(member -> new PlanMemberDeleteRequest(member.getId()))
-                .toList()
-        );
+                plan.getPlanName(),
+                plan.getDescription(),
+                plan.getPlanStart().minusDays(2),
+                plan.getPlanEnd().minusDays(2),
+                planCategories.stream()
+                        .map(planCategory -> new PlanCategoryDeleteRequest(planCategory.getContent(), planCategory.getColor()))
+                        .toList(),
+                planMembers.stream()
+                        .map(member -> new PlanMemberDeleteRequest(member.getId()))
+                        .toList());
 
         PlanResponse planResponse = PlanResponse.from(Plan.of(1L,
-                request.planName(),
-                request.description(),
-                request.planStart(),
-                request.planEnd(),
-                true,
-                project),
-            planCategories.stream()
-                .map(PlanCategoryResponse::from)
-                .toList(),
-            planMembers.stream()
-                .map(member -> PlanMemberResponse.from(PlanMember.of(member, plan)))
-                .toList());
+                        request.planName(),
+                        request.description(),
+                        request.planStart(),
+                        request.planEnd(),
+                        true,
+                        project),
+                planCategories.stream()
+                        .map(PlanCategoryResponse::from)
+                        .toList(),
+                planMembers.stream()
+                        .map(member -> PlanMemberResponse.from(PlanMember.of(member, plan)))
+                        .toList());
 
-        given(
-                planService.modifyPlan(any(PlanUpdateRequest.class), any(Long.class), any(Long.class)))
-            .willReturn(planResponse);
+        given(planService.modifyPlan(any(PlanUpdateRequest.class), any(Long.class), any(Long.class)))
+                .willReturn(planResponse);
 
         //when
         ResultActions perform = mockMvc.perform(
-            put("/api/v1/projects/{projectId}/plans/{planId}", 1L, 1L)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(request)));
+                put("/api/v1/projects/{projectId}/plans/{planId}", 1L, 1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(toJson(request)));
 
         //then
         perform.andExpect(status().isOk())
-            .andExpect(jsonPath("$.planId").value(planResponse.planId()))
-            .andExpect(jsonPath("$.planName").value(planResponse.planName()))
-            .andExpect(jsonPath("$.description").value(planResponse.description()))
-            .andExpect(jsonPath("$.categories[0].content").value(
-                planResponse.categories().get(0).content()))
-            .andExpect(jsonPath("$.members[0].memberId").value(
-                planResponse.members().get(0).memberId()))
-            .andExpect(jsonPath("$.members[0].memberName").value(
-                planResponse.members().get(0).memberName()));
+                .andExpect(jsonPath("$.planId").value(planResponse.planId()))
+                .andExpect(jsonPath("$.planName").value(planResponse.planName()))
+                .andExpect(jsonPath("$.description").value(planResponse.description()))
+                .andExpect(jsonPath("$.categories[0].content").value(
+                        planResponse.categories().get(0).content()))
+                .andExpect(jsonPath("$.members[0].memberId").value(
+                        planResponse.members().get(0).memberId()))
+                .andExpect(jsonPath("$.members[0].memberName").value(
+                        planResponse.members().get(0).memberName()));
 
         perform.andDo(print())
-            .andDo(document("plan-update",
-                getDocumentRequest(),
-                getDocumentResponse(),
-                pathParameters(
-                    parameterWithName("projectId").description("프로젝트 키"),
-                    parameterWithName("planId").description("일정 키")),
-                requestFields(
-                    fieldWithPath("planName").type(STRING).description("일정 이름"),
-                    fieldWithPath("description").type(STRING).description("일정 설명"),
-                    fieldWithPath("planStart").type(STRING).description("일정 시작일"),
-                    fieldWithPath("planEnd").type(STRING).description("일정 종료일"),
-                    fieldWithPath("categories").type(ARRAY).description("일정 카테고리"),
-                    fieldWithPath("members").type(ARRAY).description("일정 멤버"),
-                    fieldWithPath("categories.[].content").type(STRING).description("일정 카테고리 내용"),
-                    fieldWithPath("members.[].memberId").type(NUMBER).description("일정 멤버 키")),
-                responseFields(
-                    fieldWithPath("planName").type(STRING).description("일정 이름"),
-                    fieldWithPath("description").type(STRING).description("일정 설명"),
-                    fieldWithPath("planStart").type(STRING).description("일정 시작일"),
-                    fieldWithPath("planEnd").type(STRING).description("일정 종료일"),
-                    fieldWithPath("enabled").type(BOOLEAN).description("활성화"),
-                    fieldWithPath("categories").type(ARRAY).description("일정 카테고리"),
-                    fieldWithPath("categories.[].id").type(NUMBER).description("일정 카테고리 키"),
-                    fieldWithPath("categories.[].content").type(STRING).description("일정 카테고리 내용"),
-                    fieldWithPath("members").type(ARRAY).description("일정 카테고리"),
-                    fieldWithPath("members.[].memberId").type(NUMBER).description("일정 멤버 키"),
-                    fieldWithPath("members.[].memberName").type(STRING).description("일정 멤버 내용"),
-                    fieldWithPath("planId").type(NUMBER).description("일정 키"))));
+                .andDo(document("plan-update",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        pathParameters(
+                                parameterWithName("projectId").description("프로젝트 키"),
+                                parameterWithName("planId").description("일정 키")),
+                        requestFields(
+                                fieldWithPath("planName").type(STRING).description("일정 이름"),
+                                fieldWithPath("description").type(STRING).description("일정 설명"),
+                                fieldWithPath("planStart").type(STRING).description("일정 시작일"),
+                                fieldWithPath("planEnd").type(STRING).description("일정 종료일"),
+                                fieldWithPath("categories").type(ARRAY).description("일정 카테고리"),
+                                fieldWithPath("members").type(ARRAY).description("일정 멤버"),
+                                fieldWithPath("categories.[].content").type(STRING).description("일정 카테고리 내용"),
+                                fieldWithPath("categories.[].color").type(STRING).description("일정 카테고리 색"),
+                                fieldWithPath("members.[].memberId").type(NUMBER).description("일정 멤버 키")),
+                        responseFields(
+                                fieldWithPath("planName").type(STRING).description("일정 이름"),
+                                fieldWithPath("description").type(STRING).description("일정 설명"),
+                                fieldWithPath("planStart").type(STRING).description("일정 시작일"),
+                                fieldWithPath("planEnd").type(STRING).description("일정 종료일"),
+                                fieldWithPath("enabled").type(BOOLEAN).description("활성화"),
+                                fieldWithPath("categories").type(ARRAY).description("일정 카테고리"),
+                                fieldWithPath("categories.[].id").type(NUMBER).description("일정 카테고리 키"),
+                                fieldWithPath("categories.[].content").type(STRING).description("일정 카테고리 내용"),
+                                fieldWithPath("categories.[].color").type(STRING).description("일정 카테고리 색"),
+                                fieldWithPath("members").type(ARRAY).description("일정 카테고리"),
+                                fieldWithPath("members.[].memberId").type(NUMBER).description("일정 멤버 키"),
+                                fieldWithPath("members.[].memberName").type(STRING).description("일정 멤버 내용"),
+                                fieldWithPath("planId").type(NUMBER).description("일정 키"))));
     }
 
     @Test
@@ -342,113 +341,46 @@ class PlanControllerTest extends RestDocsTest {
         perform.andExpect(status().isNoContent());
 
         perform.andDo(print())
-            .andDo(document("plan-delete",
-                pathParameters(
-                    parameterWithName("projectId").description("프로젝트 키"),
-                    parameterWithName("planId").description("일정 키"))));
+                .andDo(document("plan-delete",
+                        pathParameters(
+                                parameterWithName("projectId").description("프로젝트 키"),
+                                parameterWithName("planId").description("일정 키"))));
 
-    }
-
-    @Test
-    @DisplayName("카테고리 추가")
-    void categoryCreate() throws Exception {
-        //given
-        PlanCategoryResponse response = PlanCategoryResponse.from(planCategories.get(0));
-        given(
-                planService.createPlanCategory(any(Long.class), any(PlanCategoryCreateRequest.class)))
-            .willReturn(response);
-
-        PlanCategoryCreateRequest request = new PlanCategoryCreateRequest(
-            planCategories.get(0).getContent());
-
-        //when
-        ResultActions perform = mockMvc.perform(
-            post("/api/v1/projects/{projectId}/plans/{planId}/categories", 1L, 1L)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(request)));
-
-        //then
-        perform.andExpect(status().isOk())
-            .andExpect(jsonPath("$.content").value(response.content()))
-            .andExpect(jsonPath("$.id").value(response.id()));
-
-        perform.andDo(print())
-            .andDo(document("planCategory-create",
-                getDocumentRequest(),
-                getDocumentResponse(),
-                pathParameters(
-                    parameterWithName("projectId").description("프로젝트 키"),
-                    parameterWithName("planId").description("일정 키")),
-                requestFields(
-                    fieldWithPath("content").type(STRING).description("카테고리 내용")),
-                responseFields(
-                    fieldWithPath("content").type(STRING).description("카테고리 내용"),
-                    fieldWithPath("id").type(NUMBER).description("카테고리 키"))));
-    }
-
-    @Test
-    @DisplayName("카테고리 삭제")
-    void categoryDelete() throws Exception {
-        //given
-        PlanCategoryDeleteRequest request = new PlanCategoryDeleteRequest(
-            planCategories.get(0).getContent());
-
-        //when
-        ResultActions perform = mockMvc.perform(delete(
-            "/api/v1/projects/{projectId}/plans/{planId}/categories",
-            1L, 1L)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(toJson(request)));
-
-        //then
-        perform.andExpect(status().isNoContent());
-
-        perform.andDo(print())
-            .andDo(document("planCategory-delete",
-                getDocumentRequest(),
-                getDocumentResponse(),
-                pathParameters(
-                    parameterWithName("projectId").description("프로젝트 키"),
-                    parameterWithName("planId").description("일정 키")),
-                requestFields(
-                    fieldWithPath("content").type(STRING).description("카테고리 내용"))));
     }
 
     @Test
     @DisplayName("일정 멤버 추가")
     void planMemberCreate() throws Exception {
         //given
-        PlanMemberResponse response = PlanMemberResponse.from(
-            PlanMember.of(planMembers.get(0), plan));
-        given(
-                planService.createPlanMember(any(Long.class), any(PlanMemberCreateRequest.class)))
-            .willReturn(response);
+        PlanMemberResponse response = PlanMemberResponse.from(PlanMember.of(planMembers.get(0), plan));
+        given(planService.createPlanMember(any(Long.class), any(PlanMemberCreateRequest.class)))
+                .willReturn(response);
 
         PlanMemberCreateRequest request = new PlanMemberCreateRequest(planMembers.get(0).getId());
 
         //when
         ResultActions perform = mockMvc.perform(
-            post("/api/v1/projects/{projectId}/plans/{planId}/members", 1L, 1L)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(request)));
+                post("/api/v1/projects/{projectId}/plans/{planId}/members", 1L, 1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(toJson(request)));
 
         //then
         perform.andExpect(status().isOk())
-            .andExpect(jsonPath("$.memberId").value(planMembers.get(0).getId()))
-            .andExpect(jsonPath("$.memberName").value(planMembers.get(0).getName()));
+                .andExpect(jsonPath("$.memberId").value(planMembers.get(0).getId()))
+                .andExpect(jsonPath("$.memberName").value(planMembers.get(0).getName()));
 
         perform.andDo(print())
-            .andDo(document("planMember-create",
-                getDocumentRequest(),
-                getDocumentResponse(),
-                pathParameters(
-                    parameterWithName("projectId").description("프로젝트 키"),
-                    parameterWithName("planId").description("일정 키")),
-                requestFields(
-                    fieldWithPath("memberId").type(NUMBER).description("멤버 키")),
-                responseFields(
-                        fieldWithPath("memberId").type(NUMBER).description("멤버 키"),
-                    fieldWithPath("memberName").type(STRING).description("멤버 이름"))));
+                .andDo(document("planMember-create",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        pathParameters(
+                                parameterWithName("projectId").description("프로젝트 키"),
+                                parameterWithName("planId").description("일정 키")),
+                        requestFields(
+                                fieldWithPath("memberId").type(NUMBER).description("멤버 키")),
+                        responseFields(
+                                fieldWithPath("memberId").type(NUMBER).description("멤버 키"),
+                                fieldWithPath("memberName").type(STRING).description("멤버 이름"))));
     }
 
     @Test
@@ -459,22 +391,22 @@ class PlanControllerTest extends RestDocsTest {
 
         //when
         ResultActions perform = mockMvc.perform(delete(
-            "/api/v1/projects/{projectId}/plans/{planId}/members",
-            1L, 1L)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(toJson(request)));
+                "/api/v1/projects/{projectId}/plans/{planId}/members",
+                1L, 1L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(request)));
 
         //then
         perform.andExpect(status().isNoContent());
 
         perform.andDo(print())
-            .andDo(document("planMember-delete",
-                getDocumentRequest(),
-                getDocumentResponse(),
-                pathParameters(
-                    parameterWithName("projectId").description("프로젝트 키"),
-                    parameterWithName("planId").description("일정 키")),
-                requestFields(
-                    fieldWithPath("memberId").type(NUMBER).description("멤버 키"))));
+                .andDo(document("planMember-delete",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        pathParameters(
+                                parameterWithName("projectId").description("프로젝트 키"),
+                                parameterWithName("planId").description("일정 키")),
+                        requestFields(
+                                fieldWithPath("memberId").type(NUMBER).description("멤버 키"))));
     }
 }

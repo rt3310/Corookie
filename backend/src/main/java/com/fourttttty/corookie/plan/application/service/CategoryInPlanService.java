@@ -22,8 +22,8 @@ public class CategoryInPlanService {
     private final PlanCategoryService planCategoryService;
 
     @Transactional
-    public PlanCategoryResponse create(Plan plan, PlanCategoryCreateRequest request) {
-        PlanCategory newPlanCategory = planCategoryService.create(request);
+    public PlanCategoryResponse create(Long projectId, Plan plan, PlanCategoryCreateRequest request) {
+        PlanCategory newPlanCategory = planCategoryService.create(request, projectId);
         categoryInPlanRepository.save(CategoryInPlan.of(plan,newPlanCategory));
         return PlanCategoryResponse.from(newPlanCategory);
     }

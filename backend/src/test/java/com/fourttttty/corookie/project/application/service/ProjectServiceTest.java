@@ -2,7 +2,9 @@ package com.fourttttty.corookie.project.application.service;
 
 import com.fourttttty.corookie.global.exception.ProjectNotFoundException;
 import com.fourttttty.corookie.member.application.repository.MemberRepository;
+import com.fourttttty.corookie.member.domain.AuthProvider;
 import com.fourttttty.corookie.member.domain.Member;
+import com.fourttttty.corookie.member.domain.Oauth2;
 import com.fourttttty.corookie.project.application.repository.ProjectMemberRepository;
 import com.fourttttty.corookie.project.application.repository.ProjectRepository;
 import com.fourttttty.corookie.project.domain.ProjectMember;
@@ -43,7 +45,7 @@ public class ProjectServiceTest {
         projectMemberRepository = new FakeProjectMemberRepository(projectRepository, memberRepository);
         projectService = new ProjectService(projectRepository, textChannelRepository, memberRepository, projectMemberRepository,
                 new InvitationLinkGenerateService(new Base62Encoder()));
-        member = Member.of("이름", "test@test.com", null);
+        member = Member.of("이름", "test@test.com", "https://test", Oauth2.of(AuthProvider.KAKAO, "account"));
         project = Project.of("memberName",
                 "description",
                 true,
