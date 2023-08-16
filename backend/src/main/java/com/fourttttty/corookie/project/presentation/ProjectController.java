@@ -49,4 +49,22 @@ public class ProjectController {
         projectService.deleteById(projectId);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/{projectId}/invite/enable")
+    public ResponseEntity<ProjectDetailResponse> projectInvitationEnable(@PathVariable Long projectId,
+                                                                         @AuthenticationPrincipal LoginUser loginUser) {
+        return ResponseEntity.ok(projectService.enableInvitationStatus(projectId, loginUser.getMemberId()));
+    }
+
+    @PutMapping("/{projectId}/invite/disable")
+    public ResponseEntity<ProjectDetailResponse> projectInvitationDisable(@PathVariable Long projectId,
+                                                                          @AuthenticationPrincipal LoginUser loginUser) {
+        return ResponseEntity.ok(projectService.disableInvitationStatus(projectId, loginUser.getMemberId()));
+    }
+
+    @GetMapping("/invite/{invitationLink}")
+    public ResponseEntity<ProjectDetailResponse> projectInvitation(@PathVariable String invitationLink,
+                                                                   @AuthenticationPrincipal LoginUser loginUser) {
+        return ResponseEntity.ok(projectService.findByInvitationLink(invitationLink, loginUser.getMemberId()));
+    }
 }

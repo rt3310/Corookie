@@ -3,6 +3,7 @@ package com.fourttttty.corookie.texture.issue.application.repository;
 import com.fourttttty.corookie.global.exception.ProjectNotFoundException;
 import com.fourttttty.corookie.issue.application.repository.IssueRepository;
 import com.fourttttty.corookie.issue.domain.Issue;
+import com.fourttttty.corookie.issue.domain.IssueCategory;
 import com.fourttttty.corookie.issue.domain.IssueProgress;
 import com.fourttttty.corookie.member.application.repository.MemberRepository;
 import com.fourttttty.corookie.project.application.repository.ProjectRepository;
@@ -79,6 +80,13 @@ public class FakeIssueRepository implements IssueRepository {
     public List<Issue> findByProgress(Long projectId, IssueProgress progress) {
         return  store.values().stream()
                 .filter(issue -> issue.getProgress().equals(progress))
+                .toList();
+    }
+
+    @Override
+    public List<Issue> findByCategory(Long projectId, IssueCategory category) {
+        return store.values().stream()
+                .filter(issue -> issue.getCategory().equals(category))
                 .toList();
     }
 }

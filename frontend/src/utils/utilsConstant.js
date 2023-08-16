@@ -8,6 +8,7 @@ export const URL = {
     },
     PROJECT: {
         MAIN: '/project/:projectId',
+        INVITE: 'project/invite/:inviteLink',
     },
     CHAT: {
         TEXT: '/project/:projectId/channel/text/:channelId',

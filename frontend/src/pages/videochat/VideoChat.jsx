@@ -19,8 +19,15 @@ const VideoChat = () => {
             </S.Header>
             <S.Container>
                 <S.ChatBox>
-                    <components.VideoBoard />
-                    <components.VideoControl />
+                    <S.ThreadBox>
+                        <iframe
+                            src="https://i9a402.p.ssafy.io:8443/#/sessionTest"
+                            allow="camera;microphone;fullscreen;autoplay"
+                            width={1200}
+                            height={800}>
+                            <p>사용 중인 브라우저는 iframe을 지원하지 않습니다.</p>
+                        </iframe>
+                    </S.ThreadBox>
                 </S.ChatBox>
                 {chatboxOpened && <components.TextChatBox />}
             </S.Container>
@@ -67,6 +74,7 @@ const S = {
         display: flex;
         height: 100%;
         max-height: calc(100vh - 152px);
+        padding: 0 26px;
     `,
     ChatBox: styled.div`
         display: flex;

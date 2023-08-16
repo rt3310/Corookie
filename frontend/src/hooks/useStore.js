@@ -5,6 +5,11 @@ export const textChannelsState = create(set => ({
     setTextChannels: data => set(state => ({ textChannels: data })),
 }))
 
+export const videoChannelsState = create(set => ({
+    videoChannels: ['회의', '자유'],
+    setVideoChannels: data => set(state => ({ videoChannels: data })),
+}))
+
 export const threadsState = create(set => ({
     page: 0,
     size: 10,
@@ -102,6 +107,7 @@ export const meState = create(set => ({
             email: data.email,
             imageUrl: data.imageUrl,
         })),
+    setName: data => set(state => ({ name: data })),
     setImageUrl: data => set(state => ({ imageUrl: data })),
 }))
 

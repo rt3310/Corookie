@@ -13,6 +13,7 @@ const Thread = ({ projectId, channelId, thread }) => {
     const [overText, setOverText] = useState(false)
     const [closedText, setClosedText] = useState(false)
     const [addImoticon, setAddImoticon] = useState(false)
+    const [comments, setComments] = useState([])
     const { closeProfile } = hooks.profileState()
     const { commentOpened, openComment, closeComment } = hooks.commentState()
     const { threadId, setThreadId, commentCount, setCommentCount } = hooks.selectedThreadState()
@@ -93,6 +94,12 @@ const Thread = ({ projectId, channelId, thread }) => {
     let imoticonRef = useRef(null)
 
     useEffect(() => {
+        api.apis.getComments(projectId, channelId, thread.id, 0, 3, 'createdAt', 'desc').then(response => {
+            setComments(response.data)
+        })
+    }, [])
+
+    useEffect(() => {
         const handleOutside = e => {
             if (imoticonRef.current && !imoticonRef.current.contains(e.target)) {
                 setAddImoticon(false)
@@ -120,18 +127,28 @@ const Thread = ({ projectId, channelId, thread }) => {
         <S.Wrap open={thread.id === threadId}>
             <S.ChatBox>
                 <S.ImageBox>
-                    <img src={require('images/thread_profile.png').default} alt="스레드 이미지" />
+                    <img
+                        src={thread.writer.imageUrl ? thread.writer.imageUrl : require('images/profile.png').default}
+                        alt="스레드 이미지"
+                    />
                 </S.ImageBox>
                 <S.ContentBox>
                     <S.MemberInfoBox>
                         <S.MemberName>{thread && thread.writer.name}</S.MemberName>
                         <S.CreatedTime>{thread && utils.calDate(thread.createdAt)}</S.CreatedTime>
                         <S.CommentButton onClick={() => openCommentBox()} open={commentOpened}>
-                            {/* <div>
-                                <img src={require('images/profile.png').default} alt="프로필" />
-                                <img src={require('images/profile.png').default} alt="프로필" />
-                                <img src={require('images/profile.png').default} alt="프로필" />
-                            </div> */}
+                            <div>
+                                {comments.map(comment => (
+                                    <img
+                                        src={
+                                            comment.writer.imageUrl
+                                                ? comment.writer.imageUrl
+                                                : require('images/profile.png').default
+                                        }
+                                        alt="프로필"
+                                    />
+                                ))}
+                            </div>
                             {currentCommentCount}개의 댓글 <IoIosArrowForward />
                         </S.CommentButton>
                     </S.MemberInfoBox>
@@ -238,6 +255,7 @@ const S = {
         margin: 0 16px 0 0;
 
         & img {
+            border-radius: 8px;
             width: 40px;
             height: 40px;
         }
@@ -249,6 +267,11 @@ const S = {
         display: flex;
         align-items: flex-end;
         margin: 0 0 16px 0;
+
+        & img {
+            border-radius: 4px;
+            box-shadow: ${({ theme }) => theme.shadow.card};
+        }
     `,
     MemberName: styled.div`
         font-size: ${({ theme }) => theme.fontsize.title3};

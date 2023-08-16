@@ -22,7 +22,7 @@ public class FakeTextChannelRepository implements TextChannelRepository {
     }
 
     @Override
-    public List<TextChannel> findByProjectId(Long projectId) {
+    public List<TextChannel> findByProjectId(Long projectId, Long memberId) {
         return store.values().stream()
                 .filter(textChannel -> textChannel.getProject().getId().equals(projectId))
                 .toList();

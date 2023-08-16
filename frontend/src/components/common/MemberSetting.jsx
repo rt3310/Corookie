@@ -1,16 +1,20 @@
 import React, { useEffect, useRef } from 'react'
+import { useParams } from 'react-router'
 import styled from 'styled-components'
 
 import * as hooks from 'hooks'
+import * as api from 'api'
 import { FaCrown } from 'react-icons/fa'
 import { IoClose, IoLink } from 'react-icons/io5'
 
 const MemberSetting = ({ memberTextRef }) => {
+    const { projectId } = useParams()
     const { members, memberOpened, closeMember, removeMember } = hooks.memberState()
     const { projectMembers, setProjectMembers } = hooks.projectMembersState()
     const { manager } = hooks.setManagerState()
     const { project } = hooks.projectState()
     const { linkActivated, activateLink, deactivateLink } = hooks.linkState()
+    let componentRef = useRef(null)
 
     const copyLink = async text => {
         try {
@@ -29,22 +33,31 @@ const MemberSetting = ({ memberTextRef }) => {
 
     const handleLinkActivation = () => {
         if (linkActivated) {
+            api.apis.disableInvitation(projectId)
             deactivateLink()
         } else {
+            if (!project.isManager) {
+                alert('프로젝트 관리자만 초대할 수 있습니다')
+                return
+            }
+            api.apis.enableInvitation(projectId)
             activateLink()
         }
     }
 
     useEffect(() => {
-        console.log(linkActivated)
-    }, [linkActivated])
+        if (project.invitationStatus) {
+            activateLink()
+        } else {
+            deactivateLink()
+        }
+    }, [project])
 
-    let memberRef = useRef(null)
     useEffect(() => {
         const handleOutside = e => {
             if (
-                memberRef.current &&
-                !memberRef.current.contains(e.target) &&
+                componentRef.current &&
+                !componentRef.current.contains(e.target) &&
                 !memberTextRef.current.contains(e.target)
             ) {
                 closeMember()
@@ -54,10 +67,10 @@ const MemberSetting = ({ memberTextRef }) => {
         return () => {
             document.removeEventListener('mousedown', handleOutside)
         }
-    }, [memberRef])
+    }, [componentRef])
 
     return (
-        <S.Wrap ref={memberRef}>
+        <S.Wrap ref={componentRef}>
             {memberOpened && (
                 <S.Container>
                     <S.Title>멤버</S.Title>
@@ -88,17 +101,25 @@ const MemberSetting = ({ memberTextRef }) => {
                             </S.Member>
                         )
                     })}
-                    <S.Line />
-                    <S.ActivateLink>
-                        <S.Text>링크 활성화</S.Text>
-                        <S.SlideButton active={linkActivated} onClick={handleLinkActivation}>
-                            <S.InnerButton className={linkActivated ? 'active' : null} />
-                        </S.SlideButton>
-                    </S.ActivateLink>
-                    {linkActivated && (
+                    {project.isManager && (
+                        <>
+                            <S.Line />
+                            <S.ActivateLink>
+                                <S.Text>링크 활성화</S.Text>
+                                <S.SlideButton className={linkActivated ? 'active' : ''} onClick={handleLinkActivation}>
+                                    <S.InnerButton />
+                                </S.SlideButton>
+                            </S.ActivateLink>
+                        </>
+                    )}
+                    {project.isManager && linkActivated && (
                         <S.CreateLink>
                             <S.Text>초대링크 복사</S.Text>
-                            <IoLink onClick={() => copyLink('복사!')} />
+                            <IoLink
+                                onClick={() =>
+                                    copyLink(`http://localhost:3000/project/invite/${project.invitationLink}`)
+                                }
+                            />
                         </S.CreateLink>
                     )}
                 </S.Container>
@@ -151,6 +172,7 @@ const S = {
             width: 30px;
             height: 30px;
             margin-right: 16px;
+            border-radius: 4px;
         }
     `,
     Name: styled.div`
@@ -204,10 +226,14 @@ const S = {
         height: 15px;
         align-items: center;
         border-radius: 8px;
-        background-color: ${({ theme, active }) => (active ? theme.color.main : theme.color.gray)};
+        background-color: ${({ theme }) => theme.color.gray};
         padding: 2px;
         transition: background-color 0.5s;
         cursor: pointer;
+
+        &.active {
+            background-color: ${({ theme }) => theme.color.main};
+        }
     `,
     InnerButton: styled.div`
         width: 10px;
@@ -217,7 +243,7 @@ const S = {
         /* margin-left: 0px; */
         transition: all 0.1s linear;
 
-        &.active {
+        .active & {
             margin-left: 13px;
         }
     `,
@@ -234,6 +260,10 @@ const S = {
             height: 24px;
             color: ${({ theme }) => theme.color.main};
             cursor: pointer;
+        }
+
+        & > svg:hover {
+            opacity: 0.6;
         }
     `,
 }

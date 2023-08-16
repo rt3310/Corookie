@@ -8,7 +8,7 @@ import { BiChevronsUp, BiChevronUp, BiChevronDown, BiChevronsDown } from 'react-
 import * as hooks from 'hooks'
 import * as api from 'api'
 
-const KanbanBoard = () => {
+const KanbanBoard = ({ projectId }) => {
     const { tasks, setTasks } = hooks.tasksState()
     const { project } = hooks.projectState()
     const { issueDetailOpened, openIssueDetail, closeIssueDetail } = hooks.issueDetailState()
@@ -41,7 +41,7 @@ const KanbanBoard = () => {
     }, {})
 
     const taskStatus = {
-        toDo: {
+        todo: {
             name: 'To Do',
             items: tasksByStatus['todo'] || [],
         },
@@ -87,6 +87,8 @@ const KanbanBoard = () => {
 
             removed.status = destination.droppableId
 
+            api.apis.changeIssueStatus(projectId, removed.id, { progress: destination.droppableId })
+
             destItems.splice(destination.index, 0, removed)
             setColumns({
                 ...columns,
@@ -120,7 +122,7 @@ const KanbanBoard = () => {
                 {Object.entries(columns).map(([columnId, column], index) => {
                     return (
                         <S.Column key={columnId}>
-                            {columnId === 'toDo' && <S.Todo>{column.name}</S.Todo>}
+                            {columnId === 'todo' && <S.Todo>{column.name}</S.Todo>}
                             {columnId === 'inProgress' && <S.InProgress>{column.name}</S.InProgress>}
                             {columnId === 'done' && <S.Done>{column.name}</S.Done>}
                             <S.TaskBox>

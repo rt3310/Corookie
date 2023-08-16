@@ -1,11 +1,14 @@
 package com.fourttttty.corookie.project.application.service;
 
+import com.fourttttty.corookie.global.exception.InvalidProjectChangeRequestException;
+import com.fourttttty.corookie.global.exception.ProjectNotOpenForInvitationException;
 import com.fourttttty.corookie.member.application.repository.MemberRepository;
 import com.fourttttty.corookie.member.domain.Member;
 import com.fourttttty.corookie.project.application.repository.ProjectMemberRepository;
 import com.fourttttty.corookie.project.application.repository.ProjectRepository;
 import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.project.domain.ProjectMember;
+import com.fourttttty.corookie.project.domain.ProjectMemberId;
 import com.fourttttty.corookie.project.dto.request.ProjectCreateRequest;
 import com.fourttttty.corookie.project.dto.request.ProjectUpdateRequest;
 import com.fourttttty.corookie.project.dto.response.ProjectDetailResponse;
@@ -55,7 +58,7 @@ public class ProjectService {
         Project project = projectRepository.save(projectCreateRequest.toEntity(member));
 
         registerMemberForProject(member, project);
-        project.changeInvitationLink(invitationLinkGenerateService.generateInvitationLink((long) project.hashCode()));
+        project.changeInvitationLink(invitationLinkGenerateService.generateInvitationLink(project.getId()));
         project.createDefaultTextChannels().forEach(textChannelRepository::save);
         return ProjectDetailResponse.from(project, project.isManager(managerId));
     }
@@ -76,4 +79,41 @@ public class ProjectService {
         projectRepository.findById(projectId).orElseThrow(EntityNotFoundException::new).delete();
     }
 
+    @Transactional
+    public ProjectDetailResponse findByInvitationLink(String invitationLink, Long memberId) {
+        Project project = findEntityById(invitationLinkGenerateService.decodingInvitationLink(invitationLink));
+        validateInvitationStatus(project);
+        Member member = memberRepository.findById(memberId).orElseThrow(EntityNotFoundException::new);
+        projectMemberRepository.findById(new ProjectMemberId(project, member))
+                .orElseGet(() -> projectMemberRepository.save(ProjectMember.of(project, member)));
+        return ProjectDetailResponse.from(project, project.isManager(memberId));
+    }
+
+    @Transactional
+    public ProjectDetailResponse enableInvitationStatus(Long projectId, Long memberId) {
+        Project project = findEntityById(projectId);
+        validateManagerAuthority(memberId, project);
+        project.enableLink();
+        return ProjectDetailResponse.from(project, project.isManager(memberId));
+    }
+
+    @Transactional
+    public ProjectDetailResponse disableInvitationStatus(Long projectId, Long memberId) {
+        Project project = findEntityById(projectId);
+        validateManagerAuthority(memberId, project);
+        project.disableLink();
+        return ProjectDetailResponse.from(project, project.isManager(memberId));
+    }
+
+    private static void validateManagerAuthority(Long memberId, Project project) {
+        if (!project.isManager(memberId)) {
+            throw new InvalidProjectChangeRequestException();
+        }
+    }
+
+    private static void validateInvitationStatus(Project project) {
+        if (!project.isEnabledLink()) {
+            throw new ProjectNotOpenForInvitationException();
+        }
+    }
 }

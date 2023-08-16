@@ -3,6 +3,8 @@ package com.fourttttty.corookie.plan.application.repository;
 import com.fourttttty.corookie.plan.domain.CategoryInPlan;
 import com.fourttttty.corookie.plan.domain.PlanCategory;
 import com.fourttttty.corookie.plan.infrastructure.PlanCategoryJpaRepository;
+
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -15,6 +17,11 @@ public class PlanCategoryRepositoryImpl implements PlanCategoryRepository {
     @Override
     public PlanCategory save(PlanCategory planCategory) {
         return planCategoryJpaRepository.save(planCategory);
+    }
+
+    @Override
+    public List<PlanCategory> findByProjectId(Long projectId) {
+        return planCategoryJpaRepository.findByProjectId(projectId);
     }
 
     @Override

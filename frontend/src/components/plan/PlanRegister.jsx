@@ -13,16 +13,20 @@ const PlanRegister = () => {
     const { planStartDate, setPlanStartDate, planEndDate, setPlanEndDate } = hooks.planDateState()
     const { closePlanRegister } = hooks.planRegisterState()
     const [title, setTitle] = useState('')
-    const [member, setMember] = useState({
-        id: null,
-        name: '참여자 선택',
-        color: '#ffffff',
-    })
-    const [category, setCategory] = useState({
-        id: null,
-        name: '분류 선택',
-        color: '#ffffff',
-    })
+    const [member, setMember] = useState([
+        {
+            id: null,
+            name: '참여자 선택',
+            color: '#ffffff',
+        },
+    ])
+    const [category, setCategory] = useState([
+        {
+            id: null,
+            name: '분류 선택',
+            color: '#ffffff',
+        },
+    ])
     const [content, setContent] = useState('')
 
     useEffect(() => {

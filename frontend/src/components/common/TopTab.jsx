@@ -33,7 +33,7 @@ const TopTab = () => {
         <S.Wrap style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <S.Title onClick={() => navigate(utils.URL.HOME.MAIN)}>CoRookie</S.Title>
             <S.Profile onClick={() => toggleProfile()}>
-                <img src={imageUrl ? imageUrl : require('images/thread_profile.png').default} alt="스레드 이미지" />
+                <img src={imageUrl ? imageUrl : require('images/profile.png').default} alt="스레드 이미지" />
             </S.Profile>
         </S.Wrap>
     )
@@ -61,6 +61,7 @@ const S = {
         width: 40px;
         margin: 16px 16px 0 0;
         cursor: pointer;
+        border-radius: 8px;
         & img {
             width: 40px;
             height: 40px;

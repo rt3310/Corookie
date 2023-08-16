@@ -172,12 +172,6 @@ const S = {
     Day: styled.li`
         flex: 1 1 0%;
         cursor: pointer;
-        &:active {
-            cursor: pointer;
-        }
-        &:hover {
-            cursor: pointer;
-        }
 
         &:not(:last-child) {
             border-right: 1px solid ${({ theme }) => theme.color.middlegray};
@@ -234,7 +228,7 @@ const S = {
         top: 0;
         position: absolute;
         height: 100%;
-        cursor: grab;
+        cursor: pointer;
         border-radius: 4px;
         z-index: 100;
 
