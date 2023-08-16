@@ -59,7 +59,7 @@ public class ProjectMemberControllerTest extends RestDocsTest {
                 member.getEmail(),
                 member.getImageUrl(),
                 false);
-        given(projectMemberService.createIfNone(any(ProjectMemberCreateRequest.class)))
+        given(projectMemberService.create(any(ProjectMemberCreateRequest.class)))
                 .willReturn(response);
 
         // when

@@ -53,6 +53,13 @@ export const apis = {
             `/api/v1/projects/${projectId}/text-channels/${textChannelId}/threads/${threadId}/comments?page=${page}&size=${size}&sort=${sort},${direction}`,
         ),
 
+    getDirectChannels: projectId => instance.get(`/api/v1/projects/${projectId}/directs`),
+    getDirectChannel: (projectId, channelId) => instance.get(`/api/v1/projects/${projectId}/directs/${channelId}`),
+    getDirectMessages: (projectId, directChannelId, page, size, sort, direction) =>
+        instance.get(
+            `/api/v1/projects/${projectId}/directs/${directChannelId}/messages?page=${page}&size=${size}&sort=${sort},${direction}`,
+        ),
+
     getIssueList: projectId => instance.get(`/api/v1/projects/${projectId}/issues`),
     createIssue: (projectId, data) => instance.post(`/api/v1/projects/${projectId}/issues`, data),
     deleteIssue: (projectId, issueId) => instance.delete(`/api/v1/projects/${projectId}/issues/${issueId}`),

@@ -17,7 +17,7 @@ const ProfileBox = () => {
         }),
     })
 
-    const { id, name, email, imageUrl, setName, setImageUrl, setMe } = hooks.meState()
+    const { memberId, memberName, memberEmail, memberImageUrl, setName, setImageUrl, setMe } = hooks.meState()
     const { profileEdit, openEdit, closeEdit } = hooks.profileState()
     const fileRef = useRef()
     let nameRef = useRef()
@@ -38,7 +38,7 @@ const ProfileBox = () => {
         promise.then(
             function (data) {
                 console.log(data)
-                api.apis.changeMemberProfile(id, { imageUrl: data.Location }).then(response => {
+                api.apis.changeMemberProfile(memberId, { imageUrl: data.Location }).then(response => {
                     setImageUrl(response.data.imageUrl)
                 })
             },
@@ -53,7 +53,7 @@ const ProfileBox = () => {
     const nameKeyDown = e => {
         if (e.key === 'Enter') {
             api.apis
-                .changeMemberName(id, { name: name })
+                .changeMemberName(memberId, { name: memberName })
                 .then(response => {
                     closeEdit()
                 })
@@ -77,7 +77,10 @@ const ProfileBox = () => {
         <S.Wrap>
             <S.Header>프로필</S.Header>
             <S.ImageBox onClick={handleFileClick}>
-                <img src={imageUrl ? imageUrl : require('images/profile.png').default} alt="프로필 이미지" />
+                <img
+                    src={memberImageUrl ? memberImageUrl : require('images/profile.png').default}
+                    alt="프로필 이미지"
+                />
                 <S.FileUpload>
                     <input
                         ref={fileRef}
@@ -93,19 +96,19 @@ const ProfileBox = () => {
                 <S.MemberInfoBox>
                     <S.MemberNameContainer>
                         {!profileEdit ? (
-                            <S.MemberName>{name}</S.MemberName>
+                            <S.MemberName>{memberName}</S.MemberName>
                         ) : (
                             <S.MemberNameEdit
                                 ref={nameRef}
                                 onChange={handleNameChange}
                                 onKeyDown={nameKeyDown}
                                 type="text"
-                                value={name}
+                                value={memberName}
                             />
                         )}
                         {!profileEdit && <S.EditName onClick={() => openEdit()}>편집</S.EditName>}
                     </S.MemberNameContainer>
-                    <S.MemberEmail>{email ? email : '이메일이 없습니다'}</S.MemberEmail>
+                    <S.MemberEmail>{memberEmail ? memberEmail : '이메일이 없습니다'}</S.MemberEmail>
                 </S.MemberInfoBox>
             </S.ContentBox>
         </S.Wrap>

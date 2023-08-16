@@ -40,7 +40,11 @@ const Comment = ({ comment }) => {
                     <S.MemberName>{comment.writer.name}</S.MemberName>
                     <S.CreatedTime>{utils.calDate(comment.createdAt)}</S.CreatedTime>
                 </S.MemberInfoBox>
-                <S.Text ref={text}>{comment.content}</S.Text>
+                <S.Text ref={text}>
+                    {comment.content.split('\n').map(line => (
+                        <p>{line}</p>
+                    ))}
+                </S.Text>
                 {closedText && (
                     <S.MoreButton>
                         <div onClick={() => openMoreText()}>
