@@ -58,7 +58,7 @@ const TextChat = () => {
                     setThreads(threads => [jsonBody, ...threads])
                 })
                 client.current.publish({
-                    destination: '/app/thread/',
+                    destination: '/app/thread',
                     body: JSON.stringify(threads),
                 })
             },

@@ -5,6 +5,20 @@ export const textChannelsState = create(set => ({
     setTextChannels: data => set(state => ({ textChannels: data })),
 }))
 
+export const directChannelsState = create(set => ({
+    directChannels: [],
+    setDirectChannels: data => set(state => ({ directChannels: data })),
+}))
+
+export const directMessagesState = create(set => ({
+    page: 0,
+    size: 10,
+    sort: 'createdAt',
+    direction: 'desc',
+    upPage: () => set(state => ({ ...state, page: state.page + 1 })),
+    initPage: () => set(state => ({ ...state, page: 0 })),
+}))
+
 export const videoChannelsState = create(set => ({
     videoChannels: ['회의', '자유'],
     setVideoChannels: data => set(state => ({ videoChannels: data })),
@@ -96,16 +110,16 @@ export const setManagerState = create(set => ({
 }))
 
 export const meState = create(set => ({
-    id: null,
-    name: null,
-    email: null,
-    imageUrl: null,
+    memberId: null,
+    memberName: null,
+    memberEmail: null,
+    memberImageUrl: null,
     setMe: data =>
         set(state => ({
-            id: data.id,
-            name: data.name,
-            email: data.email,
-            imageUrl: data.imageUrl,
+            memberId: data.id,
+            memberName: data.name,
+            memberEmail: data.email,
+            memberImageUrl: data.imageUrl,
         })),
     setName: data => set(state => ({ name: data })),
     setImageUrl: data => set(state => ({ imageUrl: data })),

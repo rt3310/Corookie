@@ -1,5 +1,7 @@
 package com.fourttttty.corookie.project.application.service;
 
+import com.fourttttty.corookie.directmessagechannel.application.repository.DirectMessageChannelRepository;
+import com.fourttttty.corookie.directmessagechannel.application.service.DirectMessageChannelService;
 import com.fourttttty.corookie.member.application.repository.MemberRepository;
 import com.fourttttty.corookie.member.domain.AuthProvider;
 import com.fourttttty.corookie.member.domain.Member;
@@ -13,6 +15,7 @@ import com.fourttttty.corookie.project.dto.request.ProjectMemberCreateRequest;
 import com.fourttttty.corookie.project.dto.response.ProjectMemberResponse;
 import com.fourttttty.corookie.project.util.Base62Encoder;
 import com.fourttttty.corookie.textchannel.application.repository.TextChannelRepository;
+import com.fourttttty.corookie.texture.directmessagechannel.application.repository.FakeDirectMessageChannelRepository;
 import com.fourttttty.corookie.texture.member.application.repository.FakeMemberRepository;
 import com.fourttttty.corookie.texture.project.application.repository.FakeProjectMemberRepository;
 import com.fourttttty.corookie.texture.project.application.repository.FakeProjectRepository;
@@ -24,8 +27,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 
 class ProjectMemberServiceTest {
 
@@ -33,6 +35,7 @@ class ProjectMemberServiceTest {
     MemberRepository memberRepository;
     ProjectMemberRepository projectMemberRepository;
     TextChannelRepository textChannelRepository;
+    DirectMessageChannelRepository directMessageChannelRepository;
     ProjectMemberService projectMemberService;
 
     private Member member;
@@ -44,9 +47,11 @@ class ProjectMemberServiceTest {
         memberRepository = new FakeMemberRepository();
         projectMemberRepository = new FakeProjectMemberRepository(projectRepository, memberRepository);
         textChannelRepository = new FakeTextChannelRepository();
+        directMessageChannelRepository = new FakeDirectMessageChannelRepository();
         projectMemberService = new ProjectMemberService(projectMemberRepository, memberRepository, projectRepository,
                 new ProjectService(projectRepository, textChannelRepository, memberRepository, projectMemberRepository,
-                        new InvitationLinkGenerateService(new Base62Encoder())));
+                        directMessageChannelRepository, new InvitationLinkGenerateService(new Base62Encoder())),
+                new DirectMessageChannelService(directMessageChannelRepository));
         member = Member.of("memberName", "test@gmail.com", "https://test", Oauth2.of(AuthProvider.KAKAO, "account"));
         project = Project.of("memberName", "description", true,
                 "http://test.com", false, member);
@@ -61,7 +66,7 @@ class ProjectMemberServiceTest {
         ProjectMemberCreateRequest request = new ProjectMemberCreateRequest(project.getId(), member.getId());
 
         // when
-        ProjectMemberResponse response = projectMemberService.createIfNone(request);
+        ProjectMemberResponse response = projectMemberService.create(request);
 
         // then
         assertThat(response.memberName()).isEqualTo(member.getName());

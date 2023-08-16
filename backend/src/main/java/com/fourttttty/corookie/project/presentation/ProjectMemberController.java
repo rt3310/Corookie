@@ -5,7 +5,6 @@ import com.fourttttty.corookie.project.application.service.ProjectMemberService;
 import com.fourttttty.corookie.project.dto.request.ProjectMemberCreateRequest;
 import com.fourttttty.corookie.project.dto.response.ProjectMemberResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +19,7 @@ public class ProjectMemberController {
 
     @PostMapping
     public ResponseEntity<ProjectMemberResponse> projectMemberCreate(@RequestBody @Validated ProjectMemberCreateRequest request) {
-        return ResponseEntity.ok(projectMemberService.createIfNone(request));
+        return ResponseEntity.ok(projectMemberService.create(request));
     }
 
     @DeleteMapping("/{memberId}")

@@ -34,9 +34,7 @@ public class FakeMemberRepository implements MemberRepository {
 
     private void setIdInEntity(Member member) {
         try {
-            Class<Member> memberClass = Member.class;
-            Field id;
-            id = memberClass.getDeclaredField("id");
+            Field id = Member.class.getDeclaredField("id");
             id.setAccessible(true);
             id.set(member, autoIncrementId);
         } catch (NoSuchFieldException | IllegalAccessException e) {

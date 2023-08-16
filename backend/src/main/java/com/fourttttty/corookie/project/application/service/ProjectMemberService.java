@@ -1,10 +1,9 @@
 package com.fourttttty.corookie.project.application.service;
 
+import com.fourttttty.corookie.directmessagechannel.application.service.DirectMessageChannelService;
 import com.fourttttty.corookie.member.application.repository.MemberRepository;
-import com.fourttttty.corookie.member.domain.Member;
 import com.fourttttty.corookie.project.application.repository.ProjectMemberRepository;
 import com.fourttttty.corookie.project.application.repository.ProjectRepository;
-import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.project.domain.ProjectMember;
 import com.fourttttty.corookie.project.domain.ProjectMemberId;
 import com.fourttttty.corookie.project.dto.request.ProjectMemberCreateRequest;
@@ -25,16 +24,23 @@ public class ProjectMemberService {
     private final MemberRepository memberRepository;
     private final ProjectRepository projectRepository;
     private final ProjectService projectService;
+    private final DirectMessageChannelService directMessageChannelService;
 
     @Transactional
-    public ProjectMemberResponse createIfNone(ProjectMemberCreateRequest request) {
-        Project project = projectRepository.findById(request.projectId()).orElseThrow(EntityNotFoundException::new);
-        Member member = memberRepository.findById(request.memberId()).orElseThrow(EntityNotFoundException::new);
+    public ProjectMemberResponse create(ProjectMemberCreateRequest request) {
+        ProjectMember projectMember = projectMemberRepository.save(ProjectMember.of(
+                projectRepository.findById(request.projectId()).orElseThrow(EntityNotFoundException::new),
+                memberRepository.findById(request.memberId()).orElseThrow(EntityNotFoundException::new)));
 
-        ProjectMember projectMember = projectMemberRepository.findById(new ProjectMemberId(project, member))
-                .orElse(projectMemberRepository.save(ProjectMember.of(project, member)));
-
+        generateDirectMessageChannel(projectMemberRepository.findByProjectId(request.projectId()), projectMember);
         return ProjectMemberResponse.from(projectMember);
+    }
+
+    private void generateDirectMessageChannel(List<ProjectMember> existingProjectMembers, ProjectMember projectMember) {
+        existingProjectMembers.forEach(pm -> directMessageChannelService.save(
+                pm.getId().getMember(),
+                projectMember.getId().getMember(),
+                projectMember.getId().getProject()));
     }
 
     @Transactional

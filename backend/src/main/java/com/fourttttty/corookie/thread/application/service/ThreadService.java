@@ -29,8 +29,7 @@ public class ThreadService {
         Thread thread = Thread.of(request.content(), true, 0,
                 textChannelRepository.findById(request.textChannelId()).orElseThrow(EntityNotFoundException::new),
                 memberService.findEntityById(request.writerId()));
-        threadRepository.save(thread);
-        return ThreadDetailResponse.from(thread);
+        return ThreadDetailResponse.from(threadRepository.save(thread));
     }
 
     public Thread findEntityById(Long threadId) {
@@ -38,21 +37,19 @@ public class ThreadService {
     }
 
     public ThreadDetailResponse findById(Long threadId) {
-        Thread thread = threadRepository.findById(threadId).orElseThrow(EntityNotFoundException::new);
-        return ThreadDetailResponse.from(thread);
+        return ThreadDetailResponse.from(threadRepository.findById(threadId)
+                .orElseThrow(EntityNotFoundException::new));
     }
 
     public List<ThreadDetailResponse> findByTextChannelIdLatest(Long TextChannelId, Pageable pageable) {
-        return threadRepository.findByTextChannelIdLatest(TextChannelId, pageable)
-                .stream()
+        return threadRepository.findByTextChannelIdLatest(TextChannelId, pageable).stream()
                 .map(ThreadDetailResponse::from)
                 .toList();
     }
 
     @Transactional
     public void delete(Long threadId) {
-        Thread thread = threadRepository.findById(threadId).orElseThrow(EntityNotFoundException::new);
-        thread.delete();
+        threadRepository.findById(threadId).orElseThrow(EntityNotFoundException::new).delete();
     }
 
     @Transactional
