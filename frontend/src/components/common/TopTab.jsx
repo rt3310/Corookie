@@ -12,7 +12,7 @@ const TopTab = () => {
     const { closeIssueDetail } = hooks.issueDetailState()
     const { closeDmComment } = hooks.dmcommentState()
     const { setThreadId, setCommentCount } = hooks.selectedThreadState()
-    const { imageUrl } = hooks.meState()
+    const { memberImageUrl } = hooks.meState()
     const navigate = useNavigate()
 
     const toggleProfile = () => {
@@ -33,7 +33,10 @@ const TopTab = () => {
         <S.Wrap style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <S.Title onClick={() => navigate(utils.URL.HOME.MAIN)}>CoRookie</S.Title>
             <S.Profile onClick={() => toggleProfile()}>
-                <img src={imageUrl ? imageUrl : require('images/profile.png').default} alt="스레드 이미지" />
+                <img
+                    src={memberImageUrl ? memberImageUrl : require('images/profile.png').default}
+                    alt="스레드 이미지"
+                />
             </S.Profile>
         </S.Wrap>
     )

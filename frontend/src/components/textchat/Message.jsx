@@ -22,7 +22,13 @@ const Message = ({ isCode, text, language, thread }) => {
             </S.Wrap>
         )
     } else {
-        return <div>{thread.content}</div>
+        return (
+            <div>
+                {thread.content.split('\n').map(line => (
+                    <p>{line}</p>
+                ))}
+            </div>
+        )
     }
 }
 

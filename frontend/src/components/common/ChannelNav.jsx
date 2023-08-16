@@ -15,8 +15,10 @@ const ChannelNav = () => {
     const { projectId } = useParams()
     const navigate = useNavigate()
     const { project } = hooks.projectState()
+    const { memberId } = hooks.meState()
     const { projectMembers, setProjectMembers } = hooks.projectMembersState()
-    const { textChannels, setTextChannels } = hooks.textChannelsState()
+    const { directChannels, setDirectChannels } = hooks.directChannelsState()
+    const { textChannels } = hooks.textChannelsState()
     const { videoChannels, setVideoChannels } = hooks.videoChannelsState()
     const [openText, setOpenText] = useState(true)
     const [openDm, setOpenDm] = useState(true)
@@ -139,24 +141,30 @@ const ChannelNav = () => {
                     <S.ChannelHead onClick={() => setOpenDm(!openDm)}>
                         Direct Message &nbsp; <IoIosArrowUp />
                     </S.ChannelHead>
-                    {projectMembers &&
-                        projectMembers.map(member => (
+                    {directChannels &&
+                        directChannels.map(directChannel => (
                             <S.DmMember
-                                key={member.memberId}
+                                key={directChannel.id}
                                 onClick={() =>
-                                    navigate('/project/' + project.id + '/channel/direct/' + member.memberId)
+                                    navigate('/project/' + project.id + '/channel/direct/' + directChannel.id)
                                 }>
                                 <S.DmProfileImage>
                                     <img
                                         src={
-                                            member.memberImageUrl
-                                                ? member.memberImageUrl
+                                            directChannel.member1Id === memberId
+                                                ? directChannel.member2ImageUrl
+                                                    ? directChannel.member2ImageUrl
+                                                    : require('images/profile.png').default
+                                                : directChannel.member1ImageUrl
+                                                ? directChannel.member1ImageUrl
                                                 : require('images/profile.png').default
                                         }
                                         alt="프로필"
                                     />
                                 </S.DmProfileImage>
-                                {member.memberName}
+                                {directChannel.member1Id === memberId
+                                    ? directChannel.member2Name
+                                    : directChannel.member1Name}
                             </S.DmMember>
                         ))}
                 </S.DmList>
