@@ -18,7 +18,7 @@ const ChannelNav = () => {
     const { memberId } = hooks.meState()
     const { projectMembers, setProjectMembers } = hooks.projectMembersState()
     const { directChannels, setDirectChannels } = hooks.directChannelsState()
-    const { textChannels } = hooks.textChannelsState()
+    const { textChannels, setTextChannels } = hooks.textChannelsState()
     const { videoChannels, setVideoChannels } = hooks.videoChannelsState()
     const [openText, setOpenText] = useState(true)
     const [openDm, setOpenDm] = useState(true)

@@ -20,10 +20,7 @@ export const directMessagesState = create(set => ({
 }))
 
 export const videoChannelsState = create(set => ({
-    videoChannels: [
-        // { name: '회의', id: '1' },
-        // { name: '자유', id: '2' },
-    ],
+    videoChannels: [],
     setVideoChannels: data => set(state => ({ videoChannels: data })),
 }))
 
