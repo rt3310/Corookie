@@ -13,6 +13,7 @@ import com.fourttttty.corookie.videoanalysis.dto.AnalysisResponse;
 import com.fourttttty.corookie.videochannel.application.repository.VideoChannelRepository;
 import jakarta.persistence.EntityNotFoundException;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,20 +45,21 @@ public class AnalysisService {
     @Value("${web-client.vito-api.secret-access-key}")
     public String secretAccessKey;
 
+    @Value("${ai-service.domain}")
+    private String aiDomain;
+
     @Transactional
     public AnalysisResponse createAnalysis(MultipartFile file, Long videoChannelId)
-        throws IOException {
-        String s3URL, sttText, summarizeText;
+        throws Exception {
+        String s3URL, sttText, summarizedText;
 
         s3URL = uploadAudio(file);
         sttText = getSttText(getSttId(file));
-        summarizeText = summarizeText(sttText);
-
-        System.out.println(sttText);
+        summarizedText = summarizeText(sttText);
 
         Analysis analysis = analysisRepository.save(Analysis.of(s3URL,
             sttText,
-            summarizeText,
+            summarizedText,
             true,
             videoChannelRepository.findById(videoChannelId)
                 .orElseThrow(EntityNotFoundException::new)
@@ -115,9 +117,16 @@ public class AnalysisService {
         return jsonParsing(response, "access_token");
     }
 
-    public String summarizeText(String sttText) {
+    public String summarizeText(String sttText) throws JsonProcessingException {
+        String reponse = webClient.post()
+            .uri(aiDomain+"/summarizations/")
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(BodyInserters.fromValue(Analysis.convertFastRequest(sttText)))
+            .retrieve()
+            .bodyToMono(String.class)
+            .block();
 
-        return "";
+        return jsonParsing(reponse,"text");
     }
 
     public String jsonParsing(String response, String keyValue) throws JsonProcessingException {
@@ -127,7 +136,7 @@ public class AnalysisService {
         return jsonResponse.get(keyValue).asText();
     }
 
-    public String getSttText(String transcribeId) throws IOException {
+    public String getSttText(String transcribeId) throws Exception {
         SttToken sttToken;
         StringBuilder sb = new StringBuilder();
 
@@ -142,26 +151,38 @@ public class AnalysisService {
             String response = webClient.get()
                 .uri("/transcribe/"+transcribeId)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + sttToken.getToken())
-                .exchangeToMono(clientResponse -> clientResponse.bodyToMono(String.class))
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .acceptCharset(StandardCharsets.UTF_8)
+                .retrieve()
+                .bodyToMono(String.class)
                 .block();
 
+            System.out.println(response);
             String responseStatus = jsonParsing(response, "status");
 
             if(responseStatus.equals("completed")){
                 ObjectMapper objectMapper = new ObjectMapper();
+                try{
+                    String jsonResponse = URLDecoder.decode(response, "UTF-8");
+                    System.out.println(jsonResponse);
+                    JsonNode jsonNodes = objectMapper.readTree(jsonResponse);
+                    JsonNode utterances = jsonNodes.at("/results/utterances");
 
-                JsonNode jsonResponse = objectMapper.readTree(response.getBytes(StandardCharsets.UTF_8));
-                JsonNode utterancesArray = jsonResponse.at("/results/utterances");
-
-                for (JsonNode utterance : utterancesArray
-                ) {
-                    sb.append(utterance.get("msg").asText()+" ");
+                    for (JsonNode utterance : utterances
+                    ) {
+                        JsonNode msgNode = utterance.get("msg");
+                        System.out.println(msgNode.toString());
+                        if(msgNode != null && !msgNode.isNull()){
+                            sb.append(msgNode.asText()+" ");
+                        }
+                    }
+                }catch (Exception e){
+                    throw new Exception("Parsing Error");
                 }
-
                 break;
 
             }else if(responseStatus.equals("failed")){
-                return "STT failed";
+                throw new Exception("STT failed");
             }
 
             try{
@@ -170,7 +191,6 @@ public class AnalysisService {
                 e.printStackTrace();
             }
         }
-
         return sb.toString();
     }
 }

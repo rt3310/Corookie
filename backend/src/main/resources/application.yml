@@ -68,3 +68,6 @@ web-client:
   vito-api:
     access-key : ${VITO_ACCESS_KEY}
     secret-access-key : ${VITO_SECRET_KEY}
+
+ai-service:
+  domain : ${AI_DOMAIN}

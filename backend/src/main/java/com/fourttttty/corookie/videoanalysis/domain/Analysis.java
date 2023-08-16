@@ -94,4 +94,10 @@ public class Analysis extends BaseTime {
 
         return bodyBuilder;
     }
+
+    public static String convertFastRequest(String sttText){
+        return "{ \"name\": \"string\", \"text\": \""+
+            sttText+
+            "\" }";
+    }
 }
