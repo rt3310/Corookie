@@ -31,6 +31,6 @@ public class DirectMessageChannelRepositoryImpl implements DirectMessageChannelR
 
     @Override
     public List<DirectMessageChannel> findByMemberId(Long memberId, Long projectId) {
-        return directMessageChannelJpaRepository.findByProjectIdAndMember1IdOrMember2Id(memberId, memberId, projectId);
+        return directMessageChannelJpaRepository.findByProjectIdAndMemberId(memberId, projectId);
     }
 }

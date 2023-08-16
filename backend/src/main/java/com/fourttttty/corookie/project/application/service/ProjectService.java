@@ -14,6 +14,7 @@ import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.project.domain.ProjectMember;
 import com.fourttttty.corookie.project.domain.ProjectMemberId;
 import com.fourttttty.corookie.project.dto.request.ProjectCreateRequest;
+import com.fourttttty.corookie.project.dto.request.ProjectMemberCreateRequest;
 import com.fourttttty.corookie.project.dto.request.ProjectUpdateRequest;
 import com.fourttttty.corookie.project.dto.response.ProjectDetailResponse;
 import com.fourttttty.corookie.project.dto.response.ProjectListResponse;
@@ -35,6 +36,7 @@ public class ProjectService {
     private final ProjectMemberRepository projectMemberRepository;
     private final DirectMessageChannelRepository directMessageChannelRepository;
     private final InvitationLinkGenerateService invitationLinkGenerateService;
+    private final ProjectMemberService projectMemberService;
 
     public List<ProjectListResponse> findByManagerId(Long managerId) {
         return projectRepository.findByManagerId(managerId).stream()
@@ -89,9 +91,8 @@ public class ProjectService {
     public ProjectDetailResponse findByInvitationLink(String invitationLink, Long memberId) {
         Project project = findEntityById(invitationLinkGenerateService.decodingInvitationLink(invitationLink));
         validateInvitationStatus(project);
-        Member member = memberRepository.findById(memberId).orElseThrow(EntityNotFoundException::new);
-        projectMemberRepository.findById(new ProjectMemberId(project, member))
-                .orElseGet(() -> projectMemberRepository.save(ProjectMember.of(project, member)));
+
+        projectMemberService.create(new ProjectMemberCreateRequest(project.getId(), memberId));
         return ProjectDetailResponse.from(project, project.isManager(memberId));
     }
 
