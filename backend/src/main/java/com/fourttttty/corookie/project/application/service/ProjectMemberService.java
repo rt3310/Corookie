@@ -1,9 +1,11 @@
 package com.fourttttty.corookie.project.application.service;
 
 import com.fourttttty.corookie.directmessagechannel.application.service.DirectMessageChannelService;
+import com.fourttttty.corookie.global.exception.ProjectNotFoundException;
 import com.fourttttty.corookie.member.application.repository.MemberRepository;
 import com.fourttttty.corookie.project.application.repository.ProjectMemberRepository;
 import com.fourttttty.corookie.project.application.repository.ProjectRepository;
+import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.project.domain.ProjectMember;
 import com.fourttttty.corookie.project.domain.ProjectMemberId;
 import com.fourttttty.corookie.project.dto.request.ProjectMemberCreateRequest;
@@ -23,7 +25,6 @@ public class ProjectMemberService {
     private final ProjectMemberRepository projectMemberRepository;
     private final MemberRepository memberRepository;
     private final ProjectRepository projectRepository;
-    private final ProjectService projectService;
     private final DirectMessageChannelService directMessageChannelService;
 
     @Transactional
@@ -54,7 +55,8 @@ public class ProjectMemberService {
 
     private void deleteIfNotExistsMember(Long projectId) {
         if (notExistsProjectMember(projectId)) {
-            projectService.deleteById(projectId);
+            Project project = projectRepository.findById(projectId).orElseThrow(ProjectNotFoundException::new);
+            project.delete();
         }
     }
 

@@ -10,6 +10,6 @@ import java.util.Optional;
 public interface DirectMessageChannelJpaRepository extends JpaRepository<DirectMessageChannel, Long> {
     Optional<DirectMessageChannel> findByProjectIdAndMember1IdAndMember2Id(Long member1Id, Long member2Id, Long projectId);
 
-    @Query("select dmc from DirectMessageChannel dmc where dmc.project.id = :projectId and (dmc.member1.id = :member1Id or dmc.member2.id = :member2Id) ")
-    List<DirectMessageChannel> findByProjectIdAndMember1IdOrMember2Id(Long member1Id, Long member2Id, Long projectId);
+    @Query("select dmc from DirectMessageChannel dmc where dmc.project.id = :projectId and (dmc.member1.id = :memberId or dmc.member2.id = :memberId) ")
+    List<DirectMessageChannel> findByProjectIdAndMemberId(Long memberId, Long projectId);
 }

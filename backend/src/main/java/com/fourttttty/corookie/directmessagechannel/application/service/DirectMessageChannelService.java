@@ -21,7 +21,8 @@ public class DirectMessageChannelService {
 
     @Transactional
     public DirectMessageChannelResponse save(Member member1, Member member2, Project project) {
-        return DirectMessageChannelResponse.of(directMessageChannelRepository.save(DirectMessageChannel.of(true, member1, member2, project)));
+        return DirectMessageChannelResponse.of(directMessageChannelRepository
+                .save(DirectMessageChannel.of(true, member1, member2, project)));
     }
 
     public DirectMessageChannelResponse findById(Long directChannelId) {
@@ -30,7 +31,8 @@ public class DirectMessageChannelService {
     }
 
     public DirectMessageChannelResponse findByMembersId(Long member1Id, Long member2Id, Long projectId) {
-        return DirectMessageChannelResponse.of(directMessageChannelRepository.findByMembersId(member1Id, member2Id, projectId)
+        return DirectMessageChannelResponse.of(directMessageChannelRepository
+                .findByMembersId(member1Id, member2Id, projectId)
                 .orElseThrow(EntityNotFoundException::new));
     }
 
