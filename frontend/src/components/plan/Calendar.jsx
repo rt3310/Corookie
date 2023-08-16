@@ -30,6 +30,23 @@ const Calendar = ({ currentMonth }) => {
         }
     }
 
+    const handleDragStart = e => {
+        setOnDragDate(new Date(e.target.firstChild.value))
+        setPlanStartDate(new Date(e.target.firstChild.value))
+        setPlanEndDate(new Date(e.target.firstChild.value))
+
+        const transparentImg = document.createElement('canvas')
+        transparentImg.width = 0
+        transparentImg.height = 0
+        e.dataTransfer.setDragImage(transparentImg, 0, 0)
+        e.dataTransfer.effectAllowed = 'move'
+    }
+
+    const handleDragOver = e => {
+        e.preventDefault()
+        e.currentTarget.style.cursor = 'pointer'
+    }
+
     useEffect(() => {
         let rows = []
         let days = []
@@ -43,12 +60,12 @@ const Calendar = ({ currentMonth }) => {
                     <S.Day
                         key={day}
                         draggable={true}
-                        onDragStart={e => {
-                            setOnDragDate(new Date(e.target.firstChild.value))
-                            setPlanStartDate(new Date(e.target.firstChild.value))
-                            setPlanEndDate(new Date(e.target.firstChild.value))
-                        }}
+                        onDragStart={handleDragStart}
                         onDragEnter={e => setDate(new Date(e.target.firstChild.value))}
+                        onDragOver={e => {
+                            e.preventDefault()
+                            e.currentTarget.style.cursor = 'pointer'
+                        }}
                         onDragEnd={() => openPlanRegister()}>
                         <input type="hidden" value={day} />
                     </S.Day>,
@@ -76,6 +93,7 @@ const Calendar = ({ currentMonth }) => {
                                                 7),
                                     )}%`,
                                 }}
+                                onDragOver={handleDragOver}
                                 className="same"></S.DayPlan>
                         </S.PlanRow>,
                     )
@@ -96,6 +114,7 @@ const Calendar = ({ currentMonth }) => {
                                                 7),
                                     )}%`,
                                 }}
+                                onDragOver={handleDragOver}
                                 className="same"></S.DayPlan>
                         </S.PlanRow>,
                     )
@@ -217,9 +236,14 @@ const S = {
             background-color: ${({ theme }) => theme.color.main};
         }
 
+        &:active {
+            cursor: pointer;
+        }
+
         &:hover {
             background-color: ${({ theme }) => theme.color.main};
             opacity: 0.6;
+            cursor: pointer;
         }
     `,
 }

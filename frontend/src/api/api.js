@@ -40,6 +40,8 @@ export const apis = {
         instance.post(`/api/v1/projects/${projectId}/text-channels/${textChannelId}/pin`),
     textChannelUnpin: (projectId, textChannelId) =>
         instance.delete(`/api/v1/projects/${projectId}/text-channels/${textChannelId}/unpin`),
+    createTextChannel: (projectId, name) => instance.post(`/api/v1/projects/${projectId}/text-channels`, name),
+    createVideoChannel: (projectId, name) => instance.post(`/api/v1/projects/${projectId}/video-channels`, name),
 
     getThread: (projectId, textChannelId, threadId) =>
         instance.get(`/api/v1/projects/${projectId}/text-channels/${textChannelId}/threads/${threadId}`),
@@ -51,6 +53,13 @@ export const apis = {
     getComments: (projectId, textChannelId, threadId, page, size, sort, direction) =>
         instance.get(
             `/api/v1/projects/${projectId}/text-channels/${textChannelId}/threads/${threadId}/comments?page=${page}&size=${size}&sort=${sort},${direction}`,
+        ),
+
+    getDirectChannels: projectId => instance.get(`/api/v1/projects/${projectId}/directs`),
+    getDirectChannel: (projectId, channelId) => instance.get(`/api/v1/projects/${projectId}/directs/${channelId}`),
+    getDirectMessages: (projectId, directChannelId, page, size, sort, direction) =>
+        instance.get(
+            `/api/v1/projects/${projectId}/directs/${directChannelId}/messages?page=${page}&size=${size}&sort=${sort},${direction}`,
         ),
 
     getIssueList: projectId => instance.get(`/api/v1/projects/${projectId}/issues`),

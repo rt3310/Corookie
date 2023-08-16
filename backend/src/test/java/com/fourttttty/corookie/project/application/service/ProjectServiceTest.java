@@ -1,5 +1,8 @@
 package com.fourttttty.corookie.project.application.service;
 
+import com.fourttttty.corookie.directmessagechannel.application.repository.DirectMessageChannelRepository;
+import com.fourttttty.corookie.directmessagechannel.application.repository.DirectMessageChannelRepositoryImpl;
+import com.fourttttty.corookie.directmessagechannel.application.service.DirectMessageChannelService;
 import com.fourttttty.corookie.global.exception.ProjectNotFoundException;
 import com.fourttttty.corookie.member.application.repository.MemberRepository;
 import com.fourttttty.corookie.member.domain.AuthProvider;
@@ -15,6 +18,7 @@ import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.project.dto.response.ProjectListResponse;
 import com.fourttttty.corookie.project.util.Base62Encoder;
 import com.fourttttty.corookie.textchannel.application.repository.TextChannelRepository;
+import com.fourttttty.corookie.texture.directmessagechannel.application.repository.FakeDirectMessageChannelRepository;
 import com.fourttttty.corookie.texture.member.application.repository.FakeMemberRepository;
 import com.fourttttty.corookie.texture.project.application.repository.FakeProjectMemberRepository;
 import com.fourttttty.corookie.texture.project.application.repository.FakeProjectRepository;
@@ -33,6 +37,7 @@ public class ProjectServiceTest {
     MemberRepository memberRepository;
     TextChannelRepository textChannelRepository;
     ProjectMemberRepository projectMemberRepository;
+    DirectMessageChannelRepository directMessageChannelRepository;
     ProjectService projectService;
     private Member member;
     private Project project;
@@ -43,8 +48,9 @@ public class ProjectServiceTest {
         memberRepository = new FakeMemberRepository();
         textChannelRepository = new FakeTextChannelRepository();
         projectMemberRepository = new FakeProjectMemberRepository(projectRepository, memberRepository);
+        directMessageChannelRepository = new FakeDirectMessageChannelRepository();
         projectService = new ProjectService(projectRepository, textChannelRepository, memberRepository, projectMemberRepository,
-                new InvitationLinkGenerateService(new Base62Encoder()));
+                directMessageChannelRepository, new InvitationLinkGenerateService(new Base62Encoder()));
         member = Member.of("이름", "test@test.com", "https://test", Oauth2.of(AuthProvider.KAKAO, "account"));
         project = Project.of("memberName",
                 "description",
