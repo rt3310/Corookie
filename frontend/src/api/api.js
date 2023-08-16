@@ -40,6 +40,8 @@ export const apis = {
         instance.post(`/api/v1/projects/${projectId}/text-channels/${textChannelId}/pin`),
     textChannelUnpin: (projectId, textChannelId) =>
         instance.delete(`/api/v1/projects/${projectId}/text-channels/${textChannelId}/unpin`),
+    createTextChannel: (projectId, name) => instance.post(`/api/v1/projects/${projectId}/text-channels`, name),
+    createVideoChannel: (projectId, name) => instance.post(`/api/v1/projects/${projectId}/video-channels`, name),
 
     getThread: (projectId, textChannelId, threadId) =>
         instance.get(`/api/v1/projects/${projectId}/text-channels/${textChannelId}/threads/${threadId}`),

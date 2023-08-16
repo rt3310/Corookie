@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useParams } from 'react-router'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
@@ -19,10 +19,14 @@ const ChannelNav = () => {
     const { projectMembers, setProjectMembers } = hooks.projectMembersState()
     const { directChannels, setDirectChannels } = hooks.directChannelsState()
     const { textChannels } = hooks.textChannelsState()
+    const { videoChannels, setVideoChannels } = hooks.videoChannelsState()
     const [openText, setOpenText] = useState(true)
     const [openDm, setOpenDm] = useState(true)
     const [openVideo, setOpenVideo] = useState(true)
     const [pinOn, setPinOn] = useState(true)
+    const [createTextChannel, setCreateTextChannel] = useState(false)
+    const [createVideoChannel, setCreateVideoChannel] = useState(false)
+    const [channelTitle, setChannelTitle] = useState('')
 
     useEffect(() => {
         const initProjectMembers = async () => {
@@ -33,6 +37,78 @@ const ChannelNav = () => {
 
         initProjectMembers()
     }, [])
+
+    let createTextChannelRef = useRef(null)
+    let createVideoChannelRef = useRef(null)
+
+    const clickCreateTextChannel = () => {
+        setCreateTextChannel(true)
+    }
+
+    const clickCreateVideoChannel = () => {
+        setCreateVideoChannel(true)
+    }
+
+    useEffect(() => {
+        const handleOutside = e => {
+            if (createTextChannelRef.current && !createTextChannelRef.current.contains(e.target)) {
+                setChannelTitle('')
+                setCreateTextChannel(false)
+            }
+        }
+        document.addEventListener('mousedown', handleOutside)
+        return () => {
+            document.removeEventListener('mousedown', handleOutside)
+        }
+    }, [createTextChannelRef])
+
+    useEffect(() => {
+        const handleOutside = e => {
+            if (createVideoChannelRef.current && !createVideoChannelRef.current.contains(e.target)) {
+                setChannelTitle('')
+                setCreateVideoChannel(false)
+            }
+        }
+        document.addEventListener('mousedown', handleOutside)
+        return () => {
+            document.removeEventListener('mousedown', handleOutside)
+        }
+    }, [createVideoChannelRef])
+
+    const handleTitleChange = e => setChannelTitle(e.target.value)
+
+    const textTitleKeyDown = async e => {
+        if (e.key === 'Enter') {
+            api.apis.createTextChannel(projectId, { name: channelTitle }).then(response => {
+                console.log(response.data)
+                setTextChannels([...textChannels, response.data])
+            })
+            setCreateTextChannel(false)
+            setChannelTitle('')
+        }
+    }
+
+    const videoTitleKeyDown = async e => {
+        if (e.key === 'Enter') {
+            // api.apis.createVideoChannel(projectId, { name: channelTitle }).then(response => {
+            //     console.log(response.data)
+            //     setVideoChannels([...textChannels, response.data])
+            // })
+            setCreateVideoChannel(false)
+            setChannelTitle('')
+        }
+    }
+
+    useEffect(() => {
+        if (createTextChannel) {
+            createTextChannelRef.current.focus()
+        }
+    }, [createTextChannel])
+    useEffect(() => {
+        if (createVideoChannel) {
+            createVideoChannelRef.current.focus()
+        }
+    }, [createVideoChannel])
 
     return (
         <S.Wrap>
@@ -49,7 +125,15 @@ const ChannelNav = () => {
                             {textChannel.isPinned && <AiFillPushpin />}
                         </S.Channel>
                     ))}
-                    <S.AddChannelButton>
+                    {createTextChannel && (
+                        <S.AddChannel
+                            ref={createTextChannelRef}
+                            value={channelTitle}
+                            onChange={handleTitleChange}
+                            onKeyDown={textTitleKeyDown}
+                            placeholder="채널 이름을 입력하세요"></S.AddChannel>
+                    )}
+                    <S.AddChannelButton onClick={clickCreateTextChannel}>
                         <BsPlus /> 채널 추가
                     </S.AddChannelButton>
                 </S.TextChannelList>
@@ -90,7 +174,15 @@ const ChannelNav = () => {
                     </S.ChannelHead>
                     <S.Channel onClick={() => navigate(utils.URL.CHAT.VIDEO)}>1. 회의</S.Channel>
                     <S.Channel>2. 자유</S.Channel>
-                    <S.AddChannelButton>
+                    {createVideoChannel && (
+                        <S.AddChannel
+                            ref={createVideoChannelRef}
+                            value={channelTitle}
+                            onChange={handleTitleChange}
+                            onKeyDown={videoTitleKeyDown}
+                            placeholder="채널 이름을 입력하세요"></S.AddChannel>
+                    )}
+                    <S.AddChannelButton onClick={clickCreateVideoChannel}>
                         <BsPlus /> 채널 추가
                     </S.AddChannelButton>
                 </S.VideoChannelList>
@@ -210,6 +302,14 @@ const S = {
         .opened & {
             display: flex;
         }
+    `,
+    AddChannel: styled.input`
+        display: flex;
+        border: none;
+        outline: none;
+        font-size: ${({ theme }) => theme.fontsize.sub1};
+        padding: 10px 20px;
+        cursor: pointer;
     `,
     AddChannelButton: styled.div`
         display: flex;

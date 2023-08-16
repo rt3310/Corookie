@@ -19,6 +19,11 @@ export const directMessagesState = create(set => ({
     initPage: () => set(state => ({ ...state, page: 0 })),
 }))
 
+export const videoChannelsState = create(set => ({
+    videoChannels: ['회의', '자유'],
+    setVideoChannels: data => set(state => ({ videoChannels: data })),
+}))
+
 export const threadsState = create(set => ({
     page: 0,
     size: 10,
