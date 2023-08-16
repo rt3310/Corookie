@@ -29,11 +29,11 @@ const Landing = () => {
                         </S.Section4>
                     </S.Section4>
                 </S.Box>
-                <S.Box>
+                {/* <S.Box>
                     <S.Section5>
                         <components.LandingFooter />
                     </S.Section5>
-                </S.Box>
+                </S.Box> */}
             </components.FullPageScroll>
         </S.Wrap>
     )
@@ -67,7 +67,8 @@ const S = {
     Section2: styled.div`
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: left;
+        padding: 24px 40px;
         height: 100vh;
         width: 100%;
         background-color: ${({ theme }) => theme.color.white};
@@ -75,7 +76,8 @@ const S = {
     Section3: styled.div`
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: right;
+        padding: 24px 40px;
         height: 100vh;
         width: 100%;
         background-color: ${({ theme }) => theme.color.white};

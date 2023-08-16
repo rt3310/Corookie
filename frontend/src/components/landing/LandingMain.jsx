@@ -45,6 +45,23 @@ const LandingMain = () => {
         initProjects()
     }, [])
 
+    useEffect(() => {
+        if (createFormOpened) {
+            const handleOutsideClick = event => {
+                const formNode = document.querySelector('.project-create-form')
+                if (formNode && !formNode.contains(event.target)) {
+                    setCreateFormOpened(false)
+                }
+            }
+
+            document.addEventListener('mousedown', handleOutsideClick)
+
+            return () => {
+                document.removeEventListener('mousedown', handleOutsideClick)
+            }
+        }
+    }, [createFormOpened])
+
     return (
         <S.Wrap>
             <S.Logo>
@@ -86,7 +103,7 @@ const LandingMain = () => {
                 </S.ProjectCarousel>
             )}
             {createFormOpened && (
-                <S.ProjectCreateForm>
+                <S.ProjectCreateForm className="project-create-form">
                     <S.ProjectNameBox>
                         <S.ProjectNameHeader></S.ProjectNameHeader>
                         <S.ProjectNameInput
@@ -104,7 +121,7 @@ const LandingMain = () => {
                         />
                     </S.ProjectDescriptionBox>
                     <S.CreateAccess>
-                        <S.CreateCancelButton onClick={() => setCreateFormOpened(false)}>취소</S.CreateCancelButton>
+                        {/* <S.CreateCancelButton onClick={() => setCreateFormOpened(false)}>취소</S.CreateCancelButton> */}
                         <S.CreateAcceptButton onClick={() => createProject()}>생성</S.CreateAcceptButton>
                     </S.CreateAccess>
                 </S.ProjectCreateForm>
@@ -118,6 +135,9 @@ const LandingMain = () => {
                     Logout
                 </S.Logout>
             )}
+            <S.Footer>
+                © 2023 CoRookie. Portions of content used under license from SSAFY. All Rights Reserved.
+            </S.Footer>
         </S.Wrap>
     )
 }
@@ -199,8 +219,8 @@ const S = {
         }
     `,
     ProjectCreateForm: styled.div`
-        width: 500px;
-        height: 500px;
+        width: 400px;
+        height: 400px;
         /* margin: 40px 24px; */
         padding: 16px;
         border-radius: 8px;
@@ -211,6 +231,8 @@ const S = {
         display: flex;
         flex-direction: column;
         align-items: center;
+        .project-create-form {
+        }
         .carousel {
             max-width: 1000px;
             /* width: 600px; */
@@ -354,6 +376,18 @@ const S = {
         font-size: 13px;
         text-align: left;
         line-height: 1.5;
+    `,
+    Footer: styled.div`
+        position: fixed;
+        display: flex;
+        align-items: center;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 40px;
+        padding: 8px 40px;
+        font-size: 11px;
+        background-color: ${({ theme }) => theme.color.background};
     `,
 }
 
