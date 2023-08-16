@@ -14,6 +14,7 @@ const Layout = () => {
     const { project, setProject } = hooks.projectState()
     const { memberId, setMe } = hooks.meState()
     const { textChannels, setTextChannels } = hooks.textChannelsState()
+    const { videoChannels, setVideoChannels } = hooks.videoChannelsState()
     const { directChannels, setDirectChannels } = hooks.directChannelsState()
 
     useEffect(() => {
@@ -21,9 +22,11 @@ const Layout = () => {
             try {
                 const projectRes = await api.apis.getProject(projectId)
                 const textChannelsRes = await api.apis.getTextChannels(projectRes.data.id)
+                const videoChannelsRes = await api.apis.getVideoChannels(projectRes.data.id)
                 const directChannelsRes = await api.apis.getDirectChannels(projectRes.data.id)
                 setProject(projectRes.data)
                 setTextChannels(textChannelsRes.data)
+                setVideoChannels(videoChannelsRes.data)
                 console.log(directChannelsRes.data)
                 setDirectChannels(directChannelsRes.data)
             } catch (error) {
