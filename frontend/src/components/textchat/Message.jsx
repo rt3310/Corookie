@@ -7,6 +7,14 @@ import '../../style/prism-material-light.css'
 
 const Message = ({ isCode, text, language, thread }) => {
     if (isCode) {
+        if (!language || !Prism.languages[language]) {
+            return (
+                <S.Wrap isCode={isCode}>
+                    <S.Code>{text}</S.Code>
+                </S.Wrap>
+            )
+        }
+
         const html = Prism.highlight(text, Prism.languages[language], language)
         return (
             <S.Wrap isCode={isCode}>
@@ -14,7 +22,13 @@ const Message = ({ isCode, text, language, thread }) => {
             </S.Wrap>
         )
     } else {
-        return <div>{thread.content}</div>
+        return (
+            <div>
+                {thread.content.split('\n').map(line => (
+                    <p>{line}</p>
+                ))}
+            </div>
+        )
     }
 }
 

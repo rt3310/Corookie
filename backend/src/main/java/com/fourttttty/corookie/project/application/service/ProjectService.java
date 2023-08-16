@@ -1,5 +1,9 @@
 package com.fourttttty.corookie.project.application.service;
 
+import com.fourttttty.corookie.directmessagechannel.application.repository.DirectMessageChannelRepository;
+import com.fourttttty.corookie.directmessagechannel.application.service.DirectMessageChannelService;
+import com.fourttttty.corookie.directmessagechannel.domain.DirectMessageChannel;
+import com.fourttttty.corookie.directmessagechannel.dto.response.DirectMessageChannelResponse;
 import com.fourttttty.corookie.global.exception.InvalidProjectChangeRequestException;
 import com.fourttttty.corookie.global.exception.ProjectNotOpenForInvitationException;
 import com.fourttttty.corookie.member.application.repository.MemberRepository;
@@ -29,6 +33,7 @@ public class ProjectService {
     private final TextChannelRepository textChannelRepository;
     private final MemberRepository memberRepository;
     private final ProjectMemberRepository projectMemberRepository;
+    private final DirectMessageChannelRepository directMessageChannelRepository;
     private final InvitationLinkGenerateService invitationLinkGenerateService;
 
     public List<ProjectListResponse> findByManagerId(Long managerId) {
@@ -65,6 +70,7 @@ public class ProjectService {
 
     private void registerMemberForProject(Member member, Project project) {
         projectMemberRepository.save(ProjectMember.of(project, member));
+        directMessageChannelRepository.save(DirectMessageChannel.of(true, member, member, project));
     }
 
     @Transactional

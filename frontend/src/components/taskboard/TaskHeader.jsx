@@ -59,7 +59,7 @@ const TaskHeader = () => {
 
     useEffect(() => {
         api.apis
-            .filterIssue(project.id, 'memberName', managerValue.managerId)
+            .filterIssue(project.id, 'manager', managerValue.managerId)
             .then(response => {
                 console.log(response)
                 setTasks(response.data)
