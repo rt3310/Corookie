@@ -38,6 +38,7 @@ const DMEditBox = ({ currentChat, setCurrentChat, send }) => {
                 ref={text}
                 onChange={e => setCurrentChat({ ...currentChat, content: e.target.value })}
                 onKeyPress={e => inputChat(e)}
+                value={currentChat.content}
                 rows={1}></S.Edit>
             <S.SendButton onClick={() => send()}>
                 <IoMdSend />

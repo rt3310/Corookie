@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+
 import styled from 'styled-components'
 
 const LandingText = () => {
@@ -7,11 +8,11 @@ const LandingText = () => {
             <S.Title>Text Channel</S.Title>
             <S.SubTitle1>기발한 아이디어를 공유하고 효과적인 논의를 위한 스레드 채팅</S.SubTitle1>
             <S.SubTitle2>
-                스레드를 열어 관련된 내용에 대해 논의할 수 있는 구조적인 채팅은
-                <nav></nav>협업에 특화되어 있습니다.
+                스레드를 열어 관련된 내용에 대해 논의할 수 있는 구조적인 채팅은 협업에 특화되어 있습니다.
             </S.SubTitle2>
             <S.ImageContent>
-                <S.Image src={require('images/chatting.png').default} alt="채팅" />
+                <img src={require('images/landing_text.png').default} alt="채팅1" />
+                <img src={require('images/landing_text.png').default} alt="채팅2" />
             </S.ImageContent>
         </S.Wrap>
     )
@@ -23,7 +24,7 @@ const S = {
     Title: styled.div`
         width: auto;
         color: ${({ theme }) => theme.color.black};
-        margin: 16px;
+        margin: 40px 8px 16px 8px;
         padding: 8px;
         text-align: left;
         font-weight: 700;
@@ -32,29 +33,34 @@ const S = {
     SubTitle1: styled.div`
         width: auto;
         color: ${({ theme }) => theme.color.main};
-        margin: 8px;
-        padding: 24px 8px;
-        text-align: center;
+        margin: 0 8px;
+        padding: 0 8px;
+        text-align: left;
         font-size: ${({ theme }) => theme.fontsize.title3};
-        line-height: 2.5;
+        line-height: 1.5;
     `,
     SubTitle2: styled.div`
         width: auto;
         color: ${({ theme }) => theme.color.black};
-        margin: 8px;
-        padding: 24px 8px;
-        text-align: center;
+        margin: 0 8px 20px 8px;
+        padding: 0 8px;
+        text-align: left;
         font-size: ${({ theme }) => theme.fontsize.sub1};
-        line-height: 2.5;
+        line-height: 1.5;
     `,
     ImageContent: styled.div`
-        width: 300px;
-        height: 200px;
-    `,
-    Image: styled.img`
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+        display: flex;
+        align-items: center;
+        /* justify-content: center; */
+        width: 700px;
+        height: auto;
+        margin: 8px 0 8px 8px;
+
+        & img {
+            width: 100%;
+            height: 100%;
+            margin: 8px;
+        }
     `,
 }
 
