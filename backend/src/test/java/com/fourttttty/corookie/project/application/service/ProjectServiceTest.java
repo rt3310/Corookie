@@ -50,7 +50,9 @@ public class ProjectServiceTest {
         projectMemberRepository = new FakeProjectMemberRepository(projectRepository, memberRepository);
         directMessageChannelRepository = new FakeDirectMessageChannelRepository();
         projectService = new ProjectService(projectRepository, textChannelRepository, memberRepository, projectMemberRepository,
-                directMessageChannelRepository, new InvitationLinkGenerateService(new Base62Encoder()));
+                directMessageChannelRepository, new InvitationLinkGenerateService(new Base62Encoder()),
+                new ProjectMemberService(projectMemberRepository, memberRepository, projectRepository,
+                        new DirectMessageChannelService(directMessageChannelRepository)));
         member = Member.of("이름", "test@test.com", "https://test", Oauth2.of(AuthProvider.KAKAO, "account"));
         project = Project.of("memberName",
                 "description",

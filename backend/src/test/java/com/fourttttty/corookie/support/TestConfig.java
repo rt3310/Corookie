@@ -1,5 +1,8 @@
 package com.fourttttty.corookie.support;
 
+import com.fourttttty.corookie.directmessagechannel.application.repository.DirectMessageChannelRepository;
+import com.fourttttty.corookie.directmessagechannel.application.repository.DirectMessageChannelRepositoryImpl;
+import com.fourttttty.corookie.directmessagechannel.infrastructure.DirectMessageChannelJpaRepository;
 import com.fourttttty.corookie.issue.application.repository.IssueRepository;
 import com.fourttttty.corookie.issue.application.repository.IssueRepositoryImpl;
 import com.fourttttty.corookie.issue.infrastructure.IssueJpaRepository;
@@ -62,6 +65,13 @@ public class TestConfig {
     TextChannelJpaRepository textChannelJpaRepository;
     @Autowired
     TextChannelPinJpaRepository textChannelPinJpaRepository;
+    @Autowired
+    DirectMessageChannelJpaRepository directMessageChannelJpaRepository;
+
+    @Bean
+    public DirectMessageChannelRepository directMessageChannelRepository() {
+        return new DirectMessageChannelRepositoryImpl(directMessageChannelJpaRepository);
+    }
 
     @Bean
     public MemberRepository memberRepository() {

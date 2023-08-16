@@ -49,8 +49,6 @@ class ProjectMemberServiceTest {
         textChannelRepository = new FakeTextChannelRepository();
         directMessageChannelRepository = new FakeDirectMessageChannelRepository();
         projectMemberService = new ProjectMemberService(projectMemberRepository, memberRepository, projectRepository,
-                new ProjectService(projectRepository, textChannelRepository, memberRepository, projectMemberRepository,
-                        directMessageChannelRepository, new InvitationLinkGenerateService(new Base62Encoder())),
                 new DirectMessageChannelService(directMessageChannelRepository));
         member = Member.of("memberName", "test@gmail.com", "https://test", Oauth2.of(AuthProvider.KAKAO, "account"));
         project = Project.of("memberName", "description", true,
