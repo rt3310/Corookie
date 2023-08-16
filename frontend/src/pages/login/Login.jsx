@@ -27,7 +27,9 @@ const Login = () => {
     return (
         <S.Wrap>
             <S.Container>
-                <S.Logo>CoRookie</S.Logo>
+                <S.Logo>
+                    <img src={require('images/logo.png').default} alt={'로고'} />
+                </S.Logo>
                 {loginButton.map((item, idx) => {
                     return (
                         <S.SocialLogin href={item.url} key={idx} type={item.type}>
