@@ -42,6 +42,9 @@ export const apis = {
         instance.delete(`/api/v1/projects/${projectId}/text-channels/${textChannelId}/unpin`),
     createTextChannel: (projectId, name) => instance.post(`/api/v1/projects/${projectId}/text-channels`, name),
     createVideoChannel: (projectId, name) => instance.post(`/api/v1/projects/${projectId}/video-channels`, name),
+    getVideoChannel: (projectId, videoChannelId) =>
+        instance.get(`/api/v1/projects/${projectId}/video-channels/${videoChannelId}`),
+    getVideoChannels: projectId => instance.get(`/api/v1/projects/${projectId}/video-channels`),
 
     getThread: (projectId, textChannelId, threadId) =>
         instance.get(`/api/v1/projects/${projectId}/text-channels/${textChannelId}/threads/${threadId}`),

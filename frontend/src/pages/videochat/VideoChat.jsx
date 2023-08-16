@@ -1,13 +1,32 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useParams } from 'react-router'
 import styled from 'styled-components'
 
 import * as components from 'components'
 import * as hooks from 'hooks'
+import * as api from 'api'
 
 import { IoExitOutline } from 'react-icons/io5'
+import { useEffect } from 'react'
 
 const VideoChat = () => {
     const { chatboxOpened } = hooks.chatBoxState()
+    const { projectId, channelId } = useParams()
+    const [videoChannel, setVideoChannel] = useState(null)
+
+    useEffect(() => {
+        const initChannel = async () => {
+            const videoChannelRes = await api.apis.getVideoChannel(projectId, channelId)
+            console.log(videoChannelRes.data)
+            setVideoChannel(videoChannelRes.data)
+        }
+        setVideoChannel(null)
+        initChannel()
+    }, [projectId, channelId])
+
+    if (!videoChannel) {
+        return
+    }
 
     return (
         <S.Wrap>
@@ -21,7 +40,7 @@ const VideoChat = () => {
                 <S.ChatBox>
                     <S.ThreadBox>
                         <iframe
-                            src="https://i9a402.p.ssafy.io:8443/#/sessionTest"
+                            src={`http://localhost:4200/#/${videoChannel.sessionId}`}
                             allow="camera;microphone;fullscreen;autoplay"
                             width={1200}
                             height={800}>
