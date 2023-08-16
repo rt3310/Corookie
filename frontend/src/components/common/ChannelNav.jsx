@@ -90,10 +90,6 @@ const ChannelNav = () => {
 
     const videoTitleKeyDown = async e => {
         if (e.key === 'Enter') {
-            // api.apis.createVideoChannel(projectId, { name: channelTitle }).then(response => {
-            //     console.log(response.data)
-            //     setVideoChannels([...textChannels, response.data])
-            // })
             setCreateVideoChannel(false)
             setChannelTitle('')
         }
