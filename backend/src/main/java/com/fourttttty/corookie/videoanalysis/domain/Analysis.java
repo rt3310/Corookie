@@ -13,11 +13,16 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.io.IOException;
+import java.io.InputStream;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.core.io.buffer.DataBufferFactory;
+import org.springframework.core.io.buffer.DefaultDataBufferFactory;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.http.MediaType;
+import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.web.multipart.MultipartFile;
 
 @Entity
@@ -72,12 +77,21 @@ public class Analysis extends BaseTime {
         this.enabled = false;
     }
 
-    public static ByteArrayResource convertFileResource(MultipartFile file) throws IOException {
-        byte[] fileBytes = file.getBytes();
-        return new ByteArrayResource(fileBytes);
-    }
+    public static MultipartBodyBuilder multiPartFileToBodyBuilder(MultipartFile file)
+        throws IOException {
+        String fileName = file.getOriginalFilename();
+        String contentType = file.getContentType();
 
-    public static String getSttConfig(){
-        return new String( "{\"use_diarization\": true, \"diarization\": {\"spk_count\": 2}, \"use_multi_channel\": false, \"use_itn\": false, \"use_disfluency_filter\": false, \"use_profanity_filter\": false, \"use_paragraph_splitter\": true, \"paragraph_splitter\": {\"max\": 50}}");
+        InputStream inputStream = file.getInputStream();
+        DataBufferFactory bufferFactory = new DefaultDataBufferFactory();
+        DataBuffer dataBuffer = bufferFactory.wrap(inputStream.readAllBytes());
+
+        MultipartBodyBuilder bodyBuilder = new MultipartBodyBuilder();
+        bodyBuilder.part("file", dataBuffer)
+            .filename(fileName)
+            .contentType(MediaType.valueOf(contentType));
+        bodyBuilder.part("config", "{}");
+
+        return bodyBuilder;
     }
 }

@@ -2,6 +2,7 @@ package com.fourttttty.corookie.videoanalysis.application.service;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fourttttty.corookie.videoanalysis.application.repository.AnalysisRepository;
@@ -12,16 +13,17 @@ import com.fourttttty.corookie.videoanalysis.dto.AnalysisResponse;
 import com.fourttttty.corookie.videochannel.application.repository.VideoChannelRepository;
 import jakarta.persistence.EntityNotFoundException;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
@@ -48,8 +50,10 @@ public class AnalysisService {
         String s3URL, sttText, summarizeText;
 
         s3URL = uploadAudio(file);
-        sttText = getSttText(file);
+        sttText = getSttText(getSttId(file));
         summarizeText = summarizeText(sttText);
+
+        System.out.println(sttText);
 
         Analysis analysis = analysisRepository.save(Analysis.of(s3URL,
             sttText,
@@ -75,52 +79,40 @@ public class AnalysisService {
     }
 
 
-    public String getSttText(MultipartFile file) throws IOException {
+    public String getSttId(MultipartFile file) throws IOException {
         String transcribeId;
         SttToken sttToken;
-        try{
+        try {
             sttToken = (sttTokenRepository.findById(1L)
                 .orElseThrow(EntityNotFoundException::new));
-        }catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             sttToken = sttTokenRepository.save(SttToken.of(getToken()));
         }
 
-        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-        body.add("file",Analysis.convertFileResource(file));
-        body.add("config",Analysis.getSttConfig());
+        MultipartBodyBuilder bodyBuilder = Analysis.multiPartFileToBodyBuilder(file);
 
-//        Mono<String> initResponse = webClient.post()
-//            .uri("transcribe")
-//            .contentType(MediaType.MULTIPART_FORM_DATA)
-//            .body(BodyInserters.fromMultipartData(body))
-//            .retrieve()
-//            .bodyToMono(String.class);
-        return "file";
+        String initResponse = webClient.post()
+            .uri("transcribe")
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + sttToken.getToken())
+            .contentType(MediaType.MULTIPART_FORM_DATA)
+            .body(BodyInserters.fromMultipartData(bodyBuilder.build()))
+            .exchangeToMono(clientResponse -> clientResponse.bodyToMono(String.class))
+            .block();
+
+        return jsonParsing(initResponse,"id");
     }
 
-    public String getToken() {
-        Mono<String> response = webClient.post()
+    public String getToken() throws JsonProcessingException {
+        String response = webClient.post()
             .uri("authenticate")
             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
             .bodyValue(
                 new String("client_id=" + accessKey + "&client_secret=" + secretAccessKey))
             .retrieve()
-            .bodyToMono(String.class);
+            .bodyToMono(String.class)
+            .block();
 
-        String token = response.flatMap(
-            responseBody -> {
-                try {
-                    ObjectMapper objectMapper = new ObjectMapper();
-                    JsonNode jsonNode = objectMapper.readTree(responseBody);
-                    String accessToken = jsonNode.get("access_token").asText();
-
-                    return Mono.just(accessToken);
-                } catch (Exception e) {
-                    return Mono.error(e);
-                }
-        }).block();
-
-        return token;
+        return jsonParsing(response, "access_token");
     }
 
     public String summarizeText(String sttText) {
@@ -128,7 +120,57 @@ public class AnalysisService {
         return "";
     }
 
-    public SttToken modifyToken(SttToken sttToken){
-        return SttToken.modifyToken(sttToken, getToken());
+    public String jsonParsing(String response, String keyValue) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonResponse = objectMapper.readTree(response);
+
+        return jsonResponse.get(keyValue).asText();
+    }
+
+    public String getSttText(String transcribeId) throws IOException {
+        SttToken sttToken;
+        StringBuilder sb = new StringBuilder();
+
+        while(true){
+            try {
+                sttToken = (sttTokenRepository.findById(1L)
+                    .orElseThrow(EntityNotFoundException::new));
+            } catch (EntityNotFoundException e) {
+                sttToken = sttTokenRepository.save(SttToken.of(getToken()));
+            }
+
+            String response = webClient.get()
+                .uri("/transcribe/"+transcribeId)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + sttToken.getToken())
+                .exchangeToMono(clientResponse -> clientResponse.bodyToMono(String.class))
+                .block();
+
+            String responseStatus = jsonParsing(response, "status");
+
+            if(responseStatus.equals("completed")){
+                ObjectMapper objectMapper = new ObjectMapper();
+
+                JsonNode jsonResponse = objectMapper.readTree(response.getBytes(StandardCharsets.UTF_8));
+                JsonNode utterancesArray = jsonResponse.at("/results/utterances");
+
+                for (JsonNode utterance : utterancesArray
+                ) {
+                    sb.append(utterance.get("msg").asText()+" ");
+                }
+
+                break;
+
+            }else if(responseStatus.equals("failed")){
+                return "STT failed";
+            }
+
+            try{
+                Thread.sleep(2000);
+            }catch(InterruptedException e){
+                e.printStackTrace();
+            }
+        }
+
+        return sb.toString();
     }
 }

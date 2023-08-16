@@ -23,5 +23,4 @@ public class WebClientConfig {
             .baseUrl("https://openapi.vito.ai/v1/")
             .build();
     }
-
 }
