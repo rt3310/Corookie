@@ -1,14 +1,14 @@
 package com.fourttttty.corookie.videoanalysis.presentation;
 
 import com.fourttttty.corookie.videoanalysis.application.service.AnalysisService;
+import com.fourttttty.corookie.videoanalysis.dto.AnalysisListResponse;
+import com.fourttttty.corookie.videoanalysis.dto.AnalysisResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,14 +17,24 @@ public class AnalysisController {
     private final AnalysisService analysisService;
 
     @PostMapping
-    public ResponseEntity<Object> AnalysisCreate(
+    public ResponseEntity<Object> analysisCreate(
         @RequestParam MultipartFile file,
         @RequestParam String recordName,
-        @PathVariable("videoChannelId") Long videoChannelId){
+        @PathVariable Long videoChannelId){
         try {
             return ResponseEntity.ok(analysisService.createAnalysis(file,recordName, videoChannelId));
         }catch (Exception e) {
             return ResponseEntity.status(500).body("An error occurred: " + e.getMessage());
         }
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<AnalysisListResponse>> analysisList(@PathVariable Long videoChannelId){
+        return ResponseEntity.ok(analysisService.findByVideoChannel(videoChannelId));
+    }
+
+    @GetMapping("/{analysisId}")
+    public ResponseEntity<AnalysisResponse> analysisDetail(@PathVariable Long analysisId){
+        return ResponseEntity.ok(analysisService.findById(analysisId));
     }
 }

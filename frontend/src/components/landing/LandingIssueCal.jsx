@@ -12,8 +12,8 @@ const LandingIssueCal = () => {
                         프로젝트의 이슈들을 팀원들과 공동으로 관리하고 <nav></nav>한 눈에 확인할 수 있습니다.
                     </S.SubTitle2>
                     <S.ImageContent>
-                        <img src={require('images/landing_text.png').default} alt="채팅1" />
-                        <img src={require('images/landing_text.png').default} alt="채팅2" />
+                        <img src={require('images/issue_sample1.png').default} alt="채팅1" />
+                        <img src={require('images/issue_sample2.png').default} alt="채팅2" />
                     </S.ImageContent>
                 </S.Issue>
                 <S.Schedule>
@@ -24,8 +24,8 @@ const LandingIssueCal = () => {
                         참여자를 확인할 수 있습니다.
                     </S.SubTitle2>
                     <S.ImageContent>
-                        <img src={require('images/landing_text.png').default} alt="채팅1" />
-                        <img src={require('images/landing_text.png').default} alt="채팅2" />
+                        <img src={require('images/schedule_sample1.png').default} alt="채팅1" />
+                        <img src={require('images/schedule_sample2.png').default} alt="채팅2" />
                     </S.ImageContent>
                 </S.Schedule>
             </S.Container>

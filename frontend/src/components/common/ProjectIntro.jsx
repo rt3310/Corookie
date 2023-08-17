@@ -36,7 +36,9 @@ const ProjectIntro = () => {
             closeManager()
             return
         }
-        openManager()
+        if (project.isManager) {
+            openManager()
+        }
     }
 
     const clickMember = () => {
@@ -107,6 +109,7 @@ const ProjectIntro = () => {
                                 onClick={() => {
                                     if (window.confirm(`${project.name}으로 이동하시겠습니까?`)) {
                                         navigate('/project/' + project.id)
+                                        window.location.reload()
                                         alert(`${project.name} 이동완료`)
                                     }
                                 }}>
@@ -163,7 +166,7 @@ const S = {
         background-color: ${({ theme }) => theme.color.white};
         border-radius: 8px;
         box-shadow: ${({ theme }) => theme.shadow.card};
-        padding: 24px 24px 2px;
+        padding: 20px 20px 2px;
         width: 100%;
         height: 100%;
     `,
