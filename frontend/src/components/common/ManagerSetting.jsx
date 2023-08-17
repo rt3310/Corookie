@@ -82,7 +82,7 @@ const S = {
     Wrap: styled.div`
         display: flex;
         position: absolute;
-        top: 151px;
+        top: 166px;
         left: 8px;
         flex-direction: column;
         width: 180px;
@@ -131,6 +131,9 @@ const S = {
         font-size: ${({ theme }) => theme.fontsize.content};
         color: ${({ theme }) => theme.color.black};
         white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 200px;
     `,
     ManagerButton: styled.div`
         display: flex;
