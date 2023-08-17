@@ -26,7 +26,7 @@ const MemberSetting = ({ memberTextRef }) => {
     }
 
     const handleRemoveMember = member => {
-        if (window.confirm(`${member.memberName}님을 팀에서 퇴출시키겠습니까? `)) {
+        if (project.isManager && window.confirm(`${member.memberName}님을 팀에서 퇴출시키겠습니까? `)) {
             removeMember(member.memberId)
         }
     }
@@ -94,7 +94,7 @@ const MemberSetting = ({ memberTextRef }) => {
                                         <FaCrown />
                                     </S.ManagerButton>
                                 ) : (
-                                    <S.RemoveButton>
+                                    <S.RemoveButton className={project.isManager ? 'Manager' : null}>
                                         <IoClose onClick={() => handleRemoveMember(member)} />
                                     </S.RemoveButton>
                                 )}
@@ -174,11 +174,17 @@ const S = {
             margin-right: 16px;
             border-radius: 4px;
         }
+        &.Manager {
+            height: auto;
+        }
     `,
     Name: styled.div`
         font-size: ${({ theme }) => theme.fontsize.content};
         color: ${({ theme }) => theme.color.black};
+        width: 200px;
         white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     `,
     ManagerButton: styled.div`
         display: flex;
@@ -194,6 +200,8 @@ const S = {
         display: flex;
         width: 100%;
         justify-content: flex-end;
+        height: 0px;
+        overflow: hidden;
         & svg {
             width: 16px;
             height: 16px;

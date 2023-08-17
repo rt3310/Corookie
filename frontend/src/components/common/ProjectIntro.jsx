@@ -2,12 +2,13 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useParams } from 'react-router'
 import styled from 'styled-components'
 
-import { IoPeople, IoChevronForward, IoClose, IoRocket } from 'react-icons/io5'
+import { IoPeople, IoChevronForward, IoClose, IoRocket, IoArrowForwardOutline } from 'react-icons/io5'
 import { AiOutlineCheckSquare } from 'react-icons/ai'
 
 import * as hooks from 'hooks'
 import * as components from 'components'
 import * as api from 'api'
+import { useNavigate } from 'react-router-dom'
 
 const ProjectIntro = () => {
     const { projectId } = useParams()
@@ -15,30 +16,26 @@ const ProjectIntro = () => {
     const { projectMembers } = hooks.projectMembersState()
     const { members, setMembers, memberOpened, openMember, closeMember } = hooks.memberState()
     const { project } = hooks.projectState()
+    const [projects, setProjects] = useState([])
     const [flip, setFlip] = useState(false)
     const managerTextRef = useRef(null)
     const memberTextRef = useRef(null)
+    const navigate = useNavigate()
 
-    const projects = [
-        '프로젝트 1',
-        '흐로젝트 2',
-        '그로젝트 3',
-        '느로젝트 4',
-        '드로젝트 5',
-        '르로젝트 6',
-        '므로젝트 7',
-        '브로젝트 8',
-    ]
+    useEffect(() => {
+        api.apis
+            .getProjects()
+            .then(response => setProjects(response.data))
+            .catch(error => console.log(error))
+    }, [])
 
     let flippedRef = useRef(null)
 
     const clickManager = e => {
         if (managerOpened) {
-            console.log('1')
             closeManager()
             return
         }
-        console.log('2')
         openManager()
     }
 
@@ -103,17 +100,23 @@ const ProjectIntro = () => {
                     </S.MemberInfo>
                 </S.Container>
                 <S.ProjectsContainer className="cards">
-                    <S.InnerContainer>
-                        <S.Projects>
-                            {projects.map((project, index) => {
-                                return (
-                                    <S.Project key={index}>
-                                        <S.ProjectText>{project.charAt(0)}</S.ProjectText>
-                                    </S.Project>
-                                )
-                            })}
-                        </S.Projects>
-                    </S.InnerContainer>
+                    {projects.map((project, index) => {
+                        return (
+                            <S.Project
+                                key={index}
+                                onClick={() => {
+                                    if (window.confirm(`프로젝트 ${project.name}으로 이동하시겠습니까?`)) {
+                                        navigate('/project/' + project.id)
+                                        alert(`프로젝트 ${project.name}으로 이동했습니다. `)
+                                    }
+                                }}>
+                                <S.ProjectText>{project.name}</S.ProjectText>
+                                <S.MoveIcon>
+                                    <IoArrowForwardOutline />
+                                </S.MoveIcon>
+                            </S.Project>
+                        )
+                    })}
                 </S.ProjectsContainer>
             </S.RotateContainer>
             <components.ManagerSetting managerTextRef={managerTextRef} />
@@ -172,6 +175,7 @@ const S = {
         padding: 8px;
         overflow-y: scroll;
         width: 100%;
+        height: 100%;
         &::-webkit-scrollbar {
             height: 0px;
             width: 4px;
@@ -187,43 +191,51 @@ const S = {
             background: ${({ theme }) => theme.color.gray};
         }
     `,
-    InnerContainer: styled.div`
-        height: 134px;
-        min-width: 100%;
-        overflow: visible;
-    `,
-    Projects: styled.div`
-        position: relative;
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 4px;
-        z-index: 6;
-    `,
     ProjectText: styled.div`
         display: flex;
         align-items: center;
-        font-size: ${({ theme }) => theme.fontsize.title2};
+        font-size: ${({ theme }) => theme.fontsize.content};
         z-index: 7;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+    `,
+    MoveIcon: styled.div`
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        border-radius: 100%;
+
+        background-color: ${({ theme }) => theme.color.middlegray};
+        & svg {
+            width: 16px;
+            height: 16px;
+            transform: rotate(-45deg);
+        }
     `,
     Project: styled.div`
         display: flex;
         align-items: center;
-        width: 64px;
-        height: 64px;
-        justify-content: center;
-        font-size: ${({ theme }) => theme.fontsize.title1};
-        line-height: 30px;
+        width: 200px;
+        height: 48px;
+        padding: 0 16px;
+        margin-bottom: 8px;
+        justify-content: space-between;
+        font-size: ${({ theme }) => theme.fontsize.content};
         cursor: pointer;
-        background-color: ${({ theme }) => theme.color.gray};
+        background-color: ${({ theme }) => theme.color.white};
         border-radius: 8px;
         position: relative;
+        filter: drop-shadow(1px 2px 7px rgba(0, 0, 0, 0.2));
+        transition-duration: 0.2s;
+        &:first-child {
+            margin-top: 4px;
+        }
         &:hover {
-            background-color: ${({ theme }) => theme.color.main};
-            color: ${({ theme }) => theme.color.white};
-            & > div {
-                height: auto;
-                font-size: ${({ theme }) => theme.fontsize.content};
-            }
+            transform: translateY(-3px);
         }
     `,
     Title: styled.div`
@@ -263,8 +275,7 @@ const S = {
     `,
     Manager: styled.div`
         display: flex;
-        justify-content: space-between;
-        width: 81px;
+        width: 130px;
         height: auto;
         padding: 8px 0;
     `,
@@ -278,7 +289,10 @@ const S = {
     ManagerName: styled.div`
         font-size: ${({ theme }) => theme.fontsize.content};
         color: ${({ theme }) => theme.color.black};
+        max-width: 100%;
+        overflow: hidden;
         white-space: nowrap;
+        text-overflow: ellipsis;
     `,
     Members: styled.div`
         display: flex;
