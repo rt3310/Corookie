@@ -1,5 +1,6 @@
 package com.fourttttty.corookie.videoanalysis.dto;
 
-public record AnalysisRequest() {
+import jakarta.validation.constraints.NotBlank;
 
+public record AnalysisRequest(@NotBlank String recordingName) {
 }

@@ -18,10 +18,11 @@ public class AnalysisController {
 
     @PostMapping
     public ResponseEntity<Object> AnalysisCreate(
-        @RequestParam("file")MultipartFile file,
+        @RequestParam MultipartFile file,
+        @RequestParam String recordName,
         @PathVariable("videoChannelId") Long videoChannelId){
         try {
-            return ResponseEntity.ok(analysisService.createAnalysis(file, videoChannelId));
+            return ResponseEntity.ok(analysisService.createAnalysis(file,recordName, videoChannelId));
         }catch (Exception e) {
             return ResponseEntity.status(500).body("An error occurred: " + e.getMessage());
         }

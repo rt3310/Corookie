@@ -38,6 +38,9 @@ public class Analysis extends BaseTime {
     private Long id;
 
     @Column(nullable = false)
+    private String recordName;
+
+    @Column(nullable = false)
     private String s3URL;
 
     @Column(nullable = false, columnDefinition = "text")
@@ -46,18 +49,20 @@ public class Analysis extends BaseTime {
     @Column(nullable = false, columnDefinition = "text")
     private String summarizationText;
 
-    @Column(nullable = false, columnDefinition = "text")
+    @Column(nullable = false)
     private Boolean enabled;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "video_channel_id")
     private VideoChannel videoChannel;
 
-    private Analysis(String s3URL,
+    private Analysis(String recordName,
+        String s3URL,
         String sttText,
         String summarizationText,
         Boolean enabled,
         VideoChannel videoChannel) {
+        this.recordName = recordName;
         this.s3URL = s3URL;
         this.sttText = sttText;
         this.summarizationText = summarizationText;
@@ -65,12 +70,13 @@ public class Analysis extends BaseTime {
         this.videoChannel = videoChannel;
     }
 
-    public static Analysis of(String s3URL,
+    public static Analysis of(String recordName,
+        String s3URL,
         String sttText,
         String summarizationText,
         Boolean enabled,
         VideoChannel videoChannel) {
-        return new Analysis(s3URL, sttText, summarizationText, enabled, videoChannel);
+        return new Analysis(recordName,s3URL, sttText, summarizationText, enabled, videoChannel);
     }
 
     public void delete() {

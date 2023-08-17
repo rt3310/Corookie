@@ -13,8 +13,6 @@ import com.fourttttty.corookie.videoanalysis.dto.AnalysisResponse;
 import com.fourttttty.corookie.videochannel.application.repository.VideoChannelRepository;
 import jakarta.persistence.EntityNotFoundException;
 import java.io.IOException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -49,7 +47,7 @@ public class AnalysisService {
     private String aiDomain;
 
     @Transactional
-    public AnalysisResponse createAnalysis(MultipartFile file, Long videoChannelId)
+    public AnalysisResponse createAnalysis(MultipartFile file, String recordName ,Long videoChannelId)
         throws Exception {
         String s3URL, sttText, summarizedText;
 
@@ -57,7 +55,9 @@ public class AnalysisService {
         sttText = getSttText(getSttId(file));
         summarizedText = summarizeText(sttText);
 
-        Analysis analysis = analysisRepository.save(Analysis.of(s3URL,
+        Analysis analysis = analysisRepository.save(Analysis.of(
+            recordName,
+            s3URL,
             sttText,
             summarizedText,
             true,
@@ -67,6 +67,7 @@ public class AnalysisService {
 
         return AnalysisResponse.from(analysis);
     }
+
 
     public String uploadAudio(MultipartFile file) throws IOException {
         String fileName = file.getOriginalFilename();
@@ -82,7 +83,6 @@ public class AnalysisService {
 
 
     public String getSttId(MultipartFile file) throws IOException {
-        String transcribeId;
         SttToken sttToken;
         try {
             sttToken = (sttTokenRepository.findById(1L)
@@ -101,7 +101,7 @@ public class AnalysisService {
             .exchangeToMono(clientResponse -> clientResponse.bodyToMono(String.class))
             .block();
 
-        return jsonParsing(initResponse,"id");
+        return jsonParsing(initResponse, "id");
     }
 
     public String getToken() throws JsonProcessingException {
@@ -118,15 +118,15 @@ public class AnalysisService {
     }
 
     public String summarizeText(String sttText) throws JsonProcessingException {
-        String reponse = webClient.post()
-            .uri(aiDomain+"/summarizations/")
+        String response = webClient.post()
+            .uri(aiDomain + "/summarizations/")
             .contentType(MediaType.APPLICATION_JSON)
             .body(BodyInserters.fromValue(Analysis.convertFastRequest(sttText)))
             .retrieve()
             .bodyToMono(String.class)
             .block();
 
-        return jsonParsing(reponse,"text");
+        return jsonParsing(response, "summarization_text");
     }
 
     public String jsonParsing(String response, String keyValue) throws JsonProcessingException {
@@ -138,9 +138,8 @@ public class AnalysisService {
 
     public String getSttText(String transcribeId) throws Exception {
         SttToken sttToken;
-        StringBuilder sb = new StringBuilder();
-
-        while(true){
+        String sttText = new String();
+        while (true) {
             try {
                 sttToken = (sttTokenRepository.findById(1L)
                     .orElseThrow(EntityNotFoundException::new));
@@ -149,48 +148,41 @@ public class AnalysisService {
             }
 
             String response = webClient.get()
-                .uri("/transcribe/"+transcribeId)
+                .uri("/transcribe/" + transcribeId)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + sttToken.getToken())
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .acceptCharset(StandardCharsets.UTF_8)
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
 
-            System.out.println(response);
             String responseStatus = jsonParsing(response, "status");
 
-            if(responseStatus.equals("completed")){
-                ObjectMapper objectMapper = new ObjectMapper();
-                try{
-                    String jsonResponse = URLDecoder.decode(response, "UTF-8");
-                    System.out.println(jsonResponse);
-                    JsonNode jsonNodes = objectMapper.readTree(jsonResponse);
-                    JsonNode utterances = jsonNodes.at("/results/utterances");
+            if (responseStatus.equals("completed")) {
+                try {
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    JsonNode jsonNode = objectMapper.readTree(response);
+                    JsonNode utterancesNode = jsonNode.get("results").get("utterances");
 
-                    for (JsonNode utterance : utterances
-                    ) {
-                        JsonNode msgNode = utterance.get("msg");
-                        System.out.println(msgNode.toString());
-                        if(msgNode != null && !msgNode.isNull()){
-                            sb.append(msgNode.asText()+" ");
+                    if (utterancesNode.isArray()) {
+                        for (JsonNode utteranceNode : utterancesNode) {
+                            if (!utteranceNode.get("msg").isNull()) {
+                                sttText += utteranceNode.get("msg").asText();
+                            }
                         }
                     }
-                }catch (Exception e){
-                    throw new Exception("Parsing Error");
+                    return sttText;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    throw new Exception("STT Parsing Error");
                 }
-                break;
-
-            }else if(responseStatus.equals("failed")){
+            } else if (responseStatus.equals("failed")) {
                 throw new Exception("STT failed");
             }
 
-            try{
+            try {
                 Thread.sleep(2000);
-            }catch(InterruptedException e){
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        return sb.toString();
     }
 }
