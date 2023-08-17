@@ -162,17 +162,18 @@ const PlanCategoryOptionToggle = ({ state, selected, setSelected }) => {
                 )}
                 <S.Options ref={optionRef}>
                     {categories.map((option, index) => (
-                        <S.Option
-                            key={index}
-                            onClick={() => {
-                                if (!selected.some(category => category.content === option.content)) {
-                                    setIsActive(false)
-                                    setSelected([...selected, option])
-                                } else {
-                                    clickSelectedCategory(option.content)
-                                }
-                            }}>
-                            <S.OptionContainer color={option.color} textColor={textColorCalculator(option.color)}>
+                        <S.Option key={index}>
+                            <S.OptionContainer
+                                color={option.color}
+                                textColor={textColorCalculator(option.color)}
+                                onClick={() => {
+                                    if (!selected.some(category => category.content === option.content)) {
+                                        setIsActive(false)
+                                        setSelected([...selected, option])
+                                    } else {
+                                        clickSelectedCategory(option.content)
+                                    }
+                                }}>
                                 {option.content}
                             </S.OptionContainer>
                             <IoClose onClick={() => deleteCategory(option.id)} />
