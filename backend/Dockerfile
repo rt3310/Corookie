@@ -2,7 +2,7 @@
 FROM azul/zulu-openjdk:17-latest
 WORKDIR /app
 
-COPY backend/build/libs/corookie-0.0.1-SNAPSHOT.jar .
+COPY build/libs/corookie-0.0.1-SNAPSHOT.jar .
 
 ARG KAKAO_CLIENT_ID
 ARG KAKAO_CLIENT_SECRET
