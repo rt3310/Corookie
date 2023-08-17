@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useParams } from 'react-router'
 import styled from 'styled-components'
 import DatePicker from 'react-datepicker'
 import { ko } from 'date-fns/esm/locale'
@@ -8,36 +9,60 @@ import { IoIosClose } from 'react-icons/io'
 import * as components from 'components'
 import * as style from 'style'
 import * as hooks from 'hooks'
+import * as api from 'api'
 
 const PlanDetail = () => {
+    const { projectId } = useParams()
     const { planStartDate, setPlanStartDate, planEndDate, setPlanEndDate } = hooks.planDateState()
-    const { closePlanDetail } = hooks.planDetailState()
+    const { planDetailOpened, closePlanDetail } = hooks.planDetailState()
+    const [currentPlan, setCurrentPlan] = useState(null)
+
+    useEffect(() => {
+        api.apis.getPlan(projectId, planDetailOpened).then(response => {
+            console.log(response.data)
+            setCurrentPlan(response.data)
+        })
+    }, [planDetailOpened])
+
+    if (!currentPlan) {
+        return
+    }
 
     return (
         <S.Wrap>
             <S.Header>
-                <S.Title>일정 생성</S.Title>
+                <S.Title>일정 상세</S.Title>
                 <S.CloseButton onClick={() => closePlanDetail()}>
                     <IoIosClose />
                 </S.CloseButton>
             </S.Header>
             <S.PlanTitleBox>
                 <S.PlanTitleLabel>제목</S.PlanTitleLabel>
-                <S.PlanTitleInput placeholder="제목 작성">냅다 제목 있음</S.PlanTitleInput>
+                <S.PlanTitleInput placeholder="제목 작성">{currentPlan.planName}</S.PlanTitleInput>
             </S.PlanTitleBox>
             <S.PlanDateBox>
                 <S.PlanDateLabel>날짜</S.PlanDateLabel>
                 <S.PlanDatePickerBox>
-                    <S.PlanDatePicker selected={planStartDate} dateFormat="yyyy.MM.dd" locale={ko} />
+                    <S.PlanDatePicker selected={new Date(currentPlan.planStart)} dateFormat="yyyy.MM.dd" locale={ko} />
                     <span> ~ </span>
-                    <S.PlanDatePicker selected={planEndDate} dateFormat="yyyy.MM.dd" locale={ko} />
+                    <S.PlanDatePicker selected={new Date(currentPlan.planEnd)} dateFormat="yyyy.MM.dd" locale={ko} />
                 </S.PlanDatePickerBox>
             </S.PlanDateBox>
-            <S.Member>멤버 이름</S.Member>
-            <S.Category>카테고리 이름</S.Category>
+            <S.Label>
+                <S.PlanOptionHeader>참여자</S.PlanOptionHeader>
+                {currentPlan.members.map(member => (
+                    <S.Member>{member.memberName}</S.Member>
+                ))}
+            </S.Label>
+            <S.Label>
+                <S.PlanOptionHeader>분류</S.PlanOptionHeader>
+                {currentPlan.categories.map(category => (
+                    <S.Category color={category.color}>{category.content}</S.Category>
+                ))}
+            </S.Label>
             <S.PlanContentBox>
-                <S.PlanContentHeader>내용</S.PlanContentHeader>
-                <S.PlanContentInput placeholder="내용"></S.PlanContentInput>
+                <S.PlanContentHeader>설명</S.PlanContentHeader>
+                <S.PlanContentInput placeholder="내용">{currentPlan.description}</S.PlanContentInput>
             </S.PlanContentBox>
             <S.EditButton>수정</S.EditButton>
         </S.Wrap>
@@ -189,8 +214,46 @@ const S = {
             color: ${({ theme }) => theme.color.main};
         }
     `,
-    Member: styled.div``,
-    Category: styled.div``,
+    Label: styled.button`
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 0 14px;
+        margin: 10px 0;
+        cursor: pointer;
+        pointer-events: auto;
+        border-radius: 8px;
+        font-family: ${({ theme }) => theme.font.main};
+        font-size: ${({ theme }) => theme.fontsize.sub1};
+    `,
+    PlanOptionHeader: styled.div`
+        font-size: ${({ theme }) => theme.fontsize.title3};
+        margin: 0 32px 0 0;
+    `,
+    Member: styled.div`
+        display: flex;
+        padding: 0 4px;
+    `,
+    Category: styled.div`
+        display: flex;
+        padding: 3px 6px;
+        align-items: center;
+        justify-content: space-between;
+        background-color: ${props => props.color};
+        color: ${props => props.textColor};
+        border-radius: 8px;
+        margin-right: 2px;
+        white-space: nowrap;
+        & svg {
+            width: 16px;
+            height: 16px;
+            color: ${props => props.textColor};
+            cursor: pointer;
+            &:hover {
+                color: ${({ theme }) => theme.color.main};
+            }
+        }
+    `,
 }
 
 export default PlanDetail

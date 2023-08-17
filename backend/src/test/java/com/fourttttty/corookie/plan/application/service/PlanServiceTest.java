@@ -86,8 +86,8 @@ class PlanServiceTest {
                 "createPlanDescription",
                 LocalDateTime.now().minusDays(2),
                 LocalDateTime.now(),
-                List.of(categoryCreateRequest),
-                List.of(new PlanMemberCreateRequest(member.getId())));
+                List.of(1L),
+                List.of(1L));
 
         // when
         PlanResponse response = planService.createPlan(request, project.getId());

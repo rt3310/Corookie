@@ -112,7 +112,7 @@ class PlanRepositoryTest {
         planRepository.save(plan);
 
         // when
-        List<Plan> foundPlans = planRepository.findByDate(date);
+        List<Plan> foundPlans = planRepository.findByProjectIdAndDate(project.getId(), date);
 
         // then
         assertThat(foundPlans).hasSize(1);

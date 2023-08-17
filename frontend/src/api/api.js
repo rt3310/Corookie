@@ -99,6 +99,10 @@ export const apis = {
     changeMemberName: (memberId, data) => instance.put(`/api/v1/members/${memberId}/name`, data),
     getMe: () => instance.get(`api/v1/members/me`),
 
+    createPlan: (projectId, data) => instance.post(`/api/v1/projects/${projectId}/plans`, data),
+    getPlans: (projectId, date) => instance.get(`/api/v1/projects/${projectId}/plans?date=${date}`),
+    getPlan: (projectId, planId) => instance.get(`/api/v1/projects/${projectId}/plans/${planId}`),
+
     createPlanCategory: (projectId, data) => instance.post(`/api/v1/projects/${projectId}/plan-categories`, data),
     getPlanCategories: projectId => instance.get(`/api/v1/projects/${projectId}/plan-categories`),
     deletePlanCategory: (projectId, categoryId) =>

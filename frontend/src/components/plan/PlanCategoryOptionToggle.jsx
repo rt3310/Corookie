@@ -7,13 +7,14 @@ import * as hooks from 'hooks'
 import { IoAdd, IoClose } from 'react-icons/io5'
 import { HexColorPicker } from 'react-colorful'
 
-const PlanCategoryOptionToggle = ({ state, selected, setSelected }) => {
+const PlanCategoryOptionToggle = ({ state, plan, setPlan }) => {
     const [isActive, setIsActive] = useState(false)
     const [addCategory, setAddCategory] = useState(false)
     const optionRef = useRef(null)
     const [categories, setCategories] = useState([])
     const [newOption, setNewOption] = useState('')
     const [newColor, setNewColor] = useState('#ffffff')
+    const [selectedCategories, setSelectedCategories] = useState([])
 
     const { project } = hooks.projectState()
 
@@ -23,7 +24,6 @@ const PlanCategoryOptionToggle = ({ state, selected, setSelected }) => {
         api.apis
             .getPlanCategories(project.id)
             .then(response => {
-                console.log(response.data)
                 setCategories(response.data)
             })
             .catch(error => console.log(error))
@@ -97,7 +97,11 @@ const PlanCategoryOptionToggle = ({ state, selected, setSelected }) => {
     }, [optionInput])
 
     const clickSelectedCategory = id => {
-        setSelected(selected.filter(category => category.content !== id))
+        setSelectedCategories(selectedCategories.filter(category => category.id !== id))
+        setPlan({
+            ...plan,
+            categoryIds: plan.categoryIds.filter(categoryId => categoryId !== id),
+        })
     }
 
     const [textColor, setTextColor] = useState('#000000')
@@ -142,9 +146,9 @@ const PlanCategoryOptionToggle = ({ state, selected, setSelected }) => {
             <S.PlanOptionLabel>{utils.PLAN_OPTIONS[state].label}</S.PlanOptionLabel>
             <S.Selector className={isActive ? 'active' : null}>
                 <S.Label onClick={() => setIsActive(!isActive)}>
-                    {selected.length === 0
+                    {selectedCategories.length === 0
                         ? '분류'
-                        : selected.map((selectedCategory, index) => (
+                        : selectedCategories.map((selectedCategory, index) => (
                               <S.SelectedCategory
                                   key={index}
                                   //   onClick={() => clickSelectedCategory(selectedCategory.content)}
@@ -167,11 +171,15 @@ const PlanCategoryOptionToggle = ({ state, selected, setSelected }) => {
                                 color={option.color}
                                 textColor={textColorCalculator(option.color)}
                                 onClick={() => {
-                                    if (!selected.some(category => category.content === option.content)) {
+                                    if (!selectedCategories.some(category => category.content === option.content)) {
                                         setIsActive(false)
-                                        setSelected([...selected, option])
+                                        setPlan({
+                                            ...plan,
+                                            categoryIds: [...plan.categoryIds, option.id],
+                                        })
+                                        setSelectedCategories([...selectedCategories, option])
                                     } else {
-                                        clickSelectedCategory(option.content)
+                                        clickSelectedCategory(option.id)
                                     }
                                 }}>
                                 {option.content}

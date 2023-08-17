@@ -6,11 +6,9 @@ import com.fourttttty.corookie.member.application.repository.MemberRepository;
 import com.fourttttty.corookie.plan.application.repository.PlanCategoryRepository;
 import com.fourttttty.corookie.plan.application.repository.PlanRepository;
 import com.fourttttty.corookie.plan.domain.Plan;
+import com.fourttttty.corookie.plan.domain.PlanCategory;
 import com.fourttttty.corookie.plan.domain.PlanMember;
-import com.fourttttty.corookie.plan.dto.request.PlanCreateRequest;
-import com.fourttttty.corookie.plan.dto.request.PlanMemberCreateRequest;
-import com.fourttttty.corookie.plan.dto.request.PlanMemberDeleteRequest;
-import com.fourttttty.corookie.plan.dto.request.PlanUpdateRequest;
+import com.fourttttty.corookie.plan.dto.request.*;
 import com.fourttttty.corookie.plan.dto.response.CalendarPlanResponse;
 import com.fourttttty.corookie.plan.dto.response.PlanCategoryResponse;
 import com.fourttttty.corookie.plan.dto.response.PlanMemberResponse;
@@ -40,8 +38,8 @@ public class PlanService {
     private final CategoryInPlanService categoryInPlanService;
     private final PlanMemberService planMemberService;
 
-    public List<CalendarPlanResponse> findByDate(LocalDate date) {
-        return planRepository.findByDate(date).stream()
+    public List<CalendarPlanResponse> findByProjectIdAndDate(Long projectId, LocalDate date) {
+        return planRepository.findByProjectIdAndDate(projectId, date).stream()
                 .map(CalendarPlanResponse::from)
                 .toList();
     }
@@ -49,11 +47,7 @@ public class PlanService {
     public PlanResponse findById(Long id) {
         Plan plan = planRepository.findById(id).orElseThrow(PlanNotFoundException::new);
         return PlanResponse.from(plan,
-            categoryInPlanService.findAllByPlanId(id).stream()
-                .map(categoryInPlan -> PlanCategoryResponse.from(
-                    planCategoryRepository.findByContent(categoryInPlan.content())
-                        .orElseThrow(EntityNotFoundException::new)))
-                .toList(),
+            categoryInPlanService.findAllByPlanId(id),
             planMemberService.findAllByPlanId(id));
     }
 
@@ -67,11 +61,14 @@ public class PlanService {
                 projectRepository.findById(projectId).orElseThrow(ProjectNotFoundException::new)));
 
         return PlanResponse.from(plan,
-                request.categories().stream()
-                        .map(categoryRequest -> categoryInPlanService.create(plan.getId(), categoryRequest))
+                request.categoryIds().stream()
+                        .map(categoryId -> {
+                            PlanCategory planCategory = planCategoryRepository.findById(categoryId).orElseThrow(EntityNotFoundException::new);
+                            return categoryInPlanService.create(plan.getId(), new PlanCategoryCreateRequest(planCategory.getContent(), planCategory.getColor()));
+                        })
                         .toList(),
-                request.members().stream()
-                        .map(memberRequest -> planMemberService.create(plan, memberRequest))
+                request.memberIds().stream()
+                        .map(memberId -> planMemberService.create(plan, new PlanMemberCreateRequest(memberId)))
                         .toList());
     }
 
