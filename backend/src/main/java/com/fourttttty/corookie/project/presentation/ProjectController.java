@@ -18,6 +18,7 @@ import java.util.List;
 @RequestMapping("/api/v1/projects")
 @RequiredArgsConstructor
 public class ProjectController {
+
     private final ProjectService projectService;
 
     @GetMapping

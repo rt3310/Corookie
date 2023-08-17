@@ -1,9 +1,7 @@
 package com.fourttttty.corookie.project.application.service;
 
 import com.fourttttty.corookie.directmessagechannel.application.repository.DirectMessageChannelRepository;
-import com.fourttttty.corookie.directmessagechannel.application.service.DirectMessageChannelService;
 import com.fourttttty.corookie.directmessagechannel.domain.DirectMessageChannel;
-import com.fourttttty.corookie.directmessagechannel.dto.response.DirectMessageChannelResponse;
 import com.fourttttty.corookie.global.exception.InvalidProjectChangeRequestException;
 import com.fourttttty.corookie.global.exception.ProjectNotOpenForInvitationException;
 import com.fourttttty.corookie.member.application.repository.MemberRepository;
@@ -12,7 +10,6 @@ import com.fourttttty.corookie.project.application.repository.ProjectMemberRepos
 import com.fourttttty.corookie.project.application.repository.ProjectRepository;
 import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.project.domain.ProjectMember;
-import com.fourttttty.corookie.project.domain.ProjectMemberId;
 import com.fourttttty.corookie.project.dto.request.ProjectCreateRequest;
 import com.fourttttty.corookie.project.dto.request.ProjectMemberCreateRequest;
 import com.fourttttty.corookie.project.dto.request.ProjectUpdateRequest;
@@ -52,9 +49,9 @@ public class ProjectService {
                 .toList();
     }
 
-    public ProjectDetailResponse findById(Long projectId, Long managerId) {
+    public ProjectDetailResponse findById(Long projectId, Long memberId) {
         Project project = findEntityById(projectId);
-        return ProjectDetailResponse.from(project, project.isManager(managerId));
+        return ProjectDetailResponse.from(project, project.isManager(memberId));
     }
 
     public Project findEntityById(Long projectId) {
