@@ -10,9 +10,14 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class VideoChannelRepositoryImpl implements VideoChannelRepository{
+public class VideoChannelRepositoryImpl implements VideoChannelRepository {
 
     private final VideoChannelJpaRepository videoChannelJpaRepository;
+
+    @Override
+    public List<VideoChannel> findByProjectId(Long projectId) {
+        return videoChannelJpaRepository.findByProjectId(projectId);
+    }
 
     @Override
     public List<VideoChannel> findAll() {

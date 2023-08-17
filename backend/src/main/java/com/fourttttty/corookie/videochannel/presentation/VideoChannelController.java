@@ -21,7 +21,7 @@ public class VideoChannelController {
 
     @GetMapping
     public ResponseEntity<List<VideoChannelResponse>> videoChannelList(@PathVariable Long projectId) {
-        return ResponseEntity.ok(videoChannelService.findAll());
+        return ResponseEntity.ok(videoChannelService.findByProjectId(projectId));
     }
 
     @GetMapping("/{videoChannelId}")
