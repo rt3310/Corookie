@@ -38,7 +38,7 @@ public class Plan extends BaseTime {
     @Column(nullable = false)
     private Boolean enabled;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "project_id")
     private Project project;
 

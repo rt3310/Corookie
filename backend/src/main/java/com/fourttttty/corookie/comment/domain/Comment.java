@@ -24,11 +24,11 @@ public class Comment extends BaseTime {
     @Column(nullable = false)
     private Boolean enabled;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "thread_id")
     private Thread thread;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "member_id")
     private Member writer;
 

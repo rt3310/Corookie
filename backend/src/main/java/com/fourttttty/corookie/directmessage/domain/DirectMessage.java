@@ -26,11 +26,11 @@ public class DirectMessage extends BaseTime {
     @Column(nullable = false)
     private Boolean enabled;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "channel_Id")
     private DirectMessageChannel directMessageChannel;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "member_id")
     private Member writer;
 

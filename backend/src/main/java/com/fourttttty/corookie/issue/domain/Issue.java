@@ -43,11 +43,11 @@ public class Issue extends BaseTime {
     @Column(nullable = false)
     private Boolean enabled;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "project_id", nullable = false)
     private Project project;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "manager_id", nullable = false)
     private Member manager;
 
