@@ -11,8 +11,8 @@ const LandingVideo = () => {
                 회의 내용을 놓치는 일이 없도록 획기적인 자동 회의록 기능도 제공합니다.
             </S.SubTitle2>
             <S.ImageContent>
-                <img src={require('images/landing_text.png').default} alt="채팅1" />
-                <img src={require('images/landing_text.png').default} alt="채팅2" />
+                <img src={require('images/text_sample.png').default} alt="채팅1" />
+                <img src={require('images/text_sample.png').default} alt="채팅2" />
             </S.ImageContent>
         </S.Wrap>
     )
@@ -59,8 +59,9 @@ const S = {
         margin: 8px 0 8px 8px;
 
         & img {
-            width: 50%;
+            width: 48%;
             height: 100%;
+            margin: 8px;
         }
     `,
 }

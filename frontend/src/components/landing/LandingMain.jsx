@@ -106,7 +106,7 @@ const LandingMain = () => {
                 <div>
                     <S.ProjectCreateForm className="project-create-form">
                         <S.ProjectNameInput
-                            placeholder="프로젝트명을&#13;입력하세요"
+                            placeholder="프로젝트명을     입력하세요"
                             maxlength="16"
                             onChange={e => setProject({ ...project, name: e.target.value })}
                         />
@@ -217,8 +217,8 @@ const S = {
         }
     `,
     ProjectCreateForm: styled.div`
-        width: 380px;
-        height: 380px;
+        width: 370px;
+        height: 370px;
         margin: 0 auto 8px;
         padding: 16px;
         border-radius: 8px;
@@ -251,7 +251,7 @@ const S = {
         /* overflow-y: hidden; */
         &::placeholder {
             font-size: 40px;
-            white-space: pre-line;
+            white-space: pre-wrap;
             color: ${({ theme }) => theme.color.gray};
         }
     `,
