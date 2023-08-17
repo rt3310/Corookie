@@ -250,6 +250,12 @@ export const chatBoxState = create(set => ({
     closeChatbox: () => set(state => ({ chatboxOpened: false })),
 }))
 
+export const planDetailState = create(set => ({
+    planDetailOpened: 0,
+    openPlanDetail: id => set(state => ({ planDetailOpened: id })),
+    closePlanDetail: () => set(state => ({ planDetailOpened: 0 })),
+}))
+
 export const planRegisterState = create(set => ({
     planRegisterOpened: false,
     openPlanRegister: () => set(state => ({ planRegisterOpened: true })),

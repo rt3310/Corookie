@@ -97,20 +97,29 @@ const IssueDetail = ({ id }) => {
         }
     }
 
-    const onRemove = () => {
+    const onRemove = async () => {
         if (window.confirm('정말 삭제하시겠습니까?')) {
-            const updatedTasks = tasks.filter(task => task.id !== id)
-            api.apis
-                .deleteIssue(project.id, task.id)
-                .then(response => {
-                    console.log(response.data)
-                    setTasks(updatedTasks)
-                    alert('삭제되었습니다. ')
-                    closeIssueDetail()
-                })
-                .catch(error => {
-                    console.log(error)
-                })
+            closeIssueDetail()
+            const issueRes = await api.apis.deleteIssue(project.id, id).catch(error => console.log(error))
+            setTask(issueRes.data)
+            console.log('task', task)
+            const issuesRes = await api.apis.getIssueList(project.id)
+            setTasks(issuesRes.data)
+            console.log('tasks', tasks)
+
+            alert('삭제되었습니다. ')
+            // const updatedTasks = tasks.filter(task => task.id !== id)
+            // api.apis
+            //     .deleteIssue(project.id, task.id)
+            //     .then(response => {
+            //         console.log(response.data)
+            //         setTasks(updatedTasks)
+            //         alert('삭제되었습니다. ')
+            //         closeIssueDetail()
+            //     })
+            //     .catch(error => {
+            //         console.log(error)
+            //     })
         }
     }
     const changeStatus = async status => {

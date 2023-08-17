@@ -2,7 +2,9 @@ import React, { useEffect, useState, useRef } from 'react'
 import styled from 'styled-components'
 
 import * as utils from 'utils'
-import { IoAdd } from 'react-icons/io5'
+import * as api from 'api'
+import * as hooks from 'hooks'
+import { IoAdd, IoClose } from 'react-icons/io5'
 import { HexColorPicker } from 'react-colorful'
 
 const PlanCategoryOptionToggle = ({ state, selected, setSelected }) => {
@@ -13,7 +15,19 @@ const PlanCategoryOptionToggle = ({ state, selected, setSelected }) => {
     const [newOption, setNewOption] = useState('')
     const [newColor, setNewColor] = useState('#ffffff')
 
+    const { project } = hooks.projectState()
+
     let colorRef = useRef(null)
+
+    useEffect(() => {
+        api.apis
+            .getPlanCategories(project.id)
+            .then(response => {
+                console.log(response.data)
+                setCategories(response.data)
+            })
+            .catch(error => console.log(error))
+    }, [])
 
     useEffect(() => {
         const handleOutside = e => {
@@ -43,8 +57,11 @@ const PlanCategoryOptionToggle = ({ state, selected, setSelected }) => {
     const handleAddOption = e => setNewOption(e.target.value)
     const addOptionKeyDown = async e => {
         if (e.key === 'Enter' && !categories.some(category => category.content === newOption)) {
-            const option = { content: newOption, color: newColor }
-            setCategories([...categories, option])
+            const categoryRes = await api.apis
+                .createPlanCategory(project.id, { content: newOption, color: newColor })
+                .catch(error => console.log(error))
+            // console.log(categoryRes)
+            setCategories([...categories, categoryRes.data])
             setAddCategory(false)
             setNewColor('#ffffff')
             setNewOption('')
@@ -100,6 +117,11 @@ const PlanCategoryOptionToggle = ({ state, selected, setSelected }) => {
         }
     }
 
+    const deleteCategory = async id => {
+        await api.apis.deletePlanCategory(project.id, id).catch(error => console.log(error))
+        setCategories(categories.filter(c => c.id !== id))
+    }
+
     useEffect(() => {
         const color = newColor.slice(1)
 
@@ -129,6 +151,7 @@ const PlanCategoryOptionToggle = ({ state, selected, setSelected }) => {
                                   color={selectedCategory.color}
                                   textColor={textColorCalculator(selectedCategory.color)}>
                                   {selectedCategory.content}
+                                  <IoClose onClick={() => clickSelectedCategory(selectedCategory.content)} />
                               </S.SelectedCategory>
                           ))}
                 </S.Label>
@@ -148,10 +171,11 @@ const PlanCategoryOptionToggle = ({ state, selected, setSelected }) => {
                                 } else {
                                     clickSelectedCategory(option.content)
                                 }
-                            }}
-                            color={option.color}
-                            textColor={textColorCalculator(option.color)}>
-                            {option.content}
+                            }}>
+                            <S.OptionContainer color={option.color} textColor={textColorCalculator(option.color)}>
+                                {option.content}
+                            </S.OptionContainer>
+                            <IoClose onClick={() => deleteCategory(option.id)} />
                         </S.Option>
                     ))}
 
@@ -231,12 +255,23 @@ const S = {
     `,
     SelectedCategory: styled.div`
         display: flex;
-        padding: 3px 4px;
+        padding: 3px 6px;
+        align-items: center;
+        justify-content: space-between;
         background-color: ${props => props.color};
         color: ${props => props.textColor};
         border-radius: 8px;
         margin-right: 2px;
         white-space: nowrap;
+        & svg {
+            width: 16px;
+            height: 16px;
+            color: ${props => props.textColor};
+            cursor: pointer;
+            &:hover {
+                color: ${({ theme }) => theme.color.main};
+            }
+        }
     `,
     Options: styled.ul`
         position: absolute;
@@ -270,12 +305,20 @@ const S = {
         }
     `,
     Option: styled.li`
-        padding: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 4px 8px;
         cursor: pointer;
         white-space: nowrap;
         &:hover {
             background-color: ${({ theme }) => theme.color.main};
             color: ${({ theme }) => theme.color.white};
+            & svg {
+                color: ${({ theme }) => theme.color.white};
+                cursor: pointer;
+                margin-left: 2px;
+            }
         }
 
         &:first-child {
@@ -285,8 +328,16 @@ const S = {
         &:last-child {
             border-radius: 0 0 8px 8px;
         }
+    `,
+    OptionContainer: styled.div`
+        display: flex;
+        align-items: center;
         background-color: ${props => props.color};
         color: ${props => props.textColor};
+        padding: 3px 6px;
+        width: auto;
+        height: 26px;
+        border-radius: 8px;
     `,
     AddOption: styled.li`
         padding: 8px;
@@ -314,16 +365,12 @@ const S = {
         background-color: transparent;
         color: ${props => props.textColor};
     `,
-    // ColorPreview: styled.div`
-    //     width: 8px;
-    //     height: 8px;
-    // `,
     ColorPicker: styled.div`
         position: absolute;
-        top: 0;
-        left: -100px;
-        height: 100px;
-        width: 100px;
+        top: 30px;
+        left: -200px;
+        height: 200px;
+        width: 200px;
         z-index: 10000;
         & .react-colorful {
             width: 100%;
