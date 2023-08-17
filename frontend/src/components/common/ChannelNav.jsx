@@ -18,7 +18,7 @@ const ChannelNav = () => {
     const { memberId } = hooks.meState()
     const { projectMembers, setProjectMembers } = hooks.projectMembersState()
     const { directChannels, setDirectChannels } = hooks.directChannelsState()
-    const { textChannels } = hooks.textChannelsState()
+    const { textChannels, setTextChannels } = hooks.textChannelsState()
     const { videoChannels, setVideoChannels } = hooks.videoChannelsState()
     const [openText, setOpenText] = useState(true)
     const [openDm, setOpenDm] = useState(true)
@@ -121,7 +121,7 @@ const ChannelNav = () => {
                         <S.Channel
                             key={textChannel.id}
                             onClick={() => navigate('/project/' + project.id + '/channel/text/' + textChannel.id)}>
-                            {index + 1}. {textChannel.name}
+                            {textChannel.name}
                             {textChannel.isPinned && <AiFillPushpin />}
                         </S.Channel>
                     ))}
