@@ -50,7 +50,6 @@ tasks.register('copyDocument', Copy) {
 }
 
 build {
-	dependsOn copyDocument
 }
 
 repositories {
