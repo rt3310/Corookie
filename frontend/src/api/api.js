@@ -52,6 +52,15 @@ export const apis = {
         instance.get(
             `/api/v1/projects/${projectId}/text-channels/${textChannelId}/threads?page=${page}&size=${size}&sort=${sort},${direction}`,
         ),
+    getImojis: (projectId, channelId, threadId) =>
+        instance.get(`/api/v1/projects/${projectId}/text-channels/${channelId}/threads/${threadId}/emojis`),
+
+    deleteImoji: (projectId, textChannelId, threadId, emoji) =>
+        instance.delete(
+            `/api/v1/projects/${projectId}/text-channels/${textChannelId}/threads/${threadId}/emojis/${emoji}`,
+        ),
+    createImoji: (projectId, textChannelId, threadId, emoji) =>
+        instance.post(`/api/v1/projects/${projectId}/text-channels/${textChannelId}/threads/${threadId}/emojis`, emoji),
 
     getComments: (projectId, textChannelId, threadId, page, size, sort, direction) =>
         instance.get(
