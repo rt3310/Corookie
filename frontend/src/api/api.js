@@ -89,4 +89,9 @@ export const apis = {
     changeMemberProfile: (memberId, data) => instance.put(`/api/v1/members/${memberId}/profile`, data),
     changeMemberName: (memberId, data) => instance.put(`/api/v1/members/${memberId}/name`, data),
     getMe: () => instance.get(`api/v1/members/me`),
+
+    createPlanCategory: (projectId, data) => instance.post(`/api/v1/projects/${projectId}/plan-categories`, data),
+    getPlanCategories: projectId => instance.get(`/api/v1/projects/${projectId}/plan-categories`),
+    deletePlanCategory: (projectId, categoryId) =>
+        instance.delete(`/api/v1/projects/${projectId}/plan-categories/${categoryId}`),
 }

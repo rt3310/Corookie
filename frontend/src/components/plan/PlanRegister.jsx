@@ -107,7 +107,7 @@ const S = {
         box-shadow: ${({ theme }) => theme.shadow.card};
         margin: 16px;
         padding: 16px;
-        overflow: auto;
+        overflow: visible;
         /* animation: ${style.leftSlide} 0.4s linear; */
 
         &::-webkit-scrollbar {
