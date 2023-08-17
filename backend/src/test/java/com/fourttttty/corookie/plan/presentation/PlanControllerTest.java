@@ -96,7 +96,7 @@ class PlanControllerTest extends RestDocsTest {
     @DisplayName("년 월로 일정을 조회한다")
     void planCalendarList() throws Exception {
         CalendarPlanResponse response = CalendarPlanResponse.from(plan);
-        given(planService.findByDate(any(LocalDate.class))).willReturn(List.of(response));
+        given(planService.findByProjectIdAndDate(any(Long.class), any(LocalDate.class))).willReturn(List.of(response));
         //when
         ResultActions perform = mockMvc.perform(get("/api/v1/projects/{projectId}/plans", 1L)
                 .contentType(MediaType.APPLICATION_JSON)

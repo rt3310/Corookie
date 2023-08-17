@@ -34,7 +34,7 @@ public class FakePlanRepository implements PlanRepository {
     }
 
     @Override
-    public List<Plan> findByDate(LocalDate date) {
+    public List<Plan> findByProjectIdAndDate(Long projectId, LocalDate date) {
         return store.values().stream()
                 .filter(plan -> isEqualPlanStart(date, plan) || isEqualPlanEnd(date, plan))
                 .toList();

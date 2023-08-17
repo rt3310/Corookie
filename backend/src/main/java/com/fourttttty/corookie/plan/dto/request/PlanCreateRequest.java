@@ -15,6 +15,6 @@ public record PlanCreateRequest(@NotNull String planName,
                                 @NotNull LocalDateTime planStart,
                                 @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
                                 @NotNull LocalDateTime planEnd,
-                                @NotNull List<PlanCategoryCreateRequest> categories,
-                                @NotNull List<PlanMemberCreateRequest> members) {
+                                @NotNull List<Long> categoryIds,
+                                @NotNull List<Long> memberIds) {
 }
