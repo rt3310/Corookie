@@ -82,4 +82,8 @@ public class ProjectMemberService {
         return ProjectMemberResponse.from(projectMemberRepository.findById(projectMemberId)
                 .orElseThrow(EntityNotFoundException::new));
     }
+
+    public Boolean existsProjectMember(Long projectId, Long memberId) {
+        return projectMemberRepository.existsMemberInProject(projectId, memberId);
+    }
 }
