@@ -87,14 +87,13 @@ public class Plan extends BaseTime {
         this.project = project;
     }
 
-    public static Plan of(
-        Long id,
-        String planName,
-        String description,
-        LocalDateTime planStart,
-        LocalDateTime planEnd,
-        Boolean enabled,
-        Project project) {
+    public static Plan of(Long id,
+                          String planName,
+                          String description,
+                          LocalDateTime planStart,
+                          LocalDateTime planEnd,
+                          Boolean enabled,
+                          Project project) {
         return new Plan(id,
             planName,
             description,
@@ -105,15 +104,13 @@ public class Plan extends BaseTime {
     }
 
     public void update(String planName,
-        String description,
-        LocalDateTime planStart,
-        LocalDateTime planEnd,
-        Project project) {
+                       String description,
+                       LocalDateTime planStart,
+                       LocalDateTime planEnd) {
         this.planName = planName;
         this.description = description;
         this.planStart = planStart;
         this.planEnd = planEnd;
-        this.project = project;
     }
 
     public void delete() {

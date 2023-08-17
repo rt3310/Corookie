@@ -1,35 +1,50 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useParams } from 'react-router'
 import styled from 'styled-components'
 
 import * as components from 'components'
 import * as hooks from 'hooks'
+import * as api from 'api'
 
 import { IoExitOutline } from 'react-icons/io5'
+import { useEffect } from 'react'
 
 const VideoChat = () => {
     const { chatboxOpened } = hooks.chatBoxState()
+    const { projectId, channelId } = useParams()
+    const [videoChannel, setVideoChannel] = useState(null)
+
+    useEffect(() => {
+        const initChannel = async () => {
+            const videoChannelRes = await api.apis.getVideoChannel(projectId, channelId)
+            console.log(videoChannelRes.data)
+            setVideoChannel(videoChannelRes.data)
+        }
+        setVideoChannel(null)
+        initChannel()
+    }, [projectId, channelId])
+
+    if (!videoChannel) {
+        return
+    }
 
     return (
         <S.Wrap>
             <S.Header>
-                <S.Title>1. 회의</S.Title>
+                <S.Title>{videoChannel.name}</S.Title>
                 <S.ExitButton>
                     <IoExitOutline />
                 </S.ExitButton>
             </S.Header>
             <S.Container>
-                <S.ChatBox>
-                    <S.ThreadBox>
-                        <iframe
-                            src="https://i9a402.p.ssafy.io:8443/#/sessionTest"
-                            allow="camera;microphone;fullscreen;autoplay"
-                            width={1200}
-                            height={800}>
-                            <p>사용 중인 브라우저는 iframe을 지원하지 않습니다.</p>
-                        </iframe>
-                    </S.ThreadBox>
-                </S.ChatBox>
-                {chatboxOpened && <components.TextChatBox />}
+                <iframe
+                    // src={`http://localhost:4200/#/${videoChannel.sessionId}`} // local 시험할 때
+                    src={`http://i9a402.p.ssafy.io:8443/#/${videoChannel.sessionId}`} // 우리 서버에서
+                    allow="camera;microphone;fullscreen;autoplay"
+                    width="100%"
+                    height="100%">
+                    <p>사용 중인 브라우저는 iframe을 지원하지 않습니다.</p>
+                </iframe>
             </S.Container>
         </S.Wrap>
     )
@@ -74,25 +89,8 @@ const S = {
         display: flex;
         height: 100%;
         max-height: calc(100vh - 152px);
-        padding: 0 26px;
-    `,
-    ChatBox: styled.div`
-        display: flex;
-        flex-direction: column;
-        margin-right: 32px;
-        width: 100%;
-        height: 100%;
-        transition: width 0.2s;
-    `,
-    ThreadBox: styled.div`
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 100%;
-        flex-grow: 1;
-        overflow-y: auto;
-        padding: 0 0 16px;
-        margin: 0 8px auto 0;
+        margin: 16px;
+        border-radius: 8px;
     `,
 }
 

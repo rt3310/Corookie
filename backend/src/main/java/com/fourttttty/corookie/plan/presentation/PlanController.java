@@ -43,10 +43,9 @@ public class PlanController {
     }
 
     @PutMapping("/{planId}")
-    public ResponseEntity<PlanResponse> planModify(@PathVariable Long projectId,
-                                                   @PathVariable Long planId,
+    public ResponseEntity<PlanResponse> planModify(@PathVariable Long planId,
                                                    @RequestBody @Validated PlanUpdateRequest request) {
-        return ResponseEntity.ok(planService.modifyPlan(request, planId, projectId));
+        return ResponseEntity.ok(planService.modifyPlan(request, planId));
     }
 
     @DeleteMapping("/{planId}")

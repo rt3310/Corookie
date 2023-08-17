@@ -2,6 +2,7 @@ package com.fourttttty.corookie.config.web;
 
 import com.fourttttty.corookie.issue.util.IssueFilterTypeConverter;
 import com.fourttttty.corookie.issue.util.IssueProgressConverter;
+import com.fourttttty.corookie.thread.util.EmojiConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
@@ -26,5 +27,6 @@ public class WebConfig implements WebMvcConfigurer {
     public void addFormatters(FormatterRegistry registry) {
         registry.addConverter(new IssueFilterTypeConverter());
         registry.addConverter(new IssueProgressConverter());
+        registry.addConverter(new EmojiConverter());
     }
 }

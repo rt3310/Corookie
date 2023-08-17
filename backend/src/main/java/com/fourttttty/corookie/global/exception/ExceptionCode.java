@@ -25,7 +25,9 @@ public enum ExceptionCode {
     CHANNEL_PIN_REQUEST_INVALID(BAD_REQUEST, "TEXT_CHANNEL_001", "프로젝트 인원만 채널 고정을 요청할 수 있습니다."),
 
     PLAN_NOT_FOUND(BAD_REQUEST, "PLAN_001", "일정을 찾을 수 없습니다."),
-    PLAN_NOT_ENABLED(BAD_REQUEST,"PLAN_002","더 이상 사용되지 않는 일정입니다.");
+    PLAN_NOT_ENABLED(BAD_REQUEST,"PLAN_002","더 이상 사용되지 않는 일정입니다."),
+
+    EMOJI_INVALID(BAD_REQUEST, "EMOJI_001", "유효하지 않은 이모지 유형입니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

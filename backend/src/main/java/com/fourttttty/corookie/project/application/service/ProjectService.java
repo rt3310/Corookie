@@ -19,6 +19,7 @@ import com.fourttttty.corookie.project.dto.request.ProjectUpdateRequest;
 import com.fourttttty.corookie.project.dto.response.ProjectDetailResponse;
 import com.fourttttty.corookie.project.dto.response.ProjectListResponse;
 import com.fourttttty.corookie.textchannel.application.repository.TextChannelRepository;
+import com.fourttttty.corookie.videochannel.application.repository.VideoChannelRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,7 @@ import java.util.List;
 public class ProjectService {
     private final ProjectRepository projectRepository;
     private final TextChannelRepository textChannelRepository;
+    private final VideoChannelRepository videoChannelRepository;
     private final MemberRepository memberRepository;
     private final ProjectMemberRepository projectMemberRepository;
     private final DirectMessageChannelRepository directMessageChannelRepository;
@@ -67,6 +69,7 @@ public class ProjectService {
         registerMemberForProject(member, project);
         project.changeInvitationLink(invitationLinkGenerateService.generateInvitationLink(project.getId()));
         project.createDefaultTextChannels().forEach(textChannelRepository::save);
+        project.createDefaultVideoChannels().forEach(videoChannelRepository::save);
         return ProjectDetailResponse.from(project, project.isManager(managerId));
     }
 
