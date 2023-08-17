@@ -1,6 +1,5 @@
 package com.fourttttty.corookie.plan.application.repository;
 
-import com.fourttttty.corookie.plan.domain.CategoryInPlan;
 import com.fourttttty.corookie.plan.domain.PlanCategory;
 
 import java.util.List;
@@ -12,4 +11,5 @@ public interface PlanCategoryRepository {
     List<PlanCategory> findByProjectId(Long projectId);
     Optional<PlanCategory> findById(Long id);
     Optional<PlanCategory> findByContent(String content);
+    void deleteById(Long planCategoryId);
 }

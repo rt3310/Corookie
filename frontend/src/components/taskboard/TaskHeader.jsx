@@ -251,14 +251,14 @@ const S = {
         align-items: center;
         justify-content: space-between;
         height: 31px;
-        margin: 0 8px;
+        margin: 0 4px;
         padding: 8px;
         border-radius: 8px;
         white-space: nowrap;
         border: 1px solid ${({ theme }) => theme.color.main};
         background-color: ${({ theme }) => theme.color.main};
         color: ${({ theme }) => theme.color.white};
-        margin: 0 16px;
+
         transition-duration: 0.2s;
 
         &:hover {

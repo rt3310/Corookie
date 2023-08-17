@@ -392,7 +392,7 @@ const S = {
                 ? theme.color.success
                 : chosen === 'inProgress'
                 ? theme.color.pending
-                : theme.color.warning};
+                : theme.color.orange};
         border-radius: 8px;
         transition-duration: 0.2s;
         &:hover {
@@ -401,7 +401,7 @@ const S = {
                     ? theme.color.success
                     : status === 'inProgress'
                     ? theme.color.pending
-                    : theme.color.warning};
+                    : theme.color.orange};
         }
     `,
     Manager: styled.div`

@@ -1,14 +1,12 @@
 package com.fourttttty.corookie.plan.presentation;
 
 import com.fourttttty.corookie.plan.application.service.PlanService;
-import com.fourttttty.corookie.plan.dto.request.PlanCategoryCreateRequest;
 import com.fourttttty.corookie.plan.dto.request.PlanCreateRequest;
 
 import com.fourttttty.corookie.plan.dto.request.PlanMemberCreateRequest;
 import com.fourttttty.corookie.plan.dto.request.PlanMemberDeleteRequest;
 import com.fourttttty.corookie.plan.dto.request.PlanUpdateRequest;
 import com.fourttttty.corookie.plan.dto.response.CalendarPlanResponse;
-import com.fourttttty.corookie.plan.dto.response.PlanCategoryResponse;
 import com.fourttttty.corookie.plan.dto.response.PlanMemberResponse;
 import com.fourttttty.corookie.plan.dto.response.PlanResponse;
 import lombok.RequiredArgsConstructor;
@@ -43,10 +41,9 @@ public class PlanController {
     }
 
     @PutMapping("/{planId}")
-    public ResponseEntity<PlanResponse> planModify(@PathVariable Long projectId,
-                                                   @PathVariable Long planId,
+    public ResponseEntity<PlanResponse> planModify(@PathVariable Long planId,
                                                    @RequestBody @Validated PlanUpdateRequest request) {
-        return ResponseEntity.ok(planService.modifyPlan(request, planId, projectId));
+        return ResponseEntity.ok(planService.modifyPlan(request, planId));
     }
 
     @DeleteMapping("/{planId}")

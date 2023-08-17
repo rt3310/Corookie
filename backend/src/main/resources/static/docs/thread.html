@@ -563,6 +563,21 @@ Host: localhost:8080</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">작성자 프로필 url</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].emojis.[].emoji</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">이모지</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].emojis.[].count</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">이모지 개수</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].emojis.[].isClicked</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">클릭 여부</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -575,7 +590,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 246
+Content-Length: 336
 
 [ {
   "id" : 1,
@@ -585,9 +600,14 @@ Content-Length: 246
     "email" : "email@mail.com",
     "imageUrl" : "https://test.com"
   },
-  "createdAt" : "2023-08-16T16:50:48.2923895",
+  "createdAt" : "2023-08-17T15:51:04.1678092",
   "content" : "content",
-  "commentCount" : 0
+  "commentCount" : 0,
+  "emojis" : [ {
+    "emoji" : "bad",
+    "count" : 1,
+    "isClicked" : true
+  } ]
 } ]</code></pre>
 </div>
 </div>
@@ -645,6 +665,21 @@ Content-Length: 246
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">작성자 프로필 url</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].emojis.[].emoji</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">이모지</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].emojis.[].count</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">이모지 개수</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].emojis.[].isClicked</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">클릭 여부</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -698,7 +733,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 242
+Content-Length: 331
 
 {
   "id" : 1,
@@ -708,9 +743,14 @@ Content-Length: 242
     "email" : "email@mail.com",
     "imageUrl" : "https://test.com"
   },
-  "createdAt" : "2023-08-16T16:50:48.3433875",
+  "createdAt" : "2023-08-17T15:51:04.211809",
   "content" : "content",
-  "commentCount" : 0
+  "commentCount" : 0,
+  "emojis" : [ {
+    "emoji" : "bad",
+    "count" : 1,
+    "isClicked" : true
+  } ]
 }</code></pre>
 </div>
 </div>
@@ -767,6 +807,21 @@ Content-Length: 242
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>writer.imageUrl</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">작성자 프로필 url</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>emojis.[].emoji</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">이모지</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>emojis.[].isClicked</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">이모지 클릭 여부</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>emojis.[].count</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">이모지 갯수</p></td>
 </tr>
 </tbody>
 </table>
@@ -827,7 +882,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 242
+Content-Length: 332
 
 {
   "id" : 1,
@@ -837,9 +892,14 @@ Content-Length: 242
     "email" : "email@mail.com",
     "imageUrl" : "https://test.com"
   },
-  "createdAt" : "2023-08-16T16:50:48.2383879",
+  "createdAt" : "2023-08-17T15:51:04.1208096",
   "content" : "content",
-  "commentCount" : 0
+  "commentCount" : 0,
+  "emojis" : [ {
+    "emoji" : "bad",
+    "count" : 1,
+    "isClicked" : true
+  } ]
 }</code></pre>
 </div>
 </div>
@@ -896,6 +956,21 @@ Content-Length: 242
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>writer.imageUrl</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">작성자 프로필 url</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>emojis.[].emoji</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">이모지</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>emojis.[].isClicked</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원의 이모지 클릭 여부</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>emojis.[].count</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">이모지 갯수</p></td>
 </tr>
 </tbody>
 </table>

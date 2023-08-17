@@ -27,6 +27,9 @@ import com.fourttttty.corookie.project.application.repository.ProjectRepository;
 import com.fourttttty.corookie.project.application.repository.ProjectRepositoryImpl;
 import com.fourttttty.corookie.project.infrastructure.ProjectJpaRepository;
 import com.fourttttty.corookie.project.infrastructure.ProjectMemberJpaRepository;
+import com.fourttttty.corookie.thread.application.repository.ThreadEmojiRepository;
+import com.fourttttty.corookie.thread.application.repository.ThreadEmojiRepositoryImpl;
+import com.fourttttty.corookie.thread.infrastructure.ThreadEmojiJpaRepository;
 import com.fourttttty.corookie.textchannel.application.repository.TextChannelPinRepository;
 import com.fourttttty.corookie.textchannel.application.repository.TextChannelPinRepositoryImpl;
 import com.fourttttty.corookie.textchannel.application.repository.TextChannelRepository;
@@ -62,11 +65,13 @@ public class TestConfig {
     @Autowired
     private PlanMemberJpaRepository planMemberJpaRepository;
     @Autowired
-    TextChannelJpaRepository textChannelJpaRepository;
+    private ThreadEmojiJpaRepository threadEmojiJpaRepository;
     @Autowired
-    TextChannelPinJpaRepository textChannelPinJpaRepository;
+    private TextChannelJpaRepository textChannelJpaRepository;
     @Autowired
-    DirectMessageChannelJpaRepository directMessageChannelJpaRepository;
+    private TextChannelPinJpaRepository textChannelPinJpaRepository;
+    @Autowired
+    private DirectMessageChannelJpaRepository directMessageChannelJpaRepository;
 
     @Bean
     public DirectMessageChannelRepository directMessageChannelRepository() {
@@ -111,6 +116,11 @@ public class TestConfig {
     @Bean
     public PlanMemberRepository planMemberRepository() {
         return new PlanMemberRepositoryImpl(planMemberJpaRepository);
+    }
+
+    @Bean
+    public ThreadEmojiRepository threadEmojiRepository() { 
+        return new ThreadEmojiRepositoryImpl(threadEmojiJpaRepository); 
     }
 
     @Bean

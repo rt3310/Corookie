@@ -1,10 +1,7 @@
 package com.fourttttty.corookie.project.domain;
 
 import com.fourttttty.corookie.member.domain.Member;
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

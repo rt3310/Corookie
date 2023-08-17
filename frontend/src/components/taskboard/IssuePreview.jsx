@@ -105,7 +105,7 @@ const S = {
                 case 'inProgress':
                     return theme.color.pending
                 default:
-                    return theme.color.warning
+                    return theme.color.orange
             }
         }};
     `,

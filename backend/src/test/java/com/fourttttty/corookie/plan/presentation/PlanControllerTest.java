@@ -31,7 +31,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fourttttty.corookie.plan.domain.PlanMember;
 import com.fourttttty.corookie.plan.dto.request.PlanCategoryCreateRequest;
-import com.fourttttty.corookie.plan.dto.request.PlanCategoryDeleteRequest;
 import com.fourttttty.corookie.plan.dto.request.PlanCreateRequest;
 import com.fourttttty.corookie.plan.dto.request.PlanMemberCreateRequest;
 import com.fourttttty.corookie.plan.dto.request.PlanMemberDeleteRequest;
@@ -252,13 +251,7 @@ class PlanControllerTest extends RestDocsTest {
                 plan.getPlanName(),
                 plan.getDescription(),
                 plan.getPlanStart().minusDays(2),
-                plan.getPlanEnd().minusDays(2),
-                planCategories.stream()
-                        .map(planCategory -> new PlanCategoryDeleteRequest(planCategory.getContent(), planCategory.getColor()))
-                        .toList(),
-                planMembers.stream()
-                        .map(member -> new PlanMemberDeleteRequest(member.getId()))
-                        .toList());
+                plan.getPlanEnd().minusDays(2));
 
         PlanResponse planResponse = PlanResponse.from(Plan.of(1L,
                         request.planName(),
@@ -274,7 +267,7 @@ class PlanControllerTest extends RestDocsTest {
                         .map(member -> PlanMemberResponse.from(PlanMember.of(member, plan)))
                         .toList());
 
-        given(planService.modifyPlan(any(PlanUpdateRequest.class), any(Long.class), any(Long.class)))
+        given(planService.modifyPlan(any(PlanUpdateRequest.class), any(Long.class)))
                 .willReturn(planResponse);
 
         //when
@@ -306,12 +299,7 @@ class PlanControllerTest extends RestDocsTest {
                                 fieldWithPath("planName").type(STRING).description("일정 이름"),
                                 fieldWithPath("description").type(STRING).description("일정 설명"),
                                 fieldWithPath("planStart").type(STRING).description("일정 시작일"),
-                                fieldWithPath("planEnd").type(STRING).description("일정 종료일"),
-                                fieldWithPath("categories").type(ARRAY).description("일정 카테고리"),
-                                fieldWithPath("members").type(ARRAY).description("일정 멤버"),
-                                fieldWithPath("categories.[].content").type(STRING).description("일정 카테고리 내용"),
-                                fieldWithPath("categories.[].color").type(STRING).description("일정 카테고리 색"),
-                                fieldWithPath("members.[].memberId").type(NUMBER).description("일정 멤버 키")),
+                                fieldWithPath("planEnd").type(STRING).description("일정 종료일")),
                         responseFields(
                                 fieldWithPath("planName").type(STRING).description("일정 이름"),
                                 fieldWithPath("description").type(STRING).description("일정 설명"),

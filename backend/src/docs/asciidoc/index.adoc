@@ -22,6 +22,14 @@ include::{docdir}/src/docs/asciidoc/issue.adoc[]
 
 include::{docdir}/src/docs/asciidoc/plan.adoc[]
 
+= 일정에 있는 카테고리
+
+include::{docdir}/src/docs/asciidoc/category-in-plan.adoc[]
+
+= 일정 카테고리
+
+include::{docdir}/src/docs/asciidoc/plan-category.adoc[]
+
 = 텍스트 채널
 
 include::{docdir}/src/docs/asciidoc/text-channel.adoc[]
