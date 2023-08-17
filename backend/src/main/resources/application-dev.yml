@@ -45,7 +45,7 @@ logging:
 jwt:
   access-header: Authorization
   refresh-header: Refresh
-  secret: corookiecorookiecorookiecorookiecorookiecorookiecorookiecorookiecorookiecorookiecorookiecorookiecorookiecorookiecorookie
+  secret: ${JWT_SECRET}
 
 client:
   host: localhost
