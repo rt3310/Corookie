@@ -1,8 +1,7 @@
 package com.fourttttty.corookie.plan.application.repository;
 
 import com.fourttttty.corookie.plan.domain.CategoryInPlan;
-import com.fourttttty.corookie.plan.domain.CategoryInPlanId;
-import com.fourttttty.corookie.plan.domain.Plan;
+
 import java.util.List;
 
 public interface CategoryInPlanRepository {
@@ -13,5 +12,7 @@ public interface CategoryInPlanRepository {
 
     List<CategoryInPlan> findByPlanId(Long planId);
 
-    Boolean exists(CategoryInPlanId categoryInPlanId);
+    Boolean exists(Long categoryInPlanId);
+
+    void deleteById(Long categoryInPlanId);
 }

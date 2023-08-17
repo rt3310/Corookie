@@ -7,11 +7,9 @@ import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 
 public record PlanUpdateRequest(@NotNull String planName,
-        @NotNull String description,
-        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-        @NotNull LocalDateTime planStart,
-        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-        @NotNull LocalDateTime planEnd,
-        @NotNull List<PlanCategoryDeleteRequest> categories,
-        @NotNull List<PlanMemberDeleteRequest> members) {
+                                @NotNull String description,
+                                @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+                                @NotNull LocalDateTime planStart,
+                                @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+                                @NotNull LocalDateTime planEnd) {
 }

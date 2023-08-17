@@ -8,9 +8,12 @@ import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.support.RestDocsTest;
 import com.fourttttty.corookie.textchannel.domain.TextChannel;
 import com.fourttttty.corookie.thread.application.service.ThreadService;
+import com.fourttttty.corookie.thread.domain.Emoji;
 import com.fourttttty.corookie.thread.domain.Thread;
 import com.fourttttty.corookie.thread.dto.request.ThreadModifyRequest;
 import com.fourttttty.corookie.thread.dto.response.ThreadDetailResponse;
+import com.fourttttty.corookie.thread.dto.response.ThreadEmojiResponse;
+import com.fourttttty.corookie.thread.dto.response.ThreadListResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,6 +25,7 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.fourttttty.corookie.support.ApiDocumentUtils.getDocumentRequest;
@@ -32,6 +36,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
+import static org.springframework.restdocs.payload.JsonFieldType.BOOLEAN;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
@@ -49,6 +54,7 @@ class ThreadControllerTest extends RestDocsTest {
     private SimpMessageSendingOperations sendingOperations;
 
     private Thread thread;
+    private List<ThreadEmojiResponse> emojis;
 
     @BeforeEach
     void initTexture() {
@@ -68,6 +74,8 @@ class ThreadControllerTest extends RestDocsTest {
                 0,
                 textChannel,
                 member);
+        emojis = new ArrayList<>();
+        emojis.add(ThreadEmojiResponse.from(Emoji.BAD, 1L, true));
     }
 
     @Test
@@ -75,15 +83,16 @@ class ThreadControllerTest extends RestDocsTest {
     void findAllThread() throws Exception {
         // given
         LocalDateTime now = LocalDateTime.now();
-        ThreadDetailResponse threadDetailResponse = new ThreadDetailResponse(
+        ThreadListResponse threadListResponse = new ThreadListResponse(
                 1L,
                 new MemberResponse(1L, "name", "email@mail.com", "https://test.com"),
                 now,
                 thread.getContent(),
-                thread.getCommentCount());
+                thread.getCommentCount(),
+                List.of(ThreadEmojiResponse.from(Emoji.BAD, 1L, true)));
 
         given(threadService.findByTextChannelIdLatest(any(Long.class), any(Pageable.class)))
-                .willReturn(List.of(threadDetailResponse));
+                .willReturn(List.of(threadListResponse));
 
         // when
         ResultActions perform = mockMvc.perform(get("/api/v1/projects/{projectId}/text-channels/{textChannelId}/threads",
@@ -94,9 +103,9 @@ class ThreadControllerTest extends RestDocsTest {
 
         // then
         perform.andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].content").value(threadDetailResponse.content()))
-                .andExpect(jsonPath("$[0].commentCount").value(threadDetailResponse.commentCount()))
-                .andExpect(jsonPath("$[0].writer.name").value(threadDetailResponse.writer().name()));
+                .andExpect(jsonPath("$[0].content").value(threadListResponse.content()))
+                .andExpect(jsonPath("$[0].commentCount").value(threadListResponse.commentCount()))
+                .andExpect(jsonPath("$[0].writer.name").value(threadListResponse.writer().name()));
 
         perform.andDo(print())
                 .andDo(document("thread-find-all",
@@ -117,8 +126,10 @@ class ThreadControllerTest extends RestDocsTest {
                                 fieldWithPath("[].writer.id").type(NUMBER).description("작성자 키"),
                                 fieldWithPath("[].writer.name").type(STRING).description("작성자 이름"),
                                 fieldWithPath("[].writer.email").type(STRING).description("작성자 이메일"),
-                                fieldWithPath("[].writer.imageUrl").type(STRING).description("작성자 프로필 url"))
-                ));
+                                fieldWithPath("[].writer.imageUrl").type(STRING).description("작성자 프로필 url"),
+                                fieldWithPath("[].emojis.[].emoji").type(STRING).description("이모지"),
+                                fieldWithPath("[].emojis.[].count").type(NUMBER).description("이모지 개수"),
+                                fieldWithPath("[].emojis.[].isClicked").type(BOOLEAN).description("클릭 여부"))));
     }
 
     @Test
@@ -126,15 +137,17 @@ class ThreadControllerTest extends RestDocsTest {
     void findThreadById() throws Exception {
         // given
         LocalDateTime now = LocalDateTime.now();
+
         ThreadDetailResponse threadDetailResponse = new ThreadDetailResponse(
                 1L,
                 new MemberResponse(1L, "name", "email@mail.com", "https://test.com"),
                 now,
                 thread.getContent(),
-                thread.getCommentCount()
+                thread.getCommentCount(),
+                emojis
         );
 
-        given(threadService.findById(any(Long.class)))
+        given(threadService.findById(any(Long.class), any(Long.class)))
                 .willReturn(threadDetailResponse);
 
         // when
@@ -162,8 +175,10 @@ class ThreadControllerTest extends RestDocsTest {
                                 fieldWithPath("writer.id").type(NUMBER).description("작성자 키"),
                                 fieldWithPath("writer.name").type(STRING).description("작성자 이름"),
                                 fieldWithPath("writer.email").type(STRING).description("작성자 이메일"),
-                                fieldWithPath("writer.imageUrl").type(STRING).description("작성자 프로필 url"))
-                ));
+                                fieldWithPath("writer.imageUrl").type(STRING).description("작성자 프로필 url"),
+                                fieldWithPath("emojis.[].emoji").type(STRING).description("이모지"),
+                                fieldWithPath("emojis.[].isClicked").type(BOOLEAN).description("이모지 클릭 여부"),
+                                fieldWithPath("emojis.[].count").type(NUMBER).description("이모지 갯수"))));
     }
 
     @Test
@@ -171,15 +186,17 @@ class ThreadControllerTest extends RestDocsTest {
     void modifyTextChannel() throws Exception {
         // given
         LocalDateTime now = LocalDateTime.now();
+
         ThreadDetailResponse threadDetailResponse = new ThreadDetailResponse(
                 1L,
                 new MemberResponse(1L, "name", "email@mail.com", "https://test.com"),
                 now,
                 thread.getContent(),
-                thread.getCommentCount()
+                thread.getCommentCount(),
+                emojis
         );
 
-        given(threadService.modify(any(ThreadModifyRequest.class), any(Long.class)))
+        given(threadService.modify(any(ThreadModifyRequest.class), any(Long.class), any(Long.class)))
                 .willReturn(threadDetailResponse);
 
         ThreadModifyRequest request = new ThreadModifyRequest("content");
@@ -193,7 +210,8 @@ class ThreadControllerTest extends RestDocsTest {
         perform.andExpect(status().isOk())
                 .andExpect(jsonPath("$.content").value(threadDetailResponse.content()))
                 .andExpect(jsonPath("$.commentCount").value(threadDetailResponse.commentCount()))
-                .andExpect(jsonPath("$.writer.name").value(threadDetailResponse.writer().name()));
+                .andExpect(jsonPath("$.writer.name").value(threadDetailResponse.writer().name()))
+                .andExpect(jsonPath("$.emojis.[0].emoji").value(threadDetailResponse.emojis().get(0).emoji().getValue()));
 
         perform.andDo(print())
                 .andDo(document("thread-modify",
@@ -211,8 +229,10 @@ class ThreadControllerTest extends RestDocsTest {
                                 fieldWithPath("writer.id").type(NUMBER).description("작성자 키"),
                                 fieldWithPath("writer.name").type(STRING).description("작성자 이름"),
                                 fieldWithPath("writer.email").type(STRING).description("작성자 이메일"),
-                                fieldWithPath("writer.imageUrl").type(STRING).description("작성자 프로필 url"))
-                ));
+                                fieldWithPath("writer.imageUrl").type(STRING).description("작성자 프로필 url"),
+                                fieldWithPath("emojis.[].emoji").type(STRING).description("이모지"),
+                                fieldWithPath("emojis.[].isClicked").type(BOOLEAN).description("회원의 이모지 클릭 여부"),
+                                fieldWithPath("emojis.[].count").type(NUMBER).description("이모지 갯수"))));
     }
 
     @Test
@@ -235,7 +255,6 @@ class ThreadControllerTest extends RestDocsTest {
                                 parameterWithName("textChannelId").description("텍스트 채널 키"),
                                 parameterWithName("threadId").description("스레드 키"))));
     }
-
 
 }
 
