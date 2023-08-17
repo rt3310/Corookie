@@ -6,7 +6,7 @@ import * as components from 'components'
 import * as hooks from 'hooks'
 import * as api from 'api'
 
-import { IoExitOutline } from 'react-icons/io5'
+import { IoExitOutline, IoChevronForward, IoChevronBack } from 'react-icons/io5'
 import { useEffect } from 'react'
 import axios from 'axios'
 
@@ -19,6 +19,7 @@ const VideoChat = () => {
     const [uploadStatus, setUploadStatus] = useState('')
     const [summary, setSummary] = useState([])
     const [isSummaryVisible, setIsSummaryVisible] = useState(false)
+    const [focusedRecording, setFocusedRecording] = useState(null)
     const [focusedSummary, setFocusedSummary] = useState(null)
     const [focusedSummaryUrl, setFocusedSummaryUrl] = useState(null)
 
@@ -118,53 +119,77 @@ const VideoChat = () => {
                     <IoExitOutline />
                 </S.ExitButton>
             </S.Header>
-            <S.Container>
-                <iframe
-                    src={`http://localhost:4200/#/${videoChannel.sessionId}`} // local 시험할 때
-                    // src={`http://i9a402.p.ssafy.io:8443/#/${videoChannel.sessionId}`} // 우리 서버에서
-                    allow="camera;microphone;fullscreen;autoplay"
-                    width="100%"
-                    height="100%">
-                    <p>사용 중인 브라우저는 iframe을 지원하지 않습니다.</p>
-                </iframe>
-            </S.Container>
-            <S.TextBox>
-                <div>
-                    <input type="file" onChange={handleFileChange} />
-                    <button onClick={handleUpload}>Upload</button>
-                    <p>{uploadStatus}</p>
-                </div>
-            </S.TextBox>
-            <S.TextBox>
-                {summary.map((data, index) => (
-                    <S.Recording
-                        key={data.id}
-                        onClick={() =>
-                            api.apis.getAnalysisDetail(data.id).then(response => {
-                                console.log(response.data)
-                                toggleVisibility()
-                                setFocusedSummary(response.data.summarizationText)
-                                setFocusedSummaryUrl(response.data.s3URL)
-                            })
-                        }>
-                        {index + 1}. {data.recordName}
-                        {data.createdAt}
-                    </S.Recording>
-                ))}
-            </S.TextBox>
-            {isSummaryVisible && (
-                <S.TextBox>
-                    {focusedSummary} {focusedSummaryUrl}{' '}
-                </S.TextBox>
-            )}
+            <S.Content>
+                <S.Container>
+                    <iframe
+                        src={`http://localhost:4200/#/${videoChannel.sessionId}`} // local 시험할 때
+                        // src={`http://i9a402.p.ssafy.io:8443/#/${videoChannel.sessionId}`} // 우리 서버에서
+                        allow="camera;microphone;fullscreen;autoplay"
+                        width="100%"
+                        height="100%">
+                        <p>사용 중인 브라우저는 iframe을 지원하지 않습니다.</p>
+                    </iframe>
+                </S.Container>
+                {!isSummaryVisible ? (
+                    <S.SummaryContainer>
+                        <S.SummaryHeader>회의록</S.SummaryHeader>
+                        <S.CreateSummaryHeader>새로운 회의록 만들기</S.CreateSummaryHeader>
+                        <S.CreateSummary>
+                            <S.FileInputWrapper>
+                                <S.ChosenFile>
+                                    {selectedFile ? { selectedFile } : '회의록을 업로드하세요.'}
+                                </S.ChosenFile>
+                                <input type="file" id="file" placeholder="첨부파일" onChange={handleFileChange} />
+                                <label htmlFor="file">
+                                    <S.FileButton>파일 선택</S.FileButton>
+                                </label>
+                            </S.FileInputWrapper>
+                            <S.UploadButton onClick={handleUpload}>Upload</S.UploadButton>
+                            <S.NoFileMessage>{uploadStatus}</S.NoFileMessage>
+                        </S.CreateSummary>
+                        <S.SummaryList>
+                            {summary.map((data, index) => (
+                                <S.Recording
+                                    className={focusedRecording === data.id ? 'focused' : ''}
+                                    key={data.id}
+                                    onClick={() =>
+                                        api.apis.getAnalysisDetail(data.id).then(response => {
+                                            console.log(response.data)
+                                            toggleVisibility()
+                                            setFocusedSummary(response.data.summarizationText)
+                                            setFocusedSummaryUrl(response.data.s3URL)
+                                            setFocusedRecording(data)
+                                        })
+                                    }>
+                                    <S.SummaryContent>
+                                        <S.SummaryTitle>
+                                            {index + 1}. {data.recordName}
+                                        </S.SummaryTitle>
+                                        <S.SummaryDate>{data.createdAt}</S.SummaryDate>
+                                    </S.SummaryContent>
+                                    <IoChevronForward />
+                                </S.Recording>
+                            ))}
+                        </S.SummaryList>
+                    </S.SummaryContainer>
+                ) : (
+                    <S.SummaryContainer>
+                        <IoChevronBack onClick={() => setIsSummaryVisible(false)} />
+                        <S.DetailHeader>{focusedRecording.recordName} 요약본</S.DetailHeader>
+                        <S.SummaryDetail>
+                            <S.DetailContent>{focusedSummary}</S.DetailContent>
+                            <S.DetailUrl onClick={() => window.open({ focusedSummaryUrl })}>
+                                {focusedSummaryUrl}
+                            </S.DetailUrl>
+                        </S.SummaryDetail>
+                    </S.SummaryContainer>
+                )}
+            </S.Content>
         </S.Wrap>
     )
 }
 
 const S = {
-    Recording: styled.div`
-        margin: 0 16px;
-    `,
     TextBox: styled.div`
         display: flex;
         flex-wrap: wrap;
@@ -179,6 +204,11 @@ const S = {
     Wrap: styled.div`
         display: flex;
         flex-direction: column;
+        width: 100%;
+        height: 100%;
+    `,
+    Content: styled.div`
+        display: flex;
         width: 100%;
         height: 100%;
     `,
@@ -218,9 +248,184 @@ const S = {
     Container: styled.div`
         display: flex;
         height: 100%;
+        width: 100%;
         max-height: calc(100vh - 152px);
-        margin: 16px;
+        margin: 0 16px;
         border-radius: 8px;
+    `,
+    SummaryContainer: styled.div`
+        height: 100%;
+        width: 318px;
+        background-color: ${({ theme }) => theme.color.white};
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        margin-right: 16px;
+        padding: 8px;
+        & svg {
+            width: 16px;
+            height: 16px;
+            margin: 8px;
+            cursor: pointer;
+            color: ${({ theme }) => theme.color.black};
+            justify-self: flex-end;
+            &:hover {
+                color: ${({ theme }) => theme.color.main};
+            }
+        }
+    `,
+    SummaryHeader: styled.div`
+        font-size: ${({ theme }) => theme.fontsize.title2};
+        font-weight: bold;
+        margin: 16px 0 16px 8px;
+    `,
+    CreateSummaryHeader: styled.div`
+        font-size: ${({ theme }) => theme.fontsize.title3};
+        padding: 16px 0 16px 16px;
+    `,
+    CreateSummary: styled.div`
+        display: flex;
+        flex-direction: column;
+    `,
+    FileInputWrapper: styled.div`
+        display: flex;
+        align-items: center;
+        margin-bottom: 16px;
+        & > input {
+            display: none;
+        }
+    `,
+    ChosenFile: styled.div`
+        display: flex;
+        align-items: center;
+        padding: 4px 4px 4px 8px;
+        font-size: ${({ theme }) => theme.fontsize.sub1};
+        height: 30px;
+        width: 200px;
+        margin: 0 0 0 16px;
+        border: 1px solid ${({ theme }) => theme.color.middlegray};
+        border-top-left-radius: 8px;
+        border-bottom-left-radius: 8px;
+    `,
+
+    FileButton: styled.div`
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 72px;
+        height: 30px;
+        border-top-right-radius: 8px;
+        border-bottom-right-radius: 8px;
+        background-color: ${({ theme }) => theme.color.middlegray};
+        font-size: ${({ theme }) => theme.fontsize.sub1};
+        & > input {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            overflow: hidden;
+        }
+    `,
+    UploadButton: styled.div`
+        display: flex;
+        align-self: center;
+        background-color: ${({ theme }) => theme.color.black};
+        color: ${({ theme }) => theme.color.white};
+        padding: 8px 16px;
+        align-items: center;
+        justify-content: center;
+        font-size: ${({ theme }) => theme.fontsize.sub1};
+        border-radius: 4px;
+        margin-bottom: 8px;
+    `,
+    NoFileMessage: styled.div`
+        font-size: 13px;
+        align-self: center;
+        height: 15px;
+        color: ${({ theme }) => theme.color.warning};
+    `,
+    SummaryList: styled.div`
+        width: 100%;
+        height: auto;
+        overflow-y: auto;
+        &::-webkit-scrollbar {
+            height: 3px;
+            width: 0px;
+        }
+        &::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        &::-webkit-scrollbar-thumb {
+            background: ${({ theme }) => theme.color.gray};
+            border-radius: 45px;
+        }
+        &::-webkit-scrollbar-thumb:hover {
+            background: ${({ theme }) => theme.color.gray};
+        }
+        & > div .focused {
+            background-color: ${({ theme }) => theme.color.lightgray};
+            & svg {
+                color: ${({ theme }) => theme.color.main};
+            }
+        }
+    `,
+    Recording: styled.div`
+        width: 100%;
+        height: 70px;
+        display: flex;
+        padding: 16px 24px;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        &:hover {
+            background-color: ${({ theme }) => theme.color.lightgray};
+            & svg {
+                color: ${({ theme }) => theme.color.main};
+            }
+        }
+        & svg {
+            width: 16px;
+            height: 16px;
+            color: ${({ theme }) => theme.color.white};
+        }
+    `,
+    SummaryDetail: styled.div`
+        display: flex;
+        width: 310px;
+        height: auto;
+        padding: 16px 16px;
+        flex-direction: column;
+    `,
+    DetailHeader: styled.div`
+        font-size: ${({ theme }) => theme.fontsize.title2};
+        font-weight: bold;
+        margin: 16px 0 16px 16px;
+    `,
+    DetailContent: styled.div`
+        line-height: 24px;
+        margin: 16px 0;
+    `,
+    DetailUrl: styled.div`
+        cursor: pointer;
+        font-size: 13px;
+        &:hover {
+            color: ${({ theme }) => theme.color.main};
+        }
+    `,
+    SummaryContent: styled.div`
+        display: flex;
+        width: 245px;
+        height: 100%;
+        flex-direction: column;
+        justify-content: space-between;
+    `,
+    SummaryTitle: styled.div`
+        font-size: ${({ theme }) => theme.fontsize.content};
+        font-weight: bold;
+    `,
+    SummaryDate: styled.div`
+        font-size: 11px;
+        color: ${({ theme }) => theme.color.gray};
     `,
 }
 
