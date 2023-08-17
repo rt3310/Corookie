@@ -52,6 +52,15 @@ export const apis = {
         instance.get(
             `/api/v1/projects/${projectId}/text-channels/${textChannelId}/threads?page=${page}&size=${size}&sort=${sort},${direction}`,
         ),
+    getImojis: (projectId, channelId, threadId) =>
+        instance.get(`/api/v1/projects/${projectId}/text-channels/${channelId}/threads/${threadId}/emojis`),
+
+    deleteImoji: (projectId, textChannelId, threadId, emoji) =>
+        instance.delete(
+            `/api/v1/projects/${projectId}/text-channels/${textChannelId}/threads/${threadId}/emojis/${emoji}`,
+        ),
+    createImoji: (projectId, textChannelId, threadId, emoji) =>
+        instance.post(`/api/v1/projects/${projectId}/text-channels/${textChannelId}/threads/${threadId}/emojis`, emoji),
 
     getComments: (projectId, textChannelId, threadId, page, size, sort, direction) =>
         instance.get(
@@ -89,4 +98,13 @@ export const apis = {
     changeMemberProfile: (memberId, data) => instance.put(`/api/v1/members/${memberId}/profile`, data),
     changeMemberName: (memberId, data) => instance.put(`/api/v1/members/${memberId}/name`, data),
     getMe: () => instance.get(`api/v1/members/me`),
+
+    createPlan: (projectId, data) => instance.post(`/api/v1/projects/${projectId}/plans`, data),
+    getPlans: (projectId, date) => instance.get(`/api/v1/projects/${projectId}/plans?date=${date}`),
+    getPlan: (projectId, planId) => instance.get(`/api/v1/projects/${projectId}/plans/${planId}`),
+
+    createPlanCategory: (projectId, data) => instance.post(`/api/v1/projects/${projectId}/plan-categories`, data),
+    getPlanCategories: projectId => instance.get(`/api/v1/projects/${projectId}/plan-categories`),
+    deletePlanCategory: (projectId, categoryId) =>
+        instance.delete(`/api/v1/projects/${projectId}/plan-categories/${categoryId}`),
 }

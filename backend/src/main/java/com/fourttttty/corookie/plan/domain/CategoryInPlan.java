@@ -1,8 +1,7 @@
 package com.fourttttty.corookie.plan.domain;
 
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -14,19 +13,24 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CategoryInPlan {
 
-    @EmbeddedId
-    private CategoryInPlanId id;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
+    private Long id;
 
-    private CategoryInPlan(CategoryInPlanId categoryInPlanId) {
-        this.id = categoryInPlanId;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "plan_id", nullable = false)
+    private Plan plan;
 
-    public Boolean exists(List<Long> PlanCategoryIdList) {
-        return PlanCategoryIdList.stream()
-                .anyMatch(longId -> longId.equals(this.id.getPlanCategory().getId()));
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "plan_category_id", nullable = false)
+    private PlanCategory planCategory;
+
+    private CategoryInPlan(Plan plan, PlanCategory planCategory) {
+        this.plan = plan;
+        this.planCategory = planCategory;
     }
 
     public static CategoryInPlan of(Plan plan, PlanCategory planCategory) {
-        return new CategoryInPlan(new CategoryInPlanId(plan, planCategory));
+        return new CategoryInPlan(plan, planCategory);
     }
 }

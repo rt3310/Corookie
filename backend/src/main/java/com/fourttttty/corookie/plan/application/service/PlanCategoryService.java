@@ -6,7 +6,6 @@ import com.fourttttty.corookie.plan.domain.PlanCategory;
 import com.fourttttty.corookie.plan.dto.request.PlanCategoryCreateRequest;
 import com.fourttttty.corookie.plan.dto.response.PlanCategoryResponse;
 import com.fourttttty.corookie.project.application.repository.ProjectRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +16,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class PlanCategoryService {
+
     private final PlanCategoryRepository planCategoryRepository;
     private final ProjectRepository projectRepository;
 
@@ -27,17 +27,16 @@ public class PlanCategoryService {
     }
 
     @Transactional
-    public PlanCategory create(PlanCategoryCreateRequest request, Long projectId) {
-        return planCategoryRepository.findByContent(request.content())
-            .orElse(planCategoryRepository.save(PlanCategory.of(request.content(), request.color(),
-                    projectRepository.findById(projectId).orElseThrow(ProjectNotFoundException::new))));
+    public PlanCategoryResponse create(PlanCategoryCreateRequest request, Long projectId) {
+        return PlanCategoryResponse.from(planCategoryRepository.save(
+                PlanCategory.of(
+                        request.content(),
+                        request.color(),
+                        projectRepository.findById(projectId).orElseThrow(ProjectNotFoundException::new))));
     }
 
-    public PlanCategory findById(Long id){
-        return planCategoryRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-    }
-
-    public PlanCategoryResponse findByContent(String content) {
-        return PlanCategoryResponse.from(planCategoryRepository.findByContent(content).orElseThrow(EntityNotFoundException::new));
+    @Transactional
+    public void delete(Long planCategoryId) {
+        planCategoryRepository.deleteById(planCategoryId);
     }
 }

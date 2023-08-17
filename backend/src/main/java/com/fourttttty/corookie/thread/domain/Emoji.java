@@ -7,11 +7,10 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public enum Emoji {
-    THUMB(0L, "thumb"),
-    HAPPY(1L, "happy"),
-    SAD(2L, "sad");
+    GOOD("good"),
+    SMILE("smile"),
+    BAD("bad");
 
-    private final Long id;
     private final String value;
 
     @JsonCreator
@@ -23,9 +22,6 @@ public enum Emoji {
         }
         throw new InvalidEmojiException();
     }
-
-    @JsonValue
-    public Long getId() { return this.id; }
 
     @JsonValue
     public String getValue() { return this.value; }

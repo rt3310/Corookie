@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class PlanMemberService {
     private final PlanMemberRepository planMemberRepository;
@@ -29,7 +30,7 @@ public class PlanMemberService {
 
     public List<PlanMemberResponse> findAllByPlanId(Long planId){
         return planMemberRepository.findByPlanId(planId).stream()
-            .map(planMember -> PlanMemberResponse.from(planMember))
+            .map(PlanMemberResponse::from)
             .toList();
     }
 

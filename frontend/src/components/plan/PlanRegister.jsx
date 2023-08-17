@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useParams } from 'react-router'
 import styled from 'styled-components'
 import DatePicker from 'react-datepicker'
 import { ko } from 'date-fns/esm/locale'
@@ -8,18 +9,20 @@ import { IoIosClose } from 'react-icons/io'
 import * as components from 'components'
 import * as style from 'style'
 import * as hooks from 'hooks'
+import * as api from 'api'
 
 const PlanRegister = () => {
+    const { projectId } = useParams()
     const { planStartDate, setPlanStartDate, planEndDate, setPlanEndDate } = hooks.planDateState()
     const { closePlanRegister } = hooks.planRegisterState()
-    const [title, setTitle] = useState('')
-    const [member, setMember] = useState([])
-    const [category, setCategory] = useState([])
-    const [content, setContent] = useState('')
-
-    useEffect(() => {
-        console.log(title)
-    }, [title])
+    const [plan, setPlan] = useState({
+        planName: '',
+        description: '',
+        planStart: null,
+        planEnd: null,
+        categoryIds: [],
+        memberIds: [],
+    })
 
     useEffect(() => {
         const now = new Date()
@@ -37,6 +40,14 @@ const PlanRegister = () => {
         }
     }, [])
 
+    useEffect(() => {
+        setPlan({
+            ...plan,
+            planStart: planStartDate,
+            planEnd: planEndDate,
+        })
+    }, [planStartDate, planEndDate])
+
     const changeStartDate = startDate => {
         if (startDate > planEndDate) {
             setPlanEndDate(startDate)
@@ -53,6 +64,20 @@ const PlanRegister = () => {
         setPlanEndDate(endDate)
     }
 
+    const postPlan = () => {
+        if (plan.planName === '') {
+            alert('일정 제목을 입력해주세요')
+            return
+        }
+        if (plan.planStart === null || plan.planEnd === null) {
+            alert('일정이 올바르지 않습니다')
+            return
+        }
+        api.apis.createPlan(projectId, plan).then(response => {
+            console.log(response)
+        })
+    }
+
     return (
         <S.Wrap>
             <S.Header>
@@ -63,7 +88,10 @@ const PlanRegister = () => {
             </S.Header>
             <S.PlanTitleBox>
                 <S.PlanTitleLabel>제목</S.PlanTitleLabel>
-                <S.PlanTitleInput placeholder="제목 작성" onChange={e => setTitle(e.target.value)} />
+                <S.PlanTitleInput
+                    placeholder="제목 작성"
+                    onChange={e => setPlan({ ...plan, planName: e.target.value })}
+                />
             </S.PlanTitleBox>
             <S.PlanDateBox>
                 <S.PlanDateLabel>날짜</S.PlanDateLabel>
@@ -83,15 +111,15 @@ const PlanRegister = () => {
                     />
                 </S.PlanDatePickerBox>
             </S.PlanDateBox>
-            <components.PlanOptionToggle state="member" selected={member} setSelected={setMember} />
-            <components.PlanCategoryOptionToggle state="category" selected={category} setSelected={setCategory} />
+            <components.PlanOptionToggle state="member" plan={plan} setPlan={setPlan} />
+            <components.PlanCategoryOptionToggle state="category" plan={plan} setPlan={setPlan} />
             <S.PlanContentBox>
                 <S.PlanContentHeader>내용</S.PlanContentHeader>
                 <S.PlanContentInput
                     placeholder="내용을 입력하세요"
-                    onChange={e => setContent(e.target.value)}></S.PlanContentInput>
+                    onChange={e => setPlan({ ...plan, description: e.target.value })}></S.PlanContentInput>
             </S.PlanContentBox>
-            <S.SaveButton>저장</S.SaveButton>
+            <S.SaveButton onClick={() => postPlan()}>저장</S.SaveButton>
         </S.Wrap>
     )
 }
@@ -107,7 +135,7 @@ const S = {
         box-shadow: ${({ theme }) => theme.shadow.card};
         margin: 16px;
         padding: 16px;
-        overflow: auto;
+        overflow: visible;
         /* animation: ${style.leftSlide} 0.4s linear; */
 
         &::-webkit-scrollbar {

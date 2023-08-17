@@ -43,3 +43,23 @@ client:
   host: localhost
   url: http://localhost:3000
   endpoint: success
+
+cloud:
+  aws:
+    s3:
+      bucket: corookie.sss
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+    credentials:
+      access-key: ${S3_ACCESS_KEY}
+      secret-key: ${S3_SECRET_KEY}
+
+web-client:
+  vito-api:
+    access-key: ${VITO_ACCESS_KEY}
+    secret-access-key: ${VITO_SECRET_KEY}
+
+ai-service:
+  domain: ${AI_DOMAIN}

@@ -89,39 +89,6 @@ include::{snippets}/plan-delete/path-parameters.adoc[]
 
 include::{snippets}/plan-delete/http-response.adoc[]
 
-
-== 카테고리 등록
-
-=== Request
-
-include::{snippets}/planCategory-create/http-request.adoc[]
-
-include::{snippets}/planCategory-create/path-parameters.adoc[]
-
-include::{snippets}/planCategory-create/request-fields.adoc[]
-
-=== Response
-
-include::{snippets}/planCategory-create/http-response.adoc[]
-
-include::{snippets}/planCategory-create/response-fields.adoc[]
-
-
-== 카테고리 삭제
-
-=== Request
-
-include::{snippets}/planCategory-delete/http-request.adoc[]
-
-include::{snippets}/planCategory-delete/path-parameters.adoc[]
-
-include::{snippets}/planCategory-delete/request-fields.adoc[]
-
-=== Response
-
-include::{snippets}/planCategory-delete/http-response.adoc[]
-
-
 == 일정 관련자 추가
 
 === Request

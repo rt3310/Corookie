@@ -7,6 +7,7 @@ import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.support.RestDocsTest;
 import com.fourttttty.corookie.textchannel.domain.TextChannel;
 import com.fourttttty.corookie.thread.application.service.ThreadEmojiService;
+import com.fourttttty.corookie.thread.domain.Emoji;
 import com.fourttttty.corookie.thread.domain.Thread;
 import com.fourttttty.corookie.thread.dto.request.ThreadEmojiCreateRequest;
 import com.fourttttty.corookie.thread.dto.response.ThreadEmojiResponse;
@@ -28,8 +29,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
-import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
-import static org.springframework.restdocs.payload.JsonFieldType.BOOLEAN;
+import static org.springframework.restdocs.payload.JsonFieldType.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -50,7 +50,7 @@ public class ThreadEmojiControllerTest extends RestDocsTest {
 
     @BeforeEach
     void initTexture() {
-        member = Member.of("name", "email", Oauth2.of(AuthProvider.KAKAO, "account"));
+        member = Member.of("name", "email", "https://test.com", Oauth2.of(AuthProvider.KAKAO, "account"));
         project = Project.of("memberName",
                 "description",
                 Boolean.FALSE,
@@ -69,7 +69,7 @@ public class ThreadEmojiControllerTest extends RestDocsTest {
     @DisplayName("쓰레드 이모지 정보 조회")
     void threadEmojiList() throws Exception {
         // given
-        ThreadEmojiResponse response = new ThreadEmojiResponse(1L,true, 1L);
+        ThreadEmojiResponse response = new ThreadEmojiResponse(Emoji.BAD, 1L, true);
         given(threadEmojiService.findByThreadAndMember(any(Long.class), any(Long.class))).willReturn(List.of(response));
 
         // when
@@ -77,8 +77,7 @@ public class ThreadEmojiControllerTest extends RestDocsTest {
 
         // then
         perform.andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].emojiId").value(response.emojiId()))
-                .andExpect(jsonPath("$[0].isClicked").value(response.isClicked()))
+                .andExpect(jsonPath("$[0].emoji").value(response.emoji().getValue()))
                 .andExpect(jsonPath("$[0].count").value(response.count()));
 
         perform.andDo(print())
@@ -90,17 +89,17 @@ public class ThreadEmojiControllerTest extends RestDocsTest {
                                 parameterWithName("textChannelId").description("텍스트 채널 키"),
                                 parameterWithName("threadId").description("쓰레드 키")),
                         responseFields(
-                                fieldWithPath("[].emojiId").type(NUMBER).description("이모지 키"),
-                                fieldWithPath("[].isClicked").type(BOOLEAN).description("회원의 이모지 클릭 여부"),
-                                fieldWithPath("[].count").type(NUMBER).description("이모지 갯수"))));
+                                fieldWithPath("[].emoji").type(STRING).description("이모지"),
+                                fieldWithPath("[].count").type(NUMBER).description("이모지 갯수"),
+                                fieldWithPath("[].isClicked").type(BOOLEAN).description("이모지 클릭 여부"))));
     }
 
     @Test
     @DisplayName("쓰레드에 이모지 추가")
     void threadEmojiCreate() throws Exception {
         // given
-        ThreadEmojiCreateRequest request = new ThreadEmojiCreateRequest(1L);
-        ThreadEmojiResponse response = ThreadEmojiResponse.from(1L, true, 1L);
+        ThreadEmojiCreateRequest request = new ThreadEmojiCreateRequest(Emoji.BAD);
+        ThreadEmojiResponse response = ThreadEmojiResponse.from(Emoji.BAD, 1L, true);
         given(threadEmojiService.create(any(ThreadEmojiCreateRequest.class), any(Long.class), any(Long.class)))
                 .willReturn(response);
 
@@ -111,8 +110,7 @@ public class ThreadEmojiControllerTest extends RestDocsTest {
 
         // then
         perform.andExpect(status().isOk())
-                .andExpect(jsonPath("$.emojiId").value(response.emojiId()))
-                .andExpect(jsonPath("$.isClicked").value(response.isClicked()))
+                .andExpect(jsonPath("$.emoji").value(response.emoji().getValue()))
                 .andExpect(jsonPath("$.count").value(response.count()));
 
         perform.andDo(print())
@@ -120,7 +118,7 @@ public class ThreadEmojiControllerTest extends RestDocsTest {
                         getDocumentRequest(),
                         getDocumentResponse(),
                         responseFields(
-                                fieldWithPath("emojiId").type(NUMBER).description("이모지 키"),
+                                fieldWithPath("emoji").type(STRING).description("이모지"),
                                 fieldWithPath("isClicked").type(BOOLEAN).description("회원의 이모지 클릭 여부"),
                                 fieldWithPath("count").type(NUMBER).description("이모지 갯수")
                         )));
@@ -132,7 +130,8 @@ public class ThreadEmojiControllerTest extends RestDocsTest {
         // given
 
         // when
-        ResultActions perform = mockMvc.perform(delete("/api/v1/projects/{projectId}/text-channels/{textChannelId}/threads/{threadId}/emojis/{emojiId}", 1L, 1L, 1L, 1L)
+        ResultActions perform = mockMvc.perform(delete("/api/v1/projects/{projectId}/text-channels/{textChannelId}/threads/{threadId}/emojis/{emoji}",
+                1L, 1L, 1L, "bad")
                 .contentType(MediaType.APPLICATION_JSON));
 
         perform.andExpect(status().isNoContent());
@@ -143,9 +142,9 @@ public class ThreadEmojiControllerTest extends RestDocsTest {
                         getDocumentRequest(),
                         getDocumentResponse(),
                         pathParameters(
+                                parameterWithName("emoji").description("이모지"),
                                 parameterWithName("projectId").description("프로젝트 키"),
                                 parameterWithName("threadId").description("쓰레드 키"),
-                                parameterWithName("emojiId").description("이모지 키"),
                                 parameterWithName("textChannelId").description("텍스트 채널 키"))));
     }
 }

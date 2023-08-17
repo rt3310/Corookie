@@ -27,6 +27,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -42,8 +43,7 @@ class VideoChannelControllerTest extends RestDocsTest {
     private VideoChannelService videoChannelService;
 
     private VideoChannel videoChannel;
-    
-    private String sessionId;
+
     private Project project;
 
     @BeforeEach
@@ -55,20 +55,20 @@ class VideoChannelControllerTest extends RestDocsTest {
                 "http://test.com",
                 false,
                 member);
-        sessionId = UUID.randomUUID().toString();
         videoChannel = VideoChannel.of("name",
                 true,
                 true,
                 project,
-                sessionId);
+                "sessionId");
     }
 
     @Test
     @DisplayName("비디오 채널 생성")
     void createVideoChannel() throws Exception {
         // given
+        VideoChannelResponse response = new VideoChannelResponse(1L, "name", "sessionId");
         given(videoChannelService.create(any(VideoChannelCreateRequest.class), any(Long.class)))
-                .willReturn(VideoChannelResponse.from(videoChannel));
+                .willReturn(response);
 
         VideoChannelCreateRequest request = new VideoChannelCreateRequest("name");
 
@@ -80,7 +80,7 @@ class VideoChannelControllerTest extends RestDocsTest {
         // then
         perform.andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value(request.name()))
-                .andExpect(jsonPath("$.sessionId").value(sessionId));
+                .andExpect(jsonPath("$.sessionId").value(response.sessionId()));
 
         perform.andDo(print())
                 .andDo(document("video-channel-create",
@@ -91,6 +91,7 @@ class VideoChannelControllerTest extends RestDocsTest {
                         requestFields(
                                 fieldWithPath("name").type(STRING).description("채널명")),
                         responseFields(
+                                fieldWithPath("id").type(NUMBER).description("비디오 채널 키"),
                                 fieldWithPath("name").type(STRING).description("채널명"),
                                 fieldWithPath("sessionId").type(STRING).description("세션 키"))));
     }
@@ -99,25 +100,18 @@ class VideoChannelControllerTest extends RestDocsTest {
     @DisplayName("비디오 채널 전체 조회")
     void findAllVideoChannel() throws Exception {
         // given
-        String sessionId2 = UUID.randomUUID().toString();
-
-        VideoChannel videoChannel2 = VideoChannel.of("name2",
-                true,
-                true,
-                project,
-                sessionId2);
-
+        VideoChannelResponse response1 = new VideoChannelResponse(1L, "name1", "sessionId1");
+        VideoChannelResponse response2 = new VideoChannelResponse(2L, "name2", "sessionId2");
         given(videoChannelService.findAll())
-                .willReturn(List.of(VideoChannelResponse.from(videoChannel),
-                        VideoChannelResponse.from(videoChannel2)));
+                .willReturn(List.of(response1, response2));
 
         // when
         ResultActions perform = mockMvc.perform(get("/api/v1/projects/{projectId}/video-channels", 1L));
 
         // then
         perform.andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].name").value("name"))
-                .andExpect(jsonPath("$[1].name").value("name2"));
+                .andExpect(jsonPath("$[0].name").value(response1.name()))
+                .andExpect(jsonPath("$[1].name").value(response2.name()));
 
         perform.andDo(print())
                 .andDo(document("video-channel-find-all",
@@ -126,6 +120,7 @@ class VideoChannelControllerTest extends RestDocsTest {
                         pathParameters(
                                 parameterWithName("projectId").description("프로젝트 키")),
                         responseFields(
+                                fieldWithPath("[].id").type(NUMBER).description("비디오 채널 키"),
                                 fieldWithPath("[].name").type(STRING).description("채널명"),
                                 fieldWithPath("[].sessionId").type(STRING).description("세션 키"))));
     }
@@ -134,16 +129,17 @@ class VideoChannelControllerTest extends RestDocsTest {
     @DisplayName("비디오 채널 상세 조회")
     void findVideoChannelById() throws Exception {
         // given
+        VideoChannelResponse response = new VideoChannelResponse(1L, "name", "sessionId");
         given(videoChannelService.findById(any(Long.class)))
-                .willReturn(VideoChannelResponse.from(videoChannel));
+                .willReturn(response);
 
         // when
         ResultActions perform = mockMvc.perform(get("/api/v1/projects/{projectId}/video-channels/{videoChannelId}", 1L, 1L));
 
         // then
         perform.andExpect(status().isOk())
-                .andExpect(jsonPath("name").value("name"))
-                .andExpect(jsonPath("sessionId").value(sessionId));
+                .andExpect(jsonPath("name").value(response.name()))
+                .andExpect(jsonPath("sessionId").value(response.sessionId()));
 
         perform.andDo(print())
                 .andDo(document("video-channel-find-by-id",
@@ -153,6 +149,7 @@ class VideoChannelControllerTest extends RestDocsTest {
                                 parameterWithName("projectId").description("프로젝트 키"),
                                 parameterWithName("videoChannelId").description("비디오 채널 키")),
                         responseFields(
+                                fieldWithPath("id").type(NUMBER).description("비디오 채널 키"),
                                 fieldWithPath("name").type(STRING).description("채널명"),
                                 fieldWithPath("sessionId").type(STRING).description("세션 키"))));
     }
@@ -161,8 +158,9 @@ class VideoChannelControllerTest extends RestDocsTest {
     @DisplayName("비디오 채널 수정")
     void modifyVideoChannel() throws Exception {
         // given
+        VideoChannelResponse response = new VideoChannelResponse(1L, "name", "sessionId");
         given(videoChannelService.modify(any(Long.class), any(VideoChannelModifyRequest.class)))
-                .willReturn(VideoChannelResponse.from(videoChannel));
+                .willReturn(response);
 
         VideoChannelModifyRequest request = new VideoChannelModifyRequest("name");
 
@@ -173,8 +171,8 @@ class VideoChannelControllerTest extends RestDocsTest {
 
         // then
         perform.andExpect(status().isOk())
-                .andExpect(jsonPath("name").value("name"))
-                .andExpect(jsonPath("sessionId").value(sessionId));
+                .andExpect(jsonPath("name").value(response.name()))
+                .andExpect(jsonPath("sessionId").value(response.sessionId()));
 
         perform.andDo(print())
                 .andDo(document("video-channel-modify",
@@ -186,6 +184,7 @@ class VideoChannelControllerTest extends RestDocsTest {
                         requestFields(
                                 fieldWithPath("name").type(STRING).description("채널명")),
                         responseFields(
+                                fieldWithPath("id").type(NUMBER).description("비디오 채널 키"),
                                 fieldWithPath("name").type(STRING).description("채널명"),
                                 fieldWithPath("sessionId").type(STRING).description("세션 키"))));
     }

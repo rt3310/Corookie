@@ -6,13 +6,14 @@ import * as hooks from 'hooks'
 import { IoAdd } from 'react-icons/io5'
 import { apis } from 'api'
 
-const PlanOptionToggle = ({ state, selected, setSelected }) => {
+const PlanOptionToggle = ({ state, plan, setPlan }) => {
     const [isActive, setIsActive] = useState(false)
+    const [members, setMembers] = useState([])
     const { projectMembers } = hooks.projectMembersState()
     const optionRef = useRef(null)
 
     useEffect(() => {
-        console.log('selected', selected)
+        console.log('members', members)
         const handleOutside = e => {
             if (optionRef.current && !optionRef.current.contains(e.target)) {
                 setIsActive(false)
@@ -25,7 +26,11 @@ const PlanOptionToggle = ({ state, selected, setSelected }) => {
     }, [optionRef])
 
     const clickSelectedMember = id => {
-        setSelected(selected.filter(member => member.memberId !== id))
+        setMembers(members.filter(member => member.memberId !== id))
+        setPlan({
+            ...plan,
+            memberIds: plan.memberIds.filter(memberId => memberId !== id),
+        })
     }
 
     return (
@@ -33,9 +38,9 @@ const PlanOptionToggle = ({ state, selected, setSelected }) => {
             <S.PlanOptionLabel>참여자</S.PlanOptionLabel>
             <S.Selector className={isActive ? 'active' : null}>
                 <S.Label onClick={() => setIsActive(!isActive)}>
-                    {selected.length === 0
+                    {members.length === 0
                         ? '참여자'
-                        : selected.map((selectedMember, index) => (
+                        : members.map((selectedMember, index) => (
                               <S.SelectedMember
                                   key={index}
                                   onClick={() => clickSelectedMember(selectedMember.memberId)}>
@@ -48,11 +53,15 @@ const PlanOptionToggle = ({ state, selected, setSelected }) => {
                         <S.Option
                             key={index}
                             onClick={() => {
-                                if (!selected.some(person => person.memberId === option.memberId)) {
+                                if (!members.some(person => person.memberId === option.memberId)) {
                                     setIsActive(false)
-                                    setSelected([...selected, option])
+                                    setMembers([...members, option])
+                                    setPlan({
+                                        ...plan,
+                                        memberIds: [...members, option.memberId],
+                                    })
                                 }
-                                console.log(selected)
+                                console.log(members)
                             }}>
                             {option.memberName}
                         </S.Option>

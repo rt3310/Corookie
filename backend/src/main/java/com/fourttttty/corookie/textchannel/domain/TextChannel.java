@@ -29,7 +29,7 @@ public class TextChannel extends BaseTime {
     @Column(nullable = false)
     private Boolean deletable;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id", nullable = false)
     private Project project;
 

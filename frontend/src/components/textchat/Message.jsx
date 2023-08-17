@@ -24,8 +24,8 @@ const Message = ({ isCode, text, language, thread }) => {
     } else {
         return (
             <div>
-                {thread.content.split('\n').map(line => (
-                    <p>{line}</p>
+                {thread.content.split('\n').map((line, idx) => (
+                    <p key={idx}>{line}</p>
                 ))}
             </div>
         )

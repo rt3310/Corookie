@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@Table(name = "thread_emoji")
+@Table(name = "thread_emoji",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "member_emoji", columnNames = {"emoji", "member_id", "thread_id"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ThreadEmoji {
 
@@ -16,23 +18,24 @@ public class ThreadEmoji {
     @Column(name = "thread_emoji_id")
     private Long id;
 
-    @Column(name = "memeber_id")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "emoji", nullable = false)
+    private Emoji emoji;
+
+    @Column(name = "member_id", nullable = false)
     private Long memberId;
 
-    @Column(name = "emoji_id")
-    private Long emojiId;
-
-    @Column(name = "thread_id")
+    @Column(name = "thread_id", nullable = false)
     private Long threadId;
 
-    private ThreadEmoji(Long memberId, Long emojiId, Long threadId) {
+    private ThreadEmoji(Emoji emoji, Long memberId, Long threadId) {
+        this.emoji = emoji;
         this.memberId = memberId;
-        this.emojiId = emojiId;
         this.threadId = threadId;
     }
 
-    public static ThreadEmoji of(Long memberId, Long emojiId, Long threadId) {
-        return new ThreadEmoji(memberId, emojiId, threadId);
+    public static ThreadEmoji of(Emoji emoji, Long memberId, Long threadId) {
+        return new ThreadEmoji(emoji, memberId, threadId);
     }
 
 }
