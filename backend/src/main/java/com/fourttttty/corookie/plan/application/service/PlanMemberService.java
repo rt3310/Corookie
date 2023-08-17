@@ -30,7 +30,7 @@ public class PlanMemberService {
 
     public List<PlanMemberResponse> findAllByPlanId(Long planId){
         return planMemberRepository.findByPlanId(planId).stream()
-            .map(planMember -> PlanMemberResponse.from(planMember))
+            .map(PlanMemberResponse::from)
             .toList();
     }
 

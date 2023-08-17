@@ -180,7 +180,7 @@ const ChannelNav = () => {
                         <S.Channel
                             key={videoChannel.id}
                             onClick={() => navigate('/project/' + project.id + '/channel/video/' + videoChannel.id)}>
-                            {index + 1}. {videoChannel.name}
+                            {videoChannel.name}
                             {/* {videoChannel.isPinned && <AiFillPushpin />} */}
                         </S.Channel>
                     ))}

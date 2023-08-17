@@ -46,9 +46,12 @@ const Login = () => {
 const S = {
     Wrap: styled.div`
         display: flex;
-        width: 100vw;
-        height: 100vh;
-        background-color: ${({ theme }) => theme.color.main};
+        width: 100%;
+        height: 100%;
+        /* background-color: ${({ theme }) => theme.color.main}; */
+        background-image: url(${require('images/main_background.png').default});
+        background-size: 100% 1000px;
+        background-position-y: center;
         justify-content: center;
         align-items: center;
     `,
@@ -58,7 +61,7 @@ const S = {
         align-items: center;
         width: 540px;
         height: 587px;
-        background-color: ${({ theme }) => theme.color.white};
+        /* background-color: ${({ theme }) => theme.color.white}; */
         border-radius: 8px;
     `,
     Logo: styled.div`
@@ -69,7 +72,7 @@ const S = {
         height: 24px;
         font-size: 24px;
         color: ${({ theme }) => theme.color.main};
-        margin: 130px 0 70px;
+        margin: 88px 0 100px;
     `,
     SocialLogin: styled.a`
         display: flex;
