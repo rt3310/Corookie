@@ -12,7 +12,8 @@ public record IssueListResponse(Long id,
                                 IssueProgress progress,
                                 IssuePriority priority,
                                 IssueCategory category,
-                                String memberName) {
+                                String memberName,
+                                String memberImageUrl) {
 
     public static IssueListResponse from(Issue issue) {
         return IssueListResponse.builder()
@@ -22,6 +23,7 @@ public record IssueListResponse(Long id,
                 .priority(issue.getPriority())
                 .category(issue.getCategory())
                 .memberName(issue.getManager().getName())
+                .memberImageUrl(issue.getManager().getImageUrl())
                 .build();
     }
 }
