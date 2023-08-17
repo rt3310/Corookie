@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { IoReorderTwoSharp } from 'react-icons/io5'
 import { BiChevronsUp, BiChevronUp, BiChevronDown, BiChevronsDown } from 'react-icons/bi'
-
+import * as components from 'components'
 import * as hooks from 'hooks'
 import * as api from 'api'
 
@@ -12,6 +12,7 @@ const KanbanBoard = ({ projectId }) => {
     const { tasks, setTasks } = hooks.tasksState()
     const { project } = hooks.projectState()
     const { issueDetailOpened, openIssueDetail, closeIssueDetail } = hooks.issueDetailState()
+    const [columns, setColumns] = useState(taskStatus)
 
     useEffect(() => {
         api.apis
@@ -55,6 +56,10 @@ const KanbanBoard = ({ projectId }) => {
         },
     }
 
+    useEffect(() => {
+        setColumns(taskStatus)
+    }, [tasks])
+
     const renderPriority = priority => {
         switch (priority) {
             case 'Highest':
@@ -71,8 +76,6 @@ const KanbanBoard = ({ projectId }) => {
                 return null
         }
     }
-
-    const [columns, setColumns] = useState(taskStatus)
 
     const onDragEnd = (result, columns, setColumns) => {
         if (!result.destination) return
@@ -119,62 +122,71 @@ const KanbanBoard = ({ projectId }) => {
     return (
         <S.Wrap>
             <DragDropContext onDragEnd={result => onDragEnd(result, columns, setColumns)}>
-                {Object.entries(columns).map(([columnId, column], index) => {
-                    return (
-                        <S.Column key={columnId}>
-                            {columnId === 'todo' && <S.Todo>{column.name}</S.Todo>}
-                            {columnId === 'inProgress' && <S.InProgress>{column.name}</S.InProgress>}
-                            {columnId === 'done' && <S.Done>{column.name}</S.Done>}
-                            <S.TaskBox>
-                                <Droppable droppableId={columnId} key={columnId}>
-                                    {(provided, snapshot) => {
-                                        return (
-                                            <S.IssueContainer {...provided.droppableProps} ref={provided.innerRef}>
-                                                {column.items.map((item, index) => {
-                                                    return (
-                                                        <Draggable key={item.id} draggableId={item.topic} index={index}>
-                                                            {(provided, snapshot) => {
-                                                                return (
-                                                                    <S.IssueDrag
-                                                                        ref={provided.innerRef}
-                                                                        {...provided.draggableProps}
-                                                                        {...provided.dragHandleProps}
-                                                                        isDragging={snapshot.isDragging}
-                                                                        style={{
-                                                                            ...provided.draggableProps.style,
-                                                                        }}>
-                                                                        <S.Container
-                                                                            onClick={() => toggleIssueDetail(item.id)}>
-                                                                            <S.IssueTopic>{item.topic}</S.IssueTopic>
-                                                                            <S.IssueInfo>
-                                                                                <S.Type>{item.category}</S.Type>
-                                                                                <S.Priority priority={item.priority}>
-                                                                                    {renderPriority(item.priority)}
-                                                                                </S.Priority>
-                                                                                <S.ProfileImg
-                                                                                    src={
-                                                                                        require('images/thread_profile.png')
-                                                                                            .default
-                                                                                    }
-                                                                                    alt="Profile"
-                                                                                />
-                                                                            </S.IssueInfo>
-                                                                        </S.Container>
-                                                                    </S.IssueDrag>
-                                                                )
-                                                            }}
-                                                        </Draggable>
-                                                    )
-                                                })}
-                                                {provided.placeholder}
-                                            </S.IssueContainer>
-                                        )
-                                    }}
-                                </Droppable>
-                            </S.TaskBox>
-                        </S.Column>
-                    )
-                })}
+                {columns &&
+                    Object.entries(columns).map(([columnId, column], index) => {
+                        return (
+                            <S.Column key={columnId}>
+                                {columnId === 'todo' && <S.Todo>{column.name}</S.Todo>}
+                                {columnId === 'inProgress' && <S.InProgress>{column.name}</S.InProgress>}
+                                {columnId === 'done' && <S.Done>{column.name}</S.Done>}
+                                <S.TaskBox>
+                                    <Droppable droppableId={columnId} key={columnId}>
+                                        {(provided, snapshot) => {
+                                            return (
+                                                <S.IssueContainer {...provided.droppableProps} ref={provided.innerRef}>
+                                                    {column.items.map((item, index) => {
+                                                        return (
+                                                            <Draggable
+                                                                key={item.id}
+                                                                draggableId={item.topic}
+                                                                index={index}>
+                                                                {(provided, snapshot) => {
+                                                                    return (
+                                                                        <S.IssueDrag
+                                                                            ref={provided.innerRef}
+                                                                            {...provided.draggableProps}
+                                                                            {...provided.dragHandleProps}
+                                                                            isDragging={snapshot.isDragging}
+                                                                            style={{
+                                                                                ...provided.draggableProps.style,
+                                                                            }}>
+                                                                            <S.Container
+                                                                                onClick={() =>
+                                                                                    toggleIssueDetail(item.id)
+                                                                                }>
+                                                                                <S.IssueTopic>
+                                                                                    {item.topic}
+                                                                                </S.IssueTopic>
+                                                                                <S.IssueInfo>
+                                                                                    <S.Type>{item.category}</S.Type>
+                                                                                    <S.Priority
+                                                                                        priority={item.priority}>
+                                                                                        {renderPriority(item.priority)}
+                                                                                    </S.Priority>
+                                                                                    <S.ProfileImg
+                                                                                        src={
+                                                                                            require('images/thread_profile.png')
+                                                                                                .default
+                                                                                        }
+                                                                                        alt="Profile"
+                                                                                    />
+                                                                                </S.IssueInfo>
+                                                                            </S.Container>
+                                                                        </S.IssueDrag>
+                                                                    )
+                                                                }}
+                                                            </Draggable>
+                                                        )
+                                                    })}
+                                                    {provided.placeholder}
+                                                </S.IssueContainer>
+                                            )
+                                        }}
+                                    </Droppable>
+                                </S.TaskBox>
+                            </S.Column>
+                        )
+                    })}
             </DragDropContext>
         </S.Wrap>
     )
