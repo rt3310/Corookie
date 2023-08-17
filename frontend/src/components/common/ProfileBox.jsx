@@ -215,6 +215,9 @@ const S = {
         font-size: ${({ theme }) => theme.fontsize.title2};
         margin: 0 8px 0 0;
         width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     `,
     MemberNameEdit: styled.input`
         font-size: ${({ theme }) => theme.fontsize.title2};

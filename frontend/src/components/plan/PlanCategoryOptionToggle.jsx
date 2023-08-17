@@ -2,7 +2,9 @@ import React, { useEffect, useState, useRef } from 'react'
 import styled from 'styled-components'
 
 import * as utils from 'utils'
-import { IoAdd } from 'react-icons/io5'
+import * as api from 'api'
+import * as hooks from 'hooks'
+import { IoAdd, IoClose } from 'react-icons/io5'
 import { HexColorPicker } from 'react-colorful'
 
 const PlanCategoryOptionToggle = ({ state, selected, setSelected }) => {
@@ -10,11 +12,38 @@ const PlanCategoryOptionToggle = ({ state, selected, setSelected }) => {
     const [addCategory, setAddCategory] = useState(false)
     const optionRef = useRef(null)
     const [categories, setCategories] = useState([])
+    const [newOption, setNewOption] = useState('')
+    const [newColor, setNewColor] = useState('#ffffff')
+
+    const { project } = hooks.projectState()
+
+    let colorRef = useRef(null)
+
+    useEffect(() => {
+        api.apis
+            .getPlanCategories(project.id)
+            .then(response => {
+                console.log(response.data)
+                setCategories(response.data)
+            })
+            .catch(error => console.log(error))
+    }, [])
 
     useEffect(() => {
         const handleOutside = e => {
-            if (optionRef.current && !optionRef.current.contains(e.target)) {
-                setIsActive(false)
+            if (!colorRef.current) {
+                if (optionRef.current && !optionRef.current.contains(e.target)) {
+                    setIsActive(false)
+                }
+            } else {
+                if (
+                    optionRef.current &&
+                    !optionRef.current.contains(e.target) &&
+                    colorRef.current &&
+                    !colorRef.current.contains(e.target)
+                ) {
+                    setIsActive(false)
+                }
             }
         }
         document.addEventListener('mousedown', handleOutside)
@@ -23,18 +52,27 @@ const PlanCategoryOptionToggle = ({ state, selected, setSelected }) => {
         }
     }, [optionRef])
 
-    const [newOption, setNewOption] = useState('')
-    const [newColor, setNewColor] = useState('#ffffff')
     let optionInput = useRef(null)
-    let colorRef = useRef(null)
+
     const handleAddOption = e => setNewOption(e.target.value)
     const addOptionKeyDown = async e => {
-        if (e.key === 'Enter') {
-            const option = { content: newOption, color: newColor }
-            setCategories([...categories, option])
+        if (e.key === 'Enter' && !categories.some(category => category.content === newOption)) {
+            const categoryRes = await api.apis
+                .createPlanCategory(project.id, { content: newOption, color: newColor })
+                .catch(error => console.log(error))
+            // console.log(categoryRes)
+            setCategories([...categories, categoryRes.data])
             setAddCategory(false)
+            setNewColor('#ffffff')
+            setNewOption('')
+        } else if (e.key === 'Enter') {
+            alert('이미 존재하는 카테고리입니다. ')
         }
     }
+
+    useEffect(() => {
+        console.log(newColor)
+    }, [newColor])
 
     useEffect(() => {
         if (addCategory) {
@@ -48,20 +86,56 @@ const PlanCategoryOptionToggle = ({ state, selected, setSelected }) => {
                 !colorRef.current.contains(e.target)
             ) {
                 setAddCategory(false)
-                if (!optionRef.current.contains(e.target)) {
-                    setIsActive(false)
-                }
+                setNewColor('#ffffff')
+                setNewOption('')
             }
         }
         document.addEventListener('mousedown', handleOutside)
         return () => {
             document.removeEventListener('mousedown', handleOutside)
         }
-    }, [optionInput, addCategory, optionRef])
+    }, [optionInput])
 
     const clickSelectedCategory = id => {
         setSelected(selected.filter(category => category.content !== id))
     }
+
+    const [textColor, setTextColor] = useState('#000000')
+
+    const textColorCalculator = backgroundColor => {
+        const color = backgroundColor.slice(1)
+
+        const r = parseInt(color.slice(0, 2), 16)
+        const g = parseInt(color.slice(2, 4), 16)
+        const b = parseInt(color.slice(4, 6), 16)
+
+        const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255
+        if (luminance < 0.5) {
+            return '#ffffff'
+        } else {
+            return '#000000'
+        }
+    }
+
+    const deleteCategory = async id => {
+        await api.apis.deletePlanCategory(project.id, id).catch(error => console.log(error))
+        setCategories(categories.filter(c => c.id !== id))
+    }
+
+    useEffect(() => {
+        const color = newColor.slice(1)
+
+        const r = parseInt(color.slice(0, 2), 16)
+        const g = parseInt(color.slice(2, 4), 16)
+        const b = parseInt(color.slice(4, 6), 16)
+
+        const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255
+        if (luminance < 0.5) {
+            setTextColor('#ffffff')
+        } else {
+            setTextColor('#000000')
+        }
+    }, [newColor])
 
     return (
         <S.PlanOptionBox>
@@ -73,45 +147,54 @@ const PlanCategoryOptionToggle = ({ state, selected, setSelected }) => {
                         : selected.map((selectedCategory, index) => (
                               <S.SelectedCategory
                                   key={index}
-                                  onClick={() => clickSelectedCategory(selectedCategory.content)}>
+                                  //   onClick={() => clickSelectedCategory(selectedCategory.content)}
+                                  color={selectedCategory.color}
+                                  textColor={textColorCalculator(selectedCategory.color)}>
                                   {selectedCategory.content}
+                                  <IoClose onClick={() => clickSelectedCategory(selectedCategory.content)} />
                               </S.SelectedCategory>
                           ))}
                 </S.Label>
                 {addCategory && (
                     <S.ColorPicker ref={colorRef}>
-                        <HexColorPicker color={newColor} onChangeComplete={color => setNewColor(color.hex)} />
+                        <HexColorPicker color={newColor} onChange={setNewColor} />
                     </S.ColorPicker>
                 )}
                 <S.Options ref={optionRef}>
                     {categories.map((option, index) => (
-                        <S.Option
-                            key={index}
-                            onClick={() => {
-                                setIsActive(false)
-                                setSelected([...selected, option])
-                            }}
-                            color={option.color}>
-                            {option.content}
+                        <S.Option key={index}>
+                            <S.OptionContainer
+                                color={option.color}
+                                textColor={textColorCalculator(option.color)}
+                                onClick={() => {
+                                    if (!selected.some(category => category.content === option.content)) {
+                                        setIsActive(false)
+                                        setSelected([...selected, option])
+                                    } else {
+                                        clickSelectedCategory(option.content)
+                                    }
+                                }}>
+                                {option.content}
+                            </S.OptionContainer>
+                            <IoClose onClick={() => deleteCategory(option.id)} />
                         </S.Option>
                     ))}
 
-                    <S.AddOption>
+                    <S.AddOption color={newColor}>
                         {!addCategory && (
                             <S.Text onClick={() => setAddCategory(!addCategory)}>
                                 <IoAdd /> 카테고리 추가
                             </S.Text>
                         )}
                         {addCategory && (
-                            <S.AddOptionInput ref={optionInput}>
-                                <S.NewOption
-                                    value={newOption}
-                                    onChange={handleAddOption}
-                                    onKeyDown={addOptionKeyDown}
-                                    placeholder="제목을 입력하세요"
-                                />
-                                <S.ColorPreview color={newColor} />
-                            </S.AddOptionInput>
+                            <S.NewOption
+                                ref={optionInput}
+                                value={newOption}
+                                onChange={handleAddOption}
+                                onKeyDown={addOptionKeyDown}
+                                placeholder="제목을 입력하세요"
+                                textColor={textColor}
+                            />
                         )}
                     </S.AddOption>
                 </S.Options>
@@ -155,10 +238,41 @@ const S = {
         border-radius: 8px;
         font-family: ${({ theme }) => theme.font.main};
         font-size: ${({ theme }) => theme.fontsize.sub1};
+        overflow-x: auto;
+        &::-webkit-scrollbar {
+            height: 3px;
+            width: 0px;
+        }
+        &::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        &::-webkit-scrollbar-thumb {
+            background: ${({ theme }) => theme.color.gray};
+            border-radius: 45px;
+        }
+        &::-webkit-scrollbar-thumb:hover {
+            background: ${({ theme }) => theme.color.gray};
+        }
     `,
     SelectedCategory: styled.div`
         display: flex;
-        padding: 0 4px;
+        padding: 3px 6px;
+        align-items: center;
+        justify-content: space-between;
+        background-color: ${props => props.color};
+        color: ${props => props.textColor};
+        border-radius: 8px;
+        margin-right: 2px;
+        white-space: nowrap;
+        & svg {
+            width: 16px;
+            height: 16px;
+            color: ${props => props.textColor};
+            cursor: pointer;
+            &:hover {
+                color: ${({ theme }) => theme.color.main};
+            }
+        }
     `,
     Options: styled.ul`
         position: absolute;
@@ -192,12 +306,20 @@ const S = {
         }
     `,
     Option: styled.li`
-        padding: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 4px 8px;
         cursor: pointer;
         white-space: nowrap;
         &:hover {
             background-color: ${({ theme }) => theme.color.main};
             color: ${({ theme }) => theme.color.white};
+            & svg {
+                color: ${({ theme }) => theme.color.white};
+                cursor: pointer;
+                margin-left: 2px;
+            }
         }
 
         &:first-child {
@@ -208,20 +330,26 @@ const S = {
             border-radius: 0 0 8px 8px;
         }
     `,
+    OptionContainer: styled.div`
+        display: flex;
+        align-items: center;
+        background-color: ${props => props.color};
+        color: ${props => props.textColor};
+        padding: 3px 6px;
+        width: auto;
+        height: 26px;
+        border-radius: 8px;
+    `,
     AddOption: styled.li`
         padding: 8px;
         cursor: pointer;
         white-space: nowrap;
-        &:hover {
+        /* &:hover {
             background-color: ${({ theme }) => theme.color.main};
             color: ${({ theme }) => theme.color.white};
-        }
+        } */
         overflow: visible;
-    `,
-    AddOptionInput: styled.div`
-        display: flex;
-        overflow: visible;
-        justify-content: space-between;
+        background-color: ${props => props.color};
     `,
     Text: styled.div`
         display: flex;
@@ -234,18 +362,16 @@ const S = {
         outline: none;
         font-family: 'Noto Sans KR', 'Pretendard', sans-serif;
         font-size: ${({ theme }) => theme.fontsize.content};
-    `,
-    ColorPreview: styled.div`
-        width: 8px;
-        height: 8px;
-        background-color: ${props => props.color};
+        border-radius: 8px;
+        background-color: transparent;
+        color: ${props => props.textColor};
     `,
     ColorPicker: styled.div`
         position: absolute;
-        top: 0;
-        left: -100px;
-        height: 100px;
-        width: 100px;
+        top: 30px;
+        left: -200px;
+        height: 200px;
+        width: 200px;
         z-index: 10000;
         & .react-colorful {
             width: 100%;

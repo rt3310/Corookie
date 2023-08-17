@@ -14,6 +14,7 @@ import * as hooks from 'hooks'
 const Plan = () => {
     const [currentMonth, setCurrentMonth] = useState(new Date())
     const { planRegisterOpened, openPlanRegister } = hooks.planRegisterState()
+    const { planDetailOpened, openPlanDetail } = hooks.planDetailState()
 
     const prevMonth = () => {
         setCurrentMonth(subMonths(currentMonth, 1))
@@ -35,6 +36,7 @@ const Plan = () => {
                             </div>
                             <IoIosArrowForward onClick={() => nextMonth()} />
                         </S.MonthBox>
+                        <S.DetailButton onClick={() => openPlanDetail(1)}>상세</S.DetailButton>
                         <S.CreateButton onClick={() => openPlanRegister()}>
                             <BsPlus /> 생성
                         </S.CreateButton>
@@ -54,6 +56,7 @@ const Plan = () => {
                 </DndProvider>
             </S.Container>
             {planRegisterOpened && <components.PlanRegister />}
+            {planDetailOpened && <components.PlanDetail />}
         </S.Wrap>
     )
 }
@@ -139,6 +142,28 @@ const S = {
             box-shadow: none;
         }
     `,
+    DetailButton: styled.button`
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        right: 80px;
+        width: 56px;
+        height: 30px;
+        border-radius: 8px;
+        border: 1px solid ${({ theme }) => theme.color.main};
+        background-color: ${({ theme }) => theme.color.main};
+        color: ${({ theme }) => theme.color.white};
+        margin: 0 16px;
+        transition-duration: 0.2s;
+
+        &:hover {
+            background-color: ${({ theme }) => theme.color.white};
+            color: ${({ theme }) => theme.color.main};
+            box-shadow: none;
+        }
+    `,
+
     WeekHeader: styled.div`
         width: 100%;
         height: 32px;
