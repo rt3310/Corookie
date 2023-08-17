@@ -2,7 +2,7 @@
 FROM azul/zulu-openjdk:17-latest
 WORKDIR /app
 
-COPY build/libs/corookie-0.0.1-SNAPSHOT.jar .
+COPY backend/build/libs/corookie-0.0.1-SNAPSHOT.jar .
 
 ARG KAKAO_CLIENT_ID
 ARG KAKAO_CLIENT_SECRET
@@ -30,7 +30,8 @@ ENV VITO_SECRET_KEY=$VITO_SECRET_KEY
 ENV AI_DOMAIN=$AI_DOMAIN
 ENV JWT_SECRET=$JWT_SECRET
 
-USER nobody
+USER root
+RUN chmod +x corookie-0.0.1-SNAPSHOT.jar
 ENTRYPOINT [\
     "java",\
     "-jar",\
