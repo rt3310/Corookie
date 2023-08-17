@@ -31,7 +31,9 @@ const TopTab = () => {
 
     return (
         <S.Wrap style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <S.Title onClick={() => navigate(utils.URL.HOME.MAIN)}>CoRookie</S.Title>
+            <S.Title onClick={() => navigate(utils.URL.HOME.MAIN)}>
+            <img src={require('images/logo.png').default} alt={'로고'} />
+            </S.Title>
             <S.Profile onClick={() => toggleProfile()}>
                 <img
                     src={memberImageUrl ? memberImageUrl : require('images/profile.png').default}
@@ -51,14 +53,12 @@ const S = {
         height: 56px;
     `,
     Title: styled.div`
-        height: 100%;
-        width: 167px;
-        font-family: 'Futura PT';
-        font-size: ${({ theme }) => theme.fontsize.logo};
-        font-weight: 700;
-        color: ${({ theme }) => theme.color.main};
-        padding: 24px 8px 8px 32px;
         cursor: pointer;
+        margin: 16px;
+        padding: 20px 0 0 0;
+        & img {
+            width: 180px;
+        }
     `,
     Profile: styled.div`
         width: 40px;

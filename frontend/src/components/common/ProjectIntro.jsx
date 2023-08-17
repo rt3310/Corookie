@@ -105,9 +105,9 @@ const ProjectIntro = () => {
                             <S.Project
                                 key={index}
                                 onClick={() => {
-                                    if (window.confirm(`프로젝트 ${project.name}으로 이동하시겠습니까?`)) {
+                                    if (window.confirm(`${project.name}으로 이동하시겠습니까?`)) {
                                         navigate('/project/' + project.id)
-                                        alert(`프로젝트 ${project.name}으로 이동했습니다. `)
+                                        alert(`${project.name} 이동완료`)
                                     }
                                 }}>
                                 <S.ProjectText>{project.name}</S.ProjectText>
