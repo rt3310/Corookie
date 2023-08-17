@@ -106,7 +106,7 @@ const LandingMain = () => {
                 <div>
                     <S.ProjectCreateForm className="project-create-form">
                         <S.ProjectNameInput
-                            placeholder="프로젝트명을  입력하세요"
+                            placeholder="프로젝트명을&#13;입력하세요"
                             maxlength="16"
                             onChange={e => setProject({ ...project, name: e.target.value })}
                         />
@@ -225,24 +225,16 @@ const S = {
         background-color: ${({ theme }) => theme.color.white};
         box-shadow: ${({ theme }) => theme.shadow.card};
         color: ${({ theme }) => theme.color.lightgray};
-        /* display: flex; */
-        /* flex-direction: column;
-        align-items: center; */
+
         .project-create-form {
         }
         .carousel {
             max-width: 1000px;
-            /* width: 600px; */
         }
         .slider-wrapper {
             /* width: 600px; */
         }
     `,
-    // ProjectNameBox: styled.div`
-    //     width: 100%;
-    //     height: 200px;
-    //     margin: 30px 16px;
-    // `,
 
     ProjectNameInput: styled.input`
         width: 90%;
@@ -252,14 +244,14 @@ const S = {
         outline: none;
         border-radius: 8px;
         margin: 16px 16px 0 16px;
-        font-size: ${({ theme }) => theme.fontsize.logo};
+        font-size: 40px;
         font-family: ${({ theme }) => theme.font.main};
         background-color: ${({ theme }) => theme.color.white};
         padding: 0 16px 100px;
         /* overflow-y: hidden; */
         &::placeholder {
-            font-size: 45px;
-            white-space: pre-wrap;
+            font-size: 40px;
+            white-space: pre-line;
             color: ${({ theme }) => theme.color.gray};
         }
     `,
@@ -278,7 +270,7 @@ const S = {
         outline: none;
         border-radius: 8px;
         margin: 16px;
-        font-size: ${({ theme }) => theme.fontsize.content};
+        font-size: 20px;
         font-family: ${({ theme }) => theme.font.main};
         background-color: ${({ theme }) => theme.color.white};
         /* border: 1px solid ${({ theme }) => theme.color.black}; */
@@ -365,7 +357,7 @@ const S = {
     ProjectName: styled.div`
         width: 100%;
         height: 60%;
-        padding: 30px 30px 16px 30px;
+        padding: 28px 28px 16px 28px;
         color: ${({ theme }) => theme.color.white};
         font-size: ${({ theme }) => theme.fontsize.title2};
         line-height: 1.5;
@@ -374,7 +366,7 @@ const S = {
     ProjectDescription: styled.div`
         width: 100%;
         height: 40%;
-        padding: 12px 30px 30px 30px;
+        padding: 0 28px 28px 28px;
         color: ${({ theme }) => theme.color.white};
         font-size: 13px;
         text-align: left;

@@ -11,7 +11,7 @@ const LandingText = () => {
                 스레드를 열어 관련된 내용에 대해 논의할 수 있는 구조적인 채팅은 협업에 특화되어 있습니다.
             </S.SubTitle2>
             <S.ImageContent>
-                <img src={require('images/landing_text.png').default} alt="채팅1" />
+                <img src={require('images/text_sample.png').default} alt="채팅1" />
                 <img src={require('images/landing_text.png').default} alt="채팅2" />
             </S.ImageContent>
         </S.Wrap>
