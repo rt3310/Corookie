@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 import { Outlet } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -9,6 +10,7 @@ import * as api from 'api'
 import * as components from 'components'
 
 const Layout = () => {
+    const navigate = useNavigate()
     const { projectId } = useParams()
     const { profileOpened } = hooks.profileState()
     const { project, setProject } = hooks.projectState()
@@ -34,9 +36,20 @@ const Layout = () => {
             }
         }
 
-        api.apis.getMe().then(response => {
-            setMe(response.data)
-        })
+        api.apis
+            .getMe()
+            .then(response => {
+                setMe(response.data)
+            })
+            .catch(err => {
+                navigate('/')
+            })
+        api.apis
+            .checkMeInProject(projectId)
+            .then()
+            .catch(err => {
+                navigate('/')
+            })
         initProject(projectId)
     }, [])
 
