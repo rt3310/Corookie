@@ -35,6 +35,7 @@ public class PlanCategoryService {
                         projectRepository.findById(projectId).orElseThrow(ProjectNotFoundException::new))));
     }
 
+    @Transactional
     public void delete(Long planCategoryId) {
         planCategoryRepository.deleteById(planCategoryId);
     }
