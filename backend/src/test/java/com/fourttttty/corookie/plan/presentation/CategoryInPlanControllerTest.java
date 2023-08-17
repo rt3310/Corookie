@@ -58,9 +58,8 @@ class CategoryInPlanControllerTest extends RestDocsTest {
     }
 
     @Test
-    @DisplayName("프로젝트 id로 카테고리 조회")
+    @DisplayName("일정에 있는 카테고리 목록 조회")
     void categoryList() throws Exception {
-
         List<PlanCategoryResponse> response = List.of(new PlanCategoryResponse(1L, "content", "#ffddaa"));
         given(categoryInPlanService.findAllByPlanId(any(Long.class))).willReturn(response);
 
@@ -71,10 +70,22 @@ class CategoryInPlanControllerTest extends RestDocsTest {
                 .andExpect(jsonPath("$[0].id").value(response.get(0).id()))
                 .andExpect(jsonPath("$[0].content").value(response.get(0).content()))
                 .andExpect(jsonPath("$[0].color").value(response.get(0).color()));
+
+        perform.andDo(print())
+                .andDo(document("category-list-in-plan",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        pathParameters(
+                                parameterWithName("projectId").description("프로젝트 키"),
+                                parameterWithName("planId").description("일정 키")),
+                        responseFields(
+                                fieldWithPath("[].id").type(NUMBER).description("카테고리 키"),
+                                fieldWithPath("[].content").type(STRING).description("카테고리 내용"),
+                                fieldWithPath("[].color").type(STRING).description("카테고리 색"))));
     }
 
     @Test
-    @DisplayName("카테고리 추가")
+    @DisplayName("일정에 카테고리 추가")
     void categoryCreate() throws Exception {
         //given
         PlanCategoryResponse response = PlanCategoryResponse.from(planCategories.get(0));
@@ -97,7 +108,7 @@ class CategoryInPlanControllerTest extends RestDocsTest {
                 .andExpect(jsonPath("$.color").value(response.color()));
 
         perform.andDo(print())
-                .andDo(document("planCategory-create",
+                .andDo(document("category-create-in-plan",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         pathParameters(
@@ -113,7 +124,7 @@ class CategoryInPlanControllerTest extends RestDocsTest {
     }
 
     @Test
-    @DisplayName("카테고리 삭제")
+    @DisplayName("일정에 있는 카테고리 삭제")
     void categoryDelete() throws Exception {
         //when
         ResultActions perform = mockMvc.perform(delete(
@@ -125,12 +136,12 @@ class CategoryInPlanControllerTest extends RestDocsTest {
         perform.andExpect(status().isNoContent());
 
         perform.andDo(print())
-                .andDo(document("planCategory-delete",
+                .andDo(document("category-delete-in-plan",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         pathParameters(
                                 parameterWithName("projectId").description("프로젝트 키"),
                                 parameterWithName("planId").description("일정 키"),
-                                parameterWithName("categoryId").description("카테고리 키"))));
+                                parameterWithName("categoryId").description("프로젝트 키"))));
     }
 }
