@@ -23,6 +23,9 @@ import com.fourttttty.corookie.texture.member.application.repository.FakeMemberR
 import com.fourttttty.corookie.texture.project.application.repository.FakeProjectMemberRepository;
 import com.fourttttty.corookie.texture.project.application.repository.FakeProjectRepository;
 import com.fourttttty.corookie.texture.textchannel.application.repository.FakeTextChannelRepository;
+import com.fourttttty.corookie.texture.videochannel.application.repository.FakeVideoChannelRepository;
+import com.fourttttty.corookie.videochannel.application.repository.VideoChannelRepository;
+import com.fourttttty.corookie.videochannel.application.repository.VideoChannelRepositoryImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,8 +40,12 @@ public class ProjectServiceTest {
     MemberRepository memberRepository;
     TextChannelRepository textChannelRepository;
     ProjectMemberRepository projectMemberRepository;
+    VideoChannelRepository videoChannelRepository;
     DirectMessageChannelRepository directMessageChannelRepository;
+    InvitationLinkGenerateService invitationLinkGenerateService;
+    ProjectMemberService projectMemberService;
     ProjectService projectService;
+    DirectMessageChannelService directMessageChannelService;
     private Member member;
     private Project project;
 
@@ -49,10 +56,14 @@ public class ProjectServiceTest {
         textChannelRepository = new FakeTextChannelRepository();
         projectMemberRepository = new FakeProjectMemberRepository(projectRepository, memberRepository);
         directMessageChannelRepository = new FakeDirectMessageChannelRepository();
-        projectService = new ProjectService(projectRepository, textChannelRepository, memberRepository, projectMemberRepository,
-                directMessageChannelRepository, new InvitationLinkGenerateService(new Base62Encoder()),
-                new ProjectMemberService(projectMemberRepository, memberRepository, projectRepository,
-                        new DirectMessageChannelService(directMessageChannelRepository)));
+        videoChannelRepository = new FakeVideoChannelRepository();
+        invitationLinkGenerateService = new InvitationLinkGenerateService(new Base62Encoder());
+        directMessageChannelService = new DirectMessageChannelService(directMessageChannelRepository);
+        projectMemberService = new ProjectMemberService(projectMemberRepository, memberRepository, projectRepository,
+                directMessageChannelService);
+        projectService = new ProjectService(projectRepository, textChannelRepository, videoChannelRepository,
+                memberRepository, projectMemberRepository, directMessageChannelRepository, invitationLinkGenerateService,
+                projectMemberService);
         member = Member.of("이름", "test@test.com", "https://test", Oauth2.of(AuthProvider.KAKAO, "account"));
         project = Project.of("memberName",
                 "description",

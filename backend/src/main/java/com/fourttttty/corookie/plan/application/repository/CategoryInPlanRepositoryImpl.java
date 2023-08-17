@@ -1,9 +1,10 @@
 package com.fourttttty.corookie.plan.application.repository;
 
 import com.fourttttty.corookie.plan.domain.CategoryInPlan;
-import com.fourttttty.corookie.plan.domain.CategoryInPlanId;
 import com.fourttttty.corookie.plan.infrastructure.CategoryInPlanJpaRepository;
+
 import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Repository;
 public class CategoryInPlanRepositoryImpl implements CategoryInPlanRepository {
 
     private final CategoryInPlanJpaRepository categoryInPlanJpaRepository;
+
 
     @Override
     public CategoryInPlan save(CategoryInPlan categoryInPlan) {
@@ -25,11 +27,16 @@ public class CategoryInPlanRepositoryImpl implements CategoryInPlanRepository {
 
     @Override
     public List<CategoryInPlan> findByPlanId(Long planId) {
-        return categoryInPlanJpaRepository.findAllByIdPlanId(planId);
+        return categoryInPlanJpaRepository.findAllByPlanId(planId);
     }
 
     @Override
-    public Boolean exists(CategoryInPlanId categoryInPlanId) {
+    public Boolean exists(Long categoryInPlanId) {
         return categoryInPlanJpaRepository.existsById(categoryInPlanId);
+    }
+
+    @Override
+    public void deleteById(Long categoryInPlanId) {
+        categoryInPlanJpaRepository.deleteById(categoryInPlanId);
     }
 }

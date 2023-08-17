@@ -3,6 +3,7 @@ package com.fourttttty.corookie.texture.plan.application.repository;
 import com.fourttttty.corookie.plan.application.repository.PlanRepository;
 import com.fourttttty.corookie.plan.domain.Plan;
 
+import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -11,8 +12,26 @@ import java.util.Optional;
 
 public class FakePlanRepository implements PlanRepository {
 
-    Long autoIncrementId = 1L;
+    private Long autoIncrementId = 1L;
     private final Map<Long, Plan> store = new HashMap<>();
+
+    @Override
+    public Plan save(Plan plan) {
+        setIdInEntity(plan);
+        store.put(autoIncrementId, plan);
+        autoIncrementId++;
+        return plan;
+    }
+
+    private void setIdInEntity(Plan plan) {
+        try {
+            Field id = Plan.class.getDeclaredField("id");
+            id.setAccessible(true);
+            id.set(plan, autoIncrementId);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @Override
     public List<Plan> findByDate(LocalDate date) {
@@ -32,11 +51,5 @@ public class FakePlanRepository implements PlanRepository {
     @Override
     public Optional<Plan> findById(Long id) {
         return Optional.ofNullable((store.get(id)));
-    }
-
-    @Override
-    public Plan save(Plan plan) {
-        store.put(autoIncrementId++, plan);
-        return plan;
     }
 }

@@ -7,6 +7,7 @@ import com.fourttttty.corookie.textchannel.domain.TextChannel;
 import com.fourttttty.corookie.thread.application.repository.ThreadEmojiRepository;
 import com.fourttttty.corookie.thread.application.repository.ThreadRepository;
 import com.fourttttty.corookie.thread.domain.Thread;
+import com.fourttttty.corookie.thread.domain.ThreadEmoji;
 import com.fourttttty.corookie.thread.dto.request.ThreadCreateRequest;
 import com.fourttttty.corookie.thread.dto.request.ThreadModifyRequest;
 import com.fourttttty.corookie.thread.dto.response.ThreadDetailResponse;
@@ -18,7 +19,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.NotActiveException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +29,7 @@ public class ThreadService {
 
     private final ThreadRepository threadRepository;
     private final TextChannelRepository textChannelRepository;
+    private final ThreadEmojiRepository threadEmojiRepository;
     private final ThreadEmojiService threadEmojiService;
     private final MemberService memberService;
 
@@ -52,11 +53,25 @@ public class ThreadService {
         return ThreadDetailResponse.from(thread, emojis);
     }
 
-    public List<ThreadDetailResponse> findByTextChannelIdLatest(Long TextChannelId, Pageable pageable) {
+    public List<ThreadListResponse> findByTextChannelIdLatest(Long TextChannelId, Pageable pageable) {
         return threadRepository.findByTextChannelIdLatest(TextChannelId, pageable)
                 .stream()
-                .map(ThreadListResponse::from)
+                .map(thread -> ThreadListResponse.from(thread, findEmojis(thread)))
                 .toList();
+    }
+
+    private List<ThreadEmojiResponse> findEmojis(Thread thread) {
+        return threadEmojiRepository.findByThreadId(thread.getId()).stream()
+                .map(emoji -> ThreadEmojiResponse.from(emoji.getEmoji(), getCount(emoji), isClicked(emoji)))
+                .toList();
+    }
+
+    private Long getCount(ThreadEmoji emoji) {
+        return threadEmojiRepository.countByEmojiAndThread(emoji.getEmoji(), emoji.getThreadId());
+    }
+
+    private Boolean isClicked(ThreadEmoji emoji) {
+        return threadEmojiRepository.existsByMemberAndEmojiAndThread(emoji.getEmoji(), emoji.getMemberId(), emoji.getThreadId());
     }
 
     @Transactional

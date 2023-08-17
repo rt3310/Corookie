@@ -1,10 +1,12 @@
 package com.fourttttty.corookie.thread.application.repository;
 
+import com.fourttttty.corookie.thread.domain.Emoji;
 import com.fourttttty.corookie.thread.domain.ThreadEmoji;
 import com.fourttttty.corookie.thread.infrastructure.ThreadEmojiJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -18,18 +20,23 @@ public class ThreadEmojiRepositoryImpl implements ThreadEmojiRepository {
     }
 
     @Override
-    public Optional<ThreadEmoji> findByMemberAndEmojiAndThread(Long memberId, Long emojiId, Long threadId) {
-        return threadEmojiJpaRepository.findByMemberIdAndEmojiIdAndThreadId(memberId, emojiId, threadId);
+    public List<ThreadEmoji> findByThreadId(Long threadId) {
+        return threadEmojiJpaRepository.findByThreadId(threadId);
     }
 
     @Override
-    public Long countByEmojiAndThread(Long emojiId, Long threadId) {
-        return threadEmojiJpaRepository.countByEmojiIdAndThreadId(emojiId, threadId);
+    public Optional<ThreadEmoji> findByMemberAndEmojiAndThread(Emoji emoji, Long memberId, Long threadId) {
+        return threadEmojiJpaRepository.findByEmojiAndMemberIdAndThreadId(emoji, memberId, threadId);
     }
 
     @Override
-    public Boolean existsByMemberAndEmojiAndThread(Long memberId, Long emojiId, Long threadId) {
-        return threadEmojiJpaRepository.existsByMemberIdAndEmojiIdAndThreadId(memberId, emojiId, threadId);
+    public Long countByEmojiAndThread(Emoji emoji, Long threadId) {
+        return threadEmojiJpaRepository.countByEmojiAndThreadId(emoji, threadId);
+    }
+
+    @Override
+    public Boolean existsByMemberAndEmojiAndThread(Emoji emoji, Long memberId, Long threadId) {
+        return threadEmojiJpaRepository.existsByEmojiAndMemberIdAndThreadId(emoji, memberId, threadId);
     }
 
     @Override

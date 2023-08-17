@@ -8,6 +8,7 @@ import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.support.RestDocsTest;
 import com.fourttttty.corookie.textchannel.domain.TextChannel;
 import com.fourttttty.corookie.thread.application.service.ThreadService;
+import com.fourttttty.corookie.thread.domain.Emoji;
 import com.fourttttty.corookie.thread.domain.Thread;
 import com.fourttttty.corookie.thread.dto.request.ThreadModifyRequest;
 import com.fourttttty.corookie.thread.dto.response.ThreadDetailResponse;
@@ -74,7 +75,7 @@ class ThreadControllerTest extends RestDocsTest {
                 textChannel,
                 member);
         emojis = new ArrayList<>();
-        emojis.add(ThreadEmojiResponse.from(1L, false, 1L));
+        emojis.add(ThreadEmojiResponse.from(Emoji.BAD, 1L, true));
     }
 
     @Test
@@ -82,16 +83,16 @@ class ThreadControllerTest extends RestDocsTest {
     void findAllThread() throws Exception {
         // given
         LocalDateTime now = LocalDateTime.now();
-        ThreadDetailResponse threadDetailResponse = new ThreadDetailResponse(
+        ThreadListResponse threadListResponse = new ThreadListResponse(
                 1L,
                 new MemberResponse(1L, "name", "email@mail.com", "https://test.com"),
                 now,
                 thread.getContent(),
-                thread.getCommentCount()
-                );
+                thread.getCommentCount(),
+                List.of(ThreadEmojiResponse.from(Emoji.BAD, 1L, true)));
 
         given(threadService.findByTextChannelIdLatest(any(Long.class), any(Pageable.class)))
-                .willReturn(List.of(threadDetailResponse));
+                .willReturn(List.of(threadListResponse));
 
         // when
         ResultActions perform = mockMvc.perform(get("/api/v1/projects/{projectId}/text-channels/{textChannelId}/threads",
@@ -125,7 +126,10 @@ class ThreadControllerTest extends RestDocsTest {
                                 fieldWithPath("[].writer.id").type(NUMBER).description("작성자 키"),
                                 fieldWithPath("[].writer.name").type(STRING).description("작성자 이름"),
                                 fieldWithPath("[].writer.email").type(STRING).description("작성자 이메일"),
-                                fieldWithPath("[].writer.imageUrl").type(STRING).description("작성자 프로필 url"))));
+                                fieldWithPath("[].writer.imageUrl").type(STRING).description("작성자 프로필 url"),
+                                fieldWithPath("[].emojis.[].emoji").type(STRING).description("이모지"),
+                                fieldWithPath("[].emojis.[].count").type(NUMBER).description("이모지 개수"),
+                                fieldWithPath("[].emojis.[].isClicked").type(BOOLEAN).description("클릭 여부"))));
     }
 
     @Test
@@ -172,8 +176,8 @@ class ThreadControllerTest extends RestDocsTest {
                                 fieldWithPath("writer.name").type(STRING).description("작성자 이름"),
                                 fieldWithPath("writer.email").type(STRING).description("작성자 이메일"),
                                 fieldWithPath("writer.imageUrl").type(STRING).description("작성자 프로필 url"),
-                                fieldWithPath("emojis.[].emojiId").type(NUMBER).description("이모지 키"),
-                                fieldWithPath("emojis.[].isClicked").type(BOOLEAN).description("회원의 이모지 클릭 여부"),
+                                fieldWithPath("emojis.[].emoji").type(STRING).description("이모지"),
+                                fieldWithPath("emojis.[].isClicked").type(BOOLEAN).description("이모지 클릭 여부"),
                                 fieldWithPath("emojis.[].count").type(NUMBER).description("이모지 갯수"))));
     }
 
@@ -207,7 +211,7 @@ class ThreadControllerTest extends RestDocsTest {
                 .andExpect(jsonPath("$.content").value(threadDetailResponse.content()))
                 .andExpect(jsonPath("$.commentCount").value(threadDetailResponse.commentCount()))
                 .andExpect(jsonPath("$.writer.name").value(threadDetailResponse.writer().name()))
-                .andExpect(jsonPath("$.emojis.[0].emojiId").value(threadDetailResponse.emojis().get(0).emojiId()));
+                .andExpect(jsonPath("$.emojis.[0].emoji").value(threadDetailResponse.emojis().get(0).emoji().getValue()));
 
         perform.andDo(print())
                 .andDo(document("thread-modify",
@@ -226,7 +230,7 @@ class ThreadControllerTest extends RestDocsTest {
                                 fieldWithPath("writer.name").type(STRING).description("작성자 이름"),
                                 fieldWithPath("writer.email").type(STRING).description("작성자 이메일"),
                                 fieldWithPath("writer.imageUrl").type(STRING).description("작성자 프로필 url"),
-                                fieldWithPath("emojis.[].emojiId").type(NUMBER).description("이모지 키"),
+                                fieldWithPath("emojis.[].emoji").type(STRING).description("이모지"),
                                 fieldWithPath("emojis.[].isClicked").type(BOOLEAN).description("회원의 이모지 클릭 여부"),
                                 fieldWithPath("emojis.[].count").type(NUMBER).description("이모지 갯수"))));
     }
