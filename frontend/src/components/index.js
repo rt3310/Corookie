@@ -31,6 +31,7 @@ export { default as Calendar } from './plan/Calendar'
 export { default as PlanDetail } from './plan/PlanDetail'
 export { default as PlanRegister } from './plan/PlanRegister'
 export { default as PlanOptionToggle } from './plan/PlanOptionToggle'
+export { default as PlanCategoryOptionToggle } from './plan/PlanCategoryOptionToggle'
 
 export { default as KanbanBoard } from './taskboard/KanbanBoard'
 

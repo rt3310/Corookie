@@ -18,7 +18,7 @@ const ChannelNav = () => {
     const { memberId } = hooks.meState()
     const { projectMembers, setProjectMembers } = hooks.projectMembersState()
     const { directChannels, setDirectChannels } = hooks.directChannelsState()
-    const { textChannels } = hooks.textChannelsState()
+    const { textChannels, setTextChannels } = hooks.textChannelsState()
     const { videoChannels, setVideoChannels } = hooks.videoChannelsState()
     const [openText, setOpenText] = useState(true)
     const [openDm, setOpenDm] = useState(true)
@@ -90,10 +90,10 @@ const ChannelNav = () => {
 
     const videoTitleKeyDown = async e => {
         if (e.key === 'Enter') {
-            // api.apis.createVideoChannel(projectId, { name: channelTitle }).then(response => {
-            //     console.log(response.data)
-            //     setVideoChannels([...textChannels, response.data])
-            // })
+            api.apis.createVideoChannel(projectId, { name: channelTitle }).then(response => {
+                console.log(response.data)
+                setVideoChannels([...videoChannels, response.data])
+            })
             setCreateVideoChannel(false)
             setChannelTitle('')
         }
@@ -172,8 +172,18 @@ const ChannelNav = () => {
                     <S.ChannelHead onClick={() => setOpenVideo(!openVideo)}>
                         화상 채널 &nbsp; <IoIosArrowUp />
                     </S.ChannelHead>
-                    <S.Channel onClick={() => navigate(utils.URL.CHAT.VIDEO)}>1. 회의</S.Channel>
-                    <S.Channel>2. 자유</S.Channel>
+                    {/* <S.Channel onClick={() => navigate('/project/' + project.id + '/channel/video/' + '1')}>
+                        1. 회의
+                    </S.Channel>
+                    <S.Channel>2. 자유</S.Channel> */}
+                    {videoChannels.map((videoChannel, index) => (
+                        <S.Channel
+                            key={videoChannel.id}
+                            onClick={() => navigate('/project/' + project.id + '/channel/video/' + videoChannel.id)}>
+                            {index + 1}. {videoChannel.name}
+                            {/* {videoChannel.isPinned && <AiFillPushpin />} */}
+                        </S.Channel>
+                    ))}
                     {createVideoChannel && (
                         <S.AddChannel
                             ref={createVideoChannelRef}
