@@ -21,6 +21,7 @@ const LandingVideo = () => {
 const S = {
     Wrap: styled.div`
         width: 100%;
+        padding: 4px;
     `,
 
     Title: styled.div`
@@ -38,30 +39,28 @@ const S = {
         margin: 0 8px;
         padding: 0 16px;
         text-align: right;
-        font-size: ${({ theme }) => theme.fontsize.title3};
+        font-size: ${({ theme }) => theme.fontsize.title2};
         line-height: 1.5;
     `,
     SubTitle2: styled.div`
         width: auto;
         color: ${({ theme }) => theme.color.black};
-        margin: 0 16px 20px 8px;
-        padding: 0 8px;
+        margin: 0 8px;
+        padding: 0 16px;
         text-align: right;
-        font-size: ${({ theme }) => theme.fontsize.sub1};
+        font-size: ${({ theme }) => theme.fontsize.title2};
         line-height: 1.5;
     `,
     ImageContent: styled.div`
         display: flex;
         align-items: center;
-        /* justify-content: center; */
-        width: 700px;
+        justify-content: center;
         height: auto;
         margin: 8px 0 8px 8px;
 
         & img {
-            width: 100%;
+            width: 50%;
             height: 100%;
-            margin: 8px;
         }
     `,
 }

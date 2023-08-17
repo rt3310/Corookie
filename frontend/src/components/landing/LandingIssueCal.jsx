@@ -9,7 +9,7 @@ const LandingIssueCal = () => {
                     <S.Title>Issue Management</S.Title>
                     <S.SubTitle1>협업 툴에서 필수인 직관적인 이슈 관리</S.SubTitle1>
                     <S.SubTitle2>
-                        프로젝트의 이슈들을 팀원들과 공통으로 관리하고 <nav></nav>한 눈에 확인할 수 있습니다.
+                        프로젝트의 이슈들을 팀원들과 공동으로 관리하고 <nav></nav>한 눈에 확인할 수 있습니다.
                     </S.SubTitle2>
                     <S.ImageContent>
                         <img src={require('images/landing_text.png').default} alt="채팅1" />
@@ -20,7 +20,7 @@ const LandingIssueCal = () => {
                     <S.Title>Schedule Management</S.Title>
                     <S.SubTitle1>일정을 공유할 수 있는 캘린더</S.SubTitle1>
                     <S.SubTitle2>
-                        팀원들과 프로젝트와 관련된 일정들을 공유하고 <nav></nav>
+                        팀원들과 프로젝트에 관련된 일정들을 공유하고 <nav></nav>
                         참여자를 확인할 수 있습니다.
                     </S.SubTitle2>
                     <S.ImageContent>
@@ -64,7 +64,7 @@ const S = {
         margin: 0 8px;
         padding: 0 8px;
         text-align: left;
-        font-size: ${({ theme }) => theme.fontsize.title3};
+        font-size: ${({ theme }) => theme.fontsize.title2};
         line-height: 1.5;
     `,
     SubTitle2: styled.div`
@@ -73,13 +73,10 @@ const S = {
         margin: 0 8px 20px 8px;
         padding: 0 8px;
         text-align: left;
-        font-size: ${({ theme }) => theme.fontsize.sub1};
+        font-size: ${({ theme }) => theme.fontsize.title2};
         line-height: 1.5;
     `,
     ImageContent: styled.div`
-        /* display: flex;
-        align-items: center;
-        justify-content: center; */
         width: 450px;
         height: auto;
         margin: 8px 0 8px 8px;

@@ -89,20 +89,26 @@ const IssueDetail = ({ id }) => {
         }
     }
 
-    const onRemove = () => {
+    const onRemove = async () => {
         if (window.confirm('정말 삭제하시겠습니까?')) {
-            const updatedTasks = tasks.filter(task => task.id !== id)
-            api.apis
-                .deleteIssue(project.id, task.id)
-                .then(response => {
-                    console.log(response.data)
-                    setTasks(updatedTasks)
-                    alert('삭제되었습니다. ')
-                    closeIssueDetail()
-                })
-                .catch(error => {
-                    console.log(error)
-                })
+            closeIssueDetail()
+            const issueRes = await api.apis.deleteIssue(project.id, task.id)
+            setTask(issueRes.data)
+            const issuesRes = await api.apis.getIssueList(project.id)
+            setTasks(issuesRes.data)
+
+            // const updatedTasks = tasks.filter(task => task.id !== id)
+            // api.apis
+            //     .deleteIssue(project.id, task.id)
+            //     .then(response => {
+            //         console.log(response.data)
+            //         setTasks(updatedTasks)
+            //         alert('삭제되었습니다. ')
+            //         closeIssueDetail()
+            //     })
+            //     .catch(error => {
+            //         console.log(error)
+            //     })
         }
     }
     const changeStatus = async status => {
@@ -188,10 +194,10 @@ const IssueDetail = ({ id }) => {
                 </S.Header>
                 <S.Status>
                     <S.StatusBox onClick={() => changeStatus('todo')} status="todo" chosen={task.progress}>
-                        ToDo
+                        To Do
                     </S.StatusBox>
                     <S.StatusBox onClick={() => changeStatus('inProgress')} status="inProgress" chosen={task.progress}>
-                        InProgress
+                        In Progress
                     </S.StatusBox>
                     <S.StatusBox onClick={() => changeStatus('done')} status="done" chosen={task.progress}>
                         Done
@@ -338,6 +344,7 @@ const S = {
         align-items: center;
         width: 84px;
         height: 55px;
+        margin: 4px;
         cursor: pointer;
         color: ${({ theme }) => theme.color.white};
         font-size: ${({ theme }) => theme.fontsize.content};
