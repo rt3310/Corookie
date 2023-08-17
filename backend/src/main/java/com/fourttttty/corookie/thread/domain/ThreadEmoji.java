@@ -19,12 +19,13 @@ public class ThreadEmoji {
     private Long id;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "emoji", nullable = false)
     private Emoji emoji;
 
-    @Column(name = "member_id")
+    @Column(name = "member_id", nullable = false)
     private Long memberId;
 
-    @Column(name = "thread_id")
+    @Column(name = "thread_id", nullable = false)
     private Long threadId;
 
     private ThreadEmoji(Emoji emoji, Long memberId, Long threadId) {

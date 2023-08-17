@@ -96,7 +96,7 @@ class PlanControllerTest extends RestDocsTest {
     @DisplayName("년 월로 일정을 조회한다")
     void planCalendarList() throws Exception {
         CalendarPlanResponse response = CalendarPlanResponse.from(plan);
-        given(planService.findByDate(any(LocalDate.class))).willReturn(List.of(response));
+        given(planService.findByProjectIdAndDate(any(Long.class), any(LocalDate.class))).willReturn(List.of(response));
         //when
         ResultActions perform = mockMvc.perform(get("/api/v1/projects/{projectId}/plans", 1L)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -144,12 +144,8 @@ class PlanControllerTest extends RestDocsTest {
                         plan.getDescription(),
                         plan.getPlanStart(),
                         plan.getPlanEnd(),
-                        planCategories.stream()
-                                .map(planCategory -> new PlanCategoryCreateRequest(planCategory.getContent(), planCategory.getColor()))
-                                .toList(),
-                        planMembers.stream()
-                                .map(member1 -> new PlanMemberCreateRequest(member1.getId()))
-                                .toList()))));
+                        List.of(1L),
+                        List.of(1L)))));
 
         //then
         perform.andExpect(status().isOk())
@@ -170,22 +166,17 @@ class PlanControllerTest extends RestDocsTest {
                                 fieldWithPath("description").type(STRING).description("일정 설명"),
                                 fieldWithPath("planStart").type(STRING).description("일정 시작일"),
                                 fieldWithPath("planEnd").type(STRING).description("일정 종료일"),
-                                fieldWithPath("categories").type(ARRAY).description("일정 카테고리"),
-                                fieldWithPath("members").type(ARRAY).description("일정 멤버"),
-                                fieldWithPath("categories.[].content").type(STRING).description("일정 카테고리 내용"),
-                                fieldWithPath("categories.[].color").type(STRING).description("일정 카테고리 색"),
-                                fieldWithPath("members.[].memberId").type(NUMBER).description("일정 멤버 키")),
+                                fieldWithPath("categoryIds[]").type(ARRAY).description("일정 카테고리 키"),
+                                fieldWithPath("memberIds[]").type(ARRAY).description("일정 멤버 키")),
                         responseFields(
                                 fieldWithPath("planName").type(STRING).description("일정 이름"),
                                 fieldWithPath("description").type(STRING).description("일정 설명"),
                                 fieldWithPath("planStart").type(STRING).description("일정 시작일"),
                                 fieldWithPath("planEnd").type(STRING).description("일정 종료일"),
                                 fieldWithPath("enabled").type(BOOLEAN).description("활성화"),
-                                fieldWithPath("categories").type(ARRAY).description("일정 카테고리"),
                                 fieldWithPath("categories.[].id").type(NUMBER).description("일정 카테고리 키"),
                                 fieldWithPath("categories.[].content").type(STRING).description("일정 카테고리 내용"),
                                 fieldWithPath("categories.[].color").type(STRING).description("일정 카테고리 색"),
-                                fieldWithPath("members").type(ARRAY).description("일정 카테고리"),
                                 fieldWithPath("members.[].memberId").type(NUMBER).description("일정 멤버 키"),
                                 fieldWithPath("members.[].memberName").type(STRING).description("일정 멤버 내용"),
                                 fieldWithPath("planId").type(NUMBER).description("일정 키"))));

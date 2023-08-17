@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface PlanRepository {
 
-    List<Plan> findByDate(LocalDate date);
+    List<Plan> findByProjectIdAndDate(Long projectId, LocalDate date);
     Optional<Plan> findById(Long id);
 
     Plan save(Plan plan);

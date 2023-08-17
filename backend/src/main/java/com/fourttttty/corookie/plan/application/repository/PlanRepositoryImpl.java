@@ -16,8 +16,8 @@ public class PlanRepositoryImpl implements PlanRepository {
     private final PlanJpaRepository planJpaRepository;
 
     @Override
-    public List<Plan> findByDate(LocalDate date) {
-        return planJpaRepository.findAllByDate(date.getYear(), date.getMonth().getValue());
+    public List<Plan> findByProjectIdAndDate(Long projectId, LocalDate date) {
+        return planJpaRepository.findAllByDate(projectId, date.getYear(), date.getMonth().getValue());
     }
 
     @Override
