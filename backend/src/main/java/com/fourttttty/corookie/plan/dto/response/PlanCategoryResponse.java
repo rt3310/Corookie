@@ -5,8 +5,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record PlanCategoryResponse(Long id,
-                                   String content) {
+                                   String content,
+                                   String color) {
     public static PlanCategoryResponse from(PlanCategory planCategory) {
-        return new PlanCategoryResponse(planCategory.getId(), planCategory.getContent());
+        return new PlanCategoryResponse(planCategory.getId(), planCategory.getContent(), planCategory.getColor());
     }
 }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { useParams } from 'react-router'
 import styled from 'styled-components'
 
 import { IoPeople, IoChevronForward, IoClose, IoRocket } from 'react-icons/io5'
@@ -9,10 +10,11 @@ import * as components from 'components'
 import * as api from 'api'
 
 const ProjectIntro = () => {
+    const { projectId } = useParams()
     const { manager, managerOpened, openManager, closeManager } = hooks.setManagerState()
     const { projectMembers } = hooks.projectMembersState()
     const { members, setMembers, memberOpened, openMember, closeMember } = hooks.memberState()
-    const { project, setProject } = hooks.projectState()
+    const { project } = hooks.projectState()
     const [flip, setFlip] = useState(false)
     const managerTextRef = useRef(null)
     const memberTextRef = useRef(null)
@@ -49,8 +51,16 @@ const ProjectIntro = () => {
     }
 
     useEffect(() => {
-        console.log(managerOpened)
-    }, [managerOpened])
+        api.apis
+            .getProjectMembers(projectId)
+            .then(response => {
+                setMembers(response.data)
+                console.log(response.data)
+            })
+            .catch(error => {
+                console.log('멤버 불러오기 실패', error)
+            })
+    }, [])
 
     useEffect(() => {
         const handleOutside = e => {
@@ -67,19 +77,6 @@ const ProjectIntro = () => {
             document.removeEventListener('mousedown', handleOutside)
         }
     }, [flippedRef])
-
-    useEffect(() => {
-        api.apis
-            .getProjectMembers(project.id)
-            .then(response => {
-                console.log(project.id)
-                console.log('멤버 불러오기 성공', response.data)
-                setMembers(response.data)
-            })
-            .catch(error => {
-                console.log('멤버 불러오기 실패', error)
-            })
-    }, [project])
 
     return (
         <S.Wrap>

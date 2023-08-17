@@ -5,6 +5,25 @@ export const textChannelsState = create(set => ({
     setTextChannels: data => set(state => ({ textChannels: data })),
 }))
 
+export const directChannelsState = create(set => ({
+    directChannels: [],
+    setDirectChannels: data => set(state => ({ directChannels: data })),
+}))
+
+export const directMessagesState = create(set => ({
+    page: 0,
+    size: 10,
+    sort: 'createdAt',
+    direction: 'desc',
+    upPage: () => set(state => ({ ...state, page: state.page + 1 })),
+    initPage: () => set(state => ({ ...state, page: 0 })),
+}))
+
+export const videoChannelsState = create(set => ({
+    videoChannels: [],
+    setVideoChannels: data => set(state => ({ videoChannels: data })),
+}))
+
 export const threadsState = create(set => ({
     page: 0,
     size: 10,
@@ -12,6 +31,22 @@ export const threadsState = create(set => ({
     direction: 'desc',
     upPage: () => set(state => ({ ...state, page: state.page + 1 })),
     initPage: () => set(state => ({ ...state, page: 0 })),
+}))
+
+export const commentsState = create(set => ({
+    page: 0,
+    size: 10,
+    sort: 'createdAt',
+    direction: 'desc',
+    upPage: () => set(state => ({ ...state, page: state.page + 1 })),
+    initPage: () => set(state => ({ ...state, page: 0 })),
+}))
+
+export const selectedThreadState = create(set => ({
+    threadId: null,
+    commentCount: 0,
+    setThreadId: data => set(state => ({ threadId: data })),
+    setCommentCount: data => set(state => ({ commentCount: data })),
 }))
 
 export const projectMembersState = create(set => ({
@@ -58,11 +93,13 @@ export const profileState = create(set => ({
     profileOpened: false,
     profileEdit: false,
     profileName: '황상미',
+    profileImage: require('images/profilebox.png').default,
     openProfile: () => set(state => ({ profileOpened: true })),
     closeProfile: () => set(state => ({ profileOpened: false })),
     openEdit: () => set(state => ({ profileEdit: true })),
     closeEdit: () => set(state => ({ profileEdit: false })),
     setName: name => set(state => ({ profileName: name })),
+    setProfileImage: imageUrl => set(state => ({ profileImage: imageUrl })),
 }))
 
 export const setManagerState = create(set => ({
@@ -70,6 +107,22 @@ export const setManagerState = create(set => ({
     openManager: () => set(state => ({ managerOpened: true })),
     closeManager: () => set(state => ({ managerOpened: false })),
     setManager: manager => set(state => ({ manager: manager })),
+}))
+
+export const meState = create(set => ({
+    memberId: null,
+    memberName: null,
+    memberEmail: null,
+    memberImageUrl: null,
+    setMe: data =>
+        set(state => ({
+            memberId: data.id,
+            memberName: data.name,
+            memberEmail: data.email,
+            memberImageUrl: data.imageUrl,
+        })),
+    setName: data => set(state => ({ name: data })),
+    setImageUrl: data => set(state => ({ imageUrl: data })),
 }))
 
 export const memberState = create(set => ({

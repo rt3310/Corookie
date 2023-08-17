@@ -13,14 +13,8 @@ const PlanRegister = () => {
     const { planStartDate, setPlanStartDate, planEndDate, setPlanEndDate } = hooks.planDateState()
     const { closePlanRegister } = hooks.planRegisterState()
     const [title, setTitle] = useState('')
-    const [member, setMember] = useState({
-        id: null,
-        name: '참여자 선택',
-    })
-    const [category, setCategory] = useState({
-        id: null,
-        name: '분류 선택',
-    })
+    const [member, setMember] = useState([])
+    const [category, setCategory] = useState([])
     const [content, setContent] = useState('')
 
     useEffect(() => {
@@ -90,7 +84,7 @@ const PlanRegister = () => {
                 </S.PlanDatePickerBox>
             </S.PlanDateBox>
             <components.PlanOptionToggle state="member" selected={member} setSelected={setMember} />
-            <components.PlanOptionToggle state="category" selected={category} setSelected={setCategory} />
+            <components.PlanCategoryOptionToggle state="category" selected={category} setSelected={setCategory} />
             <S.PlanContentBox>
                 <S.PlanContentHeader>내용</S.PlanContentHeader>
                 <S.PlanContentInput

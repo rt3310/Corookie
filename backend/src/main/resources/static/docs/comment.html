@@ -476,7 +476,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="_request"><a class="link" href="#_request">Request</a></h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/projects/1/text-channels/1/threads/1/comments HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/projects/1/text-channels/1/threads/1/comments?page=0&amp;size=10&amp;sort=createdAt%2Cdesc HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -517,16 +517,18 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 172
+Content-Length: 219
 
 [ {
+  "id" : 1,
   "content" : "content",
   "writer" : {
     "id" : 1,
     "name" : "name",
-    "email" : "email@mail.com"
+    "email" : "email@mail.com",
+    "imageUrl" : "https://test"
   },
-  "createdAt" : "2023-08-11T13:04:37.6169879"
+  "createdAt" : "2023-08-16T16:50:38.1183862"
 } ]</code></pre>
 </div>
 </div>
@@ -544,6 +546,11 @@ Content-Length: 172
 </tr>
 </thead>
 <tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">댓글 키</p></td>
+</tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].content</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
@@ -568,6 +575,11 @@ Content-Length: 172
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].writer.email</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">작성자 이메일</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].writer.imageUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작성자 프로필 url</p></td>
 </tr>
 </tbody>
 </table>
@@ -632,16 +644,18 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 168
+Content-Length: 215
 
 {
+  "id" : 1,
   "content" : "content",
   "writer" : {
     "id" : 1,
     "name" : "name",
-    "email" : "email@mail.com"
+    "email" : "email@mail.com",
+    "imageUrl" : "https://test"
   },
-  "createdAt" : "2023-08-11T13:04:36.7499855"
+  "createdAt" : "2023-08-16T16:50:37.3633881"
 }</code></pre>
 </div>
 </div>
@@ -659,6 +673,11 @@ Content-Length: 168
 </tr>
 </thead>
 <tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">댓글 키</p></td>
+</tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>content</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
@@ -683,6 +702,11 @@ Content-Length: 168
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>writer.email</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">작성자 이메일</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>writer.imageUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작성자 프로필 url</p></td>
 </tr>
 </tbody>
 </table>

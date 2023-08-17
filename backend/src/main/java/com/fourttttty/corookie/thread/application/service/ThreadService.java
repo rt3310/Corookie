@@ -61,8 +61,7 @@ public class ThreadService {
 
     @Transactional
     public void delete(Long threadId) {
-        Thread thread = threadRepository.findById(threadId).orElseThrow(EntityNotFoundException::new);
-        thread.delete();
+        threadRepository.findById(threadId).orElseThrow(EntityNotFoundException::new).delete();
     }
 
     @Transactional

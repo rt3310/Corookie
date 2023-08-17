@@ -6,7 +6,8 @@ import com.fourttttty.corookie.thread.domain.Thread;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record ThreadDetailResponse(MemberResponse writer,
+public record ThreadDetailResponse(Long id,
+                                   MemberResponse writer,
                                    LocalDateTime createdAt,
                                    String content,
                                    Integer commentCount,
@@ -14,6 +15,7 @@ public record ThreadDetailResponse(MemberResponse writer,
 
     public static ThreadDetailResponse from(Thread thread, List<ThreadEmojiResponse> emojis) {
         return new ThreadDetailResponse(
+                thread.getId(),
                 MemberResponse.from(thread.getWriter()),
                 thread.getCreatedAt(),
                 thread.getContent(),

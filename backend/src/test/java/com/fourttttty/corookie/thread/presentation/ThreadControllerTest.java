@@ -57,7 +57,7 @@ class ThreadControllerTest extends RestDocsTest {
 
     @BeforeEach
     void initTexture() {
-        Member member = Member.of("name", "email", Oauth2.of(AuthProvider.KAKAO, "account"));
+        Member member = Member.of("name", "email", "https://test", Oauth2.of(AuthProvider.KAKAO, "account"));
         Project project = Project.of("project",
                 "description",
                 true,
@@ -83,7 +83,8 @@ class ThreadControllerTest extends RestDocsTest {
         // given
         LocalDateTime now = LocalDateTime.now();
         ThreadDetailResponse threadDetailResponse = new ThreadDetailResponse(
-                new MemberResponse(1L, "name", "email@mail.com"),
+                1L,
+                new MemberResponse(1L, "name", "email@mail.com", "https://test.com"),
                 now,
                 thread.getContent(),
                 thread.getCommentCount()
@@ -115,16 +116,16 @@ class ThreadControllerTest extends RestDocsTest {
                         queryParameters(
                                 parameterWithName("page").description("페이지 번호"),
                                 parameterWithName("size").description("요청 개수"),
-                                parameterWithName("sort").description("정렬 기준")
-                        ),
+                                parameterWithName("sort").description("정렬 기준")),
                         responseFields(
+                                fieldWithPath("[].id").type(NUMBER).description("스레드 키"),
                                 fieldWithPath("[].content").type(STRING).description("스레드 내용"),
                                 fieldWithPath("[].commentCount").type(NUMBER).description("댓글 수"),
                                 fieldWithPath("[].createdAt").type(STRING).description("생성 일자"),
                                 fieldWithPath("[].writer.id").type(NUMBER).description("작성자 키"),
                                 fieldWithPath("[].writer.name").type(STRING).description("작성자 이름"),
-                                fieldWithPath("[].writer.email").type(STRING).description("작성자 이메일"))
-                ));
+                                fieldWithPath("[].writer.email").type(STRING).description("작성자 이메일"),
+                                fieldWithPath("[].writer.imageUrl").type(STRING).description("작성자 프로필 url"))));
     }
 
     @Test
@@ -134,7 +135,8 @@ class ThreadControllerTest extends RestDocsTest {
         LocalDateTime now = LocalDateTime.now();
 
         ThreadDetailResponse threadDetailResponse = new ThreadDetailResponse(
-                new MemberResponse(1L, "name", "email@mail.com"),
+                1L,
+                new MemberResponse(1L, "name", "email@mail.com", "https://test.com"),
                 now,
                 thread.getContent(),
                 thread.getCommentCount(),
@@ -162,17 +164,17 @@ class ThreadControllerTest extends RestDocsTest {
                                 parameterWithName("textChannelId").description("텍스트 채널 키"),
                                 parameterWithName("threadId").description("스레드 키")),
                         responseFields(
+                                fieldWithPath("id").type(NUMBER).description("스레드 키"),
                                 fieldWithPath("content").type(STRING).description("스레드 내용"),
                                 fieldWithPath("commentCount").type(NUMBER).description("댓글 수"),
                                 fieldWithPath("createdAt").type(STRING).description("생성 일자"),
                                 fieldWithPath("writer.id").type(NUMBER).description("작성자 키"),
                                 fieldWithPath("writer.name").type(STRING).description("작성자 이름"),
                                 fieldWithPath("writer.email").type(STRING).description("작성자 이메일"),
+                                fieldWithPath("writer.imageUrl").type(STRING).description("작성자 프로필 url"),
                                 fieldWithPath("emojis.[].emojiId").type(NUMBER).description("이모지 키"),
                                 fieldWithPath("emojis.[].isClicked").type(BOOLEAN).description("회원의 이모지 클릭 여부"),
-                                fieldWithPath("emojis.[].count").type(NUMBER).description("이모지 갯수")
-                        )
-                ));
+                                fieldWithPath("emojis.[].count").type(NUMBER).description("이모지 갯수"))));
     }
 
     @Test
@@ -182,7 +184,8 @@ class ThreadControllerTest extends RestDocsTest {
         LocalDateTime now = LocalDateTime.now();
 
         ThreadDetailResponse threadDetailResponse = new ThreadDetailResponse(
-                new MemberResponse(1L, "name", "email@mail.com"),
+                1L,
+                new MemberResponse(1L, "name", "email@mail.com", "https://test.com"),
                 now,
                 thread.getContent(),
                 thread.getCommentCount(),
@@ -215,17 +218,17 @@ class ThreadControllerTest extends RestDocsTest {
                                 parameterWithName("textChannelId").description("텍스트 채널 키"),
                                 parameterWithName("threadId").description("스레드 키")),
                         responseFields(
+                                fieldWithPath("id").type(NUMBER).description("스레드 키"),
                                 fieldWithPath("content").type(STRING).description("스레드 내용"),
                                 fieldWithPath("commentCount").type(NUMBER).description("댓글 수"),
                                 fieldWithPath("createdAt").type(STRING).description("생성 일자"),
                                 fieldWithPath("writer.id").type(NUMBER).description("작성자 키"),
                                 fieldWithPath("writer.name").type(STRING).description("작성자 이름"),
                                 fieldWithPath("writer.email").type(STRING).description("작성자 이메일"),
+                                fieldWithPath("writer.imageUrl").type(STRING).description("작성자 프로필 url"),
                                 fieldWithPath("emojis.[].emojiId").type(NUMBER).description("이모지 키"),
                                 fieldWithPath("emojis.[].isClicked").type(BOOLEAN).description("회원의 이모지 클릭 여부"),
-                                fieldWithPath("emojis.[].count").type(NUMBER).description("이모지 갯수")
-                        )
-                ));
+                                fieldWithPath("emojis.[].count").type(NUMBER).description("이모지 갯수"))));
     }
 
     @Test
@@ -248,7 +251,6 @@ class ThreadControllerTest extends RestDocsTest {
                                 parameterWithName("textChannelId").description("텍스트 채널 키"),
                                 parameterWithName("threadId").description("스레드 키"))));
     }
-
 
 }
 

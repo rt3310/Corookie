@@ -12,24 +12,35 @@ const Layout = () => {
     const { projectId } = useParams()
     const { profileOpened } = hooks.profileState()
     const { project, setProject } = hooks.projectState()
+    const { memberId, setMe } = hooks.meState()
     const { textChannels, setTextChannels } = hooks.textChannelsState()
+    const { videoChannels, setVideoChannels } = hooks.videoChannelsState()
+    const { directChannels, setDirectChannels } = hooks.directChannelsState()
 
     useEffect(() => {
         const initProject = async projectId => {
             try {
                 const projectRes = await api.apis.getProject(projectId)
                 const textChannelsRes = await api.apis.getTextChannels(projectRes.data.id)
+                const videoChannelsRes = await api.apis.getVideoChannels(projectRes.data.id)
+                const directChannelsRes = await api.apis.getDirectChannels(projectRes.data.id)
                 setProject(projectRes.data)
                 setTextChannels(textChannelsRes.data)
+                setVideoChannels(videoChannelsRes.data)
+                console.log(directChannelsRes.data)
+                setDirectChannels(directChannelsRes.data)
             } catch (error) {
                 console.log(error)
             }
         }
 
+        api.apis.getMe().then(response => {
+            setMe(response.data)
+        })
         initProject(projectId)
     }, [])
 
-    if (!project) {
+    if (!project || !memberId) {
         return
     }
 

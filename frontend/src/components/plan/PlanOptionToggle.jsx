@@ -2,12 +2,17 @@ import React, { useEffect, useState, useRef } from 'react'
 import styled from 'styled-components'
 
 import * as utils from 'utils'
+import * as hooks from 'hooks'
+import { IoAdd } from 'react-icons/io5'
+import { apis } from 'api'
 
 const PlanOptionToggle = ({ state, selected, setSelected }) => {
     const [isActive, setIsActive] = useState(false)
+    const { projectMembers } = hooks.projectMembersState()
     const optionRef = useRef(null)
 
     useEffect(() => {
+        console.log('selected', selected)
         const handleOutside = e => {
             if (optionRef.current && !optionRef.current.contains(e.target)) {
                 setIsActive(false)
@@ -19,23 +24,37 @@ const PlanOptionToggle = ({ state, selected, setSelected }) => {
         }
     }, [optionRef])
 
+    const clickSelectedMember = id => {
+        setSelected(selected.filter(member => member.memberId !== id))
+    }
+
     return (
         <S.PlanOptionBox>
-            <S.PlanOptionLabel>{utils.PLAN_OPTIONS[state].label}</S.PlanOptionLabel>
+            <S.PlanOptionLabel>참여자</S.PlanOptionLabel>
             <S.Selector className={isActive ? 'active' : null}>
-                <S.Label onClick={() => setIsActive(!isActive)}>{selected.name}</S.Label>
+                <S.Label onClick={() => setIsActive(!isActive)}>
+                    {selected.length === 0
+                        ? '참여자'
+                        : selected.map((selectedMember, index) => (
+                              <S.SelectedMember
+                                  key={index}
+                                  onClick={() => clickSelectedMember(selectedMember.memberId)}>
+                                  {selectedMember.memberName}
+                              </S.SelectedMember>
+                          ))}
+                </S.Label>
                 <S.Options ref={optionRef}>
-                    {utils.PLAN_OPTIONS[state].options.map((option, index) => (
+                    {projectMembers.map((option, index) => (
                         <S.Option
                             key={index}
                             onClick={() => {
-                                setIsActive(false)
-                                setSelected({
-                                    ...selected,
-                                    name: option,
-                                })
+                                if (!selected.some(person => person.memberId === option.memberId)) {
+                                    setIsActive(false)
+                                    setSelected([...selected, option])
+                                }
+                                console.log(selected)
                             }}>
-                            {option}
+                            {option.memberName}
                         </S.Option>
                     ))}
                 </S.Options>
@@ -51,7 +70,10 @@ const S = {
         margin: 10px 0;
         padding: 0 48px 0 14px;
     `,
-    PlanOptionLabel: styled.div``,
+    PlanOptionLabel: styled.div`
+        display: flex;
+        margin: 10px 0;
+    `,
     Selector: styled.div`
         position: relative;
         display: flex;
@@ -74,9 +96,15 @@ const S = {
         height: 100%;
         flex-grow: 1;
         padding: 0 16px;
+        cursor: pointer;
+        pointer-events: auto;
         border-radius: 8px;
         font-family: ${({ theme }) => theme.font.main};
         font-size: ${({ theme }) => theme.fontsize.sub1};
+    `,
+    SelectedMember: styled.div`
+        display: flex;
+        padding: 0 4px;
     `,
     Options: styled.ul`
         position: absolute;

@@ -42,7 +42,14 @@ const ManagerSetting = ({ managerTextRef }) => {
                                 <S.Member
                                     key={member.memberId}
                                     className={member.name === project.managerName ? 'manager' : null}>
-                                    <img src={member.img} alt={member.memberName} />
+                                    <img
+                                        src={
+                                            member.memberImageUrl === ''
+                                                ? require('images/profile.png').default
+                                                : member.memberImageUrl
+                                        }
+                                        alt={member.memberName}
+                                    />
                                     <S.Name>{member.memberName}</S.Name>
                                     {member.memberName !== project.managerName ? (
                                         <S.ManagerButton>
@@ -114,6 +121,7 @@ const S = {
             width: 30px;
             height: 30px;
             margin-right: 16px;
+            border-radius: 4px;
         }
         &.manager div {
             color: ${({ theme }) => theme.color.gray};

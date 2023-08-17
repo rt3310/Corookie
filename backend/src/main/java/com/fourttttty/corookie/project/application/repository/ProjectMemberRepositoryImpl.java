@@ -30,6 +30,11 @@ public class ProjectMemberRepositoryImpl implements ProjectMemberRepository {
     }
 
     @Override
+    public boolean existsMemberInProject(Long projectId, Long memberId) {
+        return projectMemberJpaRepository.existsByIdProjectIdAndIdMemberId(projectId, memberId);
+    }
+
+    @Override
     public void deleteById(ProjectMemberId id) {
         projectMemberJpaRepository.deleteById(id);
     }

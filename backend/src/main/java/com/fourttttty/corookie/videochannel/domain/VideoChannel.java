@@ -53,7 +53,7 @@ public class VideoChannel extends BaseTime {
         return new VideoChannel(channelName, enabled, deletable, project, sessionId);
     }
 
-    public void changeNotDeleableChannel() {
+    public void changeNotDeletableChannel() {
         this.deletable = false;
     }
 

@@ -55,19 +55,6 @@ public class PlanController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/{planId}/categories")
-    public ResponseEntity<PlanCategoryResponse> categoryCreate(@PathVariable Long planId,
-                                                               @RequestBody @Validated PlanCategoryCreateRequest request) {
-        return ResponseEntity.ok(planService.createPlanCategory(planId, request));
-    }
-
-    @DeleteMapping("/{planId}/categories")
-    public ResponseEntity<Object> categoryDelete(@PathVariable Long planId,
-                                                 @RequestBody @Validated PlanCategoryCreateRequest request) {
-        planService.deletePlanCategory(planId, request.content());
-        return ResponseEntity.noContent().build();
-    }
-
     @PostMapping("/{planId}/members")
     public ResponseEntity<PlanMemberResponse> memberCreate(@PathVariable Long planId,
                                                            @RequestBody @Validated PlanMemberCreateRequest request) {

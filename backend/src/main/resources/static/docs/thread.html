@@ -524,6 +524,11 @@ Host: localhost:8080</code></pre>
 </thead>
 <tbody>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">스레드 키</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].content</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">스레드 내용</p></td>
@@ -553,6 +558,11 @@ Host: localhost:8080</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">작성자 이메일</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].writer.imageUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작성자 프로필 url</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -565,15 +575,17 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 194
+Content-Length: 246
 
 [ {
+  "id" : 1,
   "writer" : {
     "id" : 1,
     "name" : "name",
-    "email" : "email@mail.com"
+    "email" : "email@mail.com",
+    "imageUrl" : "https://test.com"
   },
-  "createdAt" : "2023-08-11T13:04:49.453989",
+  "createdAt" : "2023-08-16T16:50:48.2923895",
   "content" : "content",
   "commentCount" : 0
 } ]</code></pre>
@@ -594,6 +606,11 @@ Content-Length: 194
 </thead>
 <tbody>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">스레드 키</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].content</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">스레드 내용</p></td>
@@ -622,6 +639,11 @@ Content-Length: 194
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].writer.email</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">작성자 이메일</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].writer.imageUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작성자 프로필 url</p></td>
 </tr>
 </tbody>
 </table>
@@ -676,15 +698,17 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 191
+Content-Length: 242
 
 {
+  "id" : 1,
   "writer" : {
     "id" : 1,
     "name" : "name",
-    "email" : "email@mail.com"
+    "email" : "email@mail.com",
+    "imageUrl" : "https://test.com"
   },
-  "createdAt" : "2023-08-11T13:04:49.5299869",
+  "createdAt" : "2023-08-16T16:50:48.3433875",
   "content" : "content",
   "commentCount" : 0
 }</code></pre>
@@ -704,6 +728,11 @@ Content-Length: 191
 </tr>
 </thead>
 <tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">스레드 키</p></td>
+</tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>content</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
@@ -733,6 +762,11 @@ Content-Length: 191
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>writer.email</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">작성자 이메일</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>writer.imageUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작성자 프로필 url</p></td>
 </tr>
 </tbody>
 </table>
@@ -793,15 +827,17 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 190
+Content-Length: 242
 
 {
+  "id" : 1,
   "writer" : {
     "id" : 1,
     "name" : "name",
-    "email" : "email@mail.com"
+    "email" : "email@mail.com",
+    "imageUrl" : "https://test.com"
   },
-  "createdAt" : "2023-08-11T13:04:49.386987",
+  "createdAt" : "2023-08-16T16:50:48.2383879",
   "content" : "content",
   "commentCount" : 0
 }</code></pre>
@@ -821,6 +857,11 @@ Content-Length: 190
 </tr>
 </thead>
 <tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">스레드 키</p></td>
+</tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>content</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
@@ -850,6 +891,11 @@ Content-Length: 190
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>writer.email</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">작성자 이메일</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>writer.imageUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작성자 프로필 url</p></td>
 </tr>
 </tbody>
 </table>

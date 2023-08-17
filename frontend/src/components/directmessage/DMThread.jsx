@@ -4,13 +4,26 @@ import styled from 'styled-components'
 import { IoIosArrowForward, IoIosArrowDown, IoIosArrowUp } from 'react-icons/io'
 import * as components from 'components'
 import * as hooks from 'hooks'
+import * as utils from 'utils'
+import * as api from 'api'
 
-const DMThread = () => {
+const DMThread = ({ projectId, channelId, message }) => {
     const text = useRef(null)
     const [overText, setOverText] = useState(false)
     const [closedText, setClosedText] = useState(false)
+    const [addImoticon, setAddImoticon] = useState(false)
     const { closeProfile } = hooks.profileState()
     const { dmcommentOpened, openDmComment, closeDmComment } = hooks.dmcommentState()
+
+    const [thumbCnt, setThumbCnt] = useState(0)
+    const [happyCnt, setHappyCnt] = useState(0)
+    const [sadCnt, setSadCnt] = useState(0)
+
+    const updateCounts = {
+        [utils.IMOTICON_OPTIONS.thumb]: () => setThumbCnt(thumbCnt + 1),
+        [utils.IMOTICON_OPTIONS.happy]: () => setHappyCnt(happyCnt + 1),
+        [utils.IMOTICON_OPTIONS.sad]: () => setSadCnt(sadCnt + 1),
+    }
 
     const msg = '안녕하세요'
 
@@ -60,28 +73,61 @@ const DMThread = () => {
         }
     }
 
+    const childImoticonData = [
+        { angle: -60, dist: 40, type: utils.IMOTICON_OPTIONS.thumb },
+        { angle: 0, dist: 40, type: utils.IMOTICON_OPTIONS.happy },
+        { angle: 60, dist: 40, type: utils.IMOTICON_OPTIONS.sad },
+    ]
+
+    const calculatePosition = (angle, dist) => {
+        const radian = angle * (Math.PI / 180)
+        const x = dist * Math.cos(radian)
+        const y = dist * Math.sin(radian)
+        return { x, y }
+    }
+
+    let imoticonRef = useRef(null)
+
+    useEffect(() => {
+        const handleOutside = e => {
+            if (imoticonRef.current && !imoticonRef.current.contains(e.target)) {
+                setAddImoticon(false)
+            }
+        }
+        document.addEventListener('mousedown', handleOutside)
+        return () => {
+            document.removeEventListener('mousedown', handleOutside)
+        }
+    }, [imoticonRef])
+
     return (
         <S.Wrap>
             <S.ChatBox>
                 <S.ImageBox>
-                    <img src={require('images/thread_profile.png').default} alt="스레드 이미지" />
+                    <img
+                        src={
+                            message && message.writer.imageUrl
+                                ? message.writer.imageUrl
+                                : require('images/profile.png').default
+                        }
+                        alt="스레드 이미지"
+                    />
                 </S.ImageBox>
                 <S.ContentBox>
                     <S.MemberInfoBox>
-                        <S.MemberName>권현수</S.MemberName>
-                        <S.CreatedTime>오전 11:12</S.CreatedTime>
+                        <S.MemberName>{message && message.writer.name}</S.MemberName>
+                        <S.CreatedTime>{message && utils.calDate(message.createdAt)}</S.CreatedTime>
                         <S.CommentButton onClick={() => toggleDmComment()} open={dmcommentOpened}>
-                            <div>
+                            {/* <div>
                                 <img src={require('images/profile.png').default} alt="프로필" />
                                 <img src={require('images/profile.png').default} alt="프로필" />
                                 <img src={require('images/profile.png').default} alt="프로필" />
-                            </div>
-                            3개의 댓글 <IoIosArrowForward />
+                            </div> */}
+                            0개의 댓글 <IoIosArrowForward />
                         </S.CommentButton>
                     </S.MemberInfoBox>
-                    {/* <S.Text>나는 모든 걸 갖췄다. 재미. 세련미. 미. 그리고 황상미.</S.Text> */}
                     <S.Text ref={text}>
-                        <components.Message isCode={isCode} text={code} language={language} />
+                        <components.Message isCode={isCode} text={code} language={language} thread={message} />
                     </S.Text>
                     {closedText && (
                         <S.MoreButton>
@@ -136,6 +182,7 @@ const S = {
         & img {
             width: 40px;
             height: 40px;
+            border-radius: 8px;
         }
     `,
     ContentBox: styled.div`

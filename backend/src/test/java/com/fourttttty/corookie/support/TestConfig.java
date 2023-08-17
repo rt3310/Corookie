@@ -1,5 +1,8 @@
 package com.fourttttty.corookie.support;
 
+import com.fourttttty.corookie.directmessagechannel.application.repository.DirectMessageChannelRepository;
+import com.fourttttty.corookie.directmessagechannel.application.repository.DirectMessageChannelRepositoryImpl;
+import com.fourttttty.corookie.directmessagechannel.infrastructure.DirectMessageChannelJpaRepository;
 import com.fourttttty.corookie.issue.application.repository.IssueRepository;
 import com.fourttttty.corookie.issue.application.repository.IssueRepositoryImpl;
 import com.fourttttty.corookie.issue.infrastructure.IssueJpaRepository;
@@ -27,6 +30,12 @@ import com.fourttttty.corookie.project.infrastructure.ProjectMemberJpaRepository
 import com.fourttttty.corookie.thread.application.repository.ThreadEmojiRepository;
 import com.fourttttty.corookie.thread.application.repository.ThreadEmojiRepositoryImpl;
 import com.fourttttty.corookie.thread.infrastructure.ThreadEmojiJpaRepository;
+import com.fourttttty.corookie.textchannel.application.repository.TextChannelPinRepository;
+import com.fourttttty.corookie.textchannel.application.repository.TextChannelPinRepositoryImpl;
+import com.fourttttty.corookie.textchannel.application.repository.TextChannelRepository;
+import com.fourttttty.corookie.textchannel.application.repository.TextChannelRepositoryImpl;
+import com.fourttttty.corookie.textchannel.infrastructure.TextChannelJpaRepository;
+import com.fourttttty.corookie.textchannel.infrastructure.TextChannelPinJpaRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +66,17 @@ public class TestConfig {
     private PlanMemberJpaRepository planMemberJpaRepository;
     @Autowired
     private ThreadEmojiJpaRepository threadEmojiJpaRepository;
+    @Autowired
+    private TextChannelJpaRepository textChannelJpaRepository;
+    @Autowired
+    private TextChannelPinJpaRepository textChannelPinJpaRepository;
+    @Autowired
+    private DirectMessageChannelJpaRepository directMessageChannelJpaRepository;
+
+    @Bean
+    public DirectMessageChannelRepository directMessageChannelRepository() {
+        return new DirectMessageChannelRepositoryImpl(directMessageChannelJpaRepository);
+    }
 
     @Bean
     public MemberRepository memberRepository() {
@@ -99,5 +119,18 @@ public class TestConfig {
     }
 
     @Bean
-    public ThreadEmojiRepository threadEmojiRepository() { return new ThreadEmojiRepositoryImpl(threadEmojiJpaRepository); }
+    public ThreadEmojiRepository threadEmojiRepository() { 
+        return new ThreadEmojiRepositoryImpl(threadEmojiJpaRepository); 
+    }
+
+    @Bean
+    public TextChannelRepository textChannelRepository() {
+        return new TextChannelRepositoryImpl(textChannelJpaRepository);
+    }
+
+    @Bean
+    public TextChannelPinRepository textChannelPinRepository() {
+        return new TextChannelPinRepositoryImpl(textChannelPinJpaRepository);
+    }
+
 }

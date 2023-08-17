@@ -1,6 +1,7 @@
 package com.fourttttty.corookie.issue.application.service;
 
 import com.fourttttty.corookie.issue.application.repository.IssueRepository;
+import com.fourttttty.corookie.issue.domain.IssueCategory;
 import com.fourttttty.corookie.issue.domain.IssueProgress;
 import com.fourttttty.corookie.issue.dto.response.IssueListResponse;
 import com.fourttttty.corookie.issue.util.IssueFilterType;
@@ -27,6 +28,9 @@ public class IssueFilteringService {
         if (IssueFilterType.PROGRESS.equals(type)) {
             return findByFilteringWithProgress(projectId, IssueProgress.from(condition));
         }
+        if (IssueFilterType.CATEGORY.equals(type)) {
+            return findByFilteringWithCategory(projectId, IssueCategory.from(condition));
+        }
         if (IssueFilterType.PRIORITY.equals(type)) {
             return findOrderByPriority(projectId, condition);
         }
@@ -48,6 +52,12 @@ public class IssueFilteringService {
 
     public List<IssueListResponse> findByFilteringWithTopic(Long projectId, String topic) {
         return issueRepository.findLikeTopic(projectId, topic).stream()
+                .map(IssueListResponse::from)
+                .toList();
+    }
+
+    public List<IssueListResponse> findByFilteringWithCategory(Long projectId, IssueCategory category) {
+        return issueRepository.findByCategory(projectId, category).stream()
                 .map(IssueListResponse::from)
                 .toList();
     }

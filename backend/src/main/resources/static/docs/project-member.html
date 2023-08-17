@@ -523,12 +523,13 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 115
+Content-Length: 153
 
 {
   "memberId" : 1,
   "memberName" : "memberName",
   "memberEmail" : "test@gmail.com",
+  "memberImageUrl" : "https://test",
   "isManager" : false
 }</code></pre>
 </div>
@@ -561,6 +562,11 @@ Content-Length: 115
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberEmail</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">멤버 이메일</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberImageUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">멤버 프로필 사진 url</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>isManager</code></p></td>
@@ -612,12 +618,13 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 118
+Content-Length: 156
 
 [ {
   "memberId" : 1,
   "memberName" : "memberName",
   "memberEmail" : "test@gmail.com",
+  "memberImageUrl" : "https://test",
   "isManager" : true
 } ]</code></pre>
 </div>
@@ -650,6 +657,11 @@ Content-Length: 118
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].memberEmail</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">멤버 이메일</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].memberImageUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">멤버 프로필 사진 url</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].isManager</code></p></td>

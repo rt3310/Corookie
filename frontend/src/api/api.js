@@ -27,16 +27,42 @@ export const apis = {
     createProject: data => instance.post('/api/v1/projects', data),
     getProjects: () => instance.get('/api/v1/projects'),
     getProject: projectId => instance.get(`/api/v1/projects/${projectId}`),
+    getInvitedProject: inviteLink => instance.get(`/api/v1/projects/invite/${inviteLink}`),
+    enableInvitation: projectId => instance.put(`/api/v1/projects/${projectId}/invite/enable`),
+    disableInvitation: projectId => instance.put(`/api/v1/projects/${projectId}/invite/disable`),
 
     getProjectMembers: projectId => instance.get(`/api/v1/projects/${projectId}/projectmembers`),
 
     getTextChannel: (projectId, textChannelId) =>
         instance.get(`/api/v1/projects/${projectId}/text-channels/${textChannelId}`),
     getTextChannels: projectId => instance.get(`/api/v1/projects/${projectId}/text-channels`),
+    textChannelPin: (projectId, textChannelId) =>
+        instance.post(`/api/v1/projects/${projectId}/text-channels/${textChannelId}/pin`),
+    textChannelUnpin: (projectId, textChannelId) =>
+        instance.delete(`/api/v1/projects/${projectId}/text-channels/${textChannelId}/unpin`),
+    createTextChannel: (projectId, name) => instance.post(`/api/v1/projects/${projectId}/text-channels`, name),
+    createVideoChannel: (projectId, name) => instance.post(`/api/v1/projects/${projectId}/video-channels`, name),
+    getVideoChannel: (projectId, videoChannelId) =>
+        instance.get(`/api/v1/projects/${projectId}/video-channels/${videoChannelId}`),
+    getVideoChannels: projectId => instance.get(`/api/v1/projects/${projectId}/video-channels`),
 
+    getThread: (projectId, textChannelId, threadId) =>
+        instance.get(`/api/v1/projects/${projectId}/text-channels/${textChannelId}/threads/${threadId}`),
     getThreads: (projectId, textChannelId, page, size, sort, direction) =>
         instance.get(
             `/api/v1/projects/${projectId}/text-channels/${textChannelId}/threads?page=${page}&size=${size}&sort=${sort},${direction}`,
+        ),
+
+    getComments: (projectId, textChannelId, threadId, page, size, sort, direction) =>
+        instance.get(
+            `/api/v1/projects/${projectId}/text-channels/${textChannelId}/threads/${threadId}/comments?page=${page}&size=${size}&sort=${sort},${direction}`,
+        ),
+
+    getDirectChannels: projectId => instance.get(`/api/v1/projects/${projectId}/directs`),
+    getDirectChannel: (projectId, channelId) => instance.get(`/api/v1/projects/${projectId}/directs/${channelId}`),
+    getDirectMessages: (projectId, directChannelId, page, size, sort, direction) =>
+        instance.get(
+            `/api/v1/projects/${projectId}/directs/${directChannelId}/messages?page=${page}&size=${size}&sort=${sort},${direction}`,
         ),
 
     getIssueList: projectId => instance.get(`/api/v1/projects/${projectId}/issues`),
@@ -59,7 +85,8 @@ export const apis = {
         instance.get(`/api/v1/projects/${projectId}/issues/filter?type=${type}&condition=${condition}`),
 
     // instance.put 'https://naver.com?issue=123'
-    getProjectMembers: projectId => instance.get(`/api/v1/projects/${projectId}/projectmembers`),
     getMember: memberId => instance.get(`/api/v1/members/${memberId}`),
+    changeMemberProfile: (memberId, data) => instance.put(`/api/v1/members/${memberId}/profile`, data),
+    changeMemberName: (memberId, data) => instance.put(`/api/v1/members/${memberId}/name`, data),
     getMe: () => instance.get(`api/v1/members/me`),
 }

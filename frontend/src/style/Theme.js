@@ -21,8 +21,8 @@ const color = {
     white: '#FFF',
     black: '#000',
     darkgray: '#333',
-    background: '#f1f3f6',
-    // background: '#f1f3f7',
+    // background: '#f1f3f6',
+    background: '#f1f3f7',
     middlegray: '#BDBDBD',
     lightgray: '#EEE',
     gray: '#A0A0A0',
@@ -44,7 +44,7 @@ const fontsize = {
     title2: '18px',
     title3: '16px',
     sub1: '14px',
-    landingtitle: '64px',
+    landingtitle: '60px',
 }
 
 const lineheight = {

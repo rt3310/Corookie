@@ -59,4 +59,7 @@ public class Thread extends BaseTime {
         this.content = request.content();
     }
 
+    public void upCommentCount() {
+        this.commentCount++;
+    }
 }

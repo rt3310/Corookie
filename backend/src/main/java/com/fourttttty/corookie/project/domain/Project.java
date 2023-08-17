@@ -4,6 +4,8 @@ import com.fourttttty.corookie.global.audit.BaseTime;
 import com.fourttttty.corookie.member.domain.Member;
 import com.fourttttty.corookie.textchannel.domain.DefaultChannel;
 import com.fourttttty.corookie.textchannel.domain.TextChannel;
+import com.fourttttty.corookie.videochannel.domain.DefaultVideoChannel;
+import com.fourttttty.corookie.videochannel.domain.VideoChannel;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -14,6 +16,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -92,6 +95,18 @@ public class Project extends BaseTime {
         return this.manager.equalsId(memberId);
     }
 
+    public boolean isEnabledLink() {
+        return this.invitationStatus;
+    }
+
+    public void enableLink() {
+        this.invitationStatus = true;
+    }
+
+    public void disableLink() {
+        this.invitationStatus = false;
+    }
+
     public void delete() {
         this.enabled = false;
     }
@@ -102,6 +117,18 @@ public class Project extends BaseTime {
             TextChannel textChannel = TextChannel.of(channel.getChannelName(), true, false, this);
             textChannel.changeNotDeletableChannel();
             defaultChannels.add(textChannel);
+        }
+
+        return defaultChannels;
+    }
+
+    public List<VideoChannel> createDefaultVideoChannels() {
+        List<VideoChannel> defaultChannels = new ArrayList<>();
+        for (DefaultVideoChannel channel : DefaultVideoChannel.values()) {
+            String sessionId = UUID.randomUUID().toString();
+            VideoChannel videoChannel = VideoChannel.of(channel.getChannelName(), true, false, this, sessionId);
+            videoChannel.changeNotDeletableChannel();
+            defaultChannels.add(videoChannel);
         }
 
         return defaultChannels;
