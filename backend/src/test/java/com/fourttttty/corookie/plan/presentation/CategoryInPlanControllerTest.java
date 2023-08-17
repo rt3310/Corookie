@@ -3,11 +3,10 @@ package com.fourttttty.corookie.plan.presentation;
 import com.fourttttty.corookie.member.domain.AuthProvider;
 import com.fourttttty.corookie.member.domain.Member;
 import com.fourttttty.corookie.member.domain.Oauth2;
+import com.fourttttty.corookie.plan.application.service.CategoryInPlanService;
 import com.fourttttty.corookie.plan.application.service.PlanCategoryService;
-import com.fourttttty.corookie.plan.application.service.PlanService;
 import com.fourttttty.corookie.plan.domain.PlanCategory;
 import com.fourttttty.corookie.plan.dto.request.PlanCategoryCreateRequest;
-import com.fourttttty.corookie.plan.dto.request.PlanCategoryDeleteRequest;
 import com.fourttttty.corookie.plan.dto.response.PlanCategoryResponse;
 import com.fourttttty.corookie.project.domain.Project;
 import com.fourttttty.corookie.support.RestDocsTest;
@@ -37,12 +36,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(PlanCategoryController.class)
-class PlanCategoryControllerTest extends RestDocsTest {
+@WebMvcTest(CategoryInPlanController.class)
+class CategoryInPlanControllerTest extends RestDocsTest {
+
     @MockBean
-    private PlanService planService;
-    @MockBean
-    private PlanCategoryService planCategoryService;
+    private CategoryInPlanService categoryInPlanService;
 
     private Member member;
     private Project project;
@@ -64,7 +62,7 @@ class PlanCategoryControllerTest extends RestDocsTest {
     void categoryList() throws Exception {
 
         List<PlanCategoryResponse> response = List.of(new PlanCategoryResponse(1L, "content", "#ffddaa"));
-        given(planCategoryService.findByProjectId(any(Long.class))).willReturn(response);
+        given(categoryInPlanService.findAllByPlanId(any(Long.class))).willReturn(response);
 
         ResultActions perform = mockMvc.perform(
                 get("/api/v1/projects/{projectId}/plans/{planId}/categories", 1L, 1L));
@@ -80,7 +78,7 @@ class PlanCategoryControllerTest extends RestDocsTest {
     void categoryCreate() throws Exception {
         //given
         PlanCategoryResponse response = PlanCategoryResponse.from(planCategories.get(0));
-        given(planService.createPlanCategory(any(Long.class), any(Long.class), any(PlanCategoryCreateRequest.class)))
+        given(categoryInPlanService.create(any(Long.class), any(PlanCategoryCreateRequest.class)))
                 .willReturn(response);
 
         PlanCategoryCreateRequest request = new PlanCategoryCreateRequest(
@@ -117,16 +115,11 @@ class PlanCategoryControllerTest extends RestDocsTest {
     @Test
     @DisplayName("카테고리 삭제")
     void categoryDelete() throws Exception {
-        //given
-        PlanCategoryDeleteRequest request = new PlanCategoryDeleteRequest(
-                planCategories.get(0).getContent(), planCategories.get(0).getColor());
-
         //when
         ResultActions perform = mockMvc.perform(delete(
-                "/api/v1/projects/{projectId}/plans/{planId}/categories",
-                1L, 1L)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(request)));
+                "/api/v1/projects/{projectId}/plans/{planId}/categories/{categoryId}",
+                1L, 1L, 1L)
+                .contentType(MediaType.APPLICATION_JSON));
 
         //then
         perform.andExpect(status().isNoContent());
@@ -137,9 +130,7 @@ class PlanCategoryControllerTest extends RestDocsTest {
                         getDocumentResponse(),
                         pathParameters(
                                 parameterWithName("projectId").description("프로젝트 키"),
-                                parameterWithName("planId").description("일정 키")),
-                        requestFields(
-                                fieldWithPath("content").type(STRING).description("카테고리 내용"),
-                                fieldWithPath("color").type(STRING).description("카테고리 색"))));
+                                parameterWithName("planId").description("일정 키"),
+                                parameterWithName("categoryId").description("카테고리 키"))));
     }
 }

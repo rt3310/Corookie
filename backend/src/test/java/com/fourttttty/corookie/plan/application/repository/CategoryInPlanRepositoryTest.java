@@ -60,63 +60,56 @@ public class CategoryInPlanRepositoryTest {
         true,
         project
     );
-    List<PlanCategory> categories = List.of(
-            PlanCategory.of("testCategory1", "#ffddaa", project),
-            PlanCategory.of("testCategory2", "#ffddaa", project),
-            PlanCategory.of("testCategory3", "#ffddaa", project));
+
+    PlanCategory planCategory = PlanCategory.of("content", "#ffddaa", project);
 
     @BeforeEach
     void setUp() {
         memberRepository.save(member);
         projectRepository.save(project);
+        planCategoryRepository.save(planCategory);
         planRepository.save(plan);
-        categories.stream().forEach(planCategoryRepository::save);
     }
 
     @Test
     @DisplayName("일정_카테고리를 저장한다.")
     void save() {
         // given
-        CategoryInPlan categoryInPlan = CategoryInPlan.of(plan, categories.get(0));
+        CategoryInPlan categoryInPlan = CategoryInPlan.of(plan, planCategory);
 
         // when
         CategoryInPlan savedCategoryInPlan = categoryInPlanRepository.save(categoryInPlan);
 
         // then
         assertThat(savedCategoryInPlan).isNotNull();
-        assertThat(savedCategoryInPlan.getId().getPlan()).isEqualTo(plan);
-        assertThat(savedCategoryInPlan.getId().getPlanCategory()).isEqualTo(categories.get(0));
+        assertThat(savedCategoryInPlan.getPlan()).isEqualTo(plan);
+        assertThat(savedCategoryInPlan.getPlanCategory()).isEqualTo(planCategory);
     }
 
     @Test
     @DisplayName("일정Id에 따른 카테고리 목록을 조회한다.")
     void findByPlan() {
         // given
-        categories.forEach(category -> categoryInPlanRepository.save(CategoryInPlan.of(plan, category)));
+        CategoryInPlan categoryInPlan = CategoryInPlan.of(plan, planCategory);
+        categoryInPlanRepository.save(categoryInPlan);
 
         // when
         List<CategoryInPlan> foundCategoryInPlans = categoryInPlanRepository.findByPlanId(plan.getId());
 
         // then
-        assertThat(foundCategoryInPlans.stream()
-            .map(categoryInPlan -> categoryInPlan.getId().getPlanCategory())
-            .toList()).isEqualTo(categories);
-        foundCategoryInPlans.forEach(categoryInPlan -> assertThat(categoryInPlan.getId().getPlan()).isEqualTo(plan));
+        assertThat(foundCategoryInPlans).hasSize(1);
+        assertThat(foundCategoryInPlans).contains(categoryInPlan);
     }
 
     @Test
     @DisplayName("일정_카테고리 Id에 따른 존재 여부 조회")
     void exists() {
         // given
-        categories.stream()
-            .forEach(category -> categoryInPlanRepository.save(
-                CategoryInPlan.of(plan, category)
-            ));
+        planCategoryRepository.save(planCategory);
+        CategoryInPlan savedCategoryInPlan = categoryInPlanRepository.save(CategoryInPlan.of(plan, planCategory));
 
         // when
-        Boolean exist = categoryInPlanRepository.exists(
-            CategoryInPlan.of(plan,categories.get(0)).getId()
-        );
+        Boolean exist = categoryInPlanRepository.exists(savedCategoryInPlan.getId());
 
         // then
         assertThat(exist).isTrue();
@@ -126,7 +119,7 @@ public class CategoryInPlanRepositoryTest {
     @DisplayName("일정_카테고리를 삭제한다.")
     void delete() {
         // given
-        CategoryInPlan categoryInPlan = CategoryInPlan.of(plan, categories.get(0));
+        CategoryInPlan categoryInPlan = CategoryInPlan.of(plan, planCategory);
         categoryInPlanRepository.save(categoryInPlan);
 
         // when
