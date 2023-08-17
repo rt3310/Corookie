@@ -41,28 +41,26 @@ const Thread = ({ projectId, channelId, thread }) => {
             .then(response => {
                 setImoji(response.data)
                 console.log(response.data)
+                response.data.forEach(imo => {
+                    if (imo.emoji === 'good') {
+                        setThumbCnt(imo.count)
+                        if (imo.isClicked) {
+                            setClickedThumb(true)
+                        }
+                    } else if (imo.emoji === 'smile') {
+                        setHappyCnt(imo.count)
+                        if (imo.isClicked) {
+                            setClickedHappy(true)
+                        }
+                    } else if (imo.emoji === 'bad') {
+                        setSadCnt(imo.count)
+                        if (imo.isClicked) {
+                            setClickedSad(true)
+                        }
+                    }
+                })
             })
             .catch(error => console.log(error))
-        if (imoji.length > 0) {
-            imoji.forEach(imo => {
-                if (imo.emoji === 'good') {
-                    setThumbCnt(imo.count)
-                    if (imo.isClicked) {
-                        setClickedThumb(true)
-                    }
-                } else if (imo.emoji === 'smile') {
-                    setHappyCnt(imo.count)
-                    if (imo.isClicked) {
-                        setClickedHappy(true)
-                    }
-                } else if (imo.emoji === 'bad') {
-                    setSadCnt(imo.count)
-                    if (imo.isClicked) {
-                        setClickedSad(true)
-                    }
-                }
-            })
-        }
     }, [])
 
     const regex = /```(\w*)\n([\s\S]*?)\n```/

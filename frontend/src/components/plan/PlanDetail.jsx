@@ -49,12 +49,13 @@ const PlanDetail = () => {
                 </S.PlanDatePickerBox>
             </S.PlanDateBox>
             <S.Label>
+                <S.PlanOptionHeader>참여자</S.PlanOptionHeader>
                 {currentPlan.members.map(member => (
                     <S.Member>{member.memberName}</S.Member>
                 ))}
             </S.Label>
             <S.Label>
-                <S.PlanDateLabel>카테고리</S.PlanDateLabel>
+                <S.PlanOptionHeader>분류</S.PlanOptionHeader>
                 {currentPlan.categories.map(category => (
                     <S.Category color={category.color}>{category.content}</S.Category>
                 ))}
@@ -217,14 +218,17 @@ const S = {
         display: flex;
         justify-content: flex-start;
         align-items: center;
-        height: 100%;
-        flex-grow: 1;
-        padding: 0 16px;
+        padding: 0 14px;
+        margin: 10px 0;
         cursor: pointer;
         pointer-events: auto;
         border-radius: 8px;
         font-family: ${({ theme }) => theme.font.main};
         font-size: ${({ theme }) => theme.fontsize.sub1};
+    `,
+    PlanOptionHeader: styled.div`
+        font-size: ${({ theme }) => theme.fontsize.title3};
+        margin: 0 32px 0 0;
     `,
     Member: styled.div`
         display: flex;
