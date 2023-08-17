@@ -36,7 +36,9 @@ const ProjectIntro = () => {
             closeManager()
             return
         }
-        openManager()
+        if (project.isManager) {
+            openManager()
+        }
     }
 
     const clickMember = () => {
@@ -107,6 +109,7 @@ const ProjectIntro = () => {
                                 onClick={() => {
                                     if (window.confirm(`${project.name}으로 이동하시겠습니까?`)) {
                                         navigate('/project/' + project.id)
+                                        window.location.reload()
                                         alert(`${project.name} 이동완료`)
                                     }
                                 }}>
