@@ -9,10 +9,13 @@ import com.fourttttty.corookie.videoanalysis.application.repository.AnalysisRepo
 import com.fourttttty.corookie.videoanalysis.application.repository.SttTokenRepository;
 import com.fourttttty.corookie.videoanalysis.domain.Analysis;
 import com.fourttttty.corookie.videoanalysis.domain.SttToken;
+import com.fourttttty.corookie.videoanalysis.dto.AnalysisListResponse;
 import com.fourttttty.corookie.videoanalysis.dto.AnalysisResponse;
 import com.fourttttty.corookie.videochannel.application.repository.VideoChannelRepository;
 import jakarta.persistence.EntityNotFoundException;
 import java.io.IOException;
+import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -45,6 +48,17 @@ public class AnalysisService {
 
     @Value("${ai-service.domain}")
     private String aiDomain;
+
+    public List<AnalysisListResponse> findByVideoChannel(Long videoChannelId){
+        return analysisRepository.findByVideoChannel(
+                videoChannelRepository.findById(videoChannelId).orElseThrow(EntityNotFoundException::new)).stream()
+                .map(analysis -> AnalysisListResponse.from(analysis))
+                .toList();
+    }
+
+    public AnalysisResponse findById(Long id){
+        return AnalysisResponse.from(analysisRepository.findById(id).orElseThrow(EntityNotFoundException::new));
+    }
 
     @Transactional
     public AnalysisResponse createAnalysis(MultipartFile file, String recordName ,Long videoChannelId)

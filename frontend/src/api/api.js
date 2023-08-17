@@ -46,6 +46,9 @@ export const apis = {
         instance.get(`/api/v1/projects/${projectId}/video-channels/${videoChannelId}`),
     getVideoChannels: projectId => instance.get(`/api/v1/projects/${projectId}/video-channels`),
 
+    getAnalysisList: videoChannelId => instance.get(`/api/v1/projects/1/video-channels/${videoChannelId}/analysis`),
+    getAnalysisDetail: analysisId => instance.get(`/api/v1/projects/1/video-channels/1/analysis/${analysisId}`),
+
     getThread: (projectId, textChannelId, threadId) =>
         instance.get(`/api/v1/projects/${projectId}/text-channels/${textChannelId}/threads/${threadId}`),
     getThreads: (projectId, textChannelId, page, size, sort, direction) =>
