@@ -33,7 +33,7 @@ public class VideoChannel extends BaseTime {
     @Column(nullable = false)
     private String sessionId;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id", nullable = false)
     private Project project;
 
