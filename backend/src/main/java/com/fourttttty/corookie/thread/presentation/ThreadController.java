@@ -1,9 +1,11 @@
 package com.fourttttty.corookie.thread.presentation;
 
+import com.fourttttty.corookie.config.security.LoginUser;
 import com.fourttttty.corookie.thread.application.service.ThreadService;
 import com.fourttttty.corookie.thread.dto.request.ThreadCreateRequest;
 import com.fourttttty.corookie.thread.dto.request.ThreadModifyRequest;
 import com.fourttttty.corookie.thread.dto.response.ThreadDetailResponse;
+import com.fourttttty.corookie.thread.dto.response.ThreadListResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +14,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,8 +46,9 @@ public class ThreadController {
     @GetMapping("/{threadId}")
     public ResponseEntity<ThreadDetailResponse> threadDetail(@PathVariable Long projectId,
                                                          @PathVariable Long textChannelId,
-                                                         @PathVariable Long threadId) {
-        return ResponseEntity.ok(threadService.findById(threadId));
+                                                         @PathVariable Long threadId,
+                                                             @AuthenticationPrincipal LoginUser loginUser) {
+        return ResponseEntity.ok(threadService.findById(threadId, loginUser.getMemberId()));
     }
 
     // 특정 텍스트 채널의 스레드 전체 보기
@@ -72,7 +76,8 @@ public class ThreadController {
     public ResponseEntity<ThreadDetailResponse> threadModify(@PathVariable Long projectId,
                                                              @PathVariable Long textChannelId,
                                                              @PathVariable Long threadId,
-                                                             @RequestBody ThreadModifyRequest request) {
-        return ResponseEntity.ok(threadService.modify(request, threadId));
+                                                             @RequestBody ThreadModifyRequest request,
+                                                             @AuthenticationPrincipal LoginUser loginUser) {
+        return ResponseEntity.ok(threadService.modify(request, threadId, loginUser.getMemberId()));
     }
 }
