@@ -19,23 +19,49 @@ const Thread = ({ projectId, channelId, thread }) => {
     const { threadId, setThreadId, commentCount, setCommentCount } = hooks.selectedThreadState()
     const [currentCommentCount, setCurrentCommentCount] = useState(thread.commentCount)
 
+    const [imoji, setImoji] = useState([])
+
     const [thumbCnt, setThumbCnt] = useState(0)
     const [happyCnt, setHappyCnt] = useState(0)
     const [sadCnt, setSadCnt] = useState(0)
 
+    const [clickedThumb, setClickedThumb] = useState(false)
+    const [clickedHappy, setClickedHappy] = useState(false)
+    const [clickedSad, setClickedSad] = useState(false)
+
     const updateCounts = {
-        [utils.IMOTICON_OPTIONS.thumb]: () => setThumbCnt(thumbCnt + 1),
-        [utils.IMOTICON_OPTIONS.happy]: () => setHappyCnt(happyCnt + 1),
-        [utils.IMOTICON_OPTIONS.sad]: () => setSadCnt(sadCnt + 1),
+        [utils.IMOTICON_OPTIONS.thumb]: () => clickThumb(),
+        [utils.IMOTICON_OPTIONS.happy]: () => clickHappy(),
+        [utils.IMOTICON_OPTIONS.sad]: () => clickSad(),
     }
 
-    // const msg =
-    //     '내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용'
-
-    // const msg =
-    //     '```java\npackage boj;\nimport java.io.BufferedReader;\nimport java.io.ioException;\n"문자열"\nimport java.io.InputStreamReader;\npublic class Problem2847\n\tpublic static void main(String[] args)throws Exception, IOException(\n\t\tBufferedReader br = new BufferedReader(new InputStreamReader(System.in));\n\t\tint N = Integer.parseInt(br.readLine());\n\t\tint[] score = new int[N];\n\t\tfor (int i=0; i<N; i++) {\n\t\t\tscore[i]=Integer.parseInt(br.readLine());\n\t\t}\n\t\t int prev=score[N-1];\n\t\t int cnt=0;\n\t\t for (int i=N-2; i>=0; i--) {\n\t\t\t if (score[i]>=prev) {\n\t\t\t	cnt+=score[i]-prev+1;\n\t\t\t	score[i]=prev-1;\n\t\t}\n\t\t prev=score[i];\n\t\t }\n\t\t System.out.println(cnt);\n\t }\n}\n```'
-
-    // const msg = '나는 모든 걸 갖췄다. 재미. 세련미. 미. 그리고 황상미.'
+    useEffect(() => {
+        api.apis
+            .getImojis(projectId, channelId, thread.id)
+            .then(response => {
+                setImoji(response.data)
+                console.log(response.data)
+                response.data.forEach(imo => {
+                    if (imo.emoji === 'good') {
+                        setThumbCnt(imo.count)
+                        if (imo.isClicked) {
+                            setClickedThumb(true)
+                        }
+                    } else if (imo.emoji === 'smile') {
+                        setHappyCnt(imo.count)
+                        if (imo.isClicked) {
+                            setClickedHappy(true)
+                        }
+                    } else if (imo.emoji === 'bad') {
+                        setSadCnt(imo.count)
+                        if (imo.isClicked) {
+                            setClickedSad(true)
+                        }
+                    }
+                })
+            })
+            .catch(error => console.log(error))
+    }, [])
 
     const regex = /```(\w*)\n([\s\S]*?)\n```/
     const matches = thread.content.match(regex)
@@ -96,6 +122,7 @@ const Thread = ({ projectId, channelId, thread }) => {
     useEffect(() => {
         api.apis.getComments(projectId, channelId, thread.id, 0, 3, 'createdAt', 'desc').then(response => {
             setComments(response.data)
+            console.log(response.data)
         })
     }, [])
 
@@ -122,6 +149,42 @@ const Thread = ({ projectId, channelId, thread }) => {
             getThreadDetail()
         }
     }, [commentCount])
+
+    const clickThumb = () => {
+        if (clickedThumb) {
+            api.apis.deleteImoji(projectId, channelId, thread.id, 'good').catch(error => console.log(error))
+            setClickedThumb(false)
+            setThumbCnt(thumbCnt - 1)
+        } else {
+            api.apis.createImoji(projectId, channelId, thread.id, { emoji: 'good' }).catch(error => console.log(error))
+            setClickedThumb(true)
+            setThumbCnt(thumbCnt + 1)
+        }
+    }
+
+    const clickHappy = () => {
+        if (clickedHappy) {
+            api.apis.deleteImoji(projectId, channelId, thread.id, 'smile').catch(error => console.log(error))
+            setClickedHappy(false)
+            setHappyCnt(happyCnt - 1)
+        } else {
+            api.apis.createImoji(projectId, channelId, thread.id, { emoji: 'smile' }).catch(error => console.log(error))
+            setClickedHappy(true)
+            setHappyCnt(happyCnt + 1)
+        }
+    }
+
+    const clickSad = () => {
+        if (clickedSad) {
+            api.apis.deleteImoji(projectId, channelId, thread.id, 'bad').catch(error => console.log(error))
+            setClickedSad(false)
+            setSadCnt(sadCnt - 1)
+        } else {
+            api.apis.createImoji(projectId, channelId, thread.id, { emoji: 'bad' }).catch(error => console.log(error))
+            setClickedSad(true)
+            setSadCnt(sadCnt + 1)
+        }
+    }
 
     return (
         <S.Wrap open={thread.id === threadId}>
@@ -174,22 +237,22 @@ const Thread = ({ projectId, channelId, thread }) => {
             </S.ChatBox>
             <S.Imoticons>
                 <components.Imoticon
-                    onClick={() => setThumbCnt(thumbCnt + 1)}
+                    onClick={() => clickThumb()}
                     icon={utils.IMOTICON_OPTIONS.thumb}
                     count={thumbCnt}
-                    onIconClick={setThumbCnt}
+                    onIconClick={clickThumb}
                 />
                 <components.Imoticon
-                    onClick={() => setHappyCnt(happyCnt + 1)}
+                    onClick={() => clickHappy()}
                     icon={utils.IMOTICON_OPTIONS.happy}
                     count={happyCnt}
-                    onIconClick={setHappyCnt}
+                    onIconClick={clickHappy}
                 />
                 <components.Imoticon
-                    onClick={() => setSadCnt(sadCnt + 1)}
+                    onClick={() => clickSad()}
                     icon={utils.IMOTICON_OPTIONS.sad}
                     count={sadCnt}
-                    onIconClick={setSadCnt}
+                    onIconClick={clickSad}
                 />
                 <S.ImoticonAccess ref={imoticonRef}>
                     <S.AddButton onClick={() => setAddImoticon(!addImoticon)}>

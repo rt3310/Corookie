@@ -20,6 +20,13 @@ public class FakeVideoChannelRepository implements VideoChannelRepository {
     }
 
     @Override
+    public List<VideoChannel> findByProjectId(Long projectId) {
+        return store.values().stream()
+                .filter(videoChannel -> videoChannel.getProject().getId().equals(projectId))
+                .toList();
+    }
+
+    @Override
     public List<VideoChannel> findAll() {
         return new ArrayList<>(store.values());
     }

@@ -7,7 +7,7 @@ import * as utils from 'utils'
 const Imoticon = ({ icon, count, onIconClick }) => {
     const handleClick = () => {
         if (count < 1000) {
-            onIconClick(count + 1)
+            onIconClick()
         }
     }
     return (
