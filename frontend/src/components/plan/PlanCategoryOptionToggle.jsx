@@ -10,11 +10,26 @@ const PlanCategoryOptionToggle = ({ state, selected, setSelected }) => {
     const [addCategory, setAddCategory] = useState(false)
     const optionRef = useRef(null)
     const [categories, setCategories] = useState([])
+    const [newOption, setNewOption] = useState('')
+    const [newColor, setNewColor] = useState('#ffffff')
+
+    let colorRef = useRef(null)
 
     useEffect(() => {
         const handleOutside = e => {
-            if (optionRef.current && !optionRef.current.contains(e.target)) {
-                setIsActive(false)
+            if (!colorRef.current) {
+                if (optionRef.current && !optionRef.current.contains(e.target)) {
+                    setIsActive(false)
+                }
+            } else {
+                if (
+                    optionRef.current &&
+                    !optionRef.current.contains(e.target) &&
+                    colorRef.current &&
+                    !colorRef.current.contains(e.target)
+                ) {
+                    setIsActive(false)
+                }
             }
         }
         document.addEventListener('mousedown', handleOutside)
@@ -23,18 +38,24 @@ const PlanCategoryOptionToggle = ({ state, selected, setSelected }) => {
         }
     }, [optionRef])
 
-    const [newOption, setNewOption] = useState('')
-    const [newColor, setNewColor] = useState('#ffffff')
     let optionInput = useRef(null)
-    let colorRef = useRef(null)
+
     const handleAddOption = e => setNewOption(e.target.value)
     const addOptionKeyDown = async e => {
-        if (e.key === 'Enter') {
+        if (e.key === 'Enter' && !categories.some(category => category.content === newOption)) {
             const option = { content: newOption, color: newColor }
             setCategories([...categories, option])
             setAddCategory(false)
+            setNewColor('#ffffff')
+            setNewOption('')
+        } else if (e.key === 'Enter') {
+            alert('이미 존재하는 카테고리입니다. ')
         }
     }
+
+    useEffect(() => {
+        console.log(newColor)
+    }, [newColor])
 
     useEffect(() => {
         if (addCategory) {
@@ -48,20 +69,51 @@ const PlanCategoryOptionToggle = ({ state, selected, setSelected }) => {
                 !colorRef.current.contains(e.target)
             ) {
                 setAddCategory(false)
-                if (!optionRef.current.contains(e.target)) {
-                    setIsActive(false)
-                }
+                setNewColor('#ffffff')
+                setNewOption('')
             }
         }
         document.addEventListener('mousedown', handleOutside)
         return () => {
             document.removeEventListener('mousedown', handleOutside)
         }
-    }, [optionInput, addCategory, optionRef])
+    }, [optionInput])
 
     const clickSelectedCategory = id => {
         setSelected(selected.filter(category => category.content !== id))
     }
+
+    const [textColor, setTextColor] = useState('#000000')
+
+    const textColorCalculator = backgroundColor => {
+        const color = backgroundColor.slice(1)
+
+        const r = parseInt(color.slice(0, 2), 16)
+        const g = parseInt(color.slice(2, 4), 16)
+        const b = parseInt(color.slice(4, 6), 16)
+
+        const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255
+        if (luminance < 0.5) {
+            return '#ffffff'
+        } else {
+            return '#000000'
+        }
+    }
+
+    useEffect(() => {
+        const color = newColor.slice(1)
+
+        const r = parseInt(color.slice(0, 2), 16)
+        const g = parseInt(color.slice(2, 4), 16)
+        const b = parseInt(color.slice(4, 6), 16)
+
+        const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255
+        if (luminance < 0.5) {
+            setTextColor('#ffffff')
+        } else {
+            setTextColor('#000000')
+        }
+    }, [newColor])
 
     return (
         <S.PlanOptionBox>
@@ -73,14 +125,16 @@ const PlanCategoryOptionToggle = ({ state, selected, setSelected }) => {
                         : selected.map((selectedCategory, index) => (
                               <S.SelectedCategory
                                   key={index}
-                                  onClick={() => clickSelectedCategory(selectedCategory.content)}>
+                                  //   onClick={() => clickSelectedCategory(selectedCategory.content)}
+                                  color={selectedCategory.color}
+                                  textColor={textColorCalculator(selectedCategory.color)}>
                                   {selectedCategory.content}
                               </S.SelectedCategory>
                           ))}
                 </S.Label>
                 {addCategory && (
                     <S.ColorPicker ref={colorRef}>
-                        <HexColorPicker color={newColor} onChangeComplete={color => setNewColor(color.hex)} />
+                        <HexColorPicker color={newColor} onChange={setNewColor} />
                     </S.ColorPicker>
                 )}
                 <S.Options ref={optionRef}>
@@ -88,30 +142,34 @@ const PlanCategoryOptionToggle = ({ state, selected, setSelected }) => {
                         <S.Option
                             key={index}
                             onClick={() => {
-                                setIsActive(false)
-                                setSelected([...selected, option])
+                                if (!selected.some(category => category.content === option.content)) {
+                                    setIsActive(false)
+                                    setSelected([...selected, option])
+                                } else {
+                                    clickSelectedCategory(option.content)
+                                }
                             }}
-                            color={option.color}>
+                            color={option.color}
+                            textColor={textColorCalculator(option.color)}>
                             {option.content}
                         </S.Option>
                     ))}
 
-                    <S.AddOption>
+                    <S.AddOption color={newColor}>
                         {!addCategory && (
                             <S.Text onClick={() => setAddCategory(!addCategory)}>
                                 <IoAdd /> 카테고리 추가
                             </S.Text>
                         )}
                         {addCategory && (
-                            <S.AddOptionInput ref={optionInput}>
-                                <S.NewOption
-                                    value={newOption}
-                                    onChange={handleAddOption}
-                                    onKeyDown={addOptionKeyDown}
-                                    placeholder="제목을 입력하세요"
-                                />
-                                <S.ColorPreview color={newColor} />
-                            </S.AddOptionInput>
+                            <S.NewOption
+                                ref={optionInput}
+                                value={newOption}
+                                onChange={handleAddOption}
+                                onKeyDown={addOptionKeyDown}
+                                placeholder="제목을 입력하세요"
+                                textColor={textColor}
+                            />
                         )}
                     </S.AddOption>
                 </S.Options>
@@ -155,10 +213,30 @@ const S = {
         border-radius: 8px;
         font-family: ${({ theme }) => theme.font.main};
         font-size: ${({ theme }) => theme.fontsize.sub1};
+        overflow-x: auto;
+        &::-webkit-scrollbar {
+            height: 3px;
+            width: 0px;
+        }
+        &::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        &::-webkit-scrollbar-thumb {
+            background: ${({ theme }) => theme.color.gray};
+            border-radius: 45px;
+        }
+        &::-webkit-scrollbar-thumb:hover {
+            background: ${({ theme }) => theme.color.gray};
+        }
     `,
     SelectedCategory: styled.div`
         display: flex;
-        padding: 0 4px;
+        padding: 3px 4px;
+        background-color: ${props => props.color};
+        color: ${props => props.textColor};
+        border-radius: 8px;
+        margin-right: 2px;
+        white-space: nowrap;
     `,
     Options: styled.ul`
         position: absolute;
@@ -207,21 +285,19 @@ const S = {
         &:last-child {
             border-radius: 0 0 8px 8px;
         }
+        background-color: ${props => props.color};
+        color: ${props => props.textColor};
     `,
     AddOption: styled.li`
         padding: 8px;
         cursor: pointer;
         white-space: nowrap;
-        &:hover {
+        /* &:hover {
             background-color: ${({ theme }) => theme.color.main};
             color: ${({ theme }) => theme.color.white};
-        }
+        } */
         overflow: visible;
-    `,
-    AddOptionInput: styled.div`
-        display: flex;
-        overflow: visible;
-        justify-content: space-between;
+        background-color: ${props => props.color};
     `,
     Text: styled.div`
         display: flex;
@@ -234,12 +310,14 @@ const S = {
         outline: none;
         font-family: 'Noto Sans KR', 'Pretendard', sans-serif;
         font-size: ${({ theme }) => theme.fontsize.content};
+        border-radius: 8px;
+        background-color: transparent;
+        color: ${props => props.textColor};
     `,
-    ColorPreview: styled.div`
-        width: 8px;
-        height: 8px;
-        background-color: ${props => props.color};
-    `,
+    // ColorPreview: styled.div`
+    //     width: 8px;
+    //     height: 8px;
+    // `,
     ColorPicker: styled.div`
         position: absolute;
         top: 0;
