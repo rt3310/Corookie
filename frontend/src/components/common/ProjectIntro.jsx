@@ -163,7 +163,7 @@ const S = {
         background-color: ${({ theme }) => theme.color.white};
         border-radius: 8px;
         box-shadow: ${({ theme }) => theme.shadow.card};
-        padding: 24px 24px 2px;
+        padding: 20px 20px 2px;
         width: 100%;
         height: 100%;
     `,

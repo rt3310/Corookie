@@ -117,14 +117,14 @@ const DMThread = ({ projectId, channelId, message }) => {
                     <S.MemberInfoBox>
                         <S.MemberName>{message && message.writer.name}</S.MemberName>
                         <S.CreatedTime>{message && utils.calDate(message.createdAt)}</S.CreatedTime>
-                        <S.CommentButton onClick={() => toggleDmComment()} open={dmcommentOpened}>
-                            {/* <div>
+                        {/* <S.CommentButton onClick={() => toggleDmComment()} open={dmcommentOpened}> */}
+                        {/* <div>
                                 <img src={require('images/profile.png').default} alt="프로필" />
                                 <img src={require('images/profile.png').default} alt="프로필" />
                                 <img src={require('images/profile.png').default} alt="프로필" />
                             </div> */}
-                            0개의 댓글 <IoIosArrowForward />
-                        </S.CommentButton>
+                        {/* 0개의 댓글 <IoIosArrowForward />
+                        </S.CommentButton> */}
                     </S.MemberInfoBox>
                     <S.Text ref={text}>
                         <components.Message isCode={isCode} text={code} language={language} thread={message} />
