@@ -56,7 +56,7 @@ const Plan = () => {
                 </DndProvider>
             </S.Container>
             {planRegisterOpened && <components.PlanRegister />}
-            {planDetailOpened && <components.PlanDetail />}
+            {planDetailOpened !== 0 && <components.PlanDetail />}
         </S.Wrap>
     )
 }

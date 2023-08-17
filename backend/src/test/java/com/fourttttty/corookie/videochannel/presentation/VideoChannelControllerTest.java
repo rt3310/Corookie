@@ -102,7 +102,7 @@ class VideoChannelControllerTest extends RestDocsTest {
         // given
         VideoChannelResponse response1 = new VideoChannelResponse(1L, "name1", "sessionId1");
         VideoChannelResponse response2 = new VideoChannelResponse(2L, "name2", "sessionId2");
-        given(videoChannelService.findAll())
+        given(videoChannelService.findByProjectId(any(Long.class)))
                 .willReturn(List.of(response1, response2));
 
         // when

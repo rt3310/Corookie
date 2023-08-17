@@ -21,8 +21,8 @@ public class VideoChannelService {
     private final VideoChannelRepository videoChannelRepository;
     private final ProjectRepository projectRepository;
 
-    public List<VideoChannelResponse> findAll() {
-        return videoChannelRepository.findAll().stream()
+    public List<VideoChannelResponse> findByProjectId(Long projectId) {
+        return videoChannelRepository.findByProjectId(projectId).stream()
                 .map(VideoChannelResponse::from)
                 .toList();
     }
