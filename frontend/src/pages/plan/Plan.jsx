@@ -14,7 +14,7 @@ import * as hooks from 'hooks'
 const Plan = () => {
     const [currentMonth, setCurrentMonth] = useState(new Date())
     const { planRegisterOpened, openPlanRegister } = hooks.planRegisterState()
-    const { planDetailOpened, openPlanDetail } = hooks.planDetailState()
+    const { planDetailOpened } = hooks.planDetailState()
 
     const prevMonth = () => {
         setCurrentMonth(subMonths(currentMonth, 1))
@@ -55,7 +55,7 @@ const Plan = () => {
                 </DndProvider>
             </S.Container>
             {planRegisterOpened && <components.PlanRegister />}
-            {planDetailOpened !== 0 && <components.PlanDetail />}
+            {planDetailOpened && <components.PlanDetail />}
         </S.Wrap>
     )
 }

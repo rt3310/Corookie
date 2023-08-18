@@ -40,7 +40,8 @@ public class PlanService {
 
     public List<CalendarPlanResponse> findByProjectIdAndDate(Long projectId, LocalDate date) {
         return planRepository.findByProjectIdAndDate(projectId, date).stream()
-                .map(CalendarPlanResponse::from)
+                .map(plan -> CalendarPlanResponse.from(plan, categoryInPlanService.findAllByPlanId(plan.getId()).stream()
+                        .findFirst().orElseThrow(EntityNotFoundException::new).color()))
                 .toList();
     }
 

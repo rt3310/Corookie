@@ -95,7 +95,7 @@ class PlanControllerTest extends RestDocsTest {
     @Test
     @DisplayName("년 월로 일정을 조회한다")
     void planCalendarList() throws Exception {
-        CalendarPlanResponse response = CalendarPlanResponse.from(plan);
+        CalendarPlanResponse response = CalendarPlanResponse.from(plan, "#ffddaa");
         given(planService.findByProjectIdAndDate(any(Long.class), any(LocalDate.class))).willReturn(List.of(response));
         //when
         ResultActions perform = mockMvc.perform(get("/api/v1/projects/{projectId}/plans", 1L)
@@ -120,7 +120,8 @@ class PlanControllerTest extends RestDocsTest {
                                 fieldWithPath("[].id").type(NUMBER).description("일정 키"),
                                 fieldWithPath("[].planName").type(STRING).description("일정 이름"),
                                 fieldWithPath("[].planStart").type(STRING).description("일정 시작일"),
-                                fieldWithPath("[].planEnd").type(STRING).description("일정 종료일"))));
+                                fieldWithPath("[].planEnd").type(STRING).description("일정 종료일"),
+                                fieldWithPath("[].color").type(STRING).description("일정 색"))));
     }
 
     @Test

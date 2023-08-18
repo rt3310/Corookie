@@ -17,8 +17,9 @@ const Calendar = ({ currentMonth }) => {
     const endDate = endOfWeek(monthEnd)
     const { planStartDate, planEndDate, onDragDate, setPlanStartDate, setPlanEndDate, setOnDragDate } =
         hooks.planDateState()
-    const { openPlanRegister } = hooks.planRegisterState()
-    const { planDetailOpened, openPlanDetail } = hooks.planDetailState()
+    const { openPlanRegister, closePlanRegister } = hooks.planRegisterState()
+    const { openPlanDetail, closePlanDetail } = hooks.planDetailState()
+    const { closeProfile } = hooks.profileState()
     const [calendar, setCalendar] = useState([])
     const [plans, setPlans] = useState([])
 
@@ -76,6 +77,7 @@ const Calendar = ({ currentMonth }) => {
             let plans = []
             let day = startDate
 
+            console.log(plansRes.data)
             let planLength = plansRes.data.length
             while (day <= endDate) {
                 for (let i = 0; i < 7; i++) {
@@ -86,10 +88,14 @@ const Calendar = ({ currentMonth }) => {
                             onDragStart={handleDragStart}
                             onDragEnter={e => setDate(new Date(e.target.firstChild.value))}
                             onDragOver={e => {
-                                e.preventDefault()
+                                // e.preventDefault()
                                 e.currentTarget.style.cursor = 'pointer'
                             }}
-                            onDragEnd={() => openPlanRegister()}>
+                            onDragEnd={() => {
+                                closePlanDetail()
+                                closeProfile()
+                                openPlanRegister()
+                            }}>
                             <input type="hidden" value={day} />
                         </S.Day>,
                     )
@@ -121,8 +127,13 @@ const Calendar = ({ currentMonth }) => {
                                                         7),
                                             )}%`,
                                         }}
+                                        color={plansRes.data[i].color}
                                         onDragOver={handleDragOver}
-                                        onClick={() => openDetails(plansRes.data[i])}
+                                        onClick={() => {
+                                            openDetails(plansRes.data[i])
+                                            closeProfile()
+                                            closePlanRegister()
+                                        }}
                                         className="same">
                                         {plansRes.data[i].planName}
                                     </S.DayPlan>
@@ -151,7 +162,12 @@ const Calendar = ({ currentMonth }) => {
                                             )}%`,
                                         }}
                                         onDragOver={handleDragOver}
-                                        onClick={() => openDetails(plansRes.data[i])}
+                                        onClick={() => {
+                                            openDetails(plansRes.data[i])
+                                            closeProfile()
+                                            closePlanRegister()
+                                        }}
+                                        color={plansRes.data[i].color}
                                         className="same">
                                         {plansRes.data[i].planName}
                                     </S.DayPlan>
@@ -178,6 +194,7 @@ const Calendar = ({ currentMonth }) => {
                                         )}%`,
                                     }}
                                     onDragOver={handleDragOver}
+                                    color={'#286EF0'}
                                     className="same"></S.DayPlan>
                             </S.PlanRow>,
                         )
@@ -199,6 +216,7 @@ const Calendar = ({ currentMonth }) => {
                                         )}%`,
                                     }}
                                     onDragOver={handleDragOver}
+                                    color={'#286EF0'}
                                     className="same"></S.DayPlan>
                             </S.PlanRow>,
                         )
@@ -317,13 +335,11 @@ const S = {
         position: absolute;
         height: 100%;
         cursor: pointer;
-        border-radius: 4px;
         z-index: 100;
         padding: 0 8px;
-        color: ${({ theme }) => theme.color.white};
 
         &.same {
-            background-color: ${({ theme }) => theme.color.main};
+            border-bottom: 2px solid ${({ theme, color }) => (color ? color : theme.color.main)};
         }
 
         &:active {

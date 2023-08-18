@@ -9,14 +9,16 @@ import java.time.LocalDateTime;
 public record CalendarPlanResponse(Long id,
                                    String planName,
                                    LocalDateTime planStart,
-                                   LocalDateTime planEnd) {
+                                   LocalDateTime planEnd,
+                                   String color) {
 
-    public static CalendarPlanResponse from(Plan plan) {
+    public static CalendarPlanResponse from(Plan plan, String color) {
         return CalendarPlanResponse.builder()
                 .id(plan.getId())
                 .planName(plan.getPlanName())
                 .planStart(plan.getPlanStart())
                 .planEnd(plan.getPlanEnd())
+                .color(color)
                 .build();
     }
 }
