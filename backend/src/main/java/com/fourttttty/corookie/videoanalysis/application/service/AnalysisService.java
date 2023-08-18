@@ -121,6 +121,7 @@ public class AnalysisService {
     public String getToken() throws JsonProcessingException {
         String response = webClient.post()
             .uri("authenticate")
+            .header("accept", "application/json")
             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
             .bodyValue(
                 new String("client_id=" + accessKey + "&client_secret=" + secretAccessKey))
