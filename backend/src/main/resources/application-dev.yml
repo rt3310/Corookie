@@ -48,8 +48,8 @@ jwt:
   secret: ${JWT_SECRET}
 
 client:
-  host: localhost
-  url: http://localhost:3000
+  host: i9a402.p.ssafy.io
+  url: https://i9a402.p.ssafy.io
   endpoint: success
 
 cloud:
