@@ -123,7 +123,7 @@ const VideoChat = () => {
                 <S.Container>
                     <iframe
                         // src={`http://localhost:4200/#/${videoChannel.sessionId}`} // local 시험할 때
-                        src={`http://i9a402.p.ssafy.io:8443/#/${videoChannel.sessionId}`} // 우리 서버에서
+                        src={`https://i9a402.p.ssafy.io:8443/#/${videoChannel.sessionId}`} // 우리 서버에서
                         allow="camera;microphone;fullscreen;autoplay"
                         width="100%"
                         height="100%">
