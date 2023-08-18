@@ -109,6 +109,13 @@ const Calendar = ({ currentMonth }) => {
                                 closePlanDetail()
                                 closeProfile()
                                 openPlanRegister()
+                            }}
+                            onClick={e => {
+                                setPlanStartDate(new Date(e.target.firstChild.value))
+                                setPlanEndDate(new Date(e.target.firstChild.value))
+                                closePlanDetail()
+                                closeProfile()
+                                openPlanRegister()
                             }}>
                             <input type="hidden" value={day} />
                         </S.Day>,
