@@ -17,7 +17,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class DirectMessage extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "thread_id")
+    @Column(name = "direct_message_id")
     private Long id;
 
     @Column(nullable = false)

@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PlanMemberId implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="memeber_id",nullable = false)
+    @JoinColumn(name="member_id",nullable = false)
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)

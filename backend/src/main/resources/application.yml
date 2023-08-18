@@ -2,6 +2,11 @@ spring:
   h2:
     console:
       enabled: true
+  datasource:
+    url: jdbc:mariadb://stg-yswa-kr-practice-db-master.mariadb.database.azure.com:3306/S09P12A402?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
+    username: S09P12A402
+    password: vHsB2D5Bjk
+    driver-class-name: org.mariadb.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: create
