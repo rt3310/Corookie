@@ -19,7 +19,6 @@ const PlanDetail = () => {
 
     useEffect(() => {
         api.apis.getPlan(projectId, planDetailOpened).then(response => {
-            console.log(response.data)
             setCurrentPlan(response.data)
         })
     }, [planDetailOpened])

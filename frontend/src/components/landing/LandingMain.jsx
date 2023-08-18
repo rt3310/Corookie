@@ -23,7 +23,6 @@ const LandingMain = () => {
         try {
             const projectsRes = await api.apis.getProjects()
             setProjects(projectsRes.data)
-            console.log(projectsRes.data)
         } catch (e) {
             hooks.deleteCookie('Authorization')
             hooks.deleteCookie('Refresh')

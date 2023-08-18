@@ -4,7 +4,6 @@ import styled from 'styled-components'
 
 import { IoReorderTwoSharp } from 'react-icons/io5'
 import { BiChevronsUp, BiChevronUp, BiChevronDown, BiChevronsDown } from 'react-icons/bi'
-import * as components from 'components'
 import * as hooks from 'hooks'
 import * as api from 'api'
 
