@@ -46,6 +46,13 @@ export const apis = {
         instance.get(`/api/v1/projects/${projectId}/video-channels/${videoChannelId}`),
     getVideoChannels: projectId => instance.get(`/api/v1/projects/${projectId}/video-channels`),
 
+    createAnalysis: (videoChannelId, formData, token) =>
+        instance.post(`/api/v1/projects/1/video-channels/${videoChannelId}/analysis`, formData, {
+            headers: {
+                Authorization: token,
+                'Content-Type': 'multipart/form-data',
+            },
+        }),
     getAnalysisList: videoChannelId => instance.get(`/api/v1/projects/1/video-channels/${videoChannelId}/analysis`),
     getAnalysisDetail: analysisId => instance.get(`/api/v1/projects/1/video-channels/1/analysis/${analysisId}`),
 

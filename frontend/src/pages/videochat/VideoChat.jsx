@@ -83,31 +83,19 @@ const VideoChat = () => {
         }
 
         try {
-            const response = await axios
-                .post(
-                    `http://i9a402.p.ssafy.io:8080/api/v1/projects/1/video-channels/${channelId}/analysis`,
-                    formData,
-                    {
-                        headers: {
-                            Authorization: token,
-                            'Content-Type': 'multipart/form-data',
-                        },
-                    },
-                )
-                .then(response => {
-                    console.log(response.data)
-                })
-                .then(() => {
-                    setSelectedFile(null)
-                    setSelectedFileName(null)
-                    if (response.status === 200) {
-                        setUploadStatus('File uploaded successfully.')
-                        // Handle success scenario
-                    } else {
-                        setUploadStatus('Upload failed. Please try again.')
-                        // Handle failure scenario
-                    }
-                })
+            const response = await api.apis.createAnalysis(channelId, formData, token)
+
+            console.log(response.data)
+
+            setSelectedFile(null)
+            setSelectedFileName(null)
+            if (response.status === 200) {
+                setUploadStatus('File uploaded successfully.')
+                // Handle success scenario
+            } else {
+                setUploadStatus('Upload failed. Please try again.')
+                // Handle failure scenario
+            }
         } catch (error) {
             setUploadStatus('An error occurred during upload.')
             console.log(error)
