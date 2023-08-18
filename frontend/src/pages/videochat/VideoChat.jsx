@@ -22,6 +22,7 @@ const VideoChat = () => {
     const [focusedRecording, setFocusedRecording] = useState(null)
     const [focusedSummary, setFocusedSummary] = useState(null)
     const [focusedSummaryUrl, setFocusedSummaryUrl] = useState(null)
+    const [focusedSttText, setFocusedSttText] = useState(null)
 
     const setSummaryList = async () => {
         const summaryRes = await api.apis.getAnalysisList(channelId)
@@ -161,6 +162,7 @@ const VideoChat = () => {
                                             toggleVisibility()
                                             setFocusedSummary(response.data.summarizationText)
                                             setFocusedSummaryUrl(response.data.s3URL)
+                                            setFocusedSttText(response.data.sttText)
                                             setFocusedRecording(data)
                                         })
                                     }>
@@ -178,6 +180,10 @@ const VideoChat = () => {
                 ) : (
                     <S.SummaryContainer>
                         <IoChevronBack onClick={() => setIsSummaryVisible(false)} />
+                        <S.DetailHeader>{focusedRecording.recordName} 전문</S.DetailHeader>
+                        <S.SummaryDetail>
+                            <S.DetailContent>{focusedSttText}</S.DetailContent>
+                        </S.SummaryDetail>
                         <S.DetailHeader>{focusedRecording.recordName} 요약본</S.DetailHeader>
                         <S.SummaryDetail>
                             <S.DetailContent>{focusedSummary}</S.DetailContent>
