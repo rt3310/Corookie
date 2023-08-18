@@ -84,7 +84,7 @@ const VideoChat = () => {
 
         try {
             const response = await axios
-                .post(`http://localhost:8080/api/v1/projects/1/video-channels/${channelId}/analysis`, formData, {
+                .post(`https://i9a402.p.ssafy.io/api/v1/projects/1/video-channels/${channelId}/analysis`, formData, {
                     headers: {
                         Authorization: token,
                         'Content-Type': 'multipart/form-data',
