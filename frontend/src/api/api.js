@@ -110,4 +110,6 @@ export const apis = {
     getPlanCategories: projectId => instance.get(`/api/v1/projects/${projectId}/plan-categories`),
     deletePlanCategory: (projectId, categoryId) =>
         instance.delete(`/api/v1/projects/${projectId}/plan-categories/${categoryId}`),
+
+    checkMeInProject: projectId => instance.get(`/api/v1/projects/${projectId}/projectmembers/me`),
 }
