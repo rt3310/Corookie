@@ -2,7 +2,13 @@ export const calDate = value => {
     const today = new Date()
     const timeValue = new Date(value)
 
-    const betweenTime = Math.floor((today.getTime() - timeValue.getTime()) / 1000 / 60)
+    // UTC 시간에 9시간 추가
+    timeValue.setUTCHours(timeValue.getUTCHours() + 9)
+
+    // 한국 시간으로 변환
+    const koreanTimeValue = new Date(timeValue.toLocaleString('en-US', { timeZone: 'Asia/Seoul' }))
+
+    const betweenTime = Math.floor((today.getTime() - koreanTimeValue.getTime()) / 1000 / 60)
     if (betweenTime < 1) return '방금전'
     if (betweenTime < 60) {
         return `${betweenTime}분전`

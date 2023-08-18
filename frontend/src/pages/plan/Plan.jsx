@@ -36,7 +36,6 @@ const Plan = () => {
                             </div>
                             <IoIosArrowForward onClick={() => nextMonth()} />
                         </S.MonthBox>
-                        <S.DetailButton onClick={() => openPlanDetail(1)}>상세</S.DetailButton>
                         <S.CreateButton onClick={() => openPlanRegister()}>
                             <BsPlus /> 생성
                         </S.CreateButton>

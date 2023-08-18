@@ -41,11 +41,16 @@ const PlanRegister = () => {
     }, [])
 
     useEffect(() => {
+        let start = new Date(planStartDate)
+        start.setDate(start.getDate() + 1)
+        let end = new Date(planEndDate)
+        end.setDate(end.getDate() + 1)
         setPlan({
             ...plan,
-            planStart: planStartDate,
-            planEnd: planEndDate,
+            planStart: start,
+            planEnd: end,
         })
+        console.log(plan)
     }, [planStartDate, planEndDate])
 
     const changeStartDate = startDate => {
@@ -73,7 +78,10 @@ const PlanRegister = () => {
             alert('일정이 올바르지 않습니다')
             return
         }
-        api.apis.createPlan(projectId, plan)
+        api.apis.createPlan(projectId, plan).then(response => {
+            alert('일정이 생성되었습니다')
+            closePlanRegister()
+        })
     }
 
     return (
@@ -133,7 +141,7 @@ const S = {
         box-shadow: ${({ theme }) => theme.shadow.card};
         margin: 16px;
         padding: 16px;
-        overflow: visible;
+        overflow: auto;
         /* animation: ${style.leftSlide} 0.4s linear; */
 
         &::-webkit-scrollbar {
