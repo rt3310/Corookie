@@ -8,9 +8,6 @@ import * as utils from 'utils'
 import * as api from 'api'
 
 import * as StompJs from '@stomp/stompjs'
-import * as SockJs from 'sockjs-client'
-
-import { IoExitOutline } from 'react-icons/io5'
 import { AiOutlinePushpin, AiFillPushpin } from 'react-icons/ai'
 
 const TextChat = () => {
@@ -197,9 +194,6 @@ const TextChat = () => {
                         {pinOn ? <AiFillPushpin /> : <AiOutlinePushpin />}
                     </S.PinButton>
                 </S.Title>
-                <S.ExitButton>
-                    <IoExitOutline />
-                </S.ExitButton>
             </S.Header>
             <S.Container>
                 <S.ChatBox>
@@ -248,21 +242,6 @@ const S = {
         justify-content: space-between;
         align-items: center;
         position: relative;
-    `,
-    ExitButton: styled.div`
-        margin: 0 0 0 auto;
-        cursor: pointer;
-        transition-duration: 0.2s;
-
-        & svg {
-            width: 24px;
-            height: 24px;
-        }
-
-        &:hover {
-            color: ${({ theme }) => theme.color.warning};
-            transform: translateX(1px);
-        }
     `,
     Container: styled.div`
         display: flex;

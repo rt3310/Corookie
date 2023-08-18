@@ -22,7 +22,6 @@ const FullPageScroll = ({ children, onLoad = () => {}, onPageChange = () => {} }
             }, 500)
             if (outerDivRef.current.childElementCount - 1 > currentPage.current) currentPage.current++
         }
-        console.log(currentPage.current)
         onPageChange(currentPage.current)
         refresh(v => v + 1)
     }
@@ -41,7 +40,6 @@ const FullPageScroll = ({ children, onLoad = () => {}, onPageChange = () => {} }
             }, 500)
             if (currentPage.current > 0) currentPage.current--
         }
-        console.log(currentPage.current)
         onPageChange(currentPage.current)
         refresh(v => v + 1)
     }
@@ -50,7 +48,6 @@ const FullPageScroll = ({ children, onLoad = () => {}, onPageChange = () => {} }
         e.preventDefault()
         if (!canScroll.current) return
         const { deltaY } = e
-        console.log('scroll to', outerDivRef.current?.scrollHeight)
         if (deltaY > 0 && outerDivRef.current) {
             scrollDown()
         } else if (deltaY < 0 && outerDivRef.current) {

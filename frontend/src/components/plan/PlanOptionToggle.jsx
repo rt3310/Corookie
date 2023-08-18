@@ -13,7 +13,6 @@ const PlanOptionToggle = ({ state, plan, setPlan }) => {
     const optionRef = useRef(null)
 
     useEffect(() => {
-        console.log('members', members)
         const handleOutside = e => {
             if (optionRef.current && !optionRef.current.contains(e.target)) {
                 setIsActive(false)
@@ -61,7 +60,6 @@ const PlanOptionToggle = ({ state, plan, setPlan }) => {
                                         memberIds: [...members, option.memberId],
                                     })
                                 }
-                                console.log(members)
                             }}>
                             {option.memberName}
                         </S.Option>

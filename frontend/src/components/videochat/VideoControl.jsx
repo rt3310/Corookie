@@ -5,7 +5,6 @@ import { IoIosChatboxes, IoMdSettings, IoMdMic, IoMdMicOff } from 'react-icons/i
 import { IoVideocam, IoVideocamOff } from 'react-icons/io5'
 import { LuScreenShare } from 'react-icons/lu'
 import { MdCallEnd } from 'react-icons/md'
-import * as components from 'components'
 import * as hooks from 'hooks'
 
 const VideoControl = () => {

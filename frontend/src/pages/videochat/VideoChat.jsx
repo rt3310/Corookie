@@ -6,7 +6,7 @@ import * as components from 'components'
 import * as hooks from 'hooks'
 import * as api from 'api'
 
-import { IoExitOutline, IoChevronForward, IoChevronBack } from 'react-icons/io5'
+import { IoChevronForward, IoChevronBack } from 'react-icons/io5'
 import { useEffect } from 'react'
 import axios from 'axios'
 
@@ -98,6 +98,8 @@ const VideoChat = () => {
                     console.log(response.data)
                 })
                 .then(() => {
+                    setSelectedFile(null)
+                    setSelectedFileName(null)
                     if (response.status === 200) {
                         setUploadStatus('File uploaded successfully.')
                         // Handle success scenario
@@ -119,9 +121,6 @@ const VideoChat = () => {
         <S.Wrap>
             <S.Header>
                 <S.Title>{videoChannel.name}</S.Title>
-                <S.ExitButton>
-                    <IoExitOutline />
-                </S.ExitButton>
             </S.Header>
             <S.Content>
                 <S.Container>
@@ -234,21 +233,6 @@ const S = {
         align-items: center;
         position: relative;
     `,
-    ExitButton: styled.div`
-        margin: 0 0 0 auto;
-        cursor: pointer;
-        transition-duration: 0.2s;
-
-        & svg {
-            width: 24px;
-            height: 24px;
-        }
-
-        &:hover {
-            color: ${({ theme }) => theme.color.warning};
-            transform: translateX(1px);
-        }
-    `,
     Container: styled.div`
         display: flex;
         height: 100%;
@@ -259,7 +243,7 @@ const S = {
     `,
     SummaryContainer: styled.div`
         height: 100%;
-        width: 318px;
+        min-width: 318px;
         background-color: ${({ theme }) => theme.color.white};
         border-radius: 8px;
         display: flex;
@@ -323,6 +307,10 @@ const S = {
         border-bottom-right-radius: 8px;
         background-color: ${({ theme }) => theme.color.middlegray};
         font-size: ${({ theme }) => theme.fontsize.sub1};
+        &:hover {
+            background-color: ${({ theme }) => theme.color.main};
+            color: ${({ theme }) => theme.color.white};
+        }
         & > input {
             width: 100%;
             height: 100%;
@@ -341,6 +329,12 @@ const S = {
         font-size: ${({ theme }) => theme.fontsize.sub1};
         border-radius: 4px;
         margin-bottom: 8px;
+        cursor: pointer;
+        &:hover {
+            border: 1px solid ${({ theme }) => theme.color.black};
+            background-color: ${({ theme }) => theme.color.white};
+            color: ${({ theme }) => theme.color.black};
+        }
     `,
     NoFileMessage: styled.div`
         font-size: 13px;

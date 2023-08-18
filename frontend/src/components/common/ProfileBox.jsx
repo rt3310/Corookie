@@ -37,7 +37,6 @@ const ProfileBox = () => {
 
         promise.then(
             function (data) {
-                console.log(data)
                 api.apis.changeMemberProfile(memberId, { imageUrl: data.Location }).then(response => {
                     setImageUrl(response.data.imageUrl)
                 })

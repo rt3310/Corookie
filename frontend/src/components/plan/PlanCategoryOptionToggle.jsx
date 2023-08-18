@@ -7,14 +7,13 @@ import * as hooks from 'hooks'
 import { IoAdd, IoClose } from 'react-icons/io5'
 import { HexColorPicker } from 'react-colorful'
 
-const PlanCategoryOptionToggle = ({ state, plan, setPlan }) => {
+const PlanCategoryOptionToggle = ({ state, selected, setSelected }) => {
     const [isActive, setIsActive] = useState(false)
     const [addCategory, setAddCategory] = useState(false)
     const optionRef = useRef(null)
     const [categories, setCategories] = useState([])
     const [newOption, setNewOption] = useState('')
     const [newColor, setNewColor] = useState('#ffffff')
-    const [selectedCategories, setSelectedCategories] = useState([])
 
     const { project } = hooks.projectState()
 
@@ -60,7 +59,6 @@ const PlanCategoryOptionToggle = ({ state, plan, setPlan }) => {
             const categoryRes = await api.apis
                 .createPlanCategory(project.id, { content: newOption, color: newColor })
                 .catch(error => console.log(error))
-            // console.log(categoryRes)
             setCategories([...categories, categoryRes.data])
             setAddCategory(false)
             setNewColor('#ffffff')
@@ -69,11 +67,6 @@ const PlanCategoryOptionToggle = ({ state, plan, setPlan }) => {
             alert('이미 존재하는 카테고리입니다. ')
         }
     }
-
-    useEffect(() => {
-        console.log(newColor)
-    }, [newColor])
-
     useEffect(() => {
         if (addCategory) {
             optionInput.current.focus()
@@ -97,11 +90,7 @@ const PlanCategoryOptionToggle = ({ state, plan, setPlan }) => {
     }, [optionInput])
 
     const clickSelectedCategory = id => {
-        setSelectedCategories(selectedCategories.filter(category => category.id !== id))
-        setPlan({
-            ...plan,
-            categoryIds: plan.categoryIds.filter(categoryId => categoryId !== id),
-        })
+        setSelected(selected.filter(category => category.content !== id))
     }
 
     const [textColor, setTextColor] = useState('#000000')
@@ -146,9 +135,9 @@ const PlanCategoryOptionToggle = ({ state, plan, setPlan }) => {
             <S.PlanOptionLabel>{utils.PLAN_OPTIONS[state].label}</S.PlanOptionLabel>
             <S.Selector className={isActive ? 'active' : null}>
                 <S.Label onClick={() => setIsActive(!isActive)}>
-                    {selectedCategories.length === 0
+                    {selected.length === 0
                         ? '분류'
-                        : selectedCategories.map((selectedCategory, index) => (
+                        : selected.map((selectedCategory, index) => (
                               <S.SelectedCategory
                                   key={index}
                                   //   onClick={() => clickSelectedCategory(selectedCategory.content)}
@@ -166,22 +155,17 @@ const PlanCategoryOptionToggle = ({ state, plan, setPlan }) => {
                 )}
                 <S.Options ref={optionRef}>
                     {categories.map((option, index) => (
-                        <S.Option key={index}>
-                            <S.OptionContainer
-                                color={option.color}
-                                textColor={textColorCalculator(option.color)}
-                                onClick={() => {
-                                    if (!selectedCategories.some(category => category.content === option.content)) {
-                                        setIsActive(false)
-                                        setPlan({
-                                            ...plan,
-                                            categoryIds: [...plan.categoryIds, option.id],
-                                        })
-                                        setSelectedCategories([...selectedCategories, option])
-                                    } else {
-                                        clickSelectedCategory(option.id)
-                                    }
-                                }}>
+                        <S.Option
+                            key={index}
+                            onClick={() => {
+                                if (!selected.some(category => category.content === option.content)) {
+                                    setIsActive(false)
+                                    setSelected([...selected, option])
+                                } else {
+                                    clickSelectedCategory(option.content)
+                                }
+                            }}>
+                            <S.OptionContainer color={option.color} textColor={textColorCalculator(option.color)}>
                                 {option.content}
                             </S.OptionContainer>
                             <IoClose onClick={() => deleteCategory(option.id)} />
