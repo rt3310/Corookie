@@ -37,7 +37,6 @@ const IssueDetail = ({ id }) => {
         api.apis
             .getIssueDetail(project.id, id)
             .then(response => {
-                console.log('task', response.data)
                 setTask(response.data)
                 setTitle(response.data.topic)
                 setContent(response.data.description)
@@ -104,19 +103,6 @@ const IssueDetail = ({ id }) => {
             setTask(issueRes.data)
             const issuesRes = await api.apis.getIssueList(project.id)
             setTasks(issuesRes.data)
-
-            // const updatedTasks = tasks.filter(task => task.id !== id)
-            // api.apis
-            //     .deleteIssue(project.id, task.id)
-            //     .then(response => {
-            //         console.log(response.data)
-            //         setTasks(updatedTasks)
-            //         alert('삭제되었습니다. ')
-            //         closeIssueDetail()
-            //     })
-            //     .catch(error => {
-            //         console.log(error)
-            //     })
         }
     }
     const changeStatus = async status => {
@@ -128,14 +114,12 @@ const IssueDetail = ({ id }) => {
 
     useEffect(() => {
         if (task && task.id) {
-            console.log('중요도', priorityValue)
             const updatedTasks = tasks.map(task => (task.id === id ? { ...task, priority: `${priorityValue}` } : task))
             api.apis
                 .changeIssuePriority(project.id, id, {
                     priority: priorityValue,
                 })
                 .then(response => {
-                    console.log(response.data)
                     setTasks(updatedTasks)
                 })
                 .catch(error => console.log(error))
@@ -148,7 +132,6 @@ const IssueDetail = ({ id }) => {
             api.apis
                 .changeIssueManager(project.id, id, { managerId: managerValue.managerId })
                 .then(response => {
-                    console.log(response.data)
                     setTasks(updatedTasks)
                 })
                 .catch(error => console.log(error))
@@ -161,7 +144,6 @@ const IssueDetail = ({ id }) => {
             api.apis
                 .changeIssueCategory(project.id, id, { category: categoryValue })
                 .then(response => {
-                    console.log(response.data)
                     setTasks(updatedTasks)
                 })
                 .catch(error => console.log(error))

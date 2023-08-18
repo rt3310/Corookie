@@ -29,7 +29,6 @@ const Layout = () => {
                 setProject(projectRes.data)
                 setTextChannels(textChannelsRes.data)
                 setVideoChannels(videoChannelsRes.data)
-                console.log(directChannelsRes.data)
                 setDirectChannels(directChannelsRes.data)
             } catch (error) {
                 console.log(error)

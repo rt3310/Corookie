@@ -9,19 +9,18 @@ import { IoSearch, IoAdd } from 'react-icons/io5'
 
 const TaskHeader = () => {
     const { showIssue, openIssue, openKanban } = hooks.taskState()
-    const { issueCreateOpened, openIssueCreate } = hooks.issueCreateState()
+    const { openIssueCreate } = hooks.issueCreateState()
     const { closeIssueDetail } = hooks.issueDetailState()
     const { project } = hooks.projectState()
     const { setTasks } = hooks.tasksState()
     const { members } = hooks.memberState()
 
-    const { value: priorityValue, setValue: setPriorityValue } = hooks.priorityState()
-    const { value: managerValue, setValue: setManagerValue } = hooks.managerState()
-    const { value: categoryValue, setValue: setCategoryValue } = hooks.categoryState()
-    const { value: statusValue, setValue: setStatusValue } = hooks.statusState()
+    const { value: priorityValue } = hooks.priorityState()
+    const { value: managerValue } = hooks.managerState()
+    const { value: categoryValue } = hooks.categoryState()
+    const { value: statusValue } = hooks.statusState()
 
     const priorityList = ['내림차순', '오름차순']
-    // const managerList = ['황상미', '최효빈', '신승수', '박종서', '서원호', '권현수']
     const categoryList = ['frontend', 'backend', 'design', 'development', 'product', 'other']
     const statusList = ['todo', 'inProgress', 'done']
 
@@ -49,7 +48,6 @@ const TaskHeader = () => {
         api.apis
             .filterIssue(project.id, 'priority', priorityValue)
             .then(response => {
-                console.log(response.data)
                 setTasks(response.data)
             })
             .catch(error => {
@@ -61,7 +59,6 @@ const TaskHeader = () => {
         api.apis
             .filterIssue(project.id, 'manager', managerValue.managerId)
             .then(response => {
-                console.log(response)
                 setTasks(response.data)
             })
             .catch(error => {

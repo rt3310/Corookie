@@ -121,7 +121,7 @@ export const meState = create(set => ({
             memberEmail: data.email,
             memberImageUrl: data.imageUrl,
         })),
-    setName: data => set(state => ({ name: data })),
+    setName: data => set(state => ({ memberName: data })),
     setImageUrl: data => set(state => ({ imageUrl: data })),
 }))
 

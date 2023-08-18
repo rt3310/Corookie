@@ -34,7 +34,6 @@ const IssueCreate = ({ projectId }) => {
             api.apis
                 .createIssue(projectId, data)
                 .then(response => {
-                    console.log(response)
                     setTasks([...tasks, response.data])
                 })
                 .catch(error => {
@@ -63,10 +62,6 @@ const IssueCreate = ({ projectId }) => {
     }, [createRef, closeIssueCreate])
 
     const handleTitleChange = e => setTitle(e.target.value)
-
-    useEffect(() => {
-        console.log('변화', tasks)
-    }, [tasks])
 
     const managerList = members.map(member => member.memberName)
     const priorityList = ['Highest', 'High', 'Normal', 'Low', 'Lowest']

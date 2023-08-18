@@ -13,7 +13,6 @@ const IssueBoard = ({ projectId }) => {
         api.apis
             .getIssueList(projectId)
             .then(response => {
-                console.log(response.data)
                 setTasks(response.data)
             })
             .catch(error => {
