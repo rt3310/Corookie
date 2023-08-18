@@ -13,6 +13,8 @@ const TopTab = () => {
     const { closeDmComment } = hooks.dmcommentState()
     const { setThreadId, setCommentCount } = hooks.selectedThreadState()
     const { memberImageUrl } = hooks.meState()
+    const { closePlanDetail } = hooks.planDetailState()
+    const { closePlanRegister } = hooks.planRegisterState()
     const navigate = useNavigate()
 
     const toggleProfile = () => {
@@ -26,13 +28,15 @@ const TopTab = () => {
             closeDmComment()
             setThreadId(null)
             setCommentCount(0)
+            closePlanDetail()
+            closePlanRegister()
         }
     }
 
     return (
         <S.Wrap style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <S.Title onClick={() => navigate(utils.URL.HOME.MAIN)}>
-            <img src={require('images/logo.png').default} alt={'로고'} />
+                <img src={require('images/logo.png').default} alt={'로고'} />
             </S.Title>
             <S.Profile onClick={() => toggleProfile()}>
                 <img

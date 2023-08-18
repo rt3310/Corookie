@@ -251,9 +251,9 @@ export const chatBoxState = create(set => ({
 }))
 
 export const planDetailState = create(set => ({
-    planDetailOpened: 0,
+    planDetailOpened: null,
     openPlanDetail: id => set(state => ({ planDetailOpened: id })),
-    closePlanDetail: () => set(state => ({ planDetailOpened: 0 })),
+    closePlanDetail: () => set(state => ({ planDetailOpened: null })),
 }))
 
 export const planRegisterState = create(set => ({
