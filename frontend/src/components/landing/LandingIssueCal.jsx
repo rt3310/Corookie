@@ -7,7 +7,7 @@ const LandingIssueCal = () => {
             <S.Container>
                 <S.Issue>
                     <S.Title>Issue Management</S.Title>
-                    <S.SubTitle1>협업 툴에서 필수인 직관적인 이슈 관리</S.SubTitle1>
+                    <S.SubTitle1>직관적인 이슈 관리</S.SubTitle1>
                     <S.SubTitle2>
                         프로젝트의 이슈들을 팀원들과 공동으로 관리하고 <nav></nav>한 눈에 확인할 수 있습니다.
                     </S.SubTitle2>
@@ -84,7 +84,8 @@ const S = {
         & img {
             width: 100%;
             height: 100%;
-            margin: 8px;
+            margin: 12px;
+            box-shadow: 0px 15px 15px 0px rgba(0, 0, 0, 0.1);
         }
     `,
 }

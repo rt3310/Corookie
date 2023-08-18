@@ -44,23 +44,6 @@ const LandingMain = () => {
         initProjects()
     }, [])
 
-    // useEffect(() => {
-    //     if (createFormOpened) {
-    //         const handleOutsideClick = event => {
-    //             const formNode = document.querySelector('.project-create-form')
-    //             if (formNode && !formNode.contains(event.target)) {
-    //                 setCreateFormOpened(false)
-    //             }
-    //         }
-
-    //         document.addEventListener('mousedown', handleOutsideClick)
-
-    //         return () => {
-    //             document.removeEventListener('mousedown', handleOutsideClick)
-    //         }
-    //     }
-    // }, [createFormOpened])
-
     return (
         <S.Wrap>
             <S.Logo>
@@ -299,6 +282,7 @@ const S = {
         border: 1px solid ${({ theme }) => theme.color.main};
         background-color: ${({ theme }) => theme.color.main};
         color: ${({ theme }) => theme.color.white};
+        box-shadow: ${({ theme }) => theme.shadow.card};
         transition: all 0.2s linear;
 
         &:hover {
@@ -319,6 +303,7 @@ const S = {
         border: 1px solid ${({ theme }) => theme.color.darkgray};
         background-color: ${({ theme }) => theme.color.darkgray};
         color: ${({ theme }) => theme.color.white};
+        box-shadow: ${({ theme }) => theme.shadow.card};
         transition: all 0.2s linear;
 
         &:hover {
@@ -345,6 +330,7 @@ const S = {
         border: 1px solid ${({ theme }) => theme.color.darkgray};
         background-color: ${({ theme }) => theme.color.darkgray};
         color: ${({ theme }) => theme.color.white};
+        box-shadow: ${({ theme }) => theme.shadow.card};
         transition: all 0.2s linear;
         cursor: pointer;
 

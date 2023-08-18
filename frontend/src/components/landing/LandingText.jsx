@@ -58,7 +58,8 @@ const S = {
         & img {
             width: 48%;
             height: 100%;
-            margin: 8px;
+            margin: 12px;
+            box-shadow: 0px 15px 15px 0px rgba(0, 0, 0, 0.1);
         }
     `,
 }
