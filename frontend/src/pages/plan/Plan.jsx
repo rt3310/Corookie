@@ -14,7 +14,9 @@ import * as hooks from 'hooks'
 const Plan = () => {
     const [currentMonth, setCurrentMonth] = useState(new Date())
     const { planRegisterOpened, openPlanRegister } = hooks.planRegisterState()
+    const { closePlanDetail } = hooks.planDetailState()
     const { planDetailOpened } = hooks.planDetailState()
+    const { closeProfile } = hooks.profileState()
 
     const prevMonth = () => {
         setCurrentMonth(subMonths(currentMonth, 1))
@@ -36,7 +38,12 @@ const Plan = () => {
                             </div>
                             <IoIosArrowForward onClick={() => nextMonth()} />
                         </S.MonthBox>
-                        <S.CreateButton onClick={() => openPlanRegister()}>
+                        <S.CreateButton
+                            onClick={() => {
+                                openPlanRegister()
+                                closePlanDetail()
+                                closeProfile()
+                            }}>
                             <BsPlus /> 생성
                         </S.CreateButton>
                     </S.CalendarAccess>

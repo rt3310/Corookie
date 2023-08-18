@@ -23,6 +23,21 @@ const PlanDetail = () => {
         })
     }, [planDetailOpened])
 
+    const textColorCalculator = backgroundColor => {
+        const color = backgroundColor.slice(1)
+
+        const r = parseInt(color.slice(0, 2), 16)
+        const g = parseInt(color.slice(2, 4), 16)
+        const b = parseInt(color.slice(4, 6), 16)
+
+        const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255
+        if (luminance < 0.5) {
+            return '#ffffff'
+        } else {
+            return '#000000'
+        }
+    }
+
     if (!currentPlan) {
         return
     }
@@ -56,7 +71,9 @@ const PlanDetail = () => {
             <S.Label>
                 <S.PlanOptionHeader>분류</S.PlanOptionHeader>
                 {currentPlan.categories.map(category => (
-                    <S.Category color={category.color}>{category.content}</S.Category>
+                    <S.Category color={category.color} fontColor={textColorCalculator(category.color)}>
+                        {category.content}
+                    </S.Category>
                 ))}
             </S.Label>
             <S.PlanContentBox>
@@ -239,14 +256,14 @@ const S = {
         align-items: center;
         justify-content: space-between;
         background-color: ${props => props.color};
-        color: ${props => props.textColor};
+        color: ${props => props.fontColor};
         border-radius: 8px;
         margin-right: 2px;
         white-space: nowrap;
         & svg {
             width: 16px;
             height: 16px;
-            color: ${props => props.textColor};
+            color: ${props => props.fontColor};
             cursor: pointer;
             &:hover {
                 color: ${({ theme }) => theme.color.main};
