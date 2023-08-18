@@ -36,13 +36,12 @@ const IssuePreview = ({ task }) => {
         }
     }
 
-    const renderProfile = manager => {
-        switch (manager) {
-            case '1':
-                return <img src={require('images/thread_profile.png').default} alt="프로필 이미지" />
-            default:
-                return <img src={require('images/thread_profile.png').default} alt="프로필 이미지" />
+    const renderProfile = task => {
+        console.log(task)
+        if (task.memberId === null) {
+            return <img src={require('images/profile.png').default} alt="프로필 이미지" />
         }
+        return <img src={task.memberImageUrl} alt="프로필 이미지" />
     }
 
     if (!task) {
@@ -55,7 +54,7 @@ const IssuePreview = ({ task }) => {
             <S.Description>
                 <S.Status status={task.progress} />
                 <S.Type>{task.category}</S.Type>
-                <S.Profile>{renderProfile(task.managerId)}</S.Profile>
+                <S.Profile>{renderProfile(task)}</S.Profile>
                 <S.Priority priority={task.priority}>{renderPriority(task.priority)}</S.Priority>
             </S.Description>
         </S.Wrap>
@@ -127,6 +126,7 @@ const S = {
         & img {
             width: 30px;
             height: 30px;
+            border-radius: 4px;
         }
     `,
     Priority: styled.div`
