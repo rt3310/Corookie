@@ -67,6 +67,21 @@ const Calendar = ({ currentMonth }) => {
         openPlanDetail(plan.id)
     }
 
+    const textColorCalculator = backgroundColor => {
+        const color = backgroundColor.slice(1)
+
+        const r = parseInt(color.slice(0, 2), 16)
+        const g = parseInt(color.slice(2, 4), 16)
+        const b = parseInt(color.slice(4, 6), 16)
+
+        const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255
+        if (luminance < 0.5) {
+            return '#ffffff'
+        } else {
+            return '#000000'
+        }
+    }
+
     useEffect(() => {
         const initCalendar = async () => {
             const plansRes = await api.apis.getPlans(projectId, dateFormat(currentMonth))
@@ -77,7 +92,6 @@ const Calendar = ({ currentMonth }) => {
             let plans = []
             let day = startDate
 
-            console.log(plansRes.data)
             let planLength = plansRes.data.length
             while (day <= endDate) {
                 for (let i = 0; i < 7; i++) {
@@ -134,6 +148,7 @@ const Calendar = ({ currentMonth }) => {
                                             closeProfile()
                                             closePlanRegister()
                                         }}
+                                        fontcolor={textColorCalculator(plansRes.data[i].color)}
                                         className="same">
                                         {plansRes.data[i].planName}
                                     </S.DayPlan>
@@ -168,6 +183,7 @@ const Calendar = ({ currentMonth }) => {
                                             closePlanRegister()
                                         }}
                                         color={plansRes.data[i].color}
+                                        fontColor={textColorCalculator(plansRes.data[i].color)}
                                         className="same">
                                         {plansRes.data[i].planName}
                                     </S.DayPlan>
@@ -195,6 +211,7 @@ const Calendar = ({ currentMonth }) => {
                                     }}
                                     onDragOver={handleDragOver}
                                     color={'#286EF0'}
+                                    fontcolor={textColorCalculator('#286EF0')}
                                     className="same"></S.DayPlan>
                             </S.PlanRow>,
                         )
@@ -217,6 +234,7 @@ const Calendar = ({ currentMonth }) => {
                                     }}
                                     onDragOver={handleDragOver}
                                     color={'#286EF0'}
+                                    fontcolor={textColorCalculator('#286EF0')}
                                     className="same"></S.DayPlan>
                             </S.PlanRow>,
                         )
@@ -347,7 +365,8 @@ const S = {
         }
 
         &:hover {
-            background-color: ${({ theme }) => theme.color.main};
+            background-color: ${({ theme, color }) => (color ? color : theme.color.main)};
+            color: ${({ theme, fontcolor }) => (fontcolor ? fontcolor : theme.color.white)};
             opacity: 0.6;
             cursor: pointer;
         }
