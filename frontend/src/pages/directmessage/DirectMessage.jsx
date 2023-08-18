@@ -11,7 +11,6 @@ import * as StompJs from '@stomp/stompjs'
 
 const DirectMessage = () => {
     const { projectId, channelId } = useParams()
-    const { dmcommentOpened } = hooks.dmcommentState()
     const { closeProfile } = hooks.profileState()
     const { closeComment } = hooks.commentState()
     const { closeChatbox } = hooks.chatBoxState()

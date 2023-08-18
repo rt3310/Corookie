@@ -6,10 +6,10 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum DefaultChannel {
-    NOTICE("공지"),
-    FREE("자유"),
-    BACKEND("backend"),
-    FRONTEND("frontend");
+    NOTICE("1-공지"),
+    FREE("2-자유"),
+    BACKEND("3-Backend"),
+    FRONTEND("4-Frontend");
 
     private final String channelName;
 }

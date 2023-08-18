@@ -164,8 +164,10 @@ const KanbanBoard = ({ projectId }) => {
                                                                                     </S.Priority>
                                                                                     <S.ProfileImg
                                                                                         src={
-                                                                                            require('images/thread_profile.png')
-                                                                                                .default
+                                                                                            item.memberId === null
+                                                                                                ? require('images/thread_profile.png')
+                                                                                                      .default
+                                                                                                : item.memberImageUrl
                                                                                         }
                                                                                         alt="Profile"
                                                                                     />
@@ -294,6 +296,7 @@ const S = {
         width: 20px;
         height: 20px;
         margin: 0 0 0 4px;
+        border-radius: 4px;
     `,
     Type: styled.div`
         margin: 4px 0;

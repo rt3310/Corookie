@@ -3,11 +3,10 @@ import { useParams } from 'react-router'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io'
+import { IoIosArrowUp } from 'react-icons/io'
 import { BsPlus } from 'react-icons/bs'
-import { AiOutlinePushpin, AiFillPushpin } from 'react-icons/ai'
+import { AiFillPushpin } from 'react-icons/ai'
 
-import * as utils from 'utils'
 import * as api from 'api'
 import * as hooks from 'hooks'
 
@@ -16,14 +15,13 @@ const ChannelNav = () => {
     const navigate = useNavigate()
     const { project } = hooks.projectState()
     const { memberId } = hooks.meState()
-    const { projectMembers, setProjectMembers } = hooks.projectMembersState()
-    const { directChannels, setDirectChannels } = hooks.directChannelsState()
+    const { setProjectMembers } = hooks.projectMembersState()
+    const { directChannels } = hooks.directChannelsState()
     const { textChannels, setTextChannels } = hooks.textChannelsState()
     const { videoChannels, setVideoChannels } = hooks.videoChannelsState()
     const [openText, setOpenText] = useState(true)
     const [openDm, setOpenDm] = useState(true)
     const [openVideo, setOpenVideo] = useState(true)
-    const [pinOn, setPinOn] = useState(true)
     const [createTextChannel, setCreateTextChannel] = useState(false)
     const [createVideoChannel, setCreateVideoChannel] = useState(false)
     const [channelTitle, setChannelTitle] = useState('')
@@ -32,6 +30,7 @@ const ChannelNav = () => {
         const initProjectMembers = async () => {
             const projectMembersRes = await api.apis.getProjectMembers(projectId)
             setProjectMembers(projectMembersRes.data)
+            console.log(projectMembersRes.data)
         }
 
         initProjectMembers()
@@ -79,6 +78,7 @@ const ChannelNav = () => {
     const textTitleKeyDown = async e => {
         if (e.key === 'Enter') {
             api.apis.createTextChannel(projectId, { name: channelTitle }).then(response => {
+                console.log(response.data)
                 setTextChannels([...textChannels, response.data])
             })
             setCreateTextChannel(false)
@@ -89,6 +89,7 @@ const ChannelNav = () => {
     const videoTitleKeyDown = async e => {
         if (e.key === 'Enter') {
             api.apis.createVideoChannel(projectId, { name: channelTitle }).then(response => {
+                console.log(response.data)
                 setVideoChannels([...videoChannels, response.data])
             })
             setCreateVideoChannel(false)

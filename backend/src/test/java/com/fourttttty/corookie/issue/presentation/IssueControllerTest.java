@@ -133,7 +133,8 @@ class IssueControllerTest extends RestDocsTest {
                 IssueProgress.TODO,
                 IssuePriority.HIGH,
                 IssueCategory.BACKEND,
-                "memberName"));
+                "memberName",
+                "https://test.com"));
         given(issueService.findByProjectId(any(Long.class)))
                 .willReturn(responses);
 
@@ -162,7 +163,8 @@ class IssueControllerTest extends RestDocsTest {
                                 fieldWithPath("[].progress").type(STRING).description("이슈 진행도"),
                                 fieldWithPath("[].priority").type(STRING).description("이슈 중요도"),
                                 fieldWithPath("[].category").type(STRING).description("이슈 카테고리"),
-                                fieldWithPath("[].memberName").type(STRING).description("멤버 이름"))));
+                                fieldWithPath("[].memberName").type(STRING).description("멤버 이름"),
+                                fieldWithPath("[].memberImageUrl").type(STRING).description("멤버 프로필 사진"))));
     }
 
     @Test
@@ -240,7 +242,8 @@ class IssueControllerTest extends RestDocsTest {
                 IssueProgress.TODO,
                 IssuePriority.HIGH,
                 IssueCategory.BACKEND,
-                "memberName"));
+                "memberName",
+                "https://test.com"));
         given(issueFilteringService.findByFiltering(any(Long.class), any(IssueFilterType.class), any(String.class)))
                 .willReturn(responses);
 
@@ -274,6 +277,7 @@ class IssueControllerTest extends RestDocsTest {
                                 fieldWithPath("[].progress").type(STRING).description("이슈 진행도"),
                                 fieldWithPath("[].priority").type(STRING).description("이슈 중요도"),
                                 fieldWithPath("[].category").type(STRING).description("이슈 카테고리"),
-                                fieldWithPath("[].memberName").type(STRING).description("멤버 이름"))));
+                                fieldWithPath("[].memberName").type(STRING).description("멤버 이름"),
+                                fieldWithPath("[].memberImageUrl").type(STRING).description("멤버 프로필 사진"))));
     }
 }

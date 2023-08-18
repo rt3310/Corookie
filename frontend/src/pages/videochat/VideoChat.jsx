@@ -121,8 +121,8 @@ const VideoChat = () => {
             <S.Content>
                 <S.Container>
                     <iframe
-                        src={`http://localhost:4200/#/${videoChannel.sessionId}`} // local 시험할 때
-                        // src={`http://i9a402.p.ssafy.io:8443/#/${videoChannel.sessionId}`} // 우리 서버에서
+                        // src={`http://localhost:4200/#/${videoChannel.sessionId}`} // local 시험할 때
+                        src={`https://i9a402.p.ssafy.io:8443/#/${videoChannel.sessionId}`} // 우리 서버에서
                         allow="camera;microphone;fullscreen;autoplay"
                         width="100%"
                         height="100%">
@@ -143,8 +143,8 @@ const VideoChat = () => {
                                     <S.FileButton>파일 선택</S.FileButton>
                                 </label>
                             </S.FileInputWrapper>
-                            <S.UploadButton onClick={handleUpload}>Upload</S.UploadButton>
-                            <S.NoFileMessage>{uploadStatus}</S.NoFileMessage>
+                            <S.UploadButton onClick={handleUpload}>요약 생성하기</S.UploadButton>
+                            {/* <S.NoFileMessage>{uploadStatus}</S.NoFileMessage> */}
                         </S.CreateSummary>
                         <S.SummaryList>
                             {summary.map((data, index) => (
