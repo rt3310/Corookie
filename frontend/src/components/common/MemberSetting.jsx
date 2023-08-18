@@ -117,7 +117,7 @@ const MemberSetting = ({ memberTextRef }) => {
                             <S.Text>초대링크 복사</S.Text>
                             <IoLink
                                 onClick={() =>
-                                    copyLink(`http://localhost:3000/project/invite/${project.invitationLink}`)
+                                    copyLink(`https://i9a402.p.ssafy.io/project/invite/${project.invitationLink}`)
                                 }
                             />
                         </S.CreateLink>

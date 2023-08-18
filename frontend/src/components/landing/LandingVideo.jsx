@@ -12,6 +12,7 @@ const LandingVideo = () => {
             </S.SubTitle2>
             <S.ImageContent>
                 <img src={require('images/video_sample1.png').default} alt="채팅1" />
+                <img src={require('images/video_sample1.png').default} alt="채팅1" />
                 {/* <img src={require('images/video_sample2.PNG').default} alt="채팅2" /> */}
             </S.ImageContent>
         </S.Wrap>

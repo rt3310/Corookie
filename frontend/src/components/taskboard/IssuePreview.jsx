@@ -36,7 +36,7 @@ const IssuePreview = ({ task }) => {
 
     const renderProfile = task => {
         console.log(task)
-        if (task.memberId === null) {
+        if (task.memberImageUrl === '' || task.memberId === null) {
             return <img src={require('images/profile.png').default} alt="프로필 이미지" />
         }
         return <img src={task.memberImageUrl} alt="프로필 이미지" />
