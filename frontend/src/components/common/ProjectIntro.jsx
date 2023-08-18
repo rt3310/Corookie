@@ -260,6 +260,10 @@ const S = {
         font-size: ${({ theme }) => theme.fontsize.content};
         line-height: ${({ theme }) => theme.lineheight.content};
         padding-bottom: 8px;
+        max-height: 54px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     `,
     Line: styled.div`
         margin: auto 8px 0;
