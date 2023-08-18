@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 import * as hooks from 'hooks'
 import { IoReorderTwoSharp } from 'react-icons/io5'
 import { BiChevronsUp, BiChevronUp, BiChevronDown, BiChevronsDown } from 'react-icons/bi'
 
-import * as api from 'api'
-
 const IssuePreview = ({ task }) => {
     const { issueDetailOpened, openIssueDetail, closeIssueDetail } = hooks.issueDetailState()
-    const { closeProfile } = hooks.profileState()
+    const { memberId, membereImageUrl } = hooks.meState()
 
     const renderPriority = priority => {
         switch (priority) {
@@ -36,8 +34,8 @@ const IssuePreview = ({ task }) => {
         }
     }
 
-    const renderProfile = manager => {
-        switch (manager) {
+    const renderProfile = memberId => {
+        switch (memberId) {
             case '1':
                 return <img src={require('images/thread_profile.png').default} alt="프로필 이미지" />
             default:

@@ -10,7 +10,6 @@ const ToggleButton = ({ btnType, list }) => {
 
     const changeIsActive = () => {
         setIsActive(!isActive)
-        console.log(isActive)
     }
 
     useEffect(() => {
@@ -39,10 +38,6 @@ const ToggleButton = ({ btnType, list }) => {
     }
 
     const { value, setValue } = type[btnType]
-
-    useEffect(() => {
-        console.log(value)
-    }, [value])
 
     return (
         <S.Selector className={isActive ? 'active' : null} onClick={() => changeIsActive()}>
@@ -84,7 +79,6 @@ const S = {
     `,
     Label: styled.button`
         display: flex;
-        /* justify-content: space-around; */
         align-items: center;
         width: 100%;
     `,

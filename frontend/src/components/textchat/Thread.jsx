@@ -15,7 +15,7 @@ const Thread = ({ projectId, channelId, thread }) => {
     const [addImoticon, setAddImoticon] = useState(false)
     const [comments, setComments] = useState([])
     const { closeProfile } = hooks.profileState()
-    const { commentOpened, openComment, closeComment } = hooks.commentState()
+    const { commentOpened, openComment } = hooks.commentState()
     const { threadId, setThreadId, commentCount, setCommentCount } = hooks.selectedThreadState()
     const [currentCommentCount, setCurrentCommentCount] = useState(thread.commentCount)
 
@@ -40,7 +40,6 @@ const Thread = ({ projectId, channelId, thread }) => {
             .getImojis(projectId, channelId, thread.id)
             .then(response => {
                 setImoji(response.data)
-                console.log(response.data)
                 response.data.forEach(imo => {
                     if (imo.emoji === 'good') {
                         setThumbCnt(imo.count)
@@ -122,7 +121,6 @@ const Thread = ({ projectId, channelId, thread }) => {
     useEffect(() => {
         api.apis.getComments(projectId, channelId, thread.id, 0, 3, 'createdAt', 'desc').then(response => {
             setComments(response.data)
-            console.log(response.data)
         })
     }, [])
 
@@ -142,7 +140,6 @@ const Thread = ({ projectId, channelId, thread }) => {
         const getThreadDetail = async () => {
             const threadRes = await api.apis.getThread(projectId, channelId, thread.id)
             setCurrentCommentCount(threadRes.data.commentCount)
-            console.log(threadRes.data)
         }
 
         if (threadId === thread.id) {

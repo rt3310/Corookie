@@ -44,7 +44,6 @@ const S = {
     Code: styled.pre`
         width: 100%;
         height: 100%;
-        /* white-space: pre-wrap; */
         padding: 16px;
         border-radius: 8px;
         font-size: ${({ theme }) => theme.fontsize.sub1};

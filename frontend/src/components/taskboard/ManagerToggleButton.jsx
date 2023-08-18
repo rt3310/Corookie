@@ -10,7 +10,6 @@ const ManagerToggleButton = ({ btnType, list }) => {
 
     const changeIsActive = () => {
         setIsActive(!isActive)
-        console.log(isActive)
     }
 
     useEffect(() => {
@@ -32,10 +31,6 @@ const ManagerToggleButton = ({ btnType, list }) => {
     }
 
     const { value, setValue } = type[btnType]
-
-    useEffect(() => {
-        console.log('value', value)
-    }, [])
 
     if (!value) {
         return

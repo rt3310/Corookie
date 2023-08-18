@@ -32,7 +32,6 @@ const ChannelNav = () => {
         const initProjectMembers = async () => {
             const projectMembersRes = await api.apis.getProjectMembers(projectId)
             setProjectMembers(projectMembersRes.data)
-            console.log(projectMembersRes.data)
         }
 
         initProjectMembers()
@@ -80,7 +79,6 @@ const ChannelNav = () => {
     const textTitleKeyDown = async e => {
         if (e.key === 'Enter') {
             api.apis.createTextChannel(projectId, { name: channelTitle }).then(response => {
-                console.log(response.data)
                 setTextChannels([...textChannels, response.data])
             })
             setCreateTextChannel(false)
@@ -91,7 +89,6 @@ const ChannelNav = () => {
     const videoTitleKeyDown = async e => {
         if (e.key === 'Enter') {
             api.apis.createVideoChannel(projectId, { name: channelTitle }).then(response => {
-                console.log(response.data)
                 setVideoChannels([...videoChannels, response.data])
             })
             setCreateVideoChannel(false)

@@ -73,9 +73,7 @@ const PlanRegister = () => {
             alert('일정이 올바르지 않습니다')
             return
         }
-        api.apis.createPlan(projectId, plan).then(response => {
-            console.log(response)
-        })
+        api.apis.createPlan(projectId, plan)
     }
 
     return (
@@ -97,7 +95,7 @@ const PlanRegister = () => {
                 <S.PlanDateLabel>날짜</S.PlanDateLabel>
                 <S.PlanDatePickerBox>
                     <S.PlanDatePicker
-                    selected={planStartDate}
+                        selected={planStartDate}
                         onChange={date => changeStartDate(date)}
                         dateFormat="yyyy.MM.dd"
                         locale={ko}

@@ -9,8 +9,6 @@ import * as api from 'api'
 
 import * as StompJs from '@stomp/stompjs'
 
-import { IoExitOutline } from 'react-icons/io5'
-
 const DirectMessage = () => {
     const { projectId, channelId } = useParams()
     const { dmcommentOpened } = hooks.dmcommentState()
@@ -167,9 +165,6 @@ const DirectMessage = () => {
                     {directChannel &&
                         (directChannel.member1Id === memberId ? directChannel.member2Name : directChannel.member1Name)}
                 </S.Title>
-                <S.ExitButton>
-                    <IoExitOutline />
-                </S.ExitButton>
             </S.Header>
             <S.Container>
                 <S.ChatBox>
@@ -217,21 +212,6 @@ const S = {
     `,
     Title: styled.div`
         font-size: ${({ theme }) => theme.fontsize.title2};
-    `,
-    ExitButton: styled.div`
-        margin: 0 0 0 auto;
-        cursor: pointer;
-        transition-duration: 0.2s;
-
-        & svg {
-            width: 24px;
-            height: 24px;
-        }
-
-        &:hover {
-            color: ${({ theme }) => theme.color.warning};
-            transform: translateX(1px);
-        }
     `,
     Container: styled.div`
         display: flex;
